@@ -7,6 +7,7 @@
 
   var app = document.getElementById("app"), crumbs = document.getElementById("crumbs");
   var P = window.PROGRAM;
+  if (!P) { app.innerHTML = '<div class="card empty"><h2>The course list didn\'t load.</h2><p>There is probably a typo (like a missing comma) in <code>js/program.js</code>. Undo the last edit to that file, or ask Claude to fix it.</p></div>'; return; }
   var LOCAL = location.protocol === "file:";
   function examHref(e) { return encodeURI(LOCAL && e.localPath ? e.localPath : e.path); }
 
