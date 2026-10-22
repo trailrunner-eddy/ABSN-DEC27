@@ -102,10 +102,11 @@
     var guide = c.exams.filter(function (e) { return e.name === c.lectureExam && e.status === "ready"; })[0];
     var mods = []; L.forEach(function (g) { if (mods.indexOf(g.mod) < 0) mods.push(g.mod); });
     var html = '<section class="sem" id="lectures"><div class="sem-head"><h2>Lecture guides</h2><span class="muted small">' + L.length + " guides · " + mods.length + " modules</span></div>" +
-      (LOCAL && c.lectureFolder ? "" : '<p class="small muted">The PDFs open from the copy of this hub on your Mac. Here, each guide links to its topics in the study guide.</p>');
+      ((LOCAL && c.lectureFolder) || c.lectureWebFolder ? "" : '<p class="small muted">The PDFs open from the copy of this hub on your Mac. Here, each guide links to its topics in the study guide.</p>');
     mods.forEach(function (m) {
       html += '<h3 style="margin:18px 0 10px">' + esc(m) + '</h3><div class="grid grid-2">' + L.filter(function (g) { return g.mod === m; }).map(function (g) {
-        var pdf = LOCAL && c.lectureFolder ? '<a class="btn primary" href="' + encodeURI(c.lectureFolder + g.file) + '" target="_blank" rel="noopener">📄 Open PDF</a>' : "";
+        var pdf = LOCAL && c.lectureFolder ? '<a class="btn primary" href="' + encodeURI(c.lectureFolder + g.file) + '" target="_blank" rel="noopener">📄 Open PDF</a>'
+          : c.lectureWebFolder && g.web ? '<a class="btn primary" href="' + encodeURI(c.lectureWebFolder + g.web) + '" download="' + esc(g.file) + '">⬇ Download PDF</a><a class="btn" href="' + encodeURI(c.lectureWebFolder + g.web) + '" target="_blank" rel="noopener">View</a>' : "";
         var chips = guide && g.topics ? g.topics.map(function (t) { return '<a class="chip" href="' + examHref(guide) + "#topic/" + t[1] + '">' + esc(t[0]) + " →</a>"; }).join("") : "";
         return '<div class="card lecture" style="--c:' + c.color + '"><span class="tag" style="--c:' + c.color + '">' + esc(g.mod) + "</span><h3>" + esc(g.title) + "</h3>" +
           (chips ? '<div class="small muted">Study these topics:</div><div class="row">' + chips + "</div>" : "") + (pdf ? '<div class="row">' + pdf + "</div>" : "") + "</div>";
