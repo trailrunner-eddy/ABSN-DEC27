@@ -63,6 +63,10 @@ window.PROGRAM = {
           id: "nura330", code: "NURA 330", name: "Health Assessment", icon: "🩺", color: "#12898f",
           exams: [ { name: "Exam 1", status: "planned" } ]
         }
+        {
+          id: "nura350", code: "NURA 350", name: "Pharmacology", icon: "💉", color: "#12898f",
+          exams: [ { name: "Exam 2", status: "planned" } ]
+        }
       ]
     },
     { id: "sem2", name: "Semester 2", note: "", courses: [] },
