@@ -32,3 +32,10 @@ a.exam:hover { transform: translateY(-2px); }
 a.chip { text-decoration: none; }
 a.chip:hover { border-color: var(--c, var(--accent)); color: var(--ink); }
 .lecture .tag { align-self: flex-start; }
+.dl-list h4 { font-size: .74rem; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-3); margin: 14px 0 4px; }
+.dl-list h4:first-child { margin-top: 0; }
+.dl-list ul { list-style: none; margin: 0; padding: 0; }
+.dl-list li { padding: 7px 0; border-bottom: 1px solid var(--line); }
+.dl-list li:last-child { border-bottom: none; }
+.dl-list a { text-decoration: none; font-weight: 500; }
+.dl-list a:hover { text-decoration: underline; }

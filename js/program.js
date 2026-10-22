@@ -28,7 +28,15 @@ window.PROGRAM = {
       id: "sem1", name: "Semester 1", note: "Foundations",
       courses: [
         {
-          id: "nura340", code: "NURA 340", name: "Pathophysiology", icon: "🫀", color: "#c8463d",
+          id: "nura320", code: "NURA 320", name: "Nursing Fundamentals", icon: "🩹", color: "#5b8c3a",
+          exams: []
+        },
+        {
+          id: "nura330", code: "NURA 330", name: "Health Assessment", icon: "🩺", color: "#12898f",
+          exams: []
+        },
+        {
+          id: "nura340", code: "NURA 340", name: "Pathology", icon: "🫀", color: "#c8463d",
           lectureFolder: "../Sem 1/Patho/Exam 2/Lecture Guides/",
           lectureWebFolder: "nura340/lecture-guides/",
           lectureExam: "Exam 2",
@@ -60,12 +68,16 @@ window.PROGRAM = {
           ]
         },
         {
-          id: "nura330", code: "NURA 330", name: "Health Assessment", icon: "🩺", color: "#12898f",
-          exams: [ { name: "Exam 1", status: "planned" } ]
-        }
-        {
-          id: "nura350", code: "NURA 350", name: "Pharmacology", icon: "💉", color: "#12898f",
+          id: "nura350", code: "NURA 350", name: "Pharmacology", icon: "💊", color: "#a43f87",
           exams: [ { name: "Exam 2", status: "planned" } ]
+        },
+        {
+          id: "dosage", code: "", name: "Dosage Calc", icon: "🧮", color: "#c27a17",
+          exams: []
+        },
+        {
+          id: "nutrition", code: "", name: "Nutrition", icon: "🥗", color: "#4b5fc9",
+          exams: []
         }
       ]
     },

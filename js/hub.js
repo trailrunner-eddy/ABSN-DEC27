@@ -58,7 +58,7 @@
 
     if (recent.length) {
       html += '<section class="sem"><div class="sem-head"><h2>Jump back in</h2></div><div class="grid grid-3">' +
-        recent.map(function (r) { return '<a class="card exam" style="--c:' + r.x.course.color + '" href="' + examHref(r.e) + '" data-open="' + esc(r.x.course.id + "|" + r.e.name) + '"><span class="tiny">' + esc(r.x.course.code + " · " + r.x.course.name) + "</span><h3>" + esc(r.e.name) + "</h3>" + (r.e.date ? countdown(r.e.date) : "") + "</a>"; }).join("") + "</div></section>";
+        recent.map(function (r) { return '<a class="card exam" style="--c:' + r.x.course.color + '" href="' + examHref(r.e) + '" data-open="' + esc(r.x.course.id + "|" + r.e.name) + '"><span class="tiny">' + esc((r.x.course.code ? r.x.course.code + " · " : "") + r.x.course.name) + "</span><h3>" + esc(r.e.name) + "</h3>" + (r.e.date ? countdown(r.e.date) : "") + "</a>"; }).join("") + "</div></section>";
     }
 
     P.semesters.forEach(function (s) {
@@ -69,7 +69,7 @@
       } else {
         html += '<div class="grid grid-3">' + s.courses.map(function (c) {
           var r = readyCount(c), next = c.exams.filter(function (e) { var d = daysUntil(e.date); return d !== null && d >= 0; })[0];
-          return '<a class="card course" style="--c:' + c.color + '" href="#course/' + c.id + '"><div class="row"><div class="icon">' + c.icon + '</div><div><div class="code">' + esc(c.code) + "</div><h3 style=\"margin:2px 0 0\">" + esc(c.name) + "</h3></div></div>" +
+          return '<a class="card course" style="--c:' + c.color + '" href="#course/' + c.id + '"><div class="row"><div class="icon">' + c.icon + '</div><div><div class="code">' + esc(c.code || "Semester course") + "</div><h3 style=\"margin:2px 0 0\">" + esc(c.name) + "</h3></div></div>" +
             '<p class="small muted" style="margin:12px 0 6px">' + c.exams.length + " exam" + (c.exams.length === 1 ? "" : "s") + " · " + r + " guide" + (r === 1 ? "" : "s") + " ready" + (c.lectureGuides && c.lectureGuides.length ? " · " + c.lectureGuides.length + " lecture guides" : "") + "</p>" +
             '<div class="progress" style="--c:' + c.color + '"><span style="width:' + (c.exams.length ? 100 * r / c.exams.length : 0) + '%"></span></div>' +
             (next ? '<p class="small" style="margin:10px 0 0">Next: <b>' + esc(next.name) + "</b> " + countdown(next.date) + "</p>" : "") + "</a>";
@@ -87,10 +87,10 @@
     var x = findCourse(id);
     if (!x) { location.hash = "#home"; return; }
     var c = x.course, s = x.sem;
-    setCrumbs([["Program", "#home"], [s.name, "#home"], [c.code, null]]);
+    setCrumbs([["Program", "#home"], [s.name, "#home"], [c.code || c.name, null]]);
     app.innerHTML =
-      '<section class="course-hero" style="--c:' + c.color + '"><div class="code">' + esc(c.code) + " · " + esc(s.name) + '</div><h1>' + c.icon + " " + esc(c.name) + "</h1><p style=\"margin:0;opacity:.9\">" + readyCount(c) + " of " + c.exams.length + " exam guides ready. Choose an exam.</p></section>" +
-      '<h2>Exams</h2><div class="grid grid-2">' + c.exams.map(function (e) { return examCard(e, c); }).join("") + "</div>" +
+      '<section class="course-hero" style="--c:' + c.color + '"><div class="code">' + (c.code ? esc(c.code) + " · " : "") + esc(s.name) + '</div><h1>' + c.icon + " " + esc(c.name) + "</h1><p style=\"margin:0;opacity:.9\">" + (c.exams.length ? readyCount(c) + " of " + c.exams.length + " exam guides ready. Choose an exam." : "No exams added yet.") + "</p></section>" +
+      (c.exams.length ? '<h2>Exams</h2><div class="grid grid-2">' + c.exams.map(function (e) { return examCard(e, c); }).join("") + "</div>" : '<div class="card placeholder">Exam study guides for this course will show up here.</div>') +
       lectureSection(c) +
       '<div class="row" style="margin-top:22px"><a class="btn" href="#home">← All courses</a></div>';
     bindOpen();
@@ -99,20 +99,15 @@
   function lectureSection(c) {
     var L = c.lectureGuides || [];
     if (!L.length) return "";
-    var guide = c.exams.filter(function (e) { return e.name === c.lectureExam && e.status === "ready"; })[0];
+    var base = LOCAL && c.lectureFolder ? c.lectureFolder : c.lectureWebFolder;
     var mods = []; L.forEach(function (g) { if (mods.indexOf(g.mod) < 0) mods.push(g.mod); });
-    var html = '<section class="sem" id="lectures"><div class="sem-head"><h2>Lecture guides</h2><span class="muted small">' + L.length + " guides · " + mods.length + " modules</span></div>" +
-      ((LOCAL && c.lectureFolder) || c.lectureWebFolder ? "" : '<p class="small muted">The PDFs open from the copy of this hub on your Mac. Here, each guide links to its topics in the study guide.</p>');
-    mods.forEach(function (m) {
-      html += '<h3 style="margin:18px 0 10px">' + esc(m) + '</h3><div class="grid grid-2">' + L.filter(function (g) { return g.mod === m; }).map(function (g) {
-        var pdf = LOCAL && c.lectureFolder ? '<a class="btn primary" href="' + encodeURI(c.lectureFolder + g.file) + '" target="_blank" rel="noopener">📄 Open PDF</a>'
-          : c.lectureWebFolder && g.web ? '<a class="btn primary" href="' + encodeURI(c.lectureWebFolder + g.web) + '" download="' + esc(g.file) + '">⬇ Download PDF</a><a class="btn" href="' + encodeURI(c.lectureWebFolder + g.web) + '" target="_blank" rel="noopener">View</a>' : "";
-        var chips = guide && g.topics ? g.topics.map(function (t) { return '<a class="chip" href="' + examHref(guide) + "#topic/" + t[1] + '">' + esc(t[0]) + " →</a>"; }).join("") : "";
-        return '<div class="card lecture" style="--c:' + c.color + '"><span class="tag" style="--c:' + c.color + '">' + esc(g.mod) + "</span><h3>" + esc(g.title) + "</h3>" +
-          (chips ? '<div class="small muted">Study these topics:</div><div class="row">' + chips + "</div>" : "") + (pdf ? '<div class="row">' + pdf + "</div>" : "") + "</div>";
-      }).join("") + "</div>";
-    });
-    return html + "</section>";
+    return '<section class="sem" id="lectures"><div class="sem-head"><h2>Lecture guides</h2><span class="muted small">' + L.length + ' PDFs</span></div><div class="card dl-list">' +
+      mods.map(function (m) {
+        return '<h4>' + esc(m) + '</h4><ul>' + L.filter(function (g) { return g.mod === m; }).map(function (g) {
+          var f = LOCAL && c.lectureFolder ? g.file : g.web;
+          return base && f ? '<li><a href="' + encodeURI(base + f) + '" download="' + esc(g.file) + '">⬇ ' + esc(g.title) + "</a></li>" : "<li>" + esc(g.title) + "</li>";
+        }).join("") + "</ul>";
+      }).join("") + "</div></section>";
   }
 
   function bindOpen() {
