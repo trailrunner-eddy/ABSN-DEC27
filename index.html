@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ABSN Study Hub</title>
+  <meta name="description" content="Home base for every course and exam study guide across the 16-month PLU ABSN program.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8E%93%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/hub.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="#home"><span class="brand-mark">🎓</span><span class="brand-text">ABSN Study Hub</span></a>
+      <nav class="nav" id="crumbs"></nav>
+      <button class="icon-btn" id="theme" title="Toggle light/dark" aria-label="Toggle theme">🌓</button>
+    </div>
+  </header>
+  <main id="app" tabindex="-1"></main>
+  <footer class="footer">
+    To add a semester, course, or exam, edit <code>js/program.js</code> in this folder. Each exam guide lives in its own folder, e.g. <code>nura340/exam2/</code>.
+  </footer>
+  <script src="js/program.js"></script>
+  <script src="js/hub.js"></script>
+</body>
+</html>
