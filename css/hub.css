@@ -43,11 +43,18 @@ a.chip:hover { border-color: var(--c, var(--accent)); color: var(--ink); }
 .collapser > summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 16px 20px; }
 .collapser > summary::-webkit-details-marker { display: none; }
 .collapser .sum-title { font-weight: 700; font-size: 1.2rem; color: var(--accent); }
-.collapser > summary:hover .sum-title, .dl-mod > summary:hover { text-decoration: underline; }
-.dl-mod > summary { list-style: none; cursor: pointer; padding: 9px 0; font-weight: 600; color: var(--accent); }
+.dl-mod > summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 9px 8px; margin: 2px -8px; border-radius: 10px; font-weight: 600; color: var(--accent); transition: background .15s; }
+.dl-mod > summary:hover { background: color-mix(in srgb, var(--accent) 8%, transparent); }
+.dl-mod > summary:hover .mod-name { text-decoration: underline; }
+.dl-mod .pm { width: 22px; height: 22px; flex: none; border-radius: 50%; border: 1.5px solid var(--accent); display: grid; place-items: center; font-size: 15px; line-height: 1; }
+.dl-mod .pm::before { content: "+"; }
+.dl-mod[open] .pm { background: var(--accent); color: var(--accent-ink); }
+.dl-mod[open] .pm::before { content: "−"; }
+.dl-mod .mod-count { margin-left: auto; font-size: .75rem; font-weight: 600; color: var(--ink-3); background: var(--surface-2); padding: 2px 9px; border-radius: 999px; white-space: nowrap; }
+.collapser > summary:hover .sum-title { text-decoration: underline; }
 .dl-mod > summary::-webkit-details-marker { display: none; }
 .dl-mod + .dl-mod { border-top: 1px solid var(--line); }
-.dl-mod ul { padding: 0 0 8px 14px; }
+.dl-mod ul { padding: 0 0 8px 32px; }
 .collapser .dl-body { padding: 0 20px 16px; border-top: 1px solid var(--line); padding-top: 12px; }
 #lectures { margin-top: 30px; }
 .nclex-banner { display: flex; align-items: center; gap: 16px; text-decoration: none; color: inherit; margin-top: 18px; border-left: 5px solid var(--card2); }
