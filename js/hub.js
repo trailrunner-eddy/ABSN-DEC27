@@ -96,8 +96,9 @@
       (c.exams.length ? '<h2>Exams</h2><div class="grid grid-2">' + c.exams.map(function (e) { return examCard(e, c); }).join("") + "</div>" : '<div class="card placeholder">Exam study guides for this course will show up here.</div>') +
       lectureSection(c) +
       '<div class="row" style="margin-top:22px"><a class="btn" href="#home">← All courses</a><a class="btn" href="#nclex">🧠 NCLEX Prep</a></div>';
-    var lec = document.getElementById("lectures");
-    if (lec) lec.addEventListener("toggle", function () { S.lecOpen = S.lecOpen || {}; S.lecOpen[c.id] = lec.open; save(); });
+    Array.prototype.forEach.call(app.querySelectorAll("details[data-lec]"), function (d) {
+      d.addEventListener("toggle", function () { S.lecOpen = S.lecOpen || {}; S.lecOpen[d.getAttribute("data-lec")] = d.open; save(); });
+    });
     bindOpen();
   }
 
@@ -106,13 +107,15 @@
     if (!L.length) return "";
     var base = LOCAL && c.lectureFolder ? c.lectureFolder : c.lectureWebFolder;
     var mods = []; L.forEach(function (g) { if (mods.indexOf(g.mod) < 0) mods.push(g.mod); });
-    var open = S.lecOpen && S.lecOpen[c.id];
-    return '<details class="card dl-list collapser" id="lectures" data-c="' + esc(c.id) + '"' + (open ? " open" : "") + '><summary><span class="sum-title">Lecture guides</span><span class="muted small">' + L.length + " PDFs · " + mods.length + ' modules</span><span class="spacer"></span><span class="caret" aria-hidden="true">▾</span></summary><div class="dl-body">' +
+    var lo = S.lecOpen || {};
+    function key(m) { return c.id + (m ? "|" + m : ""); }
+    return '<details class="card dl-list collapser" id="lectures" data-lec="' + esc(key()) + '"' + (lo[key()] ? " open" : "") + '><summary><span class="sum-title">Lecture guides</span><span class="muted small">' + L.length + " PDFs · " + mods.length + ' modules</span></summary><div class="dl-body">' +
       mods.map(function (m) {
-        return '<h4>' + esc(m) + '</h4><ul>' + L.filter(function (g) { return g.mod === m; }).map(function (g) {
+        var n = L.filter(function (g) { return g.mod === m; });
+        return '<details class="dl-mod" data-lec="' + esc(key(m)) + '"' + (lo[key(m)] ? " open" : "") + '><summary>' + esc(m) + ' <span class="muted small">' + n.length + '</span></summary><ul>' + n.map(function (g) {
           var f = LOCAL && c.lectureFolder ? g.file : g.web;
-          return base && f ? '<li><a href="' + encodeURI(base + f) + '" download="' + esc(g.file) + '">⬇ ' + esc(g.title) + "</a></li>" : "<li>" + esc(g.title) + "</li>";
-        }).join("") + "</ul>";
+          return base && f ? '<li><a href="' + encodeURI(base + f) + '" download="' + esc(g.file) + '">' + esc(g.title) + "</a></li>" : "<li>" + esc(g.title) + "</li>";
+        }).join("") + "</ul></details>";
       }).join("") + "</div></details>";
   }
 
