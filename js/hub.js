@@ -57,6 +57,8 @@
         }).join("") + "</div>" +
       "</section>";
 
+    html += '<a class="card nclex-banner" href="#nclex"><div class="icon">🧠</div><div><h3>NCLEX Prep</h3><p class="small muted" style="margin:0">Build a custom practice exam from questions across your courses. Pick the courses, systems, question types, and length.</p></div><span class="btn primary">Build an exam →</span></a>';
+
     if (recent.length) {
       html += '<section class="sem"><div class="sem-head"><h2>Jump back in</h2></div><div class="grid grid-3">' +
         recent.map(function (r) { return '<a class="card exam" style="--c:' + r.x.course.color + '" href="' + examHref(r.e) + '" data-open="' + esc(r.x.course.id + "|" + r.e.name) + '"><span class="tiny">' + esc((r.x.course.code ? r.x.course.code + " · " : "") + r.x.course.name) + "</span><h3>" + esc(r.e.name) + "</h3>" + (r.e.date ? countdown(r.e.date) : "") + "</a>"; }).join("") + "</div></section>";
@@ -93,7 +95,9 @@
       '<section class="course-hero" style="--c:' + c.color + '"><div class="code">' + (c.code ? esc(c.code) + " · " : "") + esc(s.name) + '</div><h1>' + c.icon + " " + esc(c.name) + "</h1><p style=\"margin:0;opacity:.9\">" + (c.exams.length ? readyCount(c) + " of " + c.exams.length + " exam guides ready. Choose an exam." : "No exams added yet.") + "</p></section>" +
       (c.exams.length ? '<h2>Exams</h2><div class="grid grid-2">' + c.exams.map(function (e) { return examCard(e, c); }).join("") + "</div>" : '<div class="card placeholder">Exam study guides for this course will show up here.</div>') +
       lectureSection(c) +
-      '<div class="row" style="margin-top:22px"><a class="btn" href="#home">← All courses</a></div>';
+      '<div class="row" style="margin-top:22px"><a class="btn" href="#home">← All courses</a><a class="btn" href="#nclex">🧠 NCLEX Prep</a></div>';
+    var lec = document.getElementById("lectures");
+    if (lec) lec.addEventListener("toggle", function () { S.lecOpen = S.lecOpen || {}; S.lecOpen[c.id] = lec.open; save(); });
     bindOpen();
   }
 
@@ -102,13 +106,14 @@
     if (!L.length) return "";
     var base = LOCAL && c.lectureFolder ? c.lectureFolder : c.lectureWebFolder;
     var mods = []; L.forEach(function (g) { if (mods.indexOf(g.mod) < 0) mods.push(g.mod); });
-    return '<section class="sem" id="lectures"><div class="sem-head"><h2>Lecture guides</h2><span class="muted small">' + L.length + ' PDFs</span></div><div class="card dl-list">' +
+    var open = S.lecOpen && S.lecOpen[c.id];
+    return '<details class="card dl-list collapser" id="lectures" data-c="' + esc(c.id) + '"' + (open ? " open" : "") + '><summary><span class="sum-title">Lecture guides</span><span class="muted small">' + L.length + " PDFs · " + mods.length + ' modules</span><span class="spacer"></span><span class="caret" aria-hidden="true">▾</span></summary><div class="dl-body">' +
       mods.map(function (m) {
         return '<h4>' + esc(m) + '</h4><ul>' + L.filter(function (g) { return g.mod === m; }).map(function (g) {
           var f = LOCAL && c.lectureFolder ? g.file : g.web;
           return base && f ? '<li><a href="' + encodeURI(base + f) + '" download="' + esc(g.file) + '">⬇ ' + esc(g.title) + "</a></li>" : "<li>" + esc(g.title) + "</li>";
         }).join("") + "</ul>";
-      }).join("") + "</div></section>";
+      }).join("") + "</div></details>";
   }
 
   function bindOpen() {
@@ -124,6 +129,7 @@
   function route() {
     var h = (location.hash || "#home").slice(1).split("/");
     if (h[0] === "course") course(h[1]);
+    else if (h[0] === "nclex" && window.NCLEX) { setCrumbs([["Program", "#home"], ["NCLEX Prep", null]]); window.NCLEX.render(app, { P: P, LOCAL: LOCAL, esc: esc, S: S, save: save }); }
     else if (h[0].indexOf("sem-") === 0) { home(); var el = document.getElementById(h[0]); if (el) el.scrollIntoView(); return; }
     else home();
     window.scrollTo(0, 0);

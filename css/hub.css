@@ -39,3 +39,27 @@ a.chip:hover { border-color: var(--c, var(--accent)); color: var(--ink); }
 .dl-list li:last-child { border-bottom: none; }
 .dl-list a { text-decoration: none; font-weight: 500; }
 .dl-list a:hover { text-decoration: underline; }
+.collapser { padding: 0; }
+.collapser > summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 16px 20px; }
+.collapser > summary::-webkit-details-marker { display: none; }
+.collapser .sum-title { font-weight: 700; font-size: 1.2rem; }
+.collapser .caret { transition: transform .2s; color: var(--ink-3); }
+.collapser[open] .caret { transform: rotate(180deg); }
+.collapser .dl-body { padding: 0 20px 16px; border-top: 1px solid var(--line); padding-top: 12px; }
+#lectures { margin-top: 30px; }
+.nclex-banner { display: flex; align-items: center; gap: 16px; text-decoration: none; color: inherit; margin-top: 18px; border-left: 5px solid var(--card2); }
+.nclex-banner .icon { font-size: 34px; }
+.nclex-banner h3 { margin: 0 0 2px; }
+.nclex-banner .btn { margin-left: auto; white-space: nowrap; }
+@media (max-width: 640px) { .nclex-banner { flex-wrap: wrap; } .nclex-banner .btn { margin-left: 0; } }
+.nx-section { margin-bottom: 18px; }
+.nx-section h3 { margin-bottom: 8px; }
+.nx-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 8px; }
+.nx-check { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: 12px; cursor: pointer; background: var(--surface); }
+.nx-check input { margin-top: 3px; accent-color: var(--accent); width: 18px; height: 18px; }
+.nx-check:has(input:checked) { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 7%, var(--surface)); }
+.nx-check.disabled { opacity: .5; cursor: default; }
+.nx-summary { position: sticky; bottom: 12px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; box-shadow: 0 6px 24px rgba(0,0,0,.12); }
+.nx-flag.on { background: var(--warn-bg); border-color: var(--warn); color: var(--warn); }
+.nx-bar { display: grid; grid-template-columns: minmax(120px, 220px) 1fr 52px; gap: 10px; align-items: center; padding: 6px 0; font-size: .9rem; }
+.nx-hist td, .nx-hist th { font-size: .85rem; }

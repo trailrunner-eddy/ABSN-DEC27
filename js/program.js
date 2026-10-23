@@ -11,6 +11,8 @@
         date:   optional, e.g. "2026-11-05" (shows a countdown)
         localPath: optional path used when the hub is opened from the Mac
         topics: optional list of chips shown on the card
+        bank:   optional script files (relative to the guide folder) holding its
+                practice questions; they join the NCLEX Prep question pool
 
    Lecture guides (per course):
         lectureFolder:    folder holding the PDFs, relative to the hub on the Mac
@@ -60,6 +62,7 @@ window.PROGRAM = {
               name: "Exam 2", status: "ready",
               path: "nura340/exam2/index.html",
               localPath: "../Sem 1/Patho/Exam 2/Patho Exam 2 Study Lab/index.html",
+              bank: ["js/data.js", "js/practice.js"],
               blurb: "Respiratory, vascular, cardiac, kidney, urinary & reproductive disorders.",
               topics: ["Respiratory", "Cardiac 1", "Cardiac 2", "Kidney", "GU & Repro"],
               stats: "28 topics · 55 questions · 100 flashcards · 4 games"
