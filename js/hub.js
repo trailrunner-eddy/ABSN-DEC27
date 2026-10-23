@@ -112,7 +112,7 @@
     return '<details class="card dl-list collapser" id="lectures" data-lec="' + esc(key()) + '"' + (lo[key()] ? " open" : "") + '><summary><span class="sum-title">Lecture guides</span><span class="muted small">' + L.length + " PDFs · " + mods.length + ' modules</span></summary><div class="dl-body">' +
       mods.map(function (m) {
         var n = L.filter(function (g) { return g.mod === m; });
-        return '<details class="dl-mod" data-lec="' + esc(key(m)) + '"' + (lo[key(m)] ? " open" : "") + '><summary><span class="pm" aria-hidden="true"></span><span class="mod-name">' + esc(m) + '</span><span class="mod-count">' + n.length + ' guide' + (n.length === 1 ? '' : 's') + '</span></summary><ul>' + n.map(function (g) {
+        return '<details class="dl-mod" data-lec="' + esc(key(m)) + '"' + (lo[key(m)] ? " open" : "") + '><summary>' + esc(m) + '</summary><ul>' + n.map(function (g) {
           var f = LOCAL && c.lectureFolder ? g.file : g.web;
           return base && f ? '<li><a href="' + encodeURI(base + f) + '" download="' + esc(g.file) + '">' + esc(g.title) + "</a></li>" : "<li>" + esc(g.title) + "</li>";
         }).join("") + "</ul></details>";
