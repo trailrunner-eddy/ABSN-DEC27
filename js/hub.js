@@ -57,7 +57,6 @@
         }).join("") + "</div>" +
       "</section>";
 
-    html += '<a class="card nclex-banner" href="#nclex"><div class="icon">🧠</div><div><h3>NCLEX Prep</h3><p class="small muted" style="margin:0">Build a custom practice exam from questions across your courses. Pick the courses, systems, question types, and length.</p></div><span class="btn primary">Build an exam →</span></a>';
 
     if (recent.length) {
       html += '<section class="sem"><div class="sem-head"><h2>Jump back in</h2></div><div class="grid grid-3">' +
@@ -80,6 +79,7 @@
       }
       html += "</section>";
     });
+    html += '<section class="sem"><a class="card nclex-banner" href="#nclex"><div class="icon">🧠</div><div><h3>NCLEX Prep</h3><p class="small muted" style="margin:0">Build a custom practice exam from questions across your courses. Pick the courses, systems, question types, and length.</p></div><span class="btn primary">Build an exam →</span></a></section>';
     app.innerHTML = html;
     Array.prototype.forEach.call(app.querySelectorAll("[data-cur]"), function (b) { b.onclick = function () { S.current = b.getAttribute("data-cur"); save(); home(); }; });
     bindOpen();
