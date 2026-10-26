@@ -396,3 +396,124 @@ td:first-child { font-weight: 600; }
 .pic-frame img { max-width: 100%; max-height: 380px; cursor: zoom-in; }
 .pic-q h2 { margin-top: 0; }
 a.chip { text-decoration: none; }
+
+/* ---------- Topic & section diagrams ---------- */
+.dg-svg .dg-lbl { font: 600 13px var(--font); fill: var(--ink-2); text-anchor: middle; }
+.dg-svg .dg-lbl.sm { font-size: 11px; font-weight: 500; }
+.dg-svg .dg-lbl.big { font-size: 20px; font-weight: 800; fill: #1d2433; }
+.dg-svg .dg-emoji { font-size: 30px; text-anchor: middle; }
+.dg-svg .dg-ah { fill: var(--ink-2); }
+.dg-svg .dg-arrow { fill: none; stroke: var(--ink-2); stroke-width: 3; stroke-linecap: round; }
+.dg-svg .dg-arrow.thin { stroke-width: 2; }
+.dg-svg .dg-arrow.dash { stroke-dasharray: 6 5; stroke-width: 2.5; }
+.dg-svg .dg-arrow.push, .dg-svg .dg-arrow.jet { stroke-width: 5; }
+.dg-svg .dg-arrow.back { stroke: #c2413a; stroke-width: 4; stroke-dasharray: 8 5; }
+.dg-svg .dg-dial { fill: #fff; stroke: #2f6fde; stroke-width: 4; }
+.dg-svg .dg-beam { stroke: #4a5468; stroke-width: 6; stroke-linecap: round; }
+.dg-svg .dg-base { fill: #7b8496; }
+.dg-svg .dg-pan { fill: #fdf3dc; stroke: #b7791f; stroke-width: 3; }
+.dg-svg .dg-tissue-bg { fill: #fbf1e6; }
+.dg-svg .dg-capvessel { fill: #f7c9c4; stroke: #c8463d; stroke-width: 3; }
+.dg-svg .dg-prot { fill: #f3d36b; stroke: #b7791f; stroke-width: 1.5; }
+.dg-svg .dg-gap { stroke: #fbf1e6; stroke-width: 6; }
+.dg-svg .dg-drop { fill: #7fb2e5; }
+.dg-svg .dg-edema { fill: #bcd8f2; opacity: .8; }
+.dg-svg .dg-skin { fill: #e8c3a0; }
+.dg-svg .dg-splinter { stroke: #7a5230; stroke-width: 6; stroke-linecap: round; }
+.dg-svg .dg-bug { fill: #5b8c3a; stroke: #2f5a1a; stroke-width: 1; }
+.dg-svg .dg-cell { fill: #d9c4ef; stroke: #7a52a8; stroke-width: 2; }
+.dg-svg .dg-gran { fill: #7a52a8; }
+.dg-svg .dg-wbc { fill: #f3f0fa; stroke: #7a52a8; stroke-width: 2.5; }
+.dg-svg .dg-nerve { fill: none; stroke: #e2b85c; stroke-width: 4; }
+.dg-svg .dg-sinus { fill: #fbe9c8; stroke: #b7791f; stroke-width: 2; }
+.dg-svg .dg-ostium { fill: #c2413a; }
+.dg-svg .dg-airtube { fill: #fff3f2; stroke: #c8463d; stroke-width: 3; stroke-linejoin: round; }
+.dg-svg .dg-mucosa { stroke: #f0a39c; stroke-width: 5; }
+.dg-svg .dg-tonsil { fill: #e58a7f; stroke: #a8382f; stroke-width: 2; }
+.dg-svg .dg-larynx { fill: #e9d7b8; stroke: #8a6d3b; stroke-width: 2; }
+.dg-svg .dg-cord { stroke: #8a6d3b; stroke-width: 3; stroke-linecap: round; }
+.dg-svg .dg-alv-air { fill: #e8f3fd; stroke: #c8463d; stroke-width: 3; }
+.dg-svg .dg-alv-fill { fill: #f1dc8a; stroke: #c8463d; stroke-width: 3; }
+.dg-svg .dg-cap-o { fill: none; stroke: #d9534f; stroke-width: 12; stroke-linecap: round; }
+.dg-svg .dg-cap-d { fill: none; stroke: #5a78c4; stroke-width: 12; stroke-linecap: round; }
+.dg-svg .dg-lymph { fill: #c9d6f5; stroke: #3b5aa8; stroke-width: 1.5; }
+.dg-svg .dg-macro { fill: #f3d7c9; stroke: #b0574f; stroke-width: 2; }
+.dg-svg .dg-caseous { fill: #fbf6e3; stroke: #d6c58f; stroke-width: 2; }
+.dg-svg .dg-bacilli { stroke: #c2413a; stroke-width: 3.5; stroke-linecap: round; }
+.dg-svg .dg-sm { fill: #e8a69f; stroke: #b13a32; stroke-width: 2; }
+.dg-svg .dg-sm.thick { stroke-width: 8; }
+.dg-svg .dg-mucosa-c { fill: #fbe0de; }
+.dg-svg .dg-mucosa-c.swollen { fill: #f5b5b0; }
+.dg-svg .dg-mucus, .dg-svg .dg-mucus-fill { fill: #c9d77a; stroke: #8a9a3a; stroke-width: 1.5; }
+.dg-svg .dg-alv-big { fill: #e8f3fd; stroke: #c8463d; stroke-width: 3; }
+.dg-svg .dg-septa { stroke: #c8463d; stroke-width: 2.5; stroke-linecap: round; }
+.dg-svg .dg-chest { fill: #fbf1e6; stroke: #b7791f; stroke-width: 3; }
+.dg-svg .dg-pleura-air { fill: #dceefc; stroke: #7fb2e5; stroke-width: 2; stroke-dasharray: 5 4; }
+.dg-svg .dg-blood-pool { fill: #c2413a; opacity: .7; }
+.dg-svg .dg-heartm { fill: #f0a39c; stroke: #b13a32; stroke-width: 3; }
+.dg-svg .dg-vessel-tube { fill: #f7c9c4; stroke: #c8463d; stroke-width: 3; }
+.dg-svg .dg-squeeze { fill: #f3d36b; stroke: #b7791f; stroke-width: 6; }
+.dg-svg .dg-leg, .dg-svg .dg-leg2 { fill: #f3dcc6; stroke: #b98a62; stroke-width: 2.5; }
+.dg-svg .dg-pale { fill: #f7efe7; }
+.dg-svg .dg-collateral { fill: none; stroke: #c8463d; stroke-width: 2.5; stroke-dasharray: 3 3; }
+.dg-svg .dg-ulcer { fill: #7d1a14; }
+.dg-svg .dg-aneur { fill: #e8786f; stroke: #a32b26; stroke-width: 3; }
+.dg-svg .dg-tear { stroke: #fff; stroke-width: 4; stroke-linecap: round; }
+.dg-svg .dg-bleed { fill: #a32b26; opacity: .75; }
+.dg-svg .dg-brown { fill: #b98a62; opacity: .55; }
+.dg-svg .dg-valve-l { fill: none; stroke: #1d2433; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.dg-svg .dg-valve-open { stroke: #c2413a; stroke-width: 3; stroke-linecap: round; }
+.dg-svg .dg-triangle { fill: none; stroke: #7a52a8; stroke-width: 3; stroke-linejoin: round; }
+.dg-svg .dg-vein-wall { fill: #b9c8ee; stroke: #3b5aa8; stroke-width: 2; }
+.dg-svg .dg-vein-lumen { fill: #eef2fb; }
+.dg-svg .dg-capbed { fill: none; stroke: #c06a8e; stroke-width: 14; stroke-linecap: round; opacity: .55; }
+.dg-svg .dg-leaflet { fill: none; stroke: #1d2433; stroke-width: 4; stroke-linecap: round; }
+.dg-svg .dg-leaflet.thick { stroke-width: 9; stroke: #7b6a3a; }
+.dg-svg .dg-lv.thickwall { stroke-width: 10; }
+.dg-svg .dg-ischemic { fill: #f8d3cf; stroke: #e58a7f; stroke-width: 2; stroke-dasharray: 5 4; }
+.dg-svg .dg-infarct { fill: #6b2a26; opacity: .85; }
+.dg-svg .dg-coronary.thick { stroke-width: 6; }
+.dg-svg .dg-ekg { fill: none; stroke: #c2413a; stroke-width: 2.5; stroke-linejoin: round; }
+.dg-svg .dg-sac-band { fill: #fdf3dc; stroke: #b7791f; stroke-width: 2; }
+.dg-svg .dg-fluid-band { fill: #dceefc; }
+.dg-svg .dg-myo { fill: #e8786f; }
+.dg-svg .dg-stria { stroke: #c8463d; stroke-width: 2; }
+.dg-svg .dg-endo { fill: #fbe0de; }
+.dg-svg .dg-chamber { fill: #f7c9c4; }
+.dg-svg .dg-veg { fill: #8a9a3a; stroke: #5b6a1a; stroke-width: 1.5; }
+.dg-svg .dg-liver { fill: #a8584a; stroke: #7a3a2e; stroke-width: 2; }
+.dg-svg .dg-edema-leg { fill: #bcd8f2; opacity: .75; }
+.dg-svg .dg-heart-outline { fill: #fbe0de; stroke: #b13a32; stroke-width: 3; }
+.dg-svg .dg-wire { fill: none; stroke: #b7791f; stroke-width: 4; stroke-linecap: round; }
+.dg-svg .dg-purk { stroke: #b7791f; stroke-width: 2.5; stroke-linecap: round; }
+.dg-svg .dg-node { fill: #f3d36b; stroke: #b7791f; stroke-width: 2.5; }
+.dg-svg .dg-quiver { fill: none; stroke: #7a52a8; stroke-width: 2.5; }
+.dg-svg .dg-zone { stroke-width: 0; opacity: .5; }
+.dg-svg .dg-zone.pre { fill: #f8d3cf; } .dg-svg .dg-zone.intra { fill: #fdf3dc; } .dg-svg .dg-zone.post { fill: #dceefc; }
+.dg-svg .dg-stone { fill: #8a7a5a; stroke: #4a3f2a; stroke-width: 2; }
+.dg-svg .dg-spoke { stroke: var(--line); stroke-width: 3; }
+.dg-svg .dg-box { fill: var(--surface); stroke: var(--line); stroke-width: 2; }
+.dg-svg .dg-kidney.scarred { fill: #c98a7f; }
+.dg-svg .dg-kidney.inflamed { fill: #e8574a; }
+.dg-svg .dg-kidney.swollen { stroke-width: 5; }
+.dg-svg .dg-scar { stroke: #6b2a26; stroke-width: 3; stroke-linecap: round; }
+.dg-svg .dg-glom-loop { fill: #f0a39c; stroke: #b13a32; stroke-width: 3; }
+.dg-svg .dg-complex { fill: #f3d36b; stroke: #b7791f; stroke-width: 1.5; }
+.dg-svg .dg-membrane { stroke: #4a5468; stroke-width: 8; }
+.dg-svg .dg-urine { fill: #fbf2c8; stroke: #d6c58f; stroke-width: 2; }
+.dg-svg .dg-bladder.inflamed { stroke: #c2413a; stroke-width: 6; }
+.dg-svg .dg-bladder.thickwall { stroke-width: 9; }
+.dg-svg .dg-anus { fill: #b98a62; }
+.dg-svg .dg-cup { fill: #fbf2c8; stroke: #7b8496; stroke-width: 2.5; }
+.dg-svg .dg-abscess { fill: #f3f0d0; stroke: #8a9a3a; stroke-width: 2; }
+.dg-svg .dg-pelvis { fill: none; stroke: #e2b85c; stroke-width: 8; stroke-linecap: round; }
+.dg-svg .dg-ureter.wide { stroke-width: 13; }
+.dg-svg .dg-ureter.thin { stroke-width: 5; }
+.dg-svg .dg-urine-res { fill: #e9d77a; }
+.dg-svg .dg-prostate.big { stroke-width: 3; }
+.dg-svg .dg-prostate.inflamed { fill: #e8786f; stroke: #a32b26; stroke-width: 3; }
+.dg-svg .dg-catheter { stroke: #7b8496; stroke-width: 3; stroke-dasharray: 2 3; }
+.dg-pick { margin-bottom: 14px; max-width: 420px; }
+.summary-card p { font-size: 1.02rem; line-height: 1.65; }
+.intro-link { font-weight: 700; }
+.good-chip { background: var(--good-bg); color: var(--good); border-color: transparent; }

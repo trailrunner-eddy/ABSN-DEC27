@@ -2,7 +2,7 @@
    Each spot: x/y in the diagram's viewBox, what it is, what goes wrong there, and linked topics. */
 window.DIAGRAMS = [
   {
-    id: "lungs", sys: "resp", title: "Lungs & airways", view: "0 0 400 360",
+    id: "lungs", kind: "structure", sys: "resp", title: "Lungs & airways", view: "0 0 400 360",
     svg:
       '<path class="dg-tissue" d="M120 120 C70 130 50 210 55 280 C58 310 90 318 130 305 L178 290 L180 140 C170 122 145 115 120 120Z"/>' +
       '<path class="dg-tissue" d="M280 120 C330 130 350 210 345 280 C342 310 310 318 270 305 L222 290 L220 140 C230 122 255 115 280 120Z"/>' +
@@ -22,7 +22,7 @@ window.DIAGRAMS = [
     ]
   },
   {
-    id: "heart", sys: "card2", title: "The heart", view: "0 0 400 380",
+    id: "heart", kind: "structure", sys: "card2", title: "The heart", view: "0 0 400 380",
     svg:
       '<path class="dg-sac" d="M200 60 C110 60 60 130 70 220 C80 300 150 350 200 360 C250 350 320 300 330 220 C340 130 290 60 200 60Z"/>' +
       '<path class="dg-vein" d="M108 30 L108 120"/><path class="dg-vein" d="M108 250 L108 330"/>' +
@@ -50,7 +50,7 @@ window.DIAGRAMS = [
     ]
   },
   {
-    id: "artery", sys: "card1", title: "Inside an artery", view: "0 0 400 300",
+    id: "artery", topic: "athero", sys: "card1", title: "Inside an artery", view: "0 0 400 300",
     svg:
       '<circle class="dg-adv" cx="200" cy="150" r="130"/><circle class="dg-media" cx="200" cy="150" r="108"/><circle class="dg-intima" cx="200" cy="150" r="88"/>' +
       '<circle class="dg-lumen" cx="200" cy="150" r="82"/>' +
@@ -69,7 +69,7 @@ window.DIAGRAMS = [
     ]
   },
   {
-    id: "nephron", sys: "kidney", title: "The nephron", view: "0 0 420 340",
+    id: "nephron", kind: "structure", sys: "kidney", title: "The nephron", view: "0 0 420 340",
     svg:
       '<path class="dg-artery" d="M20 70 L80 70"/><path class="dg-artery-s" d="M150 95 L210 60 L260 60"/>' +
       '<circle class="dg-capsule" cx="110" cy="80" r="42"/><circle class="dg-glom" cx="110" cy="80" r="26"/>' +
@@ -87,7 +87,7 @@ window.DIAGRAMS = [
     ]
   },
   {
-    id: "urinary", sys: "gu", title: "Urinary tract & prostate", view: "0 0 360 420",
+    id: "urinary", kind: "structure", sys: "gu", title: "Urinary tract & prostate", view: "0 0 360 420",
     svg:
       '<path class="dg-artery" d="M180 20 L180 230"/>' +
       '<path class="dg-kidney" d="M70 60 C30 70 30 170 70 180 C95 186 105 150 95 120 C105 90 95 54 70 60Z"/><path class="dg-kidney" d="M290 60 C330 70 330 170 290 180 C265 186 255 150 265 120 C255 90 265 54 290 60Z"/>' +

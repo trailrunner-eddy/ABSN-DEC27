@@ -47,8 +47,8 @@
     confettiRun++;
     var h = (location.hash || "#home").slice(1).split("/");
     var r = h[0] || "home", arg = h[1], arg2 = h[2];
-    $$("#nav a", document).forEach(function (a) { a.classList.toggle("active", a.getAttribute("data-r") === r || (r === "topic" && a.getAttribute("data-r") === "topics")); });
-    var views = { home: home, topics: topics, topic: topics, pics: pics, flash: flash, quiz: quiz, sort: sortGame, chains: chains, triage: triage, abg: abg, emerg: emerg };
+    $$("#nav a", document).forEach(function (a) { a.classList.toggle("active", a.getAttribute("data-r") === r || ((r === "topic" || r === "intro") && a.getAttribute("data-r") === "topics")); });
+    var views = { home: home, topics: topics, topic: topics, intro: intro, pics: pics, flash: flash, quiz: quiz, sort: sortGame, chains: chains, triage: triage, abg: abg, emerg: emerg };
     (views[r] || home)(arg, arg2);
     window.scrollTo(0, 0);
     var active = $(".nav a.active", document); if (active && active.scrollIntoView) { try { active.scrollIntoView({ block: "nearest", inline: "center" }); } catch (e) {} }
@@ -67,7 +67,7 @@
     }).join("");
     var tiles = [
       ["#topics", "📚", "Topic Pages", "Every disorder on the study guide as a mechanism → change → cues → worst-case chain, with the guide's questions to self-test."],
-      ["#pics", "🖼️", "Picture Lab", "Every lecture slide, tap-to-learn diagrams of the lungs, heart, arteries, nephron and urinary tract, and a picture quiz."],
+      ["#pics", "🖼️", "Picture Lab", "Tap-to-learn diagrams for every system and topic, plus a picture quiz from the lecture slides."],
       ["#flash", "🃏", "Flashcards", FLASHCARDS.length + " flip cards. Mark what you know and drill the rest."],
       ["#quiz", "📝", "Practice Questions", QUESTIONS.length + " NGN-style items: multiple choice, SATA, select N, cloze dropdowns, and matrix grids."],
       ["#sort", "🧺", "Sort It", "Race the clock sorting cues between look-alike disorders."],
@@ -108,23 +108,68 @@
   function bindReveal() { $$(".reveal-q button").forEach(function (b) { b.onclick = function () { b.parentNode.classList.toggle("open"); }; }); }
 
   /* ================= TOPICS ================= */
-  function topics(id) {
-    var d = DISORDERS.filter(function (x) { return x.id === id; })[0] || DISORDERS.filter(function (x) { return x.sys === "resp"; })[0];
+  /* Reading order: each system's overview page, then its topics */
+  var SECTIONS = window.SECTIONS || {};
+  var ORDER = [];
+  SYSTEMS.forEach(function (s) {
+    if (SECTIONS[s.id]) ORDER.push({ key: "intro/" + s.id, name: s.name + ": overview" });
+    DISORDERS.filter(function (x) { return x.sys === s.id; }).forEach(function (x) { ORDER.push({ key: "topic/" + x.id, name: x.name }); });
+  });
+  function navLinks(key, middle) {
+    var i = ORDER.map(function (o) { return o.key; }).indexOf(key), prev = ORDER[i - 1], next = ORDER[i + 1];
+    return '<div class="row">' + (prev ? '<a class="btn" href="#' + prev.key + '">← ' + esc(prev.name) + "</a>" : "") + '<span class="spacer"></span>' + (middle || "") +
+      (next ? '<a class="btn" href="#' + next.key + '">' + esc(next.name) + " →</a>" : "") + "</div>";
+  }
+  function topicShell(key, body) {
     var side = "";
     SYSTEMS.forEach(function (s) {
       side += '<h4><span class="sys-dot sys-' + s.id + '"></span>' + esc(s.name) + "</h4>";
+      if (SECTIONS[s.id]) side += '<a class="sys-' + s.id + ' intro-link' + (key === "intro/" + s.id ? " active" : "") + '" href="#intro/' + s.id + '">Overview</a>';
       DISORDERS.filter(function (x) { return x.sys === s.id; }).forEach(function (x) {
-        side += '<a class="sys-' + s.id + (x.id === d.id ? " active" : "") + '" href="#topic/' + x.id + '">' + esc(x.name) + (x.star ? ' <span class="star">★</span>' : "") + (S.topics[x.id] ? '<span class="check">✓</span>' : "") + "</a>";
+        side += '<a class="sys-' + s.id + (key === "topic/" + x.id ? " active" : "") + '" href="#topic/' + x.id + '">' + esc(x.name) + (x.star ? ' <span class="star">★</span>' : "") + (S.topics[x.id] ? '<span class="check">✓</span>' : "") + "</a>";
       });
     });
-    var list = DISORDERS, idx = list.indexOf(d), prev = list[idx - 1], next = list[idx + 1];
+    var jump = SYSTEMS.map(function (s) {
+      return '<optgroup label="' + esc(s.name) + '">' + (SECTIONS[s.id] ? '<option value="intro/' + s.id + '"' + (key === "intro/" + s.id ? " selected" : "") + ">Overview</option>" : "") +
+        DISORDERS.filter(function (x) { return x.sys === s.id; }).map(function (x) { return '<option value="topic/' + x.id + '"' + (key === "topic/" + x.id ? " selected" : "") + ">" + esc(x.name) + (S.topics[x.id] ? " ✓" : "") + "</option>"; }).join("") + "</optgroup>";
+    }).join("");
+    app.innerHTML = '<div class="topics-layout"><aside class="card sidebar" id="side"><div class="row" style="margin-bottom:6px"><b>Topics</b><span class="spacer"></span><span class="tiny">' + Object.keys(S.topics).length + "/" + DISORDERS.length + ' studied</span></div><div class="side-body">' + side + '</div></aside><div class="stack"><select class="topic-jump" id="jump" aria-label="Jump to topic">' + jump + "</select>" + body + "</div></div>";
+    $("#jump").onchange = function () { location.hash = "#" + this.value; };
+    bindReveal();
+  }
+  function diagramCard(dg, sys, heading) {
+    return '<div class="card sys-' + sys + '"><div class="row"><h2 style="margin:0">' + heading + '</h2><span class="spacer"></span><a class="chip" href="#pics/diagrams/' + dg.id + '/find">Quiz me on it</a></div>' + diagramHTML(dg) + "</div>";
+  }
+
+  function intro(sysId) {
+    var sec = SECTIONS[sysId], s = SYS[sysId];
+    if (!sec || !s) { topics(); return; }
+    var dg = DIAG.filter(function (g) { return g.id === sec.diagram; })[0];
+    var list = DISORDERS.filter(function (x) { return x.sys === sysId; });
+    var body =
+      '<div class="card topic-head sys-' + sysId + '"><div class="row">' + tag(sysId) + '<span class="spacer"></span><span class="tiny">' + esc(s.weight || "") + "</span></div>" +
+        '<h1 style="margin-top:10px">' + esc(s.icon + " " + s.name) + '</h1><p class="muted" style="margin-bottom:0">' + esc(sec.lead) + "</p></div>" +
+      '<div class="card sys-' + sysId + ' summary-card"><h2>The big picture</h2>' + sec.summary.map(function (p) { return "<p>" + esc(p) + "</p>"; }).join("") + "</div>" +
+      (dg ? diagramCard(dg, sysId, "🧩 " + (dg.kind === "structure" ? "Structure: " : "") + esc(dg.title)) : "") +
+      '<div class="card"><h2>Structure & function to know</h2><ul class="facts">' + sec.structure.map(function (f) { return "<li>" + esc(f) + "</li>"; }).join("") + "</ul></div>" +
+      "<h2>Topics in this section</h2>" +
+      '<div class="grid grid-2 intro-topics">' + list.map(function (x) {
+        return '<a class="card tile sys-' + sysId + '" href="#topic/' + x.id + '"><div class="row"><h3 style="margin:0">' + esc(x.name) + (x.star ? ' <span class="star">★</span>' : "") + '</h3><span class="spacer"></span>' + (S.topics[x.id] ? '<span class="chip good-chip">✓ studied</span>' : "") + '</div><p class="small muted" style="margin:6px 0 0">' + esc(PLAIN[x.id] && S.plain ? PLAIN[x.id].text.split(". ")[0] + "." : x.summary) + "</p></a>";
+      }).join("") + "</div>" +
+      navLinks("intro/" + sysId, sysId !== "found" ? '<a class="btn" href="#quiz/' + sysId + '">Quiz this system</a>' : "");
+    topicShell("intro/" + sysId, body);
+    if (dg) bindDiagram($(".dg"), dg, "explore");
+  }
+
+  function topics(id) {
+    var d = DISORDERS.filter(function (x) { return x.id === id; })[0];
+    if (!d) { intro(SYSTEMS[0].id); return; }
     var s = SYS[d.sys];
 
     function bullets(arr) { return "<ul>" + arr.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + "</ul>"; }
     function table(t) { return '<div class="table-wrap"><table><thead><tr>' + t.cols.map(function (c) { return "<th>" + esc(c) + "</th>"; }).join("") + "</tr></thead><tbody>" + t.rows.map(function (r) { return "<tr>" + r.map(function (c) { return "<td>" + esc(c) + "</td>"; }).join("") + "</tr>"; }).join("") + "</tbody></table></div>"; }
 
-    var tdg = DIAG.filter(function (g) { return g.spots.some(function (p) { return p.topics.indexOf(d.id) > -1; }); })[0];
-    var tsl = SLIDE_LIST.filter(function (x) { return x.topics.indexOf(d.id) > -1; });
+    var tdg = DIAG.filter(function (g) { return g.topic === d.id; })[0];
     var body =
       '<div class="card topic-head sys-' + d.sys + '">' +
         '<div class="row">' + tag(d.sys) + (d.star ? '<span class="chip" style="color:var(--warn)">★ Instructor\'s #1 arterial topic</span>' : "") + '<span class="spacer"></span><span class="tiny">' + esc(s.weight || "") + "</span></div>" +
@@ -135,6 +180,7 @@
         (d.pathogens ? '<div class="pathogens" style="margin-top:10px"><span class="small muted" style="margin-right:4px">Pathogens:</span>' + d.pathogens.map(function (p) { return '<span class="pathogen">' + esc(p) + "</span>"; }).join("") + "</div>" : "") +
       "</div>" +
       plainCard(d) +
+      (tdg ? diagramCard(tdg, d.sys, "🧩 " + esc(tdg.title)) : "") +
       '<div class="card sys-' + d.sys + '"><h2>The chain</h2><p class="small muted">Underlying mechanism → physiologic change → expected cues → potential complications.</p>' +
         '<div class="chain">' +
           '<div class="chain-step"><h4>1 · Mechanism</h4>' + bullets(d.chain.mechanism) + "</div>" +
@@ -142,26 +188,17 @@
           '<div class="chain-step"><h4>3 · Expected cues</h4>' + bullets(d.chain.cues) + "</div>" +
           '<div class="chain-step"><h4>4 · Worst case</h4>' + bullets(d.chain.worst) + "</div>" +
         "</div></div>" +
-      (tdg ? '<div class="card sys-' + d.sys + '"><h2>🧩 Tap-to-learn: ' + esc(tdg.title) + '</h2>' + diagramHTML(tdg, d.id) + '<p class="tiny" style="margin:8px 0 0"><a href="#pics/diagrams/' + tdg.id + '/find">Quiz yourself on this diagram →</a></p></div>' : "") +
-      (tsl.length ? '<div class="card sys-' + d.sys + '" id="slidesCard"><h2>📽 From the lecture slides <span class="muted small">' + tsl.length + " slide" + (tsl.length === 1 ? "" : "s") + "</span></h2>" + slideViewer(tsl) + "</div>" : "") +
       (d.table ? '<div class="card"><h2>' + (d.tableTitle || "At a glance") + "</h2>" + table(d.table) + "</div>" : "") +
       (d.table2 ? '<div class="card"><h2>' + esc(d.table2.title) + "</h2>" + table(d.table2) + "</div>" : "") +
       (d.facts && d.facts.length ? '<div class="card"><h2>Must-know facts</h2><ul class="facts">' + d.facts.map(function (f) { return "<li>" + esc(f) + "</li>"; }).join("") + "</ul></div>" : "") +
       (d.beyond ? '<div class="callout beyond"><strong>Beyond the lectures</strong>' + esc(d.beyond) + "</div>" : "") +
       (d.qa && d.qa.length ? '<div class="card sys-' + d.sys + '"><h2>Study guide questions</h2><p class="small muted">Answer out loud first, then tap to check.</p>' + d.qa.map(function (q) { return revealQ(q[0], q[1]); }).join("") + "</div>" : "") +
-      '<div class="row">' +
-        (prev ? '<a class="btn" href="#topic/' + prev.id + '">← ' + esc(prev.name) + "</a>" : "") + '<span class="spacer"></span>' +
-        '<button class="btn ' + (S.topics[d.id] ? "good" : "primary") + '" id="mark">' + (S.topics[d.id] ? "✓ Studied" : "Mark as studied") + "</button>" +
-        (d.sys !== "found" ? '<a class="btn" href="#quiz/' + d.sys + '">Quiz this system</a>' : "") +
-        (next ? '<a class="btn" href="#topic/' + next.id + '">' + esc(next.name) + " →</a>" : "") +
-      "</div>";
+      navLinks("topic/" + d.id, '<button class="btn ' + (S.topics[d.id] ? "good" : "primary") + '" id="mark">' + (S.topics[d.id] ? "✓ Studied" : "Mark as studied") + "</button>" +
+        (d.sys !== "found" ? '<a class="btn" href="#quiz/' + d.sys + '">Quiz this system</a>' : ""));
 
-    app.innerHTML = '<div class="topics-layout"><aside class="card sidebar" id="side"><div class="row" style="margin-bottom:6px"><b>Topics</b><span class="spacer"></span><span class="tiny">' + Object.keys(S.topics).length + "/" + DISORDERS.length + ' studied</span></div><div class="side-body">' + side + '</div></aside><div class="stack"><select class="topic-jump" id="jump" aria-label="Jump to topic">' + SYSTEMS.map(function (s) { return '<optgroup label="' + esc(s.name) + '">' + DISORDERS.filter(function (x) { return x.sys === s.id; }).map(function (x) { return '<option value="' + x.id + '"' + (x.id === d.id ? " selected" : "") + ">" + esc(x.name) + (S.topics[x.id] ? " ✓" : "") + "</option>"; }).join("") + "</optgroup>"; }).join("") + "</select>" + body + "</div></div>";
-    bindReveal();
-    $("#jump").onchange = function () { location.hash = "#topic/" + this.value; };
+    topicShell("topic/" + d.id, body);
     if ($("#plainT")) $("#plainT").onclick = function () { S.plain = !S.plain; save(); this.classList.toggle("on", S.plain); this.setAttribute("aria-checked", S.plain ? "true" : "false"); var b = $("#plainBox"); if (b) { b.hidden = !S.plain; if (S.plain) b.scrollIntoView({ block: "nearest", behavior: "smooth" }); } };
-    if (tdg) bindDiagram($(".dg"), tdg, "explore", d.id);
-    if (tsl.length) bindViewer($("#slidesCard .sv"), tsl);
+    if (tdg) bindDiagram($(".dg"), tdg, "explore");
     $("#mark").onclick = function () {
       if (S.topics[d.id]) { delete S.topics[d.id]; save(); topics(d.id); return; }
       S.topics[d.id] = 1; save(); addXP(15, "Topic studied");
@@ -169,11 +206,11 @@
     };
   }
 
+
   /* ================= PICTURES: lecture slides, diagrams, plain language ================= */
   var SLIDE_LIST = window.SLIDES || [], DECKS = window.SLIDE_DECKS || [], FIGS = window.FIGURES || [], DIAG = window.DIAGRAMS || [], PLAIN = window.PLAIN || {};
   var CREDIT = "From the PLU ABSN NURA 340 lecture slides. Images belong to their original owners as marked on each slide.";
   function topicName(id) { var d = DISORDERS.filter(function (x) { return x.id === id; })[0]; return d ? d.name : id; }
-  function slideSrc(s) { return "slides/" + s.id + ".jpg"; }
   function deckLabel(s) { var d = DECKS[s.deck]; return d ? d.mod + " · " + d.title : ""; }
 
   function plainCard(d) {
@@ -201,36 +238,6 @@
     show(); lb.classList.add("open"); document.body.style.overflow = "hidden";
   }
   function closeLB() { if (lb) { lb.classList.remove("open"); document.body.style.overflow = ""; } }
-
-  /* Slide viewer: big slide, arrows, thumbnails, slide text and instructor notes */
-  function slideViewer(list) {
-    return '<div class="sv"><div class="sv-stage"><button class="sv-nav sv-prev" aria-label="Previous slide">‹</button><img class="sv-img" alt="" title="Tap to enlarge"><button class="sv-nav sv-next" aria-label="Next slide">›</button></div>' +
-      '<div class="row sv-meta"><div><b class="sv-title"></b><div class="tiny sv-deck"></div></div><span class="spacer"></span><span class="tiny sv-count"></span></div>' +
-      (list.length > 1 ? '<div class="sv-thumbs">' + list.map(function (s, i) { return '<button class="sv-thumb" data-i="' + i + '" aria-label="Slide ' + (i + 1) + '"><img loading="lazy" src="' + slideSrc(s) + '" alt=""></button>'; }).join("") + "</div>" : "") +
-      '<details class="sv-more sv-text-wrap"><summary>Slide text</summary><div class="sv-text"></div></details>' +
-      '<details class="sv-more sv-note-wrap"><summary>Instructor\'s notes</summary><div class="sv-note"></div></details>' +
-      '<p class="tiny credit">' + esc(CREDIT) + "</p></div>";
-  }
-  function bindViewer(root, list) {
-    if (!root || !list.length) return;
-    var i = 0, q = function (s) { return root.querySelector(s); };
-    function show(n) {
-      i = (n + list.length) % list.length; var s = list[i];
-      q(".sv-img").src = slideSrc(s); q(".sv-img").alt = s.title;
-      q(".sv-title").textContent = s.title; q(".sv-deck").textContent = deckLabel(s) + " · slide " + s.n;
-      q(".sv-count").textContent = (i + 1) + " / " + list.length;
-      q(".sv-text").innerHTML = s.text.length ? "<ul>" + s.text.map(function (l) { return '<li style="margin-left:' + (l[0] * 16) + 'px">' + esc(l[1]) + "</li>"; }).join("") + "</ul>" : '<p class="small muted">This slide is mostly a picture.</p>';
-      q(".sv-note-wrap").style.display = s.note ? "" : "none";
-      q(".sv-note").textContent = s.note || "";
-      Array.prototype.forEach.call(root.querySelectorAll(".sv-thumb"), function (t) { var on = +t.getAttribute("data-i") === i; t.classList.toggle("on", on); if (on && t.parentNode.scrollTo) t.parentNode.scrollTo({ left: t.offsetLeft - t.parentNode.clientWidth / 2 + t.clientWidth / 2, behavior: "smooth" }); });
-      q(".sv-prev").style.visibility = q(".sv-next").style.visibility = list.length > 1 ? "" : "hidden";
-    }
-    q(".sv-prev").onclick = function () { show(i - 1); };
-    q(".sv-next").onclick = function () { show(i + 1); };
-    Array.prototype.forEach.call(root.querySelectorAll(".sv-thumb"), function (t) { t.onclick = function () { show(+t.getAttribute("data-i")); }; });
-    q(".sv-img").onclick = function () { openLB(list.map(function (s) { return { src: slideSrc(s), cap: s.title + " · " + deckLabel(s) }; }), i); };
-    show(0);
-  }
 
   /* Tap-to-learn diagrams. Explore: tap a dot to learn it. Find it: tap the dot that matches the name. */
   function diagramHTML(dg, focus) {
@@ -286,25 +293,8 @@
 
   function pics(tab, arg) {
     tab = tab || "diagrams";
-    var head = '<h1>Picture Lab</h1><p class="muted">Learn with pictures: tap-to-learn diagrams, every lecture slide, and a picture quiz.</p>' +
-      '<div class="filter-bar">' + [["diagrams", "🧩 Diagrams"], ["quiz", "🖼️ Picture quiz"], ["slides", "📽 Lecture slides"]].map(function (t) { return '<a class="chip' + (tab === t[0] ? " on" : "") + '" href="#pics/' + t[0] + '">' + t[1] + "</a>"; }).join("") + "</div>";
-
-    if (tab === "slides") {
-      var di = arg === undefined ? -1 : +arg;
-      if (di >= 0 && DECKS[di]) {
-        var list = SLIDE_LIST.filter(function (s) { return s.deck === di; });
-        app.innerHTML = head + '<div class="row" style="margin-bottom:12px"><a class="btn small" href="#pics/slides">← All decks</a></div><div class="card sys-' + DECKS[di].sys + '"><div class="row">' + tag(DECKS[di].sys) + '<span class="tiny">' + esc(DECKS[di].mod) + '</span></div><h2 style="margin-top:8px">' + esc(DECKS[di].title) + "</h2>" + slideViewer(list) + "</div>";
-        bindViewer($(".sv"), list);
-        return;
-      }
-      app.innerHTML = head + SYSTEMS.filter(function (s) { return DECKS.some(function (d) { return d.sys === s.id; }); }).map(function (s) {
-        return "<h2>" + esc(s.icon + " " + s.name) + '</h2><div class="grid grid-3" style="margin-bottom:18px">' + DECKS.map(function (d, i) { return [d, i]; }).filter(function (x) { return x[0].sys === s.id; }).map(function (x) {
-          var list = SLIDE_LIST.filter(function (sl) { return sl.deck === x[1]; });
-          return '<a class="card tile deck-card sys-' + s.id + '" href="#pics/slides/' + x[1] + '"><img loading="lazy" src="' + (list[0] ? slideSrc(list[0]) : "") + '" alt=""><span class="tiny">' + esc(x[0].mod) + "</span><h3>" + esc(x[0].title) + '</h3><p class="small muted" style="margin:0">' + list.length + " slides</p></a>";
-        }).join("") + "</div>";
-      }).join("") + '<p class="tiny credit">' + esc(CREDIT) + "</p>";
-      return;
-    }
+    var head = '<h1>Picture Lab</h1><p class="muted">Learn with pictures: tap-to-learn diagrams for every system and topic, and a picture quiz built from the lecture slides.</p>' +
+      '<div class="filter-bar">' + [["diagrams", "🧩 Diagrams"], ["quiz", "🖼️ Picture quiz"]].map(function (t) { return '<a class="chip' + (tab === t[0] ? " on" : "") + '" href="#pics/' + t[0] + '">' + t[1] + "</a>"; }).join("") + "</div>";
 
     if (tab === "quiz") {
       var sys = arg && SYS[arg] ? arg : null;
@@ -319,11 +309,12 @@
     var dg = DIAG.filter(function (x) { return x.id === arg; })[0] || DIAG[0];
     var mode = arg && location.hash.indexOf("/find") > -1 ? "find" : "explore";
     app.innerHTML = head +
-      '<div class="filter-bar">' + DIAG.map(function (x) { return '<a class="chip' + (x.id === dg.id ? " on" : "") + '" href="#pics/diagrams/' + x.id + '"><span class="sys-dot sys-' + x.sys + '"></span>' + esc(x.title) + "</a>"; }).join("") + "</div>" +
+      '<select class="topic-jump dg-pick" id="dgpick" aria-label="Choose a diagram" style="display:block">' + SYSTEMS.map(function (sy) { var g = DIAG.filter(function (x) { return x.sys === sy.id; }); return g.length ? '<optgroup label="' + esc(sy.name) + '">' + g.map(function (x) { return '<option value="' + x.id + '"' + (x.id === dg.id ? " selected" : "") + ">" + esc((x.kind === "structure" ? "Structure: " : "") + x.title) + "</option>"; }).join("") + "</optgroup>" : ""; }).join("") + "</select>" +
       '<div class="card sys-' + dg.sys + '"><div class="row"><h2 style="margin:0">' + esc(dg.title) + '</h2><span class="spacer"></span>' +
         '<a class="chip' + (mode === "explore" ? " on" : "") + '" href="#pics/diagrams/' + dg.id + '">Explore</a><a class="chip' + (mode === "find" ? " on" : "") + '" href="#pics/diagrams/' + dg.id + '/find">Find it (quiz)</a></div>' +
         diagramHTML(dg) + "</div>";
     bindDiagram($(".dg"), dg, mode);
+    $("#dgpick").onchange = function () { location.hash = "#pics/diagrams/" + this.value + (mode === "find" ? "/find" : ""); };
   }
 
   function picQuiz(items, sys) {
@@ -331,7 +322,7 @@
     function draw() {
       if (pos >= items.length) {
         if (!S.best.pics || score > S.best.pics) S.best.pics = score; save();
-        app.innerHTML = '<div class="card scoreboard"><div style="font-size:44px">' + (score >= 8 ? "🏆" : score >= 6 ? "💪" : "📖") + '</div><div class="big-score">' + score + " / " + items.length + '</div><p class="muted">Pictures matched to the right topic.</p><div class="row" style="justify-content:center"><button class="btn primary" id="again">Play again</button><a class="btn" href="#pics/slides">Browse the slides</a></div></div>';
+        app.innerHTML = '<div class="card scoreboard"><div style="font-size:44px">' + (score >= 8 ? "🏆" : score >= 6 ? "💪" : "📖") + '</div><div class="big-score">' + score + " / " + items.length + '</div><p class="muted">Pictures matched to the right topic.</p><div class="row" style="justify-content:center"><button class="btn primary" id="again">Play again</button><a class="btn" href="#pics/diagrams">Diagrams</a></div></div>';
         $("#again").onclick = function () { pics("quiz", sys); };
         if (score >= 8) confetti();
         return;
