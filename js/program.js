@@ -65,7 +65,7 @@ window.PROGRAM = {
               bank: ["js/data.js", "js/practice.js"],
               blurb: "Respiratory, vascular, cardiac, kidney, urinary & reproductive disorders.",
               topics: ["Respiratory", "Cardiac 1", "Cardiac 2", "Kidney", "GU & Repro"],
-              stats: "28 topics · 55 questions · 100 flashcards · 4 games"
+              stats: "28 topics · 55 questions · 100 flashcards · 158 lecture slides · 5 diagrams"
             },
             { name: "Final Exam", status: "planned" }
           ]

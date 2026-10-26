@@ -299,3 +299,100 @@ td:first-child { font-weight: 600; }
   .reveal-q .ans { display: block; }
   body { background: #fff; }
 }
+
+/* ---------- Plain-language switch ---------- */
+.plain-switch { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
+.plain-switch label { font-weight: 600; font-size: .92rem; cursor: pointer; }
+.switch { width: 44px; height: 26px; border-radius: 999px; border: none; background: var(--line); position: relative; cursor: pointer; padding: 0; transition: background .2s; flex: none; }
+.switch .knob { position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.25); transition: transform .2s; }
+.switch.on { background: var(--accent); }
+.switch.on .knob { transform: translateX(18px); }
+.plain-card { background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+.plain-card p { font-size: 1.02rem; line-height: 1.6; }
+.plain-like { border-left: 3px solid var(--accent); padding-left: 12px; color: var(--ink-2); margin-bottom: 0; }
+
+/* ---------- Slide viewer ---------- */
+.sv-stage { position: relative; border-radius: 12px; overflow: hidden; background: #fff; border: 1px solid var(--line); }
+.sv-img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: contain; cursor: zoom-in; background: #fff; }
+.sv-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; border-radius: 50%; border: none; background: rgba(29,36,51,.65); color: #fff; font-size: 26px; line-height: 1; cursor: pointer; display: grid; place-items: center; padding: 0 0 3px; }
+.sv-nav:hover { background: rgba(29,36,51,.85); }
+.sv-prev { left: 8px; } .sv-next { right: 8px; }
+.sv-meta { margin: 10px 0 6px; align-items: flex-start; }
+.sv-thumbs { display: flex; gap: 6px; overflow-x: auto; padding: 4px 2px 8px; scroll-snap-type: x proximity; }
+.sv-thumb { flex: none; width: 96px; padding: 0; border: 2px solid transparent; border-radius: 6px; overflow: hidden; background: #fff; cursor: pointer; opacity: .65; scroll-snap-align: center; }
+.sv-thumb img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+.sv-thumb.on { border-color: var(--accent); opacity: 1; }
+.sv-more { border-top: 1px solid var(--line); padding: 8px 0; }
+.sv-more summary { cursor: pointer; font-weight: 600; font-size: .92rem; }
+.sv-more ul { margin: 8px 0 0; padding-left: 18px; font-size: .92rem; }
+.sv-note { white-space: pre-line; font-size: .92rem; color: var(--ink-2); margin-top: 8px; line-height: 1.55; }
+.credit { margin: 8px 0 0; color: var(--ink-3); }
+.deck-card img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 8px; border: 1px solid var(--line); margin-bottom: 8px; background: #fff; }
+
+/* ---------- Lightbox ---------- */
+.lb { position: fixed; inset: 0; z-index: 100; background: rgba(10,12,18,.88); display: none; align-items: center; justify-content: center; padding: 16px; }
+.lb.open { display: flex; }
+.lb figure { margin: 0; max-width: min(1200px, 100%); }
+.lb img { display: block; max-width: 100%; max-height: 82vh; margin: 0 auto; border-radius: 8px; background: #fff; }
+.lb figcaption { color: #e9ecf3; text-align: center; margin-top: 10px; font-size: .92rem; }
+.lb figcaption .tiny { color: #b4bccc; }
+.lb-x { position: absolute; top: 12px; right: 12px; width: 40px; height: 40px; border-radius: 50%; border: none; background: rgba(255,255,255,.15); color: #fff; font-size: 18px; cursor: pointer; }
+.lb-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 46px; height: 46px; border-radius: 50%; border: none; background: rgba(255,255,255,.15); color: #fff; font-size: 30px; cursor: pointer; padding-bottom: 4px; }
+.lb-prev { left: 12px; } .lb-next { right: 12px; }
+
+/* ---------- Diagrams ---------- */
+.dg { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 18px; align-items: start; margin-top: 12px; }
+@media (max-width: 760px) { .dg { grid-template-columns: 1fr; } }
+.dg-wrap { background: var(--surface-2); border-radius: 12px; padding: 8px; }
+.dg-svg { width: 100%; height: auto; display: block; max-height: 460px; }
+.dg-panel { min-height: 120px; }
+.dg-panel h3 { margin-top: 0; }
+.dg-svg .dg-tissue { fill: #f5b5b0; stroke: #c8463d; stroke-width: 2; }
+.dg-svg .dg-pleura { fill: none; stroke: #7b8496; stroke-width: 2; stroke-dasharray: 5 4; }
+.dg-svg .dg-airway { fill: #e9d7b8; stroke: #8a6d3b; stroke-width: 2; }
+.dg-svg .dg-airway-l { fill: none; stroke: #8a6d3b; stroke-width: 9; stroke-linecap: round; stroke-linejoin: round; }
+.dg-svg .dg-airway-s { fill: none; stroke: #a8865a; stroke-width: 4; stroke-linecap: round; }
+.dg-svg .dg-alv { fill: #fbe0de; stroke: #c8463d; stroke-width: 2; }
+.dg-svg .dg-muscle { fill: none; stroke: #b0574f; stroke-width: 10; stroke-linecap: round; }
+.dg-svg .dg-sac { fill: #fdf3dc; stroke: #b7791f; stroke-width: 3; }
+.dg-svg .dg-ra, .dg-svg .dg-rv { fill: #9fb6e8; stroke: #3b5aa8; stroke-width: 2; }
+.dg-svg .dg-la, .dg-svg .dg-lv { fill: #f0a39c; stroke: #b13a32; stroke-width: 2; }
+.dg-svg .dg-vein { fill: none; stroke: #5a78c4; stroke-width: 22; stroke-linecap: round; }
+.dg-svg .dg-pa { fill: none; stroke: #5a78c4; stroke-width: 18; stroke-linecap: round; }
+.dg-svg .dg-artery { fill: none; stroke: #c8463d; stroke-width: 20; stroke-linecap: round; }
+.dg-svg .dg-artery-s { fill: none; stroke: #c8463d; stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; }
+.dg-svg .dg-valve { fill: #fff; stroke: #1d2433; stroke-width: 1.5; }
+.dg-svg .dg-coronary { fill: none; stroke: #8f1d16; stroke-width: 4; stroke-linecap: round; }
+.dg-svg .dg-txt { font: 700 15px var(--font); fill: #1d2433; text-anchor: middle; opacity: .55; }
+.dg-svg .dg-adv { fill: #f3e2c7; stroke: #b7791f; stroke-width: 2; }
+.dg-svg .dg-media { fill: #e8a69f; stroke: #b13a32; stroke-width: 2; }
+.dg-svg .dg-intima { fill: #fbe0de; }
+.dg-svg .dg-lumen { fill: #fff3f2; }
+.dg-svg .dg-plaque { fill: #f3d36b; stroke: #b7791f; stroke-width: 2; }
+.dg-svg .dg-cap { fill: none; stroke: #f8f1e0; stroke-width: 5; stroke-linecap: round; }
+.dg-svg .dg-clot { fill: #7d1a14; }
+.dg-svg .dg-rbc { fill: #d9534f; stroke: #a32b26; stroke-width: 2; }
+.dg-svg .dg-capsule { fill: #fdf3dc; stroke: #b7791f; stroke-width: 3; }
+.dg-svg .dg-glom { fill: #f0a39c; stroke: #b13a32; stroke-width: 3; stroke-dasharray: 6 3; }
+.dg-svg .dg-tube { fill: none; stroke: #e2b85c; stroke-width: 12; stroke-linecap: round; stroke-linejoin: round; }
+.dg-svg .dg-duct { fill: none; stroke: #c49a3a; stroke-width: 16; stroke-linecap: round; }
+.dg-svg .dg-kidney { fill: #e58a7f; stroke: #a8382f; stroke-width: 3; }
+.dg-svg .dg-ureter { fill: none; stroke: #e2b85c; stroke-width: 7; stroke-linecap: round; }
+.dg-svg .dg-bladder { fill: #f8dfa5; stroke: #b7791f; stroke-width: 3; }
+.dg-svg .dg-prostate { fill: #9fb6e8; stroke: #3b5aa8; stroke-width: 2; }
+.spot { cursor: pointer; outline: none; }
+.spot circle { fill: var(--accent); stroke: #fff; stroke-width: 3; transition: transform .15s; transform-box: fill-box; transform-origin: center; }
+.spot text { font: 800 13px var(--font); fill: #fff; text-anchor: middle; pointer-events: none; }
+.spot:hover circle, .spot:focus circle { transform: scale(1.18); }
+.spot.seen circle { fill: #4a5468; }
+.spot.sel circle { fill: var(--warn); }
+.spot.hot circle { animation: pulse 1.6s ease-in-out infinite; }
+.spot.good circle { fill: var(--good); }
+.spot.bad circle { fill: var(--bad); }
+@keyframes pulse { 0%, 100% { stroke-width: 3; } 50% { stroke-width: 9; stroke: color-mix(in srgb, var(--accent) 40%, #fff); } }
+
+/* ---------- Picture quiz ---------- */
+.pic-frame { background: #fff; border-radius: 12px; border: 1px solid var(--line); padding: 10px; margin-bottom: 14px; text-align: center; }
+.pic-frame img { max-width: 100%; max-height: 380px; cursor: zoom-in; }
+.pic-q h2 { margin-top: 0; }
+a.chip { text-decoration: none; }

@@ -48,7 +48,7 @@
     var h = (location.hash || "#home").slice(1).split("/");
     var r = h[0] || "home", arg = h[1], arg2 = h[2];
     $$("#nav a", document).forEach(function (a) { a.classList.toggle("active", a.getAttribute("data-r") === r || (r === "topic" && a.getAttribute("data-r") === "topics")); });
-    var views = { home: home, topics: topics, topic: topics, flash: flash, quiz: quiz, sort: sortGame, chains: chains, triage: triage, abg: abg, emerg: emerg };
+    var views = { home: home, topics: topics, topic: topics, pics: pics, flash: flash, quiz: quiz, sort: sortGame, chains: chains, triage: triage, abg: abg, emerg: emerg };
     (views[r] || home)(arg, arg2);
     window.scrollTo(0, 0);
     var active = $(".nav a.active", document); if (active && active.scrollIntoView) { try { active.scrollIntoView({ block: "nearest", inline: "center" }); } catch (e) {} }
@@ -67,6 +67,7 @@
     }).join("");
     var tiles = [
       ["#topics", "📚", "Topic Pages", "Every disorder on the study guide as a mechanism → change → cues → worst-case chain, with the guide's questions to self-test."],
+      ["#pics", "🖼️", "Picture Lab", "Every lecture slide, tap-to-learn diagrams of the lungs, heart, arteries, nephron and urinary tract, and a picture quiz."],
       ["#flash", "🃏", "Flashcards", FLASHCARDS.length + " flip cards. Mark what you know and drill the rest."],
       ["#quiz", "📝", "Practice Questions", QUESTIONS.length + " NGN-style items: multiple choice, SATA, select N, cloze dropdowns, and matrix grids."],
       ["#sort", "🧺", "Sort It", "Race the clock sorting cues between look-alike disorders."],
@@ -122,14 +123,18 @@
     function bullets(arr) { return "<ul>" + arr.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + "</ul>"; }
     function table(t) { return '<div class="table-wrap"><table><thead><tr>' + t.cols.map(function (c) { return "<th>" + esc(c) + "</th>"; }).join("") + "</tr></thead><tbody>" + t.rows.map(function (r) { return "<tr>" + r.map(function (c) { return "<td>" + esc(c) + "</td>"; }).join("") + "</tr>"; }).join("") + "</tbody></table></div>"; }
 
+    var tdg = DIAG.filter(function (g) { return g.spots.some(function (p) { return p.topics.indexOf(d.id) > -1; }); })[0];
+    var tsl = SLIDE_LIST.filter(function (x) { return x.topics.indexOf(d.id) > -1; });
     var body =
       '<div class="card topic-head sys-' + d.sys + '">' +
         '<div class="row">' + tag(d.sys) + (d.star ? '<span class="chip" style="color:var(--warn)">★ Instructor\'s #1 arterial topic</span>' : "") + '<span class="spacer"></span><span class="tiny">' + esc(s.weight || "") + "</span></div>" +
+        (PLAIN[d.id] ? '<div class="plain-switch"><button type="button" class="switch' + (S.plain ? " on" : "") + '" id="plainT" role="switch" aria-checked="' + (S.plain ? "true" : "false") + '"><span class="knob"></span></button><label for="plainT">Plain language</label></div>' : "") +
         '<h1 style="margin-top:10px">' + esc(d.name) + "</h1>" + (d.sub ? '<p class="muted">' + esc(d.sub) + "</p>" : "") +
         "<p>" + esc(d.summary) + "</p>" +
         '<div class="connect"><span class="small muted" style="margin-right:4px">Connect to:</span>' + d.connect.map(function (c) { return '<span class="chip">' + esc(c) + "</span>"; }).join("") + "</div>" +
         (d.pathogens ? '<div class="pathogens" style="margin-top:10px"><span class="small muted" style="margin-right:4px">Pathogens:</span>' + d.pathogens.map(function (p) { return '<span class="pathogen">' + esc(p) + "</span>"; }).join("") + "</div>" : "") +
       "</div>" +
+      plainCard(d) +
       '<div class="card sys-' + d.sys + '"><h2>The chain</h2><p class="small muted">Underlying mechanism → physiologic change → expected cues → potential complications.</p>' +
         '<div class="chain">' +
           '<div class="chain-step"><h4>1 · Mechanism</h4>' + bullets(d.chain.mechanism) + "</div>" +
@@ -137,6 +142,8 @@
           '<div class="chain-step"><h4>3 · Expected cues</h4>' + bullets(d.chain.cues) + "</div>" +
           '<div class="chain-step"><h4>4 · Worst case</h4>' + bullets(d.chain.worst) + "</div>" +
         "</div></div>" +
+      (tdg ? '<div class="card sys-' + d.sys + '"><h2>🧩 Tap-to-learn: ' + esc(tdg.title) + '</h2>' + diagramHTML(tdg, d.id) + '<p class="tiny" style="margin:8px 0 0"><a href="#pics/diagrams/' + tdg.id + '/find">Quiz yourself on this diagram →</a></p></div>' : "") +
+      (tsl.length ? '<div class="card sys-' + d.sys + '" id="slidesCard"><h2>📽 From the lecture slides <span class="muted small">' + tsl.length + " slide" + (tsl.length === 1 ? "" : "s") + "</span></h2>" + slideViewer(tsl) + "</div>" : "") +
       (d.table ? '<div class="card"><h2>' + (d.tableTitle || "At a glance") + "</h2>" + table(d.table) + "</div>" : "") +
       (d.table2 ? '<div class="card"><h2>' + esc(d.table2.title) + "</h2>" + table(d.table2) + "</div>" : "") +
       (d.facts && d.facts.length ? '<div class="card"><h2>Must-know facts</h2><ul class="facts">' + d.facts.map(function (f) { return "<li>" + esc(f) + "</li>"; }).join("") + "</ul></div>" : "") +
@@ -152,11 +159,203 @@
     app.innerHTML = '<div class="topics-layout"><aside class="card sidebar" id="side"><div class="row" style="margin-bottom:6px"><b>Topics</b><span class="spacer"></span><span class="tiny">' + Object.keys(S.topics).length + "/" + DISORDERS.length + ' studied</span></div><div class="side-body">' + side + '</div></aside><div class="stack"><select class="topic-jump" id="jump" aria-label="Jump to topic">' + SYSTEMS.map(function (s) { return '<optgroup label="' + esc(s.name) + '">' + DISORDERS.filter(function (x) { return x.sys === s.id; }).map(function (x) { return '<option value="' + x.id + '"' + (x.id === d.id ? " selected" : "") + ">" + esc(x.name) + (S.topics[x.id] ? " ✓" : "") + "</option>"; }).join("") + "</optgroup>"; }).join("") + "</select>" + body + "</div></div>";
     bindReveal();
     $("#jump").onchange = function () { location.hash = "#topic/" + this.value; };
+    if ($("#plainT")) $("#plainT").onclick = function () { S.plain = !S.plain; save(); this.classList.toggle("on", S.plain); this.setAttribute("aria-checked", S.plain ? "true" : "false"); var b = $("#plainBox"); if (b) { b.hidden = !S.plain; if (S.plain) b.scrollIntoView({ block: "nearest", behavior: "smooth" }); } };
+    if (tdg) bindDiagram($(".dg"), tdg, "explore", d.id);
+    if (tsl.length) bindViewer($("#slidesCard .sv"), tsl);
     $("#mark").onclick = function () {
       if (S.topics[d.id]) { delete S.topics[d.id]; save(); topics(d.id); return; }
       S.topics[d.id] = 1; save(); addXP(15, "Topic studied");
       topics(d.id);
     };
+  }
+
+  /* ================= PICTURES: lecture slides, diagrams, plain language ================= */
+  var SLIDE_LIST = window.SLIDES || [], DECKS = window.SLIDE_DECKS || [], FIGS = window.FIGURES || [], DIAG = window.DIAGRAMS || [], PLAIN = window.PLAIN || {};
+  var CREDIT = "From the PLU ABSN NURA 340 lecture slides. Images belong to their original owners as marked on each slide.";
+  function topicName(id) { var d = DISORDERS.filter(function (x) { return x.id === id; })[0]; return d ? d.name : id; }
+  function slideSrc(s) { return "slides/" + s.id + ".jpg"; }
+  function deckLabel(s) { var d = DECKS[s.deck]; return d ? d.mod + " · " + d.title : ""; }
+
+  function plainCard(d) {
+    var p = PLAIN[d.id]; if (!p) return "";
+    return '<div class="card plain-card sys-' + d.sys + '" id="plainBox"' + (S.plain ? "" : " hidden") + '><h2>🗣 In plain words</h2><p>' + esc(p.text) + "</p>" +
+      (p.like ? '<p class="plain-like"><b>Think of it like this:</b> ' + esc(p.like) + "</p>" : "") + "</div>";
+  }
+
+  /* Lightbox: one overlay shared by every picture on the site */
+  var lb = null;
+  function openLB(items, i) {
+    if (!lb) {
+      lb = document.createElement("div"); lb.className = "lb"; lb.setAttribute("role", "dialog"); lb.setAttribute("aria-modal", "true");
+      lb.innerHTML = '<button class="lb-x" aria-label="Close">✕</button><button class="lb-nav lb-prev" aria-label="Previous">‹</button><figure><img alt=""><figcaption></figcaption></figure><button class="lb-nav lb-next" aria-label="Next">›</button>';
+      document.body.appendChild(lb);
+      lb.onclick = function (e) { if (e.target === lb || e.target.classList.contains("lb-x")) closeLB(); };
+      document.addEventListener("keydown", function (e) { if (!lb.classList.contains("open")) return; if (e.key === "Escape") closeLB(); else if (e.key === "ArrowRight") lb.step(1); else if (e.key === "ArrowLeft") lb.step(-1); });
+    }
+    var pos = i;
+    lb.step = function (n) { pos = (pos + n + items.length) % items.length; show(); };
+    function show() { var it = items[pos]; lb.querySelector("img").src = it.src; lb.querySelector("img").alt = it.cap; lb.querySelector("figcaption").innerHTML = esc(it.cap) + (items.length > 1 ? ' <span class="tiny">' + (pos + 1) + " / " + items.length + "</span>" : ""); }
+    lb.querySelector(".lb-prev").onclick = function () { lb.step(-1); };
+    lb.querySelector(".lb-next").onclick = function () { lb.step(1); };
+    lb.querySelector(".lb-prev").style.display = lb.querySelector(".lb-next").style.display = items.length > 1 ? "" : "none";
+    show(); lb.classList.add("open"); document.body.style.overflow = "hidden";
+  }
+  function closeLB() { if (lb) { lb.classList.remove("open"); document.body.style.overflow = ""; } }
+
+  /* Slide viewer: big slide, arrows, thumbnails, slide text and instructor notes */
+  function slideViewer(list) {
+    return '<div class="sv"><div class="sv-stage"><button class="sv-nav sv-prev" aria-label="Previous slide">‹</button><img class="sv-img" alt="" title="Tap to enlarge"><button class="sv-nav sv-next" aria-label="Next slide">›</button></div>' +
+      '<div class="row sv-meta"><div><b class="sv-title"></b><div class="tiny sv-deck"></div></div><span class="spacer"></span><span class="tiny sv-count"></span></div>' +
+      (list.length > 1 ? '<div class="sv-thumbs">' + list.map(function (s, i) { return '<button class="sv-thumb" data-i="' + i + '" aria-label="Slide ' + (i + 1) + '"><img loading="lazy" src="' + slideSrc(s) + '" alt=""></button>'; }).join("") + "</div>" : "") +
+      '<details class="sv-more sv-text-wrap"><summary>Slide text</summary><div class="sv-text"></div></details>' +
+      '<details class="sv-more sv-note-wrap"><summary>Instructor\'s notes</summary><div class="sv-note"></div></details>' +
+      '<p class="tiny credit">' + esc(CREDIT) + "</p></div>";
+  }
+  function bindViewer(root, list) {
+    if (!root || !list.length) return;
+    var i = 0, q = function (s) { return root.querySelector(s); };
+    function show(n) {
+      i = (n + list.length) % list.length; var s = list[i];
+      q(".sv-img").src = slideSrc(s); q(".sv-img").alt = s.title;
+      q(".sv-title").textContent = s.title; q(".sv-deck").textContent = deckLabel(s) + " · slide " + s.n;
+      q(".sv-count").textContent = (i + 1) + " / " + list.length;
+      q(".sv-text").innerHTML = s.text.length ? "<ul>" + s.text.map(function (l) { return '<li style="margin-left:' + (l[0] * 16) + 'px">' + esc(l[1]) + "</li>"; }).join("") + "</ul>" : '<p class="small muted">This slide is mostly a picture.</p>';
+      q(".sv-note-wrap").style.display = s.note ? "" : "none";
+      q(".sv-note").textContent = s.note || "";
+      Array.prototype.forEach.call(root.querySelectorAll(".sv-thumb"), function (t) { var on = +t.getAttribute("data-i") === i; t.classList.toggle("on", on); if (on && t.parentNode.scrollTo) t.parentNode.scrollTo({ left: t.offsetLeft - t.parentNode.clientWidth / 2 + t.clientWidth / 2, behavior: "smooth" }); });
+      q(".sv-prev").style.visibility = q(".sv-next").style.visibility = list.length > 1 ? "" : "hidden";
+    }
+    q(".sv-prev").onclick = function () { show(i - 1); };
+    q(".sv-next").onclick = function () { show(i + 1); };
+    Array.prototype.forEach.call(root.querySelectorAll(".sv-thumb"), function (t) { t.onclick = function () { show(+t.getAttribute("data-i")); }; });
+    q(".sv-img").onclick = function () { openLB(list.map(function (s) { return { src: slideSrc(s), cap: s.title + " · " + deckLabel(s) }; }), i); };
+    show(0);
+  }
+
+  /* Tap-to-learn diagrams. Explore: tap a dot to learn it. Find it: tap the dot that matches the name. */
+  function diagramHTML(dg, focus) {
+    return '<div class="dg" data-dg="' + dg.id + '"><div class="dg-wrap"><svg class="dg-svg" viewBox="' + dg.view + '" role="img" aria-label="' + esc(dg.title) + ' diagram">' + dg.svg +
+      dg.spots.map(function (p, i) { var hot = focus && p.topics.indexOf(focus) > -1; return '<g class="spot' + (hot ? " hot" : "") + '" data-i="' + i + '" tabindex="0" role="button" aria-label="' + (i + 1) + '"><circle r="13" cx="' + p.x + '" cy="' + p.y + '"></circle><text x="' + p.x + '" y="' + (p.y + 4.5) + '">' + (i + 1) + "</text></g>"; }).join("") +
+      '</svg></div><div class="dg-panel"></div></div>';
+  }
+  function bindDiagram(root, dg, mode, focus) {
+    if (!root) return;
+    var panel = root.querySelector(".dg-panel"), spots = Array.prototype.slice.call(root.querySelectorAll(".spot")), seen = {};
+    function info(i) {
+      var p = dg.spots[i];
+      return "<h3>" + (i + 1) + " · " + esc(p.label) + "</h3><p>" + esc(p.text) + "</p>" +
+        (p.topics.length ? '<div class="row">' + p.topics.map(function (t) { return '<a class="chip" href="#topic/' + t + '">' + esc(topicName(t)) + " →</a>"; }).join("") + "</div>" : "");
+    }
+    if (mode === "find") {
+      var order = shuffle(dg.spots.map(function (p, i) { return i; })), k = 0, right = 0, tries = 0;
+      var ask = function () {
+        spots.forEach(function (g) { g.classList.remove("bad"); });
+        if (k >= order.length) {
+          panel.innerHTML = "<h3>Done! " + right + " / " + order.length + " on the first try</h3><p class=\"small muted\">Every structure is labeled now. Tap any dot to review it.</p><button class=\"btn primary\" id=\"dg-again\">Try again</button>";
+          if (right === order.length) { addXP(10, "Perfect diagram"); confetti(); }
+          root.querySelector("#dg-again").onclick = function () { spots.forEach(function (g) { g.classList.remove("good"); }); bindDiagram(root, dg, "find", focus); };
+          spots.forEach(function (g) { g.onclick = function () { panel.innerHTML = info(+g.getAttribute("data-i")); }; });
+          return;
+        }
+        tries = 0;
+        panel.innerHTML = '<p class="tiny">' + (k + 1) + " of " + order.length + " · score " + right + '</p><h3>Find: ' + esc(dg.spots[order[k]].label) + '</h3><p class="small muted">Tap the numbered dot.</p>';
+      };
+      spots.forEach(function (g) {
+        g.onclick = g.onkeydown = function (e) {
+          if (e.type === "keydown" && e.key !== "Enter" && e.key !== " ") return;
+          var i = +g.getAttribute("data-i"); if (k >= order.length || g.classList.contains("good")) return;
+          if (i === order[k]) { if (!tries) right++; g.classList.add("good"); k++; toast("✓ " + dg.spots[i].label); ask(); }
+          else { tries++; g.classList.add("bad"); setTimeout(function () { g.classList.remove("bad"); }, 600); panel.querySelector(".muted").textContent = "That's " + dg.spots[i].label + ". Try again."; }
+        };
+      });
+      ask();
+      return;
+    }
+    panel.innerHTML = '<p class="muted">Tap a numbered dot to learn what it is and what goes wrong there.' + (focus ? " Pulsing dots relate to this topic." : "") + "</p>";
+    spots.forEach(function (g) {
+      g.onclick = g.onkeydown = function (e) {
+        if (e.type === "keydown" && e.key !== "Enter" && e.key !== " ") return;
+        var i = +g.getAttribute("data-i"); seen[i] = 1;
+        spots.forEach(function (x) { x.classList.toggle("sel", x === g); });
+        g.classList.add("seen");
+        panel.innerHTML = info(i) + '<p class="tiny" style="margin-top:10px">' + Object.keys(seen).length + " of " + dg.spots.length + " explored</p>";
+        if (Object.keys(seen).length === dg.spots.length && !S.best["dg_" + dg.id]) { S.best["dg_" + dg.id] = 1; addXP(5, "Diagram explored"); }
+      };
+    });
+  }
+
+  function pics(tab, arg) {
+    tab = tab || "diagrams";
+    var head = '<h1>Picture Lab</h1><p class="muted">Learn with pictures: tap-to-learn diagrams, every lecture slide, and a picture quiz.</p>' +
+      '<div class="filter-bar">' + [["diagrams", "🧩 Diagrams"], ["quiz", "🖼️ Picture quiz"], ["slides", "📽 Lecture slides"]].map(function (t) { return '<a class="chip' + (tab === t[0] ? " on" : "") + '" href="#pics/' + t[0] + '">' + t[1] + "</a>"; }).join("") + "</div>";
+
+    if (tab === "slides") {
+      var di = arg === undefined ? -1 : +arg;
+      if (di >= 0 && DECKS[di]) {
+        var list = SLIDE_LIST.filter(function (s) { return s.deck === di; });
+        app.innerHTML = head + '<div class="row" style="margin-bottom:12px"><a class="btn small" href="#pics/slides">← All decks</a></div><div class="card sys-' + DECKS[di].sys + '"><div class="row">' + tag(DECKS[di].sys) + '<span class="tiny">' + esc(DECKS[di].mod) + '</span></div><h2 style="margin-top:8px">' + esc(DECKS[di].title) + "</h2>" + slideViewer(list) + "</div>";
+        bindViewer($(".sv"), list);
+        return;
+      }
+      app.innerHTML = head + SYSTEMS.filter(function (s) { return DECKS.some(function (d) { return d.sys === s.id; }); }).map(function (s) {
+        return "<h2>" + esc(s.icon + " " + s.name) + '</h2><div class="grid grid-3" style="margin-bottom:18px">' + DECKS.map(function (d, i) { return [d, i]; }).filter(function (x) { return x[0].sys === s.id; }).map(function (x) {
+          var list = SLIDE_LIST.filter(function (sl) { return sl.deck === x[1]; });
+          return '<a class="card tile deck-card sys-' + s.id + '" href="#pics/slides/' + x[1] + '"><img loading="lazy" src="' + (list[0] ? slideSrc(list[0]) : "") + '" alt=""><span class="tiny">' + esc(x[0].mod) + "</span><h3>" + esc(x[0].title) + '</h3><p class="small muted" style="margin:0">' + list.length + " slides</p></a>";
+        }).join("") + "</div>";
+      }).join("") + '<p class="tiny credit">' + esc(CREDIT) + "</p>";
+      return;
+    }
+
+    if (tab === "quiz") {
+      var sys = arg && SYS[arg] ? arg : null;
+      var pool = FIGS.filter(function (f) { var d = DISORDERS.filter(function (x) { return x.id === f.topic; })[0]; return d && (!sys || d.sys === sys); });
+      var best = S.best.pics;
+      app.innerHTML = head + sysFilterBar(sys, "#pics/quiz", true) +
+        '<div class="card"><h2>Which topic is this picture from?</h2><p class="small muted">' + pool.length + " pictures from the lecture slides in this pool. You'll see 10 at a time and get the slide it came from after each answer." + (best ? " Best so far: " + best + "/10." : "") + '</p><button class="btn primary" id="go"' + (pool.length < 4 ? " disabled" : "") + ">Start</button></div>";
+      if (pool.length >= 4) $("#go").onclick = function () { picQuiz(shuffle(pool).slice(0, 10), sys); };
+      return;
+    }
+
+    var dg = DIAG.filter(function (x) { return x.id === arg; })[0] || DIAG[0];
+    var mode = arg && location.hash.indexOf("/find") > -1 ? "find" : "explore";
+    app.innerHTML = head +
+      '<div class="filter-bar">' + DIAG.map(function (x) { return '<a class="chip' + (x.id === dg.id ? " on" : "") + '" href="#pics/diagrams/' + x.id + '"><span class="sys-dot sys-' + x.sys + '"></span>' + esc(x.title) + "</a>"; }).join("") + "</div>" +
+      '<div class="card sys-' + dg.sys + '"><div class="row"><h2 style="margin:0">' + esc(dg.title) + '</h2><span class="spacer"></span>' +
+        '<a class="chip' + (mode === "explore" ? " on" : "") + '" href="#pics/diagrams/' + dg.id + '">Explore</a><a class="chip' + (mode === "find" ? " on" : "") + '" href="#pics/diagrams/' + dg.id + '/find">Find it (quiz)</a></div>' +
+        diagramHTML(dg) + "</div>";
+    bindDiagram($(".dg"), dg, mode);
+  }
+
+  function picQuiz(items, sys) {
+    var pos = 0, score = 0, names = DISORDERS.filter(function (d) { return d.sys !== "found"; });
+    function draw() {
+      if (pos >= items.length) {
+        if (!S.best.pics || score > S.best.pics) S.best.pics = score; save();
+        app.innerHTML = '<div class="card scoreboard"><div style="font-size:44px">' + (score >= 8 ? "🏆" : score >= 6 ? "💪" : "📖") + '</div><div class="big-score">' + score + " / " + items.length + '</div><p class="muted">Pictures matched to the right topic.</p><div class="row" style="justify-content:center"><button class="btn primary" id="again">Play again</button><a class="btn" href="#pics/slides">Browse the slides</a></div></div>';
+        $("#again").onclick = function () { pics("quiz", sys); };
+        if (score >= 8) confetti();
+        return;
+      }
+      var f = items[pos], d = DISORDERS.filter(function (x) { return x.id === f.topic; })[0];
+      var same = shuffle(names.filter(function (x) { return x.sys === d.sys && x.id !== d.id; })).slice(0, 2);
+      var other = shuffle(names.filter(function (x) { return x.sys !== d.sys; })).slice(0, 3 - same.length);
+      var opts = shuffle([d].concat(same, other));
+      var sl = SLIDE_LIST.filter(function (s) { return s.id === f.slide; })[0];
+      app.innerHTML = '<div class="row" style="margin-bottom:12px"><a class="btn small" href="#pics/quiz">← End</a><span class="spacer"></span><span class="chip">' + (pos + 1) + " / " + items.length + " · score " + score + "</span></div>" +
+        '<div class="card pic-q"><div class="pic-frame"><img src="figures/' + f.f + '" alt="Lecture slide picture" title="Tap to enlarge"></div><h2>Which topic is this picture from?</h2>' +
+        opts.map(function (o) { return '<button class="opt" data-k="' + o.id + '"><span class="box"></span><span>' + esc(o.name) + "</span></button>"; }).join("") + '<div id="rat"></div></div>';
+      $(".pic-frame img").onclick = function () { openLB([{ src: "figures/" + f.f, cap: sl ? sl.title : "" }], 0); };
+      $$(".opt").forEach(function (b) {
+        b.onclick = function () {
+          var ok = b.getAttribute("data-k") === d.id; if (ok) { score++; addXP(3); }
+          $$(".opt").forEach(function (x) { x.disabled = true; var r = x.getAttribute("data-k") === d.id; if (r) x.classList.add("right"); else if (x === b) x.classList.add("wrong"); x.querySelector(".box").textContent = r ? "✓" : x === b ? "✕" : ""; });
+          $("#rat").innerHTML = '<div class="rationale ' + (ok ? "ok" : "no") + '"><strong>' + (ok ? "Correct!" : "It's " + esc(d.name) + ".") + "</strong>" + (sl ? "From the slide “" + esc(sl.title) + "” in " + esc(deckLabel(sl)) + ". " : "") + '<a href="#topic/' + d.id + '">Open the topic</a></div><div class="row" style="margin-top:12px"><span class="spacer"></span><button class="btn primary" id="next">' + (pos + 1 >= items.length ? "See score" : "Next picture →") + "</button></div>";
+          $("#next").onclick = function () { pos++; draw(); window.scrollTo(0, 0); };
+          $("#next").focus();
+        };
+      });
+    }
+    draw();
   }
 
   /* ================= FLASHCARDS ================= */
