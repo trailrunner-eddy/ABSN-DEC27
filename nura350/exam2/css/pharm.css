@@ -1,0 +1,66 @@
+/* Pharm Exam 2 additions on top of the shared study-guide styles. */
+.sys-cv1 { --c: var(--card1); } .sys-cv2 { --c: var(--card2); }
+.sys-gu { --c: var(--gu); } .sys-gi { --c: var(--kidney); }
+.hero-main { background: linear-gradient(135deg, var(--card2), color-mix(in srgb, var(--accent) 60%, var(--card2))); }
+
+.switches { gap: 18px; flex-wrap: wrap; }
+.switches .plain-switch { margin: 10px 0 0; }
+
+.mnemonic { margin-top: 12px; padding: 12px 14px; border-radius: 12px; background: color-mix(in srgb, var(--c) 9%, var(--surface)); }
+.mn-big { font-size: 1.15rem; font-weight: 700; margin: 2px 0; }
+.mn-list { display: flex; flex-direction: column; }
+.mn-row { display: grid; grid-template-columns: minmax(110px, 38%) 1fr; gap: 10px; padding: 7px 0 7px 10px; border-left: 3px solid var(--c); border-bottom: 1px solid var(--line); text-decoration: none; color: inherit; font-size: .9rem; }
+.mn-row:last-child { border-bottom: none; }
+.mn-cat { font-weight: 600; }
+.mn-say { color: var(--ink-2); }
+
+.drug-card { padding: 0; overflow: hidden; border-left: 4px solid var(--c); }
+.drug-card > summary { list-style: none; cursor: pointer; padding: 14px 18px; display: flex; align-items: flex-start; gap: 12px; }
+.drug-card > summary::-webkit-details-marker { display: none; }
+.drug-card > summary::after { content: "+"; margin-left: auto; font-size: 1.4rem; line-height: 1; color: var(--ink-3); }
+.drug-card[open] > summary::after { content: "−"; }
+.drug-card > :not(summary) { margin-left: 18px; margin-right: 18px; }
+.drug-card > :last-child { margin-bottom: 16px; }
+.drug-head h3 { margin: 0; }
+.drug-cls { font-size: .88rem; color: var(--c); font-weight: 600; margin-top: 2px; }
+.brand-name { font-weight: 500; color: var(--ink-3); font-size: .9em; }
+.plain-box { box-shadow: none; padding: 12px 14px; margin-bottom: 12px; }
+.plain-box h4 { margin: 0 0 4px; }
+.plain-box p { margin: 0; }
+.key-line { padding: 10px 12px; border-radius: 10px; background: var(--warn-bg); font-size: .93rem; margin-bottom: 12px; }
+.drug-fields { display: grid; grid-template-columns: 170px 1fr; margin: 0 18px 12px; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; font-size: .93rem; }
+.drug-fields dt { font-weight: 700; font-size: .78rem; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-3); background: var(--surface-2); padding: 10px 12px; border-bottom: 1px solid var(--line); }
+.drug-fields dd { margin: 0; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+.drug-fields dt:last-of-type, .drug-fields dd:last-of-type { border-bottom: none; }
+.fv { border-radius: 4px; transition: filter .2s, background .2s; }
+.fv.covered { filter: blur(6px); background: var(--surface-2); cursor: pointer; user-select: none; }
+.fv:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (max-width: 640px) {
+  .drug-fields { grid-template-columns: 1fr; }
+  .drug-fields dt { border-bottom: none; padding-bottom: 2px; }
+}
+
+.search-wrap { position: relative; }
+.search-wrap input, .hl-input { width: 100%; padding: 11px 14px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--surface); }
+.search-wrap input:focus, .hl-input:focus { outline: none; border-color: var(--accent); }
+.hits { position: absolute; z-index: 20; left: 0; right: 0; top: calc(100% + 4px); background: var(--surface); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); max-height: 60vh; overflow: auto; }
+.hits a { display: flex; flex-direction: column; padding: 9px 12px; text-decoration: none; color: inherit; border-bottom: 1px solid var(--line); }
+.hits a:hover { background: var(--surface-2); }
+.hl-input { margin-bottom: 14px; }
+
+table.glance td:first-child { min-width: 130px; }
+table.compare td:first-child { min-width: 140px; }
+.compare .cat-row td { background: color-mix(in srgb, var(--c) 10%, var(--surface)); font-weight: 700; position: static; }
+.compare tr.dim td { opacity: .35; }
+mark { background: color-mix(in srgb, var(--warn) 35%, transparent); color: inherit; border-radius: 3px; padding: 0 2px; }
+
+.flash { height: 340px; }
+.flash-face .a.pre { white-space: pre-line; font-size: 1rem; overflow: auto; max-height: calc(100% - 50px); }
+.name-card .name-q { font-size: 1.6rem; font-weight: 800; margin-bottom: 2px; }
+.nav-links { flex-wrap: wrap; gap: 8px; }
+@media (max-width: 640px) {
+  table.glance thead { display: none; }
+  table.glance tr { display: block; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+  table.glance td { display: block; padding: 2px 0; border: none; position: static !important; background: none !important; }
+  table.glance td:nth-child(2) { color: var(--ink-3); font-size: .85rem; }
+}

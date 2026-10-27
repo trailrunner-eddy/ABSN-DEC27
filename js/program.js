@@ -101,7 +101,16 @@ window.PROGRAM = {
         },
         {
           id: "nura350", code: "NURA 350", name: "Pharmacology", icon: "💊", color: "#a43f87",
-          exams: [ { name: "Exam 2", status: "planned" } ]
+          exams: [
+            {
+              name: "Exam 2", status: "ready",
+              path: "nura350/exam2/index.html",
+              bank: ["js/drugs.js", "js/practice.js"],
+              blurb: "Every Exam 2 drug from the combined drug tables: cardiac, renal & GU, reproductive, and GI.",
+              topics: ["Cardiac 1", "Cardiac 2", "Renal/GU", "GI"],
+              stats: "44 drugs · 14 categories · 60 questions · 143 flashcards"
+            }
+          ]
         },
         {
           id: "dosage", code: "", name: "Dosage Calc", icon: "🧮", color: "#c27a17",
