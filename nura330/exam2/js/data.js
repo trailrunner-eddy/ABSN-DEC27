@@ -8,7 +8,7 @@ window.GUIDE = {
   course: "NURA 330 · Health Assessment",
   title: "Exam 2 Study Lab",
   heroArt: "🩺",
-  heroText: "50 items (multiple choice and SATA) in 75 minutes, 20% of the course grade. Lynnwood: Mon Nov 2, 12:00. Auburn: Wed Nov 4. For every system, practice moving from <b>anatomy → what you ask → what you examine → what you report</b>.",
+  heroText: "50 items (multiple choice and SATA) in 75 minutes, 20% of the course grade. For every system, practice moving from <b>anatomy → what you ask → what you examine → what you report</b>.",
   formats: ["Multiple choice", "Select all that apply"],
   formatNote: "The exam is MC and SATA only. Practice Qs adds a few NGN formats (select N, cloze, matrix) for extra reps.",
   chainTitle: "The assessment chain",

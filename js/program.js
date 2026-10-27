@@ -58,9 +58,8 @@ window.PROGRAM = {
             {
               name: "Exam 2", status: "ready",
               path: "nura330/exam2/index.html",
-              date: "2026-11-02",
               bank: ["js/data.js", "js/practice.js"],
-              blurb: "Lifespan, skin & lymph, cardiovascular, HEENT & reproductive. Lynnwood Mon Nov 2 at 12:00; Auburn Wed Nov 4.",
+              blurb: "Lifespan, skin & lymph, cardiovascular, HEENT & reproductive.",
               topics: ["Skin & Lymph", "Cardiovascular", "HEENT", "Reproductive"],
               stats: "4 section overviews · 31 topics · 18 diagrams · 67 questions · 110 flashcards"
             },
