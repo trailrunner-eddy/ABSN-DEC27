@@ -35,7 +35,36 @@ window.PROGRAM = {
         },
         {
           id: "nura330", code: "NURA 330", name: "Health Assessment", icon: "🩺", color: "#12898f",
-          exams: []
+          lectureFolder: "../Sem 1/Health Assessment/",
+          lectureWebFolder: "nura330/lecture-guides/",
+          lectureExam: "Exam 2",
+          lectureGuides: [
+            { mod: "Exam 1 · Mods 1–3", title: "Mod 1 · Intro to Health Assessment", file: "Exam 1/Lecture Guides/Mod 1 - Intro to Health Assessment Lecture Guide.pdf", web: "mod-1-intro-to-health-assessment.pdf", topics: [["Subjective vs. objective", "data"], ["Techniques", "inspect"]] },
+            { mod: "Exam 1 · Mods 1–3", title: "Mod 2 · General Survey & Health History", file: "Exam 1/Lecture Guides/Mod 2 - General Survey & Health History Lecture Guide.pdf", web: "mod-2-general-survey-and-health-history.pdf", topics: [["General survey", "gs"], ["OLDCARTS", "hpi"]] },
+            { mod: "Exam 1 · Mods 1–3", title: "Mod 3 · Respiratory Assessment", file: "Exam 1/Lecture Guides/Mod 3 - Respiratory Assessment Lecture Guide.pdf", web: "mod-3-respiratory-assessment.pdf", topics: [["Breath sounds", "advbs"]] },
+            { mod: "Exam 2 · Mods 4–7", title: "Mod 4 · Integumentary & Lymphatic Systems", file: "Exam 2/Lecture Guides/Mod 4 - Integumentary and Lymphatic Systems Lecture Guide.pdf", web: "mod-4-integumentary-and-lymphatic-systems.pdf", topics: [["Pressure injuries", "pi"], ["Braden", "braden"]] },
+            { mod: "Exam 2 · Mods 4–7", title: "Mod 5 · Cardiovascular Assessment", file: "Exam 2/Lecture Guides/Mod 5 - Cardiovascular Assessment Lecture Guide.pdf", web: "mod-5-cardiovascular-assessment.pdf", topics: [["Heart sounds", "heartsounds"], ["Pulses", "pulses"]] },
+            { mod: "Exam 2 · Mods 4–7", title: "Mod 6 · HEENT", file: "Exam 2/Lecture Guides/Mod 6 - HEENT Lecture Guide.pdf", web: "mod-6-heent.pdf", topics: [["Cranial nerves", "cn"]] }
+          ],
+          exams: [
+            {
+              name: "Exam 1", status: "ready",
+              path: "nura330/exam1/index.html",
+              bank: ["js/data.js", "js/practice.js"],
+              blurb: "Intro to health assessment, general survey & health history, respiratory assessment. Exam 1 is done; use it to review for the final.",
+              topics: ["Intro", "Survey & Hx", "Respiratory"],
+              stats: "3 section overviews · 26 topics · 10 diagrams · 70 questions · 93 flashcards"
+            },
+            {
+              name: "Exam 2", status: "ready",
+              path: "nura330/exam2/index.html",
+              bank: ["js/data.js", "js/practice.js"],
+              blurb: "Lifespan, skin & lymph, cardiovascular, HEENT & reproductive.",
+              topics: ["Skin & Lymph", "Cardiovascular", "HEENT", "Reproductive"],
+              stats: "4 section overviews · 31 topics · 18 diagrams · 67 questions · 110 flashcards"
+            },
+            { name: "Final Exam", status: "planned" }
+          ]
         },
         {
           id: "nura340", code: "NURA 340", name: "Pathology", icon: "🫀", color: "#c8463d",
