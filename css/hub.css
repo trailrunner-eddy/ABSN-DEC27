@@ -66,3 +66,7 @@ a.chip:hover { border-color: var(--c, var(--accent)); color: var(--ink); }
 .dl-mod > summary::after { content: "›"; display: inline-block; margin-left: 8px; color: var(--ink-3); transition: transform .15s; }
 .dl-mod[open] > summary::after { transform: rotate(90deg); }
 .dl-mod ul { padding: 0 0 6px 14px; }
+.chip.diff { font-weight: 700; border-color: transparent; }
+.chip.diff-easy { background: var(--good-bg); color: var(--good); }
+.chip.diff-medium { background: var(--warn-bg); color: var(--warn); }
+.chip.diff-hard { background: var(--bad-bg); color: var(--bad); }

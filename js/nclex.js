@@ -5,6 +5,8 @@
 (function () {
   "use strict";
   var TYPES = { mc: "Multiple choice", sata: "Select all that apply", selectn: "Select N", cloze: "Drop-down cloze", matrix: "Matrix grid", priority: "Prioritization" };
+  var DIFFS = { easy: "Easy", medium: "Medium", hard: "Hard", unrated: "Not rated" };
+  function diffChip(d) { return d === "unrated" ? "" : '<span class="chip diff diff-' + d + '">' + DIFFS[d] + "</span>"; }
   var LENGTHS = [10, 25, 50, 75, "All"];
   var bank = null, loading = null;
   var app, ctx, esc, S;
@@ -39,7 +41,7 @@
           var sys = {}; (window.SYSTEMS || []).forEach(function (s) { sys[s.id] = s; });
           var tag = (src.course.code || src.course.name) + " · " + src.exam.name, n0 = out.qs.length;
           (window.QUESTIONS || []).forEach(function (q, i) { out.qs.push(norm(q, src, sys, src.key + "|q" + i, q.type)); });
-          (window.TRIAGE || []).forEach(function (t, i) { out.qs.push(norm({ sys: t.sys, type: "mc", stem: t.stem, options: t.clients, answer: t.answer, why: t.why }, src, sys, src.key + "|t" + i, "priority")); });
+          (window.TRIAGE || []).forEach(function (t, i) { out.qs.push(norm({ sys: t.sys, type: "mc", diff: t.diff, stem: t.stem, options: t.clients, answer: t.answer, why: t.why }, src, sys, src.key + "|t" + i, "priority")); });
           src.tag = tag; src.count = out.qs.length - n0; out.sources.push(src);
         }, function () { out.failed.push(src); });
       });
@@ -48,7 +50,7 @@
   }
   function norm(q, src, sys, id, kind) {
     var s = sys[q.sys];
-    return { id: id, src: src.key, kind: kind, topic: src.key + "|" + q.sys, topicName: s ? s.name : q.sys, short: s ? s.short : q.sys, color: src.course.color, course: src.course, exam: src.exam, q: q };
+    return { id: id, src: src.key, kind: kind, diff: DIFFS[q.diff] ? q.diff : "unrated", topic: src.key + "|" + q.sys, topicName: s ? s.name : q.sys, short: s ? s.short : q.sys, color: src.course.color, course: src.course, exam: src.exam, q: q };
   }
 
   /* ---------- Builder ---------- */
@@ -83,7 +85,11 @@
         var n = B.qs.filter(function (x) { return x.kind === k; }).length;
         return n ? '<label class="nx-check"><input type="checkbox" data-type="' + k + '"' + (on(pf.types, k) ? " checked" : "") + '><span>' + TYPES[k] + '<br><span class="tiny">' + n + " questions</span></span></label>" : "";
       }).join("") + "</div></div>" +
-      '<div class="card nx-section"><h3>4 · Setup</h3>' +
+      '<div class="card nx-section"><h3>4 · Difficulty</h3><p class="tiny muted" style="margin:-4px 0 10px">Easy = recall a fact · Medium = apply it to a client · Hard = multi-step or technical reasoning</p><div class="nx-grid">' + Object.keys(DIFFS).map(function (k) {
+        var n = B.qs.filter(function (x) { return x.diff === k; }).length;
+        return n ? '<label class="nx-check"><input type="checkbox" data-diff="' + k + '"' + (on(pf.diffs, k) ? " checked" : "") + '><span>' + (k === "unrated" ? DIFFS[k] : diffChip(k)) + '<br><span class="tiny">' + n + " questions</span></span></label>" : "";
+      }).join("") + "</div></div>" +
+      '<div class="card nx-section"><h3>5 · Setup</h3>' +
         '<div class="row" style="margin-bottom:12px"><b class="small" style="width:90px">Length</b>' + LENGTHS.map(function (n) { return '<button class="chip' + (String(pf.len || 25) === String(n) ? " on" : "") + '" data-len="' + n + '">' + n + "</button>"; }).join("") + "</div>" +
         '<div class="row" style="margin-bottom:12px"><b class="small" style="width:90px">Pool</b>' + [["all", "All questions"], ["unseen", "Not tried yet"], ["missed", "Missed before"]].map(function (p) { return '<button class="chip' + ((pf.pool || "all") === p[0] ? " on" : "") + '" data-pool="' + p[0] + '">' + p[1] + "</button>"; }).join("") + "</div>" +
         '<div class="row" style="margin-bottom:12px"><b class="small" style="width:90px">Mode</b>' + [["tutor", "Tutor: rationale after each"], ["exam", "Exam: rationales at the end"]].map(function (p) { return '<button class="chip' + ((pf.mode || "tutor") === p[0] ? " on" : "") + '" data-mode="' + p[0] + '">' + p[1] + "</button>"; }).join("") + "</div>" +
@@ -98,9 +104,9 @@
     function chosen(attr) { return $$("input[" + attr + "]").filter(function (i) { return i.checked; }).map(function (i) { return i.getAttribute(attr); }); }
     function pick(attr) { var b = $("[" + attr + "].on"); return b ? b.getAttribute(attr) : null; }
     function pool() {
-      var src = chosen("data-src"), tp = chosen("data-topic"), ty = chosen("data-type"), p = pick("data-pool");
+      var src = chosen("data-src"), tp = chosen("data-topic"), ty = chosen("data-type"), df = chosen("data-diff"), p = pick("data-pool");
       return B.qs.filter(function (x) {
-        return src.indexOf(x.src) > -1 && tp.indexOf(x.topic) > -1 && ty.indexOf(x.kind) > -1 &&
+        return src.indexOf(x.src) > -1 && tp.indexOf(x.topic) > -1 && ty.indexOf(x.kind) > -1 && df.indexOf(x.diff) > -1 &&
           (p === "unseen" ? seen[x.id] === undefined : p === "missed" ? seen[x.id] === 0 : true);
       });
     }
@@ -111,7 +117,7 @@
       $("#pool-n").textContent = n;
       $("#exam-n").textContent = len === "All" ? n : Math.min(n, +len);
       $("#go").disabled = !n;
-      nx.prefs = { src: src, topics: chosen("data-topic"), types: chosen("data-type"), len: len, pool: pick("data-pool"), mode: pick("data-mode"), timed: $("#timed").checked };
+      nx.prefs = { src: src, topics: chosen("data-topic"), types: chosen("data-type"), diffs: chosen("data-diff"), len: len, pool: pick("data-pool"), mode: pick("data-mode"), timed: $("#timed").checked };
       ctx.save();
     }
     $$("input").forEach(function (i) { i.onchange = update; });
@@ -119,7 +125,7 @@
     $("#t-all").onclick = function () { $$("input[data-topic]").forEach(function (i) { i.checked = true; }); update(); };
     $("#t-none").onclick = function () { $$("input[data-topic]").forEach(function (i) { i.checked = false; }); update(); };
     $("#go").onclick = function () {
-      var p = pool(); if (!p.length) { note("No questions match. Turn on more topics or types."); return; }
+      var p = pool(); if (!p.length) { note("No questions match. Turn on more topics, types, or difficulty levels."); return; }
       var len = pick("data-len"), mode = pick("data-mode");
       run(shuffle(p).slice(0, len === "All" ? p.length : +len), mode, $("#timed").checked);
     };
@@ -146,7 +152,7 @@
       var x = list[pos], q = x.q, k = x.kind;
       var html = '<div class="row" style="margin-bottom:14px"><button class="btn small" id="quit">← End exam</button><span class="spacer"></span><span class="chip">⏱ <span id="nx-time">' + (limit ? fmt(limit - (Date.now() - t0) / 1000) + " left" : fmt((Date.now() - t0) / 1000)) + '</span></span></div>' +
         '<div class="q-card card" style="border-left:5px solid ' + x.color + '"><div class="progress" style="margin-bottom:14px"><span style="width:' + (100 * pos / list.length) + '%"></span></div>' +
-        '<div class="q-meta"><span class="chip">' + esc(x.course.code || x.course.name) + " · " + esc(x.short) + '</span><span class="chip">' + TYPES[k] + (k === "selectn" ? " · pick " + q.n : "") + '</span><span class="spacer"></span><span class="tiny">' + (pos + 1) + " / " + list.length + "</span></div>";
+        '<div class="q-meta"><span class="chip">' + esc(x.course.code || x.course.name) + " · " + esc(x.short) + '</span><span class="chip">' + TYPES[k] + (k === "selectn" ? " · pick " + q.n : "") + "</span>" + diffChip(x.diff) + '<span class="spacer"></span><span class="tiny">' + (pos + 1) + " / " + list.length + "</span></div>";
       if (k === "cloze") {
         html += '<p class="small muted">Choose the option that best completes each blank.</p><div class="cloze">' + esc(q.stem).replace(/\{(\d+)\}/g, function (m, n) {
           var b = q.blanks[+n];
@@ -225,7 +231,7 @@
       return ans.map(function (i) { return q.options[i]; }).join(" · ");
     }
     function bars(groups) {
-      return Object.keys(groups).map(function (g) { var v = groups[g], p = Math.round(100 * v.ok / v.n);
+      return Object.keys(groups).filter(function (g) { return groups[g].n; }).map(function (g) { var v = groups[g], p = Math.round(100 * v.ok / v.n);
         return '<div class="nx-bar"><span>' + esc(g) + '</span><div class="progress" style="--c:' + (p >= 75 ? "var(--good)" : p >= 60 ? "var(--warn)" : "var(--bad)") + '"><span style="width:' + p + '%;background:var(--c)"></span></div><b>' + p + "%</b></div>";
       }).join("");
     }
@@ -234,20 +240,22 @@
       var n = results.length;
       if (!n) { builder(bank); return; }
       var ok = results.filter(function (r) { return r.ok; }).length, pct = Math.round(100 * ok / n), secs = (Date.now() - t0) / 1000;
-      var byTopic = {}, byType = {};
+      var byTopic = {}, byType = {}, byDiff = {};
+      Object.keys(DIFFS).forEach(function (k) { byDiff[DIFFS[k]] = { n: 0, ok: 0 }; });
       results.forEach(function (r) {
         var a = (r.x.course.code || r.x.course.name) + " · " + r.x.topicName, b = TYPES[r.x.kind];
         (byTopic[a] = byTopic[a] || { n: 0, ok: 0 }).n++; if (r.ok) byTopic[a].ok++;
         (byType[b] = byType[b] || { n: 0, ok: 0 }).n++; if (r.ok) byType[b].ok++;
+        var d = DIFFS[r.x.diff]; (byDiff[d] = byDiff[d] || { n: 0, ok: 0 }).n++; if (r.ok) byDiff[d].ok++;
       });
       var nx = st(); nx.hist.unshift({ d: Date.now(), n: n, pct: pct, mode: mode }); nx.hist = nx.hist.slice(0, 30); ctx.save();
       var wrong = results.filter(function (r) { return !r.ok; });
       app.innerHTML = '<div class="card scoreboard"><div style="font-size:44px">' + (pct >= 85 ? "🏆" : pct >= 70 ? "💪" : "📖") + '</div><div class="big-score">' + pct + '%</div><p class="muted">' + ok + " of " + n + " correct · " + fmt(secs) + (early && n < list.length ? " · ended early" : "") + "</p>" +
         "<p>" + (pct >= 85 ? "Strong. Try a longer exam or switch to Exam mode." : pct >= 70 ? "Solid. Read the rationales below, then retry your missed questions." : "Review the topics below with the lowest scores, then build an exam from just those.") + "</p>" +
         '<div class="row" style="justify-content:center"><button class="btn primary" id="again">Build another exam</button>' + (wrong.length ? '<button class="btn" id="retry">Retry the ' + wrong.length + " I missed</button>" : "") + "</div></div>" +
-        '<div class="grid grid-2" style="margin-top:18px"><div class="card"><h3>By topic</h3>' + bars(byTopic) + '</div><div class="card"><h3>By question type</h3>' + bars(byType) + "</div></div>" +
+        '<div class="grid grid-2" style="margin-top:18px"><div class="card"><h3>By topic</h3>' + bars(byTopic) + '</div><div class="card"><h3>By question type</h3>' + bars(byType) + '</div><div class="card"><h3>By difficulty</h3>' + bars(byDiff) + "</div></div>" +
         (wrong.length ? '<h2 style="margin-top:24px">Review what you missed</h2>' + wrong.map(function (r) { var q = r.x.q;
-          return '<div class="card" style="margin-bottom:12px;border-left:5px solid ' + r.x.color + '"><div class="q-meta"><span class="chip">' + esc(r.x.course.code || r.x.course.name) + " · " + esc(r.x.short) + '</span><span class="chip">' + TYPES[r.x.kind] + "</span>" + (r.resp ? "" : '<span class="chip">Not answered</span>') + "</div><p><b>" + esc(q.stem.replace(/\{\d+\}/g, "___")) + '</b></p><p class="small"><b style="color:var(--good)">Answer:</b> ' + esc(answerText(r.x)) + '</p><p class="small muted">' + esc(q.why || "") + "</p></div>";
+          return '<div class="card" style="margin-bottom:12px;border-left:5px solid ' + r.x.color + '"><div class="q-meta"><span class="chip">' + esc(r.x.course.code || r.x.course.name) + " · " + esc(r.x.short) + '</span><span class="chip">' + TYPES[r.x.kind] + "</span>" + diffChip(r.x.diff) + (r.resp ? "" : '<span class="chip">Not answered</span>') + "</div><p><b>" + esc(q.stem.replace(/\{\d+\}/g, "___")) + '</b></p><p class="small"><b style="color:var(--good)">Answer:</b> ' + esc(answerText(r.x)) + '</p><p class="small muted">' + esc(q.why || "") + "</p></div>";
         }).join("") : "");
       $("#again").onclick = function () { builder(bank); window.scrollTo(0, 0); };
       if ($("#retry")) $("#retry").onclick = function () { run(shuffle(wrong.map(function (r) { return r.x; })), mode, timed); };
