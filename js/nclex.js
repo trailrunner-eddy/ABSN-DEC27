@@ -175,7 +175,11 @@
         if (k === "selectn" && !b.classList.contains("sel") && $$(".opt.sel").length >= q.n) { note("Pick exactly " + q.n + "."); return; }
         b.classList.toggle("sel");
       }; });
-      $("#quit").onclick = function () { if (confirm("End this exam? Answered questions will still be scored.")) { stopTimer(); finish(true); } };
+      $("#quit").onclick = function () {
+        var b = $("#quit");
+        if (!b.classList.contains("armed")) { b.classList.add("armed"); b.textContent = "Tap again to end · answered questions are scored"; setTimeout(function () { if (b.isConnected) { b.classList.remove("armed"); b.textContent = "← End exam"; } }, 4000); return; }
+        stopTimer(); finish(true);
+      };
       $("#submit").onclick = submit;
     }
 

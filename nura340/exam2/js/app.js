@@ -332,9 +332,10 @@
       var other = shuffle(names.filter(function (x) { return x.sys !== d.sys; })).slice(0, 3 - same.length);
       var opts = shuffle([d].concat(same, other));
       var sl = SLIDE_LIST.filter(function (s) { return s.id === f.slide; })[0];
-      app.innerHTML = '<div class="row" style="margin-bottom:12px"><a class="btn small" href="#pics/quiz">← End</a><span class="spacer"></span><span class="chip">' + (pos + 1) + " / " + items.length + " · score " + score + "</span></div>" +
+      app.innerHTML = '<div class="row" style="margin-bottom:12px"><button class="btn small" id="pq-end">← End</button><span class="spacer"></span><span class="chip">' + (pos + 1) + " / " + items.length + " · score " + score + "</span></div>" +
         '<div class="card pic-q"><div class="pic-frame"><img src="figures/' + f.f + '" alt="Lecture slide picture" title="Tap to enlarge"></div><h2>Which topic is this picture from?</h2>' +
         opts.map(function (o) { return '<button class="opt" data-k="' + o.id + '"><span class="box"></span><span>' + esc(o.name) + "</span></button>"; }).join("") + '<div id="rat"></div></div>';
+      $("#pq-end").onclick = function () { if (!pos) { location.hash = "#pics/diagrams"; return; } items = items.slice(0, pos); draw(); window.scrollTo(0, 0); };
       $(".pic-frame img").onclick = function () { openLB([{ src: "figures/" + f.f, cap: sl ? sl.title : "" }], 0); };
       $$(".opt").forEach(function (b) {
         b.onclick = function () {
@@ -446,13 +447,14 @@
         html += '<div class="q-stem">' + esc(q.stem) + "</div>" + shuffle(q.options.map(function (o, k) { return k; })).map(function (k) { return '<button class="opt' + (multi ? " multi" : "") + '" data-k="' + k + '"><span class="box"></span><span>' + esc(q.options[k]) + "</span></button>"; }).join("");
       }
       html += '<div class="row" style="margin-top:16px"><span class="spacer"></span><button class="btn primary" id="submit">Submit</button></div><div id="rat"></div></div>';
-      app.innerHTML = '<div class="row" style="margin-bottom:14px"><a class="btn small" href="#quiz' + (sys ? "/" + sys : "") + '">← End set</a></div>' + html;
+      app.innerHTML = '<div class="row" style="margin-bottom:14px"><button class="btn small" id="end">← End set</button></div>' + html;
 
       $$(".opt").forEach(function (b) { b.onclick = function () {
         if (q.type === "mc") $$(".opt").forEach(function (x) { if (x !== b) x.classList.remove("sel"); });
         b.classList.toggle("sel");
       }; });
       $("#submit").onclick = function () { grade(q, qi); };
+      $("#end").onclick = function () { if (results.length) finish(); else quiz(sys); };
     }
     function grade(q, qi) {
       var ok = false;
@@ -474,12 +476,13 @@
       btn.focus();
     }
     function finish() {
-      var pct = Math.round(100 * score / ids.length);
+      var n = results.length, pct = Math.round(100 * score / n);
       var wrong = results.filter(function (r) { return !r.ok; });
-      app.innerHTML = '<div class="card scoreboard"><div style="font-size:44px">' + (pct >= 85 ? "🏆" : pct >= 70 ? "💪" : "📖") + '</div><div class="big-score">' + pct + '%</div><p class="muted">' + score + " of " + ids.length + " correct</p>" +
+      app.innerHTML = '<div class="card scoreboard"><div style="font-size:44px">' + (pct >= 85 ? "🏆" : pct >= 70 ? "💪" : "📖") + '</div><div class="big-score">' + pct + '%</div><p class="muted">' + score + " of " + n + " correct" + (n < ids.length ? " · ended early" : "") + "</p>" +
         "<p>" + (pct >= 85 ? "Exam-ready on this set." : pct >= 70 ? "Solid. Review the rationales you missed." : "Go back to the topic pages for the systems you missed, then retry.") + "</p>" +
-        '<div class="row" style="justify-content:center"><a class="btn primary" href="#quiz' + (sys ? "/" + sys : "") + '">New set</a><a class="btn" href="#topics">Topics</a></div></div>' +
+        '<div class="row" style="justify-content:center"><button class="btn primary" id="newset">New set</button><a class="btn" href="#topics">Topics</a></div></div>' +
         (wrong.length ? '<h2 style="margin-top:24px">Review what you missed</h2>' + wrong.map(function (r) { var q = QUESTIONS[r.qi]; return '<div class="card sys-' + q.sys + '" style="margin-bottom:12px"><div class="q-meta">' + tag(q.sys) + '<span class="chip">' + TYPE_LABEL[q.type] + "</span>" + diffChip(q.diff) + '</div><p><b>' + esc(q.stem) + '</b></p><p class="small muted">' + esc(q.why) + "</p></div>"; }).join("") : "");
+      $("#newset").onclick = function () { quiz(sys); window.scrollTo(0, 0); };
       if (pct >= 85) confetti();
     }
     next();
