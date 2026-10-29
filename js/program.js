@@ -13,6 +13,12 @@
         topics: optional list of chips shown on the card
         bank:   optional script files (relative to the guide folder) holding its
                 practice questions; they join the NCLEX Prep question pool
+                Question format for new banks: window.QUESTIONS = [{ sys, type, diff, stem,
+                options, answer, why }]. type is "mc" (answer = index) or "sata"
+                (answer = [indexes]); Patho uses only these two. diff rates how
+                technical it is: "easy" (recall), "medium" (apply to a client),
+                "hard" (multi-step or technical reasoning). why explains the
+                correct answer, and the distractors when useful.
 
    Lecture guides (per course):
         lectureFolder:    folder holding the PDFs, relative to the hub on the Mac
@@ -94,7 +100,7 @@ window.PROGRAM = {
               bank: ["js/data.js", "js/practice.js"],
               blurb: "Respiratory, vascular, cardiac, kidney, urinary & reproductive disorders.",
               topics: ["Respiratory", "Cardiac 1", "Cardiac 2", "Kidney", "GU & Repro"],
-              stats: "6 section overviews · 28 topics · 33 diagrams · 55 questions · 100 flashcards"
+              stats: "6 section overviews · 28 topics · 33 diagrams · 55 MC & SATA questions · 100 flashcards"
             },
             { name: "Final Exam", status: "planned" }
           ]

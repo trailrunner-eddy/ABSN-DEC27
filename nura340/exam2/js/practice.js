@@ -110,387 +110,348 @@ window.FLASHCARDS = [
   ["gu", "Chronic prostatitis clue", "Pain with ejaculation, recurrent UTIs, pelvic pain."]
 ];
 
-/* Question types: mc, sata, selectn, cloze (dropdowns), matrix (each row picks a column) */
+/* Question types: mc (one best answer) and sata (select all that apply), matching the exam.
+ Every question has why (explains the correct answer) and diff: "easy" | "medium" | "hard"
+ (easy = recall a fact, medium = apply it to a client, hard = multi-step or technical reasoning). */
 window.QUESTIONS = [
 /* ---------- RESPIRATORY ---------- */
-{ sys: "resp", type: "mc",
+{ sys: "resp", type: "mc", diff: "easy",
   stem: "A 6-year-old has had a runny nose, cough, and mild sore throat for 3 days. Temperature 99.8°F, mild nasal congestion, no tonsillar exudate. Which explanation is most accurate?",
   options: ["Group A strep pharyngitis; needs rapid antigen testing now", "A viral URI; children get more because they have met fewer antigens", "Acute bacterial sinusitis because symptoms are present", "Nonallergic rhinitis caused by IgE cross-linking"],
   answer: 1,
   why: "Cough, congestion, and runny nose are the viral cold picture, and children average 6–8 URIs a year (immature immunity, fewer antigens met, poorer hygiene). Bacterial sinusitis needs >10 days. Nonallergic rhinitis is NOT IgE-mediated."
 },
-{ sys: "resp", type: "sata",
+{ sys: "resp", type: "sata", diff: "easy",
   stem: "A client with a 4-day viral URI is mouth breathing, febrile, and drinking little. Which findings would the nurse expect from fluid volume deficit? Select all that apply.",
   options: ["Thick, hard-to-clear secretions", "Tachycardia", "Dry mucous membranes", "Crackles and peripheral edema", "Concentrated, decreased urine", "JVD"],
   answer: [0, 1, 2, 4],
   why: "Fever, fast breathing, mouth breathing, exudate, and poor intake all drain fluid. Dehydration thickens mucus (escalator can't clear it), raises HR, dries membranes, and concentrates urine. Crackles, edema, and JVD are overload."
 },
-{ sys: "resp", type: "cloze",
-  stem: "Sinusitis develops when mucosal edema blocks the {0}. The sealed cavity absorbs oxygen and fills with {1} fluid, which becomes a medium for bacteria. Pain typically gets worse when the client {2}.",
-  blanks: [
-    { options: ["ostia", "alveoli", "eustachian valves", "turbinates"], answer: 0 },
-    { options: ["stagnant", "oxygenated", "free-flowing", "serous pleural"], answer: 0 },
-    { options: ["leans forward", "lies flat", "swallows", "exhales"], answer: 0 }
-  ],
-  why: "Edema blocks the ostia → sealed cavity → O₂ absorbed, vacuum pulls in fluid → stagnant fluid grows bacteria. Facial pressure worsens leaning forward."
+{ sys: "resp", type: "mc", diff: "medium",
+  stem: "A client has had nasal congestion for 12 days and now has facial pressure that worsens when leaning forward. Which sequence best explains how this sinusitis developed?",
+  options: ["Mucosal edema blocked the sinus ostia, the sealed cavity filled with stagnant fluid, and bacteria grew in it", "Bacteria invaded the alveoli first and then spread upward into the sinuses", "IgE cross-linking on mast cells filled the sinuses with blood", "The turbinates shrank, letting cold air dry out and crack the sinus lining"],
+  answer: 0,
+  why: "Swelling from a cold or allergies blocks the ostia (the sinus drain holes). The sealed sinus absorbs its oxygen and fills with stagnant fluid, which is a perfect medium for bacteria. That's why bacterial sinusitis usually follows a URI lasting more than 10 days, and why pressure worsens leaning forward. Infection doesn't travel up from the alveoli, and blood or dry turbinates aren't part of the mechanism."
 },
-{ sys: "resp", type: "mc",
+{ sys: "resp", type: "mc", diff: "medium",
   stem: "A college student in a dorm has 5 days of dry cough, low-grade fever, and fatigue. CXR shows bilateral interstitial infiltrates; WBC is normal. Which pneumonia type fits best?",
   options: ["Bacterial (S. pneumoniae)", "Viral", "Fungal (Pneumocystis)", "Aspiration with consolidation"],
   answer: 1,
   why: "Gradual onset, dry cough, bilateral infiltrates, normal WBC = viral (it inflames alveolar walls and interstitium, not the air sacs). Bacterial is abrupt with purulent/rust sputum, one-sided consolidation, high WBC. Pneumocystis needs an immunocompromised host."
 },
-{ sys: "resp", type: "selectn", n: 3,
-  stem: "A client with bacterial pneumonia is being monitored. Select the 3 findings that most suggest the pneumonia is worsening or becoming systemic.",
+{ sys: "resp", type: "sata", diff: "hard",
+  stem: "A client with bacterial pneumonia is being monitored. Which findings suggest the pneumonia is worsening or becoming systemic? Select all that apply.",
   options: ["New confusion", "Productive yellow sputum", "BP 88/50 with HR 124", "PaCO₂ rising from 32 to 47 as RR slows", "Temperature 100.9°F", "Crackles in the right lower lobe"],
   answer: [0, 2, 3],
-  why: "New confusion, hypotension with tachycardia (sepsis), and a rising CO₂ after being low (fatigue, respiratory acidosis) are the worsening signs. Purulent sputum, fever, and local crackles are expected findings of the pneumonia itself."
+  why: "New confusion (poor brain perfusion or hypoxia), hypotension with tachycardia (sepsis), and a CO₂ that climbs after being low (the client is tiring, so respiratory alkalosis is turning into respiratory acidosis) all signal decline. Purulent sputum, fever, and local crackles are expected findings of the pneumonia itself, not signs it's getting worse."
 },
-{ sys: "resp", type: "matrix",
-  stem: "Classify each finding as Latent TB, Active TB, or Both.",
-  cols: ["Latent", "Active", "Both"],
-  rows: [["Positive PPD or IGRA", 2], ["Night sweats and weight loss", 1], ["Can transmit by airborne route", 1], ["No symptoms", 0], ["Positive sputum culture", 1], ["Granuloma formed by cell-mediated immunity", 2]],
-  why: "Both forms test positive and both involve a granuloma. Latent: wall holds, no symptoms, not contagious, sputum negative. Active: wall breaks, cytokine symptoms (fever, night sweats, weight loss), airborne spread, sputum positive."
+{ sys: "resp", type: "sata", diff: "medium",
+  stem: "Which findings occur in ACTIVE tuberculosis but NOT in latent TB? Select all that apply.",
+  options: ["Positive PPD or IGRA test", "Night sweats and weight loss", "Can spread by the airborne route", "No symptoms", "Positive sputum culture", "Granuloma formed by cell-mediated immunity"],
+  answer: [1, 2, 4],
+  why: "In active TB the granuloma wall breaks down, so cytokine symptoms appear (fever, night sweats, weight loss), bacteria reach the sputum (positive culture), and the client becomes contagious by the airborne route. A positive skin or blood test and a granuloma happen in BOTH forms. Having no symptoms describes latent TB."
 },
-{ sys: "resp", type: "mc",
+{ sys: "resp", type: "mc", diff: "medium",
   stem: "A client with latent TB just started high-dose corticosteroids after a kidney transplant. The nurse explains the main risk is:",
   options: ["Developing asthma from IgE sensitization", "Reactivation because immunosuppression weakens the granuloma wall", "Spreading latent TB to family members now", "A false-negative chest X-ray"],
   answer: 1,
   why: "Cell-mediated immunity holds the granuloma together. Transplant drugs, chemo, HIV, diabetes, and aging weaken it so bacteria escape → active TB. Latent TB is not contagious."
 },
-{ sys: "resp", type: "cloze",
-  stem: "In an asthma exacerbation, the {0} phase brings bronchospasm within minutes from histamine and leukotrienes. Hours later, {1} and T helper cells cause submucosal edema and mucus plugging. Because exhalation depends on {2}, air becomes trapped.",
-  blanks: [
-    { options: ["early", "late", "chronic", "compensatory"], answer: 0 },
-    { options: ["eosinophils", "neutrophils", "plasma cells", "foam cells"], answer: 0 },
-    { options: ["elastic recoil", "the diaphragm contracting", "surfactant production", "the external intercostals"], answer: 0 }
-  ],
-  why: "Type I hypersensitivity: early phase (minutes) = bronchospasm; late phase (hours) = eosinophils + T helper cells. Exhalation is passive (elastic recoil), so narrowed airways trap air."
+{ sys: "resp", type: "mc", diff: "hard",
+  stem: "A client is several hours into an asthma exacerbation. Which statement correctly describes the LATE phase of the response?",
+  options: ["Eosinophils and T helper cells cause submucosal edema and mucus plugging", "Histamine and leukotrienes from mast cells cause bronchospasm within minutes", "Neutrophils form granulomas that narrow the bronchi", "Air is trapped because the diaphragm contracts during exhalation"],
+  answer: 0,
+  why: "Asthma is a type I hypersensitivity reaction with two phases. The early phase (minutes) is mast-cell histamine and leukotrienes causing bronchospasm. The late phase (hours) brings eosinophils and T helper cells, which cause swelling and mucus plugs; that's why steroids matter. Granulomas belong to TB. Exhalation is passive (elastic recoil), not diaphragm contraction, so narrowed airways trap air."
 },
-{ sys: "resp", type: "mc",
+{ sys: "resp", type: "mc", diff: "hard",
   stem: "A child in an asthma attack had loud wheezing 30 minutes ago. Now wheezing is barely audible, the child is drowsy, and still using accessory muscles. Which interpretation is correct?",
   options: ["The albuterol is working", "Airflow is so limited that little air is moving; this is an emergency", "The late phase has resolved", "The child is falling asleep from relief"],
   answer: 1,
   why: "A “silent chest” with ongoing distress means almost no air is moving (beyond the lectures), and drowsiness suggests rising CO₂ (status asthmaticus). Quieter is not better here."
 },
-{ sys: "resp", type: "matrix",
-  stem: "For each COPD finding, is it a chronic baseline finding or a sign of acute exacerbation?",
-  cols: ["Chronic baseline", "Acute exacerbation"],
-  rows: [["Barrel chest", 0], ["Clubbing", 0], ["SpO₂ 90% on room air (usual)", 0], ["pH 7.29 with PaCO₂ 68", 1], ["New fever with increased purulent sputum", 1], ["HCO₃⁻ 31 with pH 7.37", 0]],
-  why: "Barrel chest, clubbing, low-90s SpO₂, and compensated respiratory acidosis (high HCO₃⁻, normal pH) are baseline. A falling pH means CO₂ rose faster than kidneys can compensate; infection is the usual trigger."
+{ sys: "resp", type: "sata", diff: "hard",
+  stem: "A client with COPD is admitted. Which findings point to an ACUTE exacerbation rather than the client's chronic baseline? Select all that apply.",
+  options: ["Barrel chest", "Clubbing", "SpO₂ 90% on room air (the client's usual)", "pH 7.29 with PaCO₂ 68", "New fever with increased purulent sputum", "HCO₃⁻ 31 with pH 7.37"],
+  answer: [3, 4],
+  why: "A falling pH means CO₂ rose faster than the kidneys can compensate (acute-on-chronic respiratory acidosis), and new fever with more purulent sputum suggests infection, the usual trigger. Barrel chest, clubbing, a usual SpO₂ around 90%, and a high HCO₃⁻ with a normal pH (compensated respiratory acidosis) are the client's chronic baseline."
 },
-{ sys: "resp", type: "sata",
+{ sys: "resp", type: "sata", diff: "medium",
   stem: "A long-time smoker with emphysema asks why breathing is so hard. Which explanations are accurate? Select all that apply.",
   options: ["Elastase has destroyed alveolar walls and elastic fibers", "Airways collapse during exhalation and trap air", "The flattened diaphragm works less efficiently", "Exhalation is an active process that the muscles can no longer perform", "There is less surface area for gas diffusion", "Bronchospasm fully reverses with albuterol"],
   answer: [0, 1, 2, 4],
   why: "Emphysema = protease destruction → lost recoil → airway collapse and air trapping → hyperinflation flattens the diaphragm; fewer alveoli = less diffusion surface. Exhalation is normally passive. COPD is irreversible (reversibility = asthma)."
 },
-{ sys: "resp", type: "cloze",
-  stem: "A client with COPD develops JVD and bilateral ankle edema. Chronic hypoxia caused pulmonary {0}, raising pressure the {1} ventricle must pump against. This is called {2}.",
-  blanks: [
-    { options: ["vasoconstriction and remodeling", "vasodilation", "embolism", "consolidation"], answer: 0 },
-    { options: ["right", "left"], answer: 0 },
-    { options: ["cor pulmonale", "cardiac tamponade", "dilated cardiomyopathy", "tension pneumothorax"], answer: 0 }
-  ],
-  why: "Hypoxic vasoconstriction and remodeling → pulmonary HTN → RV hypertrophies then fails → systemic venous congestion (JVD, edema) = cor pulmonale."
+{ sys: "resp", type: "mc", diff: "hard",
+  stem: "A client with long-standing COPD develops JVD and bilateral ankle edema. Which explanation is most accurate?",
+  options: ["Chronic hypoxia constricts and remodels pulmonary vessels, so the right ventricle pumps against high pressure and fails (cor pulmonale)", "Hypoxia dilates pulmonary vessels and overloads the left ventricle", "Fluid around the heart is compressing it (cardiac tamponade)", "Trapped air has caused a tension pneumothorax"],
+  answer: 0,
+  why: "Low oxygen makes pulmonary vessels constrict (hypoxic vasoconstriction), and over years they remodel, causing pulmonary hypertension. The right ventricle thickens and then fails, backing blood into the systemic veins: JVD and edema. That's cor pulmonale. Hypoxia constricts (not dilates) lung vessels, and tamponade or tension pneumothorax would be sudden emergencies with hypotension."
 },
-{ sys: "resp", type: "mc",
+{ sys: "resp", type: "mc", diff: "hard",
   stem: "After a motor vehicle crash, a client has dyspnea, decreased breath sounds on the left, hyperresonance on the left, trachea midline, BP 128/80, HR 104. Which is most likely?",
   options: ["Tension pneumothorax", "Simple (closed) pneumothorax", "Hemothorax", "Pulmonary embolism"],
   answer: 1,
   why: "Hyperresonance = air. A midline trachea with normal BP rules out tension (which adds deviation, JVD, hypotension). Hemothorax is dull."
 },
-{ sys: "resp", type: "cloze",
-  stem: "In tension pneumothorax, a flap acts as a {0} valve. Rising pressure shifts the mediastinum and compresses the {1}, reducing {2} and causing obstructive shock.",
-  blanks: [
-    { options: ["one-way", "two-way", "semilunar", "mitral"], answer: 0 },
-    { options: ["vena cava", "trachea only", "pulmonary veins", "aortic arch"], answer: 0 },
-    { options: ["preload", "afterload", "contractility", "oncotic pressure"], answer: 0 }
-  ],
-  why: "Air in, can't get out → mediastinal shift → vena cava compressed → ↓venous return (preload) → ↓CO → hypotension. Treat before X-ray."
+{ sys: "resp", type: "mc", diff: "hard",
+  stem: "A client with a tension pneumothorax has BP 82/50. What best explains the hypotension?",
+  options: ["Rising chest pressure shifts the mediastinum and compresses the vena cava, reducing preload and cardiac output", "Air in the pleural space triggers widespread vasodilation", "The collapsed lung releases histamine into the blood", "Hypoxia stops the heart muscle from contracting within seconds"],
+  answer: 0,
+  why: "A flap acts as a one-way valve: air gets in but can't get out. Pressure builds, shifts the mediastinum, and kinks or compresses the vena cava, so less blood returns to the heart (low preload), cardiac output falls, and BP drops. That's obstructive shock, and it's treated with needle decompression before an X-ray. It isn't caused by vasodilation or histamine."
 },
-{ sys: "resp", type: "mc",
+{ sys: "resp", type: "mc", diff: "easy",
   stem: "A client with acute bronchitis asks if they need antibiotics. The nurse's best understanding is that acute bronchitis is:",
   options: ["Usually bacterial and needs antibiotics", "More than 90% viral and usually resolves in 2–3 weeks", "Diagnosed by consolidation on CXR", "A form of COPD"],
   answer: 1,
   why: ">90% viral (rhinovirus, adenovirus, influenza, parainfluenza). CXR is negative; the workup is to rule out pneumonia. Cough may linger after the client is no longer contagious."
 },
-
 /* ---------- CARDIAC PART 1 ---------- */
-{ sys: "card1", type: "mc",
+{ sys: "card1", type: "mc", diff: "medium",
   stem: "A 52-year-old with BP 186/124 reports a mild headache and anxiety. Neuro exam, troponin, creatinine, and lung sounds are normal. This is best classified as:",
   options: ["Stage 1 hypertension", "Hypertensive urgency", "Hypertensive emergency", "Secondary hypertension"],
   answer: 1,
   why: "Both urgency and emergency are >180/120. Without active organ damage (no encephalopathy, MI, pulmonary edema, renal failure), it is urgency. Autoregulation is still intact."
 },
-{ sys: "card1", type: "matrix",
-  stem: "Classify each as primary or secondary hypertension.",
-  cols: ["Primary", "Secondary"],
-  rows: [["Desensitized baroreceptor feedback", 0], ["Renal artery disease activating RAAS", 1], ["Obstructive sleep apnea", 1], ["Family history + inactivity, no single cause", 0], ["Cushing syndrome", 1], ["90–95% of cases", 0]],
-  why: "Primary (90–95%) is multifactorial with desensitized feedback loops. Secondary has an identifiable cause (renal, endocrine like Cushing/PCOS, OSA, stimulants, pregnancy, meds); treating it often improves BP."
-},
-{ sys: "card1", type: "selectn", n: 3,
-  stem: "A client with long-standing HTN asks how it can harm the body. Select 3 accurate explanations.",
-  options: ["High afterload makes the LV hypertrophy and raises O₂ demand", "High wall tension injures endothelium and speeds atherosclerosis", "Damaged retinal vessels can change vision", "HTN raises plasma oncotic pressure", "BNP causes the kidneys to retain sodium", "HTN mainly damages veins"],
+{ sys: "card1", type: "sata", diff: "medium",
+  stem: "Which are causes of SECONDARY hypertension? Select all that apply.",
+  options: ["Renal artery disease activating RAAS", "Obstructive sleep apnea", "Cushing syndrome", "Desensitized baroreceptor feedback with no single cause", "Family history and physical inactivity"],
   answer: [0, 1, 2],
-  why: "LV works against afterload (hypertrophy, ischemia), endothelium is injured (↓NO, atherosclerosis), retinal vessels are damaged. BNP promotes sodium EXCRETION."
+  why: "Secondary HTN (5–10%) has an identifiable cause, such as kidney disease activating RAAS, endocrine disorders like Cushing syndrome, or sleep apnea, and treating the cause can improve BP. Primary HTN (90–95%) has no single cause: risk factors like family history and inactivity, with feedback loops that slowly reset to accept a higher pressure."
 },
-{ sys: "card1", type: "cloze",
-  stem: "Atherosclerosis begins with {0}, which lowers nitric oxide. LDL enters the intima and becomes {1}. Macrophages engulf it to become {2}, forming the fatty streak. Smooth muscle cells then build a {3}.",
-  blanks: [
-    { options: ["endothelial injury", "valve incompetence", "IgE cross-linking", "granuloma formation"], answer: 0 },
-    { options: ["oxidized", "hydrolyzed", "calcified", "phagocytosed by neutrophils"], answer: 0 },
-    { options: ["foam cells", "Reed-Sternberg cells", "eosinophils", "vegetations"], answer: 0 },
-    { options: ["fibrous cap", "thrombus", "caseous center", "aneurysm"], answer: 0 }
-  ],
-  why: "Endothelial injury → ↓NO → LDL oxidized → foam cells (fatty streak) → smooth muscle lays collagen = fibrous cap → necrotic core → rupture/thrombus."
+{ sys: "card1", type: "sata", diff: "medium",
+  stem: "A client with long-standing hypertension asks how it can harm the body. Which explanations are accurate? Select all that apply.",
+  options: ["High afterload makes the left ventricle hypertrophy and raises its oxygen demand", "High wall tension injures the endothelium and speeds atherosclerosis", "Damaged retinal vessels can change vision", "HTN raises plasma oncotic pressure", "BNP causes the kidneys to retain sodium", "HTN mainly damages veins"],
+  answer: [0, 1, 2],
+  why: "The LV pushes against high afterload, so it thickens and needs more oxygen (ischemia, diastolic HF). High pressure injures the endothelium (less nitric oxide), which starts atherosclerosis. Small retinal vessels are damaged too. HTN doesn't change oncotic pressure, BNP actually makes the kidneys EXCRETE sodium, and HTN damages arteries, not veins."
 },
-{ sys: "card1", type: "mc",
+{ sys: "card1", type: "mc", diff: "hard",
+  stem: "Which sequence correctly describes how an atherosclerotic plaque forms?",
+  options: ["Endothelial injury → LDL enters the intima and is oxidized → macrophages become foam cells → smooth muscle builds a fibrous cap", "Fat circulating in the blood → sticks to the outside of the artery → hardens into calcium", "A clot forms first → LDL coats the clot → the clot turns into a fibrous cap", "Valve damage → blood pools → foam cells form inside a vein"],
+  answer: 0,
+  why: "Atherosclerosis is an inflammatory disease that starts INSIDE the artery wall. Endothelial injury (HTN, smoking, high glucose) lowers nitric oxide; LDL slips into the intima and is oxidized; macrophages eat it and become foam cells (the fatty streak); smooth muscle cells then lay down a fibrous cap. A thin cap can rupture and a clot forms on top. It doesn't start with a clot, on the outside of the artery, or in veins."
+},
+{ sys: "card1", type: "mc", diff: "easy",
   stem: "A client with PAD reports calf pain after walking one block that goes away within minutes of resting. This is called:",
   options: ["Rest pain", "Intermittent claudication", "Renal colic", "Paresthesia"],
   answer: 1,
   why: "Exertional demand exceeds what the narrowed artery can supply; rest restores balance. Pain at rest signals severe disease."
 },
-{ sys: "card1", type: "sata",
+{ sys: "card1", type: "sata", diff: "medium",
   stem: "A client with AFib suddenly reports severe right leg pain. Which findings support acute arterial embolism? Select all that apply.",
   options: ["Pale, cold foot", "Absent dorsalis pedis pulse", "Numbness and tingling", "Warm, red, swollen calf", "Brown hemosiderin staining", "Difficulty moving the toes"],
   answer: [0, 1, 2, 5],
   why: "The 6 P's: pain, pallor, pulselessness, poikilothermia, paresthesia, paralysis. Warm red swollen calf = DVT; hemosiderin = CVI. Paresthesia and paralysis are late, ominous signs."
 },
-{ sys: "card1", type: "mc",
+{ sys: "card1", type: "mc", diff: "medium",
   stem: "A client with a known 5 cm AAA reports new sudden severe back pain, BP 82/50, HR 128, cool clammy skin. Priority labs ordered by the provider would most likely include:",
   options: ["Lipid panel and A1C", "CBC/H&H and type and screen", "Sputum culture", "BNP only"],
   answer: 1,
   why: "Rupture or dissection = massive blood loss → hypovolemic shock. The lecture's rupture labs: CBC and H&H, D-dimer, type and screen."
 },
-{ sys: "card1", type: "matrix",
-  stem: "Arterial (PAD) or venous (CVI)?",
-  cols: ["Arterial", "Venous"],
-  rows: [["Weak or absent pedal pulses", 0], ["Brawny edema that improves with elevation", 1], ["Round, dry, pale ulcer on the toe", 0], ["Moist ulcer with irregular border at medial malleolus", 1], ["Thin, shiny, hairless skin", 0], ["Dull, heavy ache worse after standing", 1]],
-  why: "Arterial = no blood getting in (pale, cool, hairless, no pulse, dry toe ulcers). Venous = blood gets in but can't get out (edema, hemosiderin, moist ankle ulcers, heavy ache)."
+{ sys: "card1", type: "sata", diff: "medium",
+  stem: "A client has a nonhealing leg wound. Which findings point to ARTERIAL insufficiency (PAD) rather than venous insufficiency? Select all that apply.",
+  options: ["Weak or absent pedal pulses", "Brawny edema that improves with elevation", "Round, dry, pale ulcer on the toe", "Moist ulcer with an irregular border at the medial malleolus", "Thin, shiny, hairless skin", "Dull, heavy ache that worsens after standing"],
+  answer: [0, 2, 4],
+  why: "Arterial disease means blood can't get IN: weak pulses, pale, cool, shiny, hairless skin, and dry, punched-out ulcers on the toes. Venous disease means blood can't get OUT: edema that improves with elevation, brown staining, moist irregular ulcers near the ankle, and a heavy ache after standing."
 },
-{ sys: "card1", type: "selectn", n: 2,
-  stem: "A postpartum client on estrogen-containing birth control flew 12 hours yesterday. Select the 2 Virchow's triad components most clearly present.",
-  options: ["Venous stasis", "Hypercoagulability", "Endothelial injury", "Valve incompetence", "Atrial kick loss"],
+{ sys: "card1", type: "sata", diff: "medium",
+  stem: "A postpartum client taking estrogen-containing birth control flew for 12 hours yesterday. Which components of Virchow's triad are clearly present? Select all that apply.",
+  options: ["Venous stasis", "Hypercoagulability", "Endothelial injury", "Valve incompetence", "Loss of atrial kick"],
   answer: [0, 1],
-  why: "Long flight = stasis. Postpartum + estrogen = hypercoagulability. A DVT rarely forms without at least two of the three."
+  why: "Sitting on a long flight causes venous stasis. Being postpartum and taking estrogen both make blood hypercoagulable. Nothing in the scenario shows vessel wall injury (like surgery or trauma). Valve incompetence and atrial kick aren't parts of Virchow's triad. Two of three components make DVT much more likely."
 },
-{ sys: "card1", type: "cloze",
-  stem: "A PE creates alveoli that are ventilated but not perfused, called {0}. Early on, hyperventilation produces respiratory {1}. If obstructive shock develops, anaerobic metabolism causes {2} acidosis.",
-  blanks: [
-    { options: ["dead space", "shunt", "atelectasis", "consolidation"], answer: 0 },
-    { options: ["alkalosis", "acidosis"], answer: 0 },
-    { options: ["metabolic (lactic)", "respiratory", "compensated respiratory", "renal tubular"], answer: 0 }
-  ],
-  why: "PE = dead space (contrast pneumonia = shunt). Hypoxia and irritant receptors drive hyperventilation (respiratory alkalosis); later shock → lactic acidosis."
+{ sys: "card1", type: "mc", diff: "hard",
+  stem: "A client with a large pulmonary embolism first breathes rapidly and later develops obstructive shock. Which acid-base pattern is expected over time?",
+  options: ["Respiratory alkalosis early, then metabolic (lactic) acidosis", "Respiratory acidosis early, then metabolic alkalosis", "Metabolic alkalosis the whole time", "Compensated respiratory acidosis like COPD"],
+  answer: 0,
+  why: "A PE creates dead space: alveoli that are ventilated but not perfused (the opposite of pneumonia's shunt). Hypoxia and irritant receptors drive fast breathing, which blows off CO₂: respiratory alkalosis. If the clot causes obstructive shock, tissues switch to anaerobic metabolism and make lactic acid: metabolic acidosis."
 },
-{ sys: "card1", type: "mc",
+{ sys: "card1", type: "mc", diff: "hard",
   stem: "A low-risk outpatient with mild calf discomfort has a negative D-dimer. The nurse understands this result:",
   options: ["Confirms a small DVT", "Makes DVT unlikely and helps rule it out", "Means a CTPA is required", "Is not useful because D-dimer is nonspecific"],
   answer: 1,
   why: "Negative D-dimer rules out DVT/PE in low-risk patients. A POSITIVE result is the nonspecific one (surgery, pregnancy, cancer, trauma, inflammation)."
 },
-
 /* ---------- CARDIAC PART 2 ---------- */
-{ sys: "card2", type: "matrix",
-  stem: "Match each finding with the valve mechanism.",
-  cols: ["Stenosis", "Regurgitation"],
-  rows: [["Valve won't open fully", 0], ["Valve won't close fully", 1], ["Pressure overload → hypertrophy", 0], ["Volume overload → dilation", 1], ["Age-related calcification", 0], ["Endocarditis destroying leaflets", 1]],
-  why: "Stenosis = obstruction to forward flow → chamber behind it thickens. Regurgitation = backward leak → receiving chamber stretches. Calcification (age, CKD, hypercalcemia) stiffens; vegetations destroy."
+{ sys: "card2", type: "sata", diff: "medium",
+  stem: "Which statements describe valve STENOSIS? Select all that apply.",
+  options: ["The valve won't open fully", "The valve won't close fully", "Causes pressure overload and hypertrophy of the chamber behind it", "Causes volume overload and dilation", "Often caused by age-related calcification", "Often caused by endocarditis destroying the leaflets"],
+  answer: [0, 2, 4],
+  why: "Stenosis is a stiff, narrowed valve that won't open fully. The chamber behind it pushes harder and thickens (pressure overload). Calcification from aging is a common cause. A valve that won't close, with backflow, volume overload, and dilation, is regurgitation, which endocarditis can cause by destroying the leaflets."
 },
-{ sys: "card2", type: "mc",
+{ sys: "card2", type: "mc", diff: "medium",
   stem: "A 19-year-old had untreated strep throat last year and now has a new heart murmur. Which mechanism links them?",
   options: ["Direct bacterial infection of the valve", "Autoimmune cross-reaction (rheumatic heart disease)", "Atherosclerotic plaque on the valve", "Hypertrophic cardiomyopathy"],
   answer: 1,
   why: "Rheumatic heart disease: antibodies against strep cross-react with heart tissue. The immune response, not the bug, damages the valve."
 },
-{ sys: "card2", type: "cloze",
-  stem: "When myocardial cells lose oxygen they switch to {0} metabolism, producing lactic acid and {1}, which stimulate pain fibers. If flow is restored within about {2}, the cells recover.",
-  blanks: [
-    { options: ["anaerobic", "aerobic", "ketogenic", "oxidative"], answer: 0 },
-    { options: ["adenosine", "histamine", "BNP", "renin"], answer: 0 },
-    { options: ["20 minutes", "2 hours", "24 hours", "5 minutes"], answer: 0 }
-  ],
-  why: "Anaerobic glycolysis → lactic acid + adenosine → visceral pain. Ischemia >20 min → necrosis starting in the subendocardium."
+{ sys: "card2", type: "mc", diff: "medium",
+  stem: "What causes the chest pain of myocardial ischemia?",
+  options: ["Starved cells switch to anaerobic metabolism, and lactic acid and adenosine stimulate pain fibers", "Histamine from mast cells irritates the pericardium", "BNP stretches the ventricular wall", "Renin constricts the chest wall muscles"],
+  answer: 0,
+  why: "Without enough oxygen, heart cells switch to anaerobic metabolism, building up lactic acid and adenosine, which stimulate pain fibers. If blood flow returns within about 20 minutes, the cells fully recover (angina). Ischemia beyond that causes necrosis (MI). Histamine, BNP, and renin aren't the cause of the pain."
 },
-{ sys: "card2", type: "matrix",
-  stem: "Stable angina, unstable angina, or MI?",
-  cols: ["Stable", "Unstable", "MI"],
-  rows: [["Chest pain shoveling snow, gone after 3 min rest", 0], ["Chest pain at rest lasting 18 min, troponin normal ×2", 1], ["Crushing pain 45 min, troponin rising", 2], ["New pattern: more frequent episodes at lower activity", 1], ["Pain after a heavy meal, relieved by rest, predictable", 0]],
-  why: "Stable = predictable, exertional, relieved by rest. Unstable = at rest, increasing, not reliably relieved, troponin normal. MI = troponin elevated (necrosis)."
+{ sys: "card2", type: "mc", diff: "medium",
+  stem: "A client has had chest pain at rest for 18 minutes. Two troponin levels are normal. Which is most likely?",
+  options: ["Stable angina", "Unstable angina", "Myocardial infarction", "Pericarditis"],
+  answer: 1,
+  why: "Pain AT REST, lasting more than a few minutes, with normal troponin is unstable angina: a cracked plaque with a partial clot but no cell death yet. Stable angina is predictable, comes with exertion, and goes away with rest. An MI would show rising troponin. Pericarditis is sharp, positional, and better leaning forward."
 },
-{ sys: "card2", type: "mc",
+{ sys: "card2", type: "mc", diff: "hard",
   stem: "A client with an inferior wall MI has HR 46. Which explanation is correct?",
   options: ["The LAD supplies the AV node", "The RCA supplies the SA node", "Hyperkalemia from aldosterone", "Loss of atrial kick"],
   answer: 1,
   why: "The RCA feeds the right heart, the inferior LV wall, and the SA node, so inferior MI can cause sinus bradycardia."
 },
-{ sys: "card2", type: "sata",
+{ sys: "card2", type: "sata", diff: "hard",
   stem: "Within the first hours after an MI, why are dysrhythmias a major danger? Select all that apply.",
   options: ["Local lactic acidosis impairs the Na⁺/K⁺ ATPase", "Injured cells leak potassium", "The resting membrane potential becomes unstable", "Scar tissue has already formed", "Ectopic beats can arise before cells die"],
   answer: [0, 1, 2, 4],
   why: "Acidosis disables the pump, K⁺ leaks, membranes destabilize → dysrhythmias even before necrosis. Scar forms over 2–4 weeks, not hours."
 },
-{ sys: "card2", type: "cloze",
-  stem: "A 24-year-old with a recent cold has sharp chest pain that improves when {0}. EKG shows ST elevation with {1}. Troponin is {2}, which points to pericarditis rather than MI.",
-  blanks: [
-    { options: ["sitting up and leaning forward", "lying flat", "exerting", "taking a deep breath"], answer: 0 },
-    { options: ["PR depression", "a sawtooth pattern", "absent P waves", "peaked T waves"], answer: 0 },
-    { options: ["normal", "markedly elevated", "rising every 3 hours", "undetectable due to error"], answer: 0 }
-  ],
-  why: "Pericarditis: positional pleuritic pain (better leaning forward), friction rub, ST elevation + PR depression, normal troponin, young with recent virus."
+{ sys: "card2", type: "mc", diff: "medium",
+  stem: "A 24-year-old with a recent cold has sharp chest pain. Which set of findings best supports pericarditis rather than MI?",
+  options: ["Pain better sitting up and leaning forward, ST elevation with PR depression, normal troponin", "Crushing pain at rest, ST elevation, rising troponin", "Pain with exertion that goes away with rest, normal EKG", "Pain worse leaning forward, absent P waves, peaked T waves"],
+  answer: 0,
+  why: "Pericarditis is classically a young person after a virus with sharp, positional pain that's better leaning forward, a friction rub, diffuse ST elevation with PR depression, and normal troponin. Crushing pain with rising troponin is MI. Exertional pain relieved by rest is stable angina. Absent P waves and peaked T waves point to AFib and hyperkalemia."
 },
-{ sys: "card2", type: "sata",
+{ sys: "card2", type: "sata", diff: "medium",
   stem: "A client who injects drugs has fever and fatigue. Which findings support infective endocarditis? Select all that apply.",
   options: ["New regurgitant murmur", "Painless red macules on the soles", "Painful nodules on finger pads", "Splinter hemorrhages", "Pericardial friction rub", "Pain relieved by leaning forward"],
   answer: [0, 1, 2, 3],
   why: "Vegetations destroy valves (new murmur) and embolize: Janeway lesions (painless, palms/soles), Osler nodes (painful, finger/toe pads), splinter hemorrhages. Rub and positional pain = pericarditis."
 },
-{ sys: "card2", type: "matrix",
-  stem: "Left-sided or right-sided heart failure?",
-  cols: ["Left-sided", "Right-sided"],
-  rows: [["Orthopnea", 0], ["JVD", 1], ["Pink frothy sputum", 0], ["Ascites and hepatomegaly", 1], ["Paroxysmal nocturnal dyspnea", 0], ["Dependent edema", 1]],
-  why: "Left backs into the lungs. Right backs into the systemic veins (body). Left-sided HF is the most common cause of right-sided HF."
+{ sys: "card2", type: "sata", diff: "easy",
+  stem: "Which findings point to LEFT-sided heart failure? Select all that apply.",
+  options: ["Orthopnea", "JVD", "Pink, frothy sputum", "Ascites and hepatomegaly", "Paroxysmal nocturnal dyspnea", "Dependent edema"],
+  answer: [0, 2, 4],
+  why: "Left-sided failure backs blood up into the LUNGS: orthopnea, paroxysmal nocturnal dyspnea, crackles, and pink, frothy sputum. Right-sided failure backs blood into the BODY: JVD, ascites, an enlarged liver, and dependent edema. Left-sided HF is the most common cause of right-sided HF."
 },
-{ sys: "card2", type: "cloze",
-  stem: "In heart failure the body reads low output as {0}. Aldosterone retains sodium but wastes {1}, while ADH retains free water causing {2}.",
-  blanks: [
-    { options: ["hypovolemia", "hypervolemia", "infection", "hypercapnia"], answer: 0 },
-    { options: ["potassium and magnesium", "calcium and phosphate", "sodium and chloride", "bicarbonate"], answer: 0 },
-    { options: ["dilutional hyponatremia", "hypernatremia", "hyperkalemia", "metabolic alkalosis"], answer: 0 }
-  ],
-  why: "SNS, RAAS, and ADH activate as if volume were low. Aldosterone wastes K⁺ and Mg²⁺ (dysrhythmias). ADH dilutes sodium: a sign of chronic, poorly controlled HF."
+{ sys: "card2", type: "mc", diff: "hard",
+  stem: "A client with chronic, poorly controlled heart failure has a serum sodium of 128 mEq/L. What best explains this?",
+  options: ["ADH, released because the body senses low output as low volume, retains free water and dilutes sodium", "Aldosterone makes the kidneys waste sodium", "BNP blocks sodium absorption in the gut", "Failing heart muscle stores sodium"],
+  answer: 0,
+  why: "The body reads low cardiac output as hypovolemia and turns on SNS, RAAS, and ADH. ADH holds on to free water, which dilutes sodium (dilutional hyponatremia), a sign of chronic, poorly controlled HF. Aldosterone actually RETAINS sodium while wasting potassium and magnesium (dysrhythmia risk). BNP acts on the kidneys, not the gut."
 },
-{ sys: "card2", type: "mc",
+{ sys: "card2", type: "mc", diff: "medium",
   stem: "An echocardiogram shows EF 62% with a thick, stiff LV. Which history is the most likely cause?",
   options: ["Prior large anterior MI", "Long-standing uncontrolled hypertension", "Viral myocarditis", "Chronic alcohol use"],
   answer: 1,
   why: "EF ≥50% with thick stiff walls = diastolic HF (HFpEF), most often from long-standing HTN. Prior MI is the most common cause of systolic HF."
 },
-{ sys: "card2", type: "matrix",
-  stem: "Match each to the cardiomyopathy.",
-  cols: ["Dilated", "Hypertrophic", "Restrictive"],
-  rows: [["Asymmetric septal thickening", 1], ["Thin, weak walls; low EF", 0], ["Rigid walls with big atria, worst prognosis", 2], ["Sudden death in a young athlete", 1], ["Can follow viral myocarditis or chronic alcohol use", 0], ["Amyloidosis", 2]],
-  why: "DCM: big, thin, weak (systolic). HCM: thick septum, autosomal dominant, sudden death in the young. RCM: stiff, can't fill, right-sided signs, worst survival."
+{ sys: "card2", type: "sata", diff: "medium",
+  stem: "Which findings match HYPERTROPHIC cardiomyopathy? Select all that apply.",
+  options: ["Asymmetric thickening of the septum", "Thin, weak walls with a low EF", "Rigid walls with large atria and the worst prognosis", "Sudden death in a young athlete", "Often follows viral myocarditis or chronic alcohol use", "Often inherited (autosomal dominant)"],
+  answer: [0, 3, 5],
+  why: "Hypertrophic cardiomyopathy is a thick, often asymmetric septum that can block outflow, usually inherited (autosomal dominant), and a classic cause of sudden death in young athletes. Thin, weak walls with a low EF after a virus or alcohol is dilated cardiomyopathy. Rigid walls with big atria and the worst survival is restrictive."
 },
-{ sys: "card2", type: "sata",
+{ sys: "card2", type: "sata", diff: "hard",
   stem: "A client has new-onset AFib with a ventricular rate of 148. Which effects would the nurse anticipate? Select all that apply.",
   options: ["Loss of the last 20–30% of ventricular filling", "Shortened diastole reducing coronary flow", "Risk of atrial clot and embolic stroke", "Decreased cardiac output", "Regular sawtooth P waves", "Increased stroke volume from faster rate"],
   answer: [0, 1, 2, 3],
   why: "Lost atrial kick + short diastole (above ~120–140) drop SV and CO; pooling causes clots → stroke. Sawtooth = flutter. Faster rate here lowers SV."
 },
-{ sys: "card2", type: "mc",
+{ sys: "card2", type: "mc", diff: "medium",
   stem: "Which client's sinus bradycardia (HR 52) needs the nurse's attention first?",
   options: ["A marathon runner, BP 118/72, alert, at baseline", "A client with BP 82/48, dizziness, and new confusion", "A sleeping client, BP 110/70, warm skin", "A client on a beta-blocker, asymptomatic, BP 124/78"],
   answer: 1,
   why: "Whether a rhythm matters depends on perfusion (BP, mentation, skin, urine), not the number. Hypotension and confusion = ↓CO."
 },
-
 /* ---------- KIDNEY ---------- */
-{ sys: "kidney", type: "matrix",
-  stem: "Classify each AKI scenario.",
-  cols: ["Prerenal", "Intrinsic", "Postrenal"],
-  rows: [["Hemorrhage after trauma", 0], ["Gentamicin (aminoglycoside) toxicity", 1], ["BPH causing urinary retention", 2], ["Septic shock causing tubular necrosis", 1], ["Severe dehydration from gastroenteritis", 0], ["Bilateral ureteral stones", 2]],
-  why: "Where does it start? Before (blood flow), inside (tissue damage: ATN, nephrotoxins, GN, sepsis), or after (obstruction)."
+{ sys: "kidney", type: "sata", diff: "medium",
+  stem: "Which situations cause INTRINSIC (intrarenal) acute kidney injury? Select all that apply.",
+  options: ["Hemorrhage after trauma", "Gentamicin (aminoglycoside) toxicity", "BPH causing urinary retention", "Septic shock causing acute tubular necrosis", "Severe dehydration from gastroenteritis", "Post-streptococcal glomerulonephritis"],
+  answer: [1, 3, 5],
+  why: "Intrinsic AKI starts with damage INSIDE the kidney: nephrotoxins like aminoglycosides, tubular necrosis from sepsis or prolonged ischemia, and glomerulonephritis. Hemorrhage and dehydration are prerenal (not enough blood flow in). BPH and stones are postrenal (urine can't get out)."
 },
-{ sys: "kidney", type: "mc",
+{ sys: "kidney", type: "mc", diff: "medium",
   stem: "A 70 kg client has made 120 mL of urine over the past 6 hours. The nurse recognizes:",
   options: ["Output is adequate", "Output is below 0.5 mL/kg/hr and meets an AKI criterion", "Output is only abnormal if creatinine is elevated", "Output is low but requires 24 hours to assess"],
   answer: 1,
   why: "Goal ≥0.5 mL/kg/hr → 70 × 0.5 = 35 mL/hr = 210 mL in 6 hr. 120 mL is ~20 mL/hr, below threshold for ≥6 hr."
 },
-{ sys: "kidney", type: "selectn", n: 3,
-  stem: "A client with AKI has K⁺ 6.4, pH 7.28, HCO₃⁻ 16, crackles, and +3 kg in 2 days. Select the 3 findings that are most immediately life-threatening.",
+{ sys: "kidney", type: "sata", diff: "medium",
+  stem: "A client with AKI has K⁺ 6.4, pH 7.28, HCO₃⁻ 16, crackles, and a 3 kg weight gain in 2 days. Which findings are most immediately life-threatening? Select all that apply.",
   options: ["K⁺ 6.4", "Crackles with rapid weight gain", "pH 7.28", "Mild pruritus", "BUN 38", "Fatigue"],
   answer: [0, 1, 2],
-  why: "The main AKI dangers: hyperkalemia (dysrhythmia/arrest), fluid overload (pulmonary edema), and metabolic acidosis."
+  why: "The three big AKI dangers are hyperkalemia (dysrhythmias and cardiac arrest), fluid overload (pulmonary edema, shown by crackles and fast weight gain), and metabolic acidosis. Itching, a mildly high BUN, and fatigue are expected but not immediately dangerous."
 },
-{ sys: "kidney", type: "cloze",
-  stem: "In CKD, decreased {0} causes anemia. Decreased activation of {1} reduces calcium absorption, and {2} is retained, weakening bone.",
-  blanks: [
-    { options: ["erythropoietin", "renin", "ADH", "aldosterone"], answer: 0 },
-    { options: ["vitamin D (calcitriol)", "vitamin K", "vitamin B12", "angiotensinogen"], answer: 0 },
-    { options: ["phosphate", "bicarbonate", "magnesium", "chloride"], answer: 0 }
-  ],
-  why: "Lost endocrine functions: ↓EPO → anemia; ↓calcitriol + phosphate retention → low Ca²⁺, bone loss."
+{ sys: "kidney", type: "mc", diff: "easy",
+  stem: "Why do clients with chronic kidney disease develop anemia?",
+  options: ["The damaged kidneys make less erythropoietin", "The kidneys excrete too much iron", "Uremia destroys platelets", "Low vitamin D stops red blood cell production"],
+  answer: 0,
+  why: "The kidneys make erythropoietin (EPO), which tells the bone marrow to make red blood cells. Less EPO means anemia. CKD also reduces vitamin D activation (calcitriol), which lowers calcium and weakens bone, but that isn't what causes the anemia."
 },
-{ sys: "kidney", type: "mc",
+{ sys: "kidney", type: "mc", diff: "medium",
   stem: "Which finding confirms CKD rather than AKI?",
   options: ["Creatinine rose from 1.0 to 1.4 in 36 hours", "eGFR 48 on three checks over 5 months", "One eGFR of 55 during pneumonia", "Urine output 0.3 mL/kg/hr for 8 hours"],
   answer: 1,
   why: "CKD requires abnormality for ≥3 months. A rise of ≥0.3 in 48 hr and low urine output are AKI criteria; one value during acute illness is not CKD."
 },
-{ sys: "kidney", type: "matrix",
-  stem: "Nephrotic syndrome or glomerulonephritis?",
-  cols: ["Nephrotic", "Glomerulonephritis"],
-  rows: [["Foamy urine", 0], ["Cola-colored urine with RBC casts", 1], ["Albumin 1.8 g/dL", 0], ["BP 168/100 after impetigo", 1], ["Elevated cholesterol and triglycerides", 0], ["Morning periorbital edema with rising creatinine", 1]],
-  why: "Nephrotic = leaky filter (heavy protein, low albumin, high lipids, foamy). GN = inflamed filter (hematuria, RBC casts, HTN, falling GFR), often post-infectious."
+{ sys: "kidney", type: "sata", diff: "medium",
+  stem: "Which findings point to NEPHROTIC SYNDROME rather than glomerulonephritis? Select all that apply.",
+  options: ["Foamy urine", "Cola-colored urine with RBC casts", "Serum albumin 1.8 g/dL", "BP 168/100 two weeks after impetigo", "Elevated cholesterol and triglycerides", "Hematuria with a rising creatinine"],
+  answer: [0, 2, 4],
+  why: "Nephrotic syndrome is a LEAKY filter: heavy protein loss (foamy urine), low albumin, and high lipids as the liver overproduces lipoproteins. Glomerulonephritis is an INFLAMED filter: cola-colored urine with RBC casts, hypertension, and falling GFR, often after a strep infection like impetigo."
 },
-{ sys: "kidney", type: "cloze",
-  stem: "In nephrotic syndrome, heavy proteinuria causes {0}, which lowers {1}. Fluid shifts into tissues, the body senses low circulating volume, and {2} retain more sodium and water.",
-  blanks: [
-    { options: ["hypoalbuminemia", "hyperalbuminemia", "hematuria", "hyperkalemia"], answer: 0 },
-    { options: ["plasma oncotic pressure", "hydrostatic pressure", "GFR", "afterload"], answer: 0 },
-    { options: ["RAAS and ADH", "BNP and ANP", "EPO and calcitriol", "histamine and leukotrienes"], answer: 0 }
-  ],
-  why: "Proteinuria → hypoalbuminemia → ↓oncotic pressure → edema → low effective volume → RAAS/ADH → more retention that also leaks out."
+{ sys: "kidney", type: "mc", diff: "medium",
+  stem: "In nephrotic syndrome, why does edema develop?",
+  options: ["Protein lost in the urine lowers albumin, so plasma oncotic pressure falls and fluid shifts into the tissues", "Inflamed glomeruli raise blood pressure and push fluid out", "Hyperkalemia makes the capillaries leaky", "The kidneys excrete too much sodium"],
+  answer: 0,
+  why: "Heavy proteinuria causes hypoalbuminemia. Albumin is what holds water inside the vessels (oncotic pressure), so fluid seeps into the tissues. The body then senses low circulating volume and turns on RAAS and ADH, retaining even more sodium and water, which also leaks out. Inflammation-driven HTN is the glomerulonephritis pattern."
 },
-
 /* ---------- GU ---------- */
-{ sys: "gu", type: "matrix",
-  stem: "Cystitis or pyelonephritis?",
-  cols: ["Cystitis", "Pyelonephritis"],
-  rows: [["Suprapubic pain and urgency, afebrile", 0], ["CVA tenderness", 1], ["Fever 102.4°F with chills", 1], ["Dysuria and cloudy urine only", 0], ["Nausea, vomiting, flank pain", 1]],
-  why: "Cystitis = local bladder symptoms. Pyelo = kidney involvement: flank pain, CVA tenderness, and systemic signs (fever, chills, N/V)."
+{ sys: "gu", type: "sata", diff: "easy",
+  stem: "A client is being treated for a UTI. Which findings suggest the infection has reached the kidney (pyelonephritis)? Select all that apply.",
+  options: ["Suprapubic pain and urgency without fever", "CVA tenderness", "Fever of 102.4°F with chills", "Dysuria and cloudy urine only", "Nausea, vomiting, and flank pain"],
+  answer: [1, 2, 4],
+  why: "Kidney involvement adds flank pain, CVA tenderness, and systemic signs like high fever, chills, nausea, and vomiting. Suprapubic pain, urgency, dysuria, and cloudy urine without fever are local bladder symptoms, which fit cystitis (a lower UTI)."
 },
-{ sys: "gu", type: "sata",
+{ sys: "gu", type: "sata", diff: "easy",
   stem: "Which clients have increased UTI risk? Select all that apply.",
   options: ["A woman who uses spermicide", "A man with BPH and post-void residual of 250 mL", "A client with an indwelling catheter", "A client with renal calculi causing stasis", "A man with a 20 cm urethra and complete emptying", "A client drinking 3 L of water daily with no symptoms"],
   answer: [0, 1, 2, 3],
   why: "Spermicide (irritant), incomplete emptying/obstruction (stasis), catheters (introduce bacteria, give surface), stones (stasis). Long urethra and full emptying are protective."
 },
-{ sys: "gu", type: "mc",
+{ sys: "gu", type: "mc", diff: "medium",
   stem: "An 84-year-old in long-term care is newly confused and fell twice this week. No fever, no urinary complaints. The nurse should:",
   options: ["Attribute it to normal aging", "Consider a UTI among the causes and do a thorough assessment", "Diagnose a UTI based on confusion alone", "Wait for a fever before assessing further"],
   answer: 1,
   why: "Older adults may present atypically with confusion, agitation, falls, or decline. Consider UTI, but confusion doesn't automatically mean UTI; new confusion is never just normal aging."
 },
-{ sys: "gu", type: "cloze",
-  stem: "A kidney stone moving into the ureter causes {0} pain that radiates to the {1}. If the obstruction persists, urine backs up causing {2}, a postrenal AKI.",
-  blanks: [
-    { options: ["sudden, severe colicky flank", "dull, chronic suprapubic", "positional pleuritic", "burning epigastric"], answer: 0 },
-    { options: ["groin and inner thigh", "left arm and jaw", "shoulder blade", "umbilicus only"], answer: 0 },
-    { options: ["hydronephrosis", "nephrotic syndrome", "glomerulonephritis", "cor pulmonale"], answer: 0 }
-  ],
-  why: "Ureter stretches and spasms around the stone → renal colic radiating to abdomen, groin, inner thigh. Persistent block → hydronephrosis → postrenal AKI."
+{ sys: "gu", type: "mc", diff: "easy",
+  stem: "A kidney stone has just moved into the ureter. Which presentation does the nurse expect?",
+  options: ["Sudden, severe, colicky flank pain that radiates to the groin", "A dull suprapubic ache that has been constant for months", "Burning epigastric pain after meals", "Sharp chest pain that improves leaning forward"],
+  answer: 0,
+  why: "The ureter stretches and spasms around the stone, causing renal colic: sudden, severe flank pain in waves that radiates to the groin and inner thigh, often with nausea and hematuria. If the blockage lasts, urine backs up (hydronephrosis), causing postrenal AKI."
 },
-{ sys: "gu", type: "mc",
+{ sys: "gu", type: "mc", diff: "medium",
   stem: "A client with a 7 mm ureteral stone now has temperature 102.6°F and chills. Why is this urgent?",
   options: ["Fever means the stone is dissolving", "An obstructed, infected kidney can rapidly cause sepsis", "Fever indicates glomerulonephritis", "Stones cannot cause infection"],
   answer: 1,
   why: "Obstruction → stasis → bacteria multiply behind the stone; trapped pus → sepsis (beyond lectures: urologic emergency)."
 },
-{ sys: "gu", type: "matrix",
-  stem: "BPH, acute bacterial prostatitis, or chronic prostatitis?",
-  cols: ["BPH", "Acute prostatitis", "Chronic prostatitis"],
-  rows: [["Gradual weak stream and nocturia, age 68, afebrile", 0], ["Sudden fever and perineal pain after catheter removal", 1], ["Pain with ejaculation and recurrent UTIs", 2], ["Increased cell number (hyperplasia)", 0], ["Risk of sepsis", 1]],
-  why: "BPH = gradual obstruction from hyperplasia, no fever. Acute = sudden, bacterial (E. coli), febrile, sepsis risk. Chronic = persistent pelvic pain, recurrent UTIs, ejaculatory pain."
+{ sys: "gu", type: "mc", diff: "medium",
+  stem: "A 58-year-old has sudden fever, chills, and perineal pain 2 days after a urinary catheter was removed. Which is most likely?",
+  options: ["Benign prostatic hyperplasia", "Acute bacterial prostatitis", "Chronic prostatitis", "Kidney stone"],
+  answer: 1,
+  why: "Acute bacterial prostatitis comes on suddenly, often after catheterization or a procedure (usually E. coli), with fever, chills, and perineal pain, and it carries a sepsis risk. BPH develops gradually without fever. Chronic prostatitis means persistent pelvic pain and recurrent UTIs. A stone causes colicky flank pain."
 },
-{ sys: "gu", type: "selectn", n: 2,
-  stem: "A client with BPH asks how an enlarged prostate could hurt his kidneys. Select the 2 most accurate links.",
-  options: ["Incomplete emptying causes stasis and UTI that can ascend", "Back pressure from obstruction causes hydronephrosis (postrenal AKI)", "Hyperplasia produces immune complexes that attack glomeruli", "The prostate secretes nephrotoxins", "BPH lowers plasma oncotic pressure"],
+{ sys: "gu", type: "sata", diff: "medium",
+  stem: "A client with BPH asks how an enlarged prostate could hurt the kidneys. Which explanations are accurate? Select all that apply.",
+  options: ["Incomplete emptying causes stasis and UTIs that can ascend to the kidneys", "Back pressure from obstruction causes hydronephrosis (postrenal AKI)", "Hyperplasia produces immune complexes that attack the glomeruli", "The prostate secretes nephrotoxins", "BPH lowers plasma oncotic pressure"],
   answer: [0, 1],
-  why: "Stasis → infection that can climb; severe obstruction → back pressure → hydronephrosis → postrenal AKI."
+  why: "Urine left in the bladder grows bacteria that can climb to the kidney, and a severe blockage backs urine up into the kidney (hydronephrosis, postrenal AKI). BPH doesn't make immune complexes or toxins, and it has nothing to do with oncotic pressure."
 },
-
 /* ---------- PRIORITY (cross-system) ---------- */
-{ sys: "kidney", type: "mc",
+{ sys: "kidney", type: "mc", diff: "hard",
   stem: "A client with pyelonephritis now has BP 86/50, HR 122, urine output 18 mL/hr (70 kg). This suggests:",
   options: ["Expected pyelonephritis findings", "Sepsis with poor renal perfusion and possible AKI", "Cystitis recovery", "Nephrotic syndrome"],
   answer: 1,
   why: "Hypotension + falling urine output (<35 mL/hr for 70 kg) = sepsis lowering kidney perfusion; AKI worsens in a vicious cycle."
 }
 ];
+
 
 /* Sort It games: two buckets */
 window.SORTS = [
@@ -532,28 +493,28 @@ window.CHAINS = [
 
 /* Who first? priority sets */
 window.TRIAGE = [
-  { sys: "resp", stem: "You receive report on four clients. Who do you see first?",
+  { sys: "resp", diff: "medium", stem: "You receive report on four clients. Who do you see first?",
     clients: ["COPD client, SpO₂ 90% on 2 L, barrel chest, at baseline", "Client post-MVC with sudden dyspnea, JVD, trachea deviated right, BP 84/52", "Asthma client wheezing, improving after albuterol, SpO₂ 95%", "Acute bronchitis client with productive cough, afebrile"],
     answer: 1, why: "Tension pneumothorax “will always be your priority patient”: obstructive shock. The COPD findings are baseline, the asthma client is responding, bronchitis is self-limiting." },
-  { sys: "card1", stem: "Which client needs the nurse first?",
+  { sys: "card1", diff: "medium", stem: "Which client needs the nurse first?",
     clients: ["PAD client with claudication after one block", "Client with known AAA, new sudden back pain, BP 80/48, HR 130", "CVI client with brawny edema and hemosiderin staining", "HTN client, BP 158/94, asymptomatic"],
     answer: 1, why: "Sudden back pain with hypotension and tachycardia in AAA = rupture/dissection → hypovolemic shock. Others are chronic or stable." },
-  { sys: "card2", stem: "Four cardiac clients. Who is the priority?",
+  { sys: "card2", diff: "medium", stem: "Four cardiac clients. Who is the priority?",
     clients: ["Stable angina client, pain resolved with rest 10 min ago", "Pericarditis client, sharp pain better leaning forward, troponin normal", "Client with chest pain at rest for 30 min, diaphoretic, troponin rising", "HF client with 1+ ankle edema, weight unchanged"],
     answer: 2, why: "Pain >20 min at rest with rising troponin = MI in progress: necrosis and dysrhythmia risk. The others are expected or stable." },
-  { sys: "kidney", stem: "Which kidney client is most at risk right now?",
+  { sys: "kidney", diff: "medium", stem: "Which kidney client is most at risk right now?",
     clients: ["CKD client with chronic anemia, Hgb 10.1", "AKI client with K⁺ 6.7 and HR 48", "Nephrotic client with periorbital edema", "CKD client reporting pruritus"],
     answer: 1, why: "Hyperkalemia with bradycardia in AKI can progress to cardiac arrest. The others are expected chronic findings." },
-  { sys: "gu", stem: "Which urinary client should the nurse assess first?",
+  { sys: "gu", diff: "medium", stem: "Which urinary client should the nurse assess first?",
     clients: ["Cystitis client with dysuria and frequency", "BPH client with nocturia ×3", "Pyelonephritis client, BP 84/50, HR 124, urine 15 mL/hr", "Client with a passing stone, pain 6/10 after analgesic"],
     answer: 2, why: "Pyelonephritis with hypotension, tachycardia, and oliguria suggests sepsis with poor renal perfusion and possible AKI." },
-  { sys: "resp", stem: "A pulmonary unit. Who first?",
+  { sys: "resp", diff: "medium", stem: "A pulmonary unit. Who first?",
     clients: ["Asthma client whose PaCO₂ went from 30 to 44 over an hour, now drowsy", "Pneumonia client, temp 101°F, productive cough", "Latent TB client asking about medication", "Spontaneous pneumothorax client with chest tube, SpO₂ 96%"],
     answer: 0, why: "In asthma a “normalizing” CO₂ plus drowsiness means fatigue and impending hypercapnic failure (status asthmaticus)." },
-  { sys: "card1", stem: "Post-op day 2 surgical unit. Who first?",
+  { sys: "card1", diff: "medium", stem: "Post-op day 2 surgical unit. Who first?",
     clients: ["Client with unilateral calf warmth and swelling", "Client with sudden dyspnea, pleuritic chest pain, HR 126, SpO₂ 86%", "Client with incision pain 5/10", "Client with mild ankle edema bilaterally"],
     answer: 1, why: "Sudden dyspnea, pleuritic pain, tachycardia, hypoxemia after surgery = PE. The DVT client is next (risk of PE)." },
-  { sys: "card2", stem: "Telemetry unit. Who first?",
+  { sys: "card2", diff: "medium", stem: "Telemetry unit. Who first?",
     clients: ["AFib client, rate 88, on anticoagulant, alert", "AFib client with new right arm weakness and slurred speech", "Sinus brady 54 in a runner, BP 120/76", "Sinus tachy 106 with fever 101.2°F"],
     answer: 1, why: "New weakness and slurred speech in AFib = embolic stroke (clot from pooling atria)." }
 ];
