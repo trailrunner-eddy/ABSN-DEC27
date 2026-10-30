@@ -1,20 +1,22 @@
 /* Pharm Exam 2 study lab: drug tables, compare grid, flashcards, practice questions, name game.
-   Reads window.SYSTEMS, CATEGORIES, DRUGS, SUFFIXES (drugs.js) and QUESTIONS (practice.js). */
+   Reads window.SYSTEMS, CATEGORIES, DRUGS, SUFFIXES (drugs.js), GUIDE (guide.js) and QUESTIONS (practice.js). */
 (function () {
   "use strict";
 
   /* ---------- Storage (per-browser; works offline from file://) ---------- */
   var KEY = "pharm-exam2-v1";
-  var S = { xp: 0, drugs: {}, flash: {}, q: {}, best: {}, plain: false, cover: false, theme: "auto" };
+  var S = { xp: 0, drugs: {}, flash: {}, q: {}, best: {}, guide: {}, guideAlso: true, plain: false, cover: false, theme: "auto" };
   try { var saved = JSON.parse(localStorage.getItem(KEY) || "null"); if (saved) S = Object.assign(S, saved); } catch (e) {}
   function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
 
   var app = document.getElementById("app");
   var UNITS = window.SYSTEMS, CATS = window.CATEGORIES, DRUGS = window.DRUGS, SUFFIXES = window.SUFFIXES, QUESTIONS = window.QUESTIONS || [];
-  var UNIT = {}, CAT = {}, DRUG = {};
+  var G = window.GUIDE || { sections: [] }, GSECS = G.sections;
+  var UNIT = {}, CAT = {}, DRUG = {}, GSEC = {}, ON_GUIDE = {};
   UNITS.forEach(function (u) { UNIT[u.id] = u; });
   CATS.forEach(function (c) { CAT[c.id] = c; });
   DRUGS.forEach(function (d) { DRUG[d.id] = d; });
+  GSECS.forEach(function (g) { GSEC[g.id] = g; g.drugs.forEach(function (x) { ON_GUIDE[x.drug] = g; }); });
   var FIELDS = [["moa", "MOA"], ["use", "Use"], ["contra", "Contraindications"], ["se", "Side effects"], ["ae", "Adverse effects"], ["rn", "RN assessment"], ["teach", "Client teaching"]];
 
   /* ---------- Helpers ---------- */
@@ -48,6 +50,8 @@
     parts.push(fc.filter(function (c) { return S.flash[c.k]; }).length / fc.length);
     var qs = QUESTIONS.map(function (q, i) { return [q, i]; }).filter(function (x) { return !unitId || x[0].sys === unitId; });
     if (qs.length) parts.push(qs.filter(function (x) { return S.q[x[1]] === 1; }).length / qs.length);
+    var gs = GSECS.filter(function (g) { return !unitId || g.sys === unitId; });
+    if (gs.length) parts.push(gs.filter(function (g) { return S.guide[g.id]; }).length / gs.length);
     return Math.round(100 * parts.reduce(function (a, b) { return a + b; }, 0) / parts.length);
   }
 
@@ -58,7 +62,7 @@
     var h = (location.hash || "#home").slice(1).split("/");
     var r = h[0] || "home";
     $$("#nav a", document).forEach(function (a) { a.classList.toggle("active", a.getAttribute("data-r") === r || (r === "drug" && a.getAttribute("data-r") === "drugs")); });
-    var views = { home: home, drugs: drugsView, drug: drugView, compare: compare, flash: flash, quiz: quiz, names: names, memory: memory };
+    var views = { home: home, guide: guideView, drugs: drugsView, drug: drugView, compare: compare, flash: flash, quiz: quiz, names: names, memory: memory };
     (views[r] || home)(h[1], h[2]);
     window.scrollTo(0, 0);
     var active = $(".nav a.active", document); if (active && active.scrollIntoView) { try { active.scrollIntoView({ block: "nearest", inline: "center" }); } catch (e) {} }
@@ -76,10 +80,11 @@
         '<span class="small" style="font-weight:700">' + m + '%</span><div class="progress bar"><span style="width:' + m + '%"></span></div></a>';
     }).join("");
     var tiles = [
+      ["#guide", "📋", "Study Guide", "Your instructor's Exam 2 takeaways for " + GSECS.reduce(function (n, g) { return n + g.drugs.length; }, 0) + " drugs in " + GSECS.length + " sections, in exam order, with \"Also know\" context, High-Yield Comparisons, and cover mode."],
       ["#drugs", "💊", "Drug Tables", DRUGS.length + " drugs in " + CATS.length + " categories. Class, MOA, use, contraindications, side and adverse effects, RN assessment, and teaching, with a plain-language switch and cover mode."],
       ["#compare", "📊", "Compare", "Line up one column (say, adverse effects) across every drug in a unit to spot look-alikes."],
       ["#flash", "🃏", "Flashcards", FLASH.length + " flip cards: class and use, brand to generic, and the one thing to remember for each drug."],
-      ["#quiz", "📝", "Practice Questions", QUESTIONS.length + " NCLEX-style items (multiple choice and SATA) with rationales from the tables."],
+      ["#quiz", "📝", "Practice Questions", QUESTIONS.length + " NCLEX-style items (multiple choice and SATA), each rated easy to hard with a rationale, including the study guide's practice set."],
       ["#names", "⚡", "Name Game", "Rapid fire: brand to generic, drug to category, drug to class, and suffix to class."],
       ["#memory", "🧠", "Memory Aids", "The mnemonic for every category and the name endings that give away the class."]
     ].map(function (t) { return '<a class="card tile" href="' + t[0] + '"><div class="emoji">' + t[1] + "</div><h3>" + t[2] + '</h3><p class="muted small">' + t[3] + "</p></a>"; }).join("");
@@ -89,11 +94,11 @@
         '<div class="hero-main"><div class="hero-art">💊</div>' +
           '<div class="tiny" style="color:rgba(255,255,255,.8);font-weight:700;letter-spacing:.06em;text-transform:uppercase">NURA 350 · Pharmacology</div>' +
           "<h1>Exam 2 Study Lab</h1>" +
-          "<p>Every Exam 2 drug from the combined drug tables. For each one, learn <b>what it is → what it does → what to watch → what to teach</b>.</p>" +
-          '<div class="row"><a class="btn" href="#drugs">Open the drug tables</a><a class="btn ghost" href="#quiz">Quick quiz</a></div>' +
+          "<p>Start with your instructor's takeaways in the study guide, then go deeper with every Exam 2 drug from the combined drug tables. For each one, learn <b>what it is → what it does → what to watch → what to teach</b>.</p>" +
+          '<div class="row"><a class="btn" href="#guide">Open the study guide</a><a class="btn ghost" href="#drugs">Drug tables</a><a class="btn ghost" href="#quiz">Quick quiz</a></div>' +
         "</div>" +
         '<div class="card"><h3>Your progress</h3><div class="ring-wrap"><div class="ring" style="--p:' + overall + '" data-label="' + overall + '%"></div>' +
-          '<div class="small muted">Mastery blends drugs you marked studied, flashcards you know, and questions you answered correctly.<br><br><b>' + S.xp + " XP</b> earned · " + Object.keys(S.drugs).length + "/" + DRUGS.length + " drugs studied · Name Game best streak <b>" + (S.best.names || 0) + "</b></div></div>" +
+          '<div class="small muted">Mastery blends study guide sections you reviewed, drugs you marked studied, flashcards you know, and questions you answered correctly.<br><br><b>' + S.xp + " XP</b> earned · " + Object.keys(S.drugs).length + "/" + DRUGS.length + " drugs studied · Name Game best streak <b>" + (S.best.names || 0) + "</b></div></div>" +
           '<div class="row" style="margin-top:14px"><button class="btn small" id="reset">Reset progress</button></div></div>' +
       "</section>" +
       '<section class="grid grid-2">' +
@@ -107,7 +112,7 @@
         "<li><b>Side vs. adverse effects.</b> Side effects are expected and annoying; adverse effects are dangerous and get reported. Exam questions about \"priority\" usually point at an adverse effect.</li>" +
         "<li><b>RN assessment = what you check before and during.</b> Pulse before metoprolol, digoxin, and diltiazem; potassium with diuretics and ACE/ARBs; bleeding with every anticoagulant.</li>" +
         "<li><b>Client teaching = what the client does at home.</b> Turn on cover mode and try to say it before you reveal it.</li></ol></div>";
-    $("#reset").onclick = function () { if (confirm("Clear all saved progress and XP?")) { var th = S.theme; S = { xp: 0, drugs: {}, flash: {}, q: {}, best: {}, plain: false, cover: false, theme: th }; save(); document.getElementById("xp").textContent = 0; home(); } };
+    $("#reset").onclick = function () { if (confirm("Clear all saved progress and XP?")) { var th = S.theme; S = { xp: 0, drugs: {}, flash: {}, q: {}, best: {}, guide: {}, guideAlso: true, plain: false, cover: false, theme: th }; save(); document.getElementById("xp").textContent = 0; home(); } };
   }
 
   /* ================= DRUG TABLES ================= */
@@ -116,6 +121,7 @@
     var other = d.cats.filter(function (c) { return c !== catId; });
     return '<details class="card drug-card sys-' + u + '" id="d-' + d.id + '"' + (open ? " open" : "") + ">" +
       '<summary><div class="drug-head"><h3>' + title(d) + (S.drugs[d.id] ? ' <span class="chip good-chip">✓</span>' : "") + '</h3><div class="drug-cls">' + esc(d.cls) + (d.note ? " · " + esc(d.note) : "") + "</div></div></summary>" +
+      (ON_GUIDE[d.id] ? '<p class="small"><a class="chip guide-chip" href="#guide/' + ON_GUIDE[d.id].id + '">📋 On the study guide: ' + esc(ON_GUIDE[d.id].name) + "</a></p>" : '<p class="small muted">Not on the instructor\'s study guide, but still in your drug tables.</p>') +
       (other.length ? '<p class="small muted">Also in: ' + other.map(function (c) { return '<a href="#drugs/' + c + '">' + esc(CAT[c].name) + "</a>"; }).join(", ") + "</p>" : "") +
       '<div class="plain-card card plain-box"' + (S.plain ? "" : " hidden") + '><h4>🗣 In plain words</h4><p>' + esc(d.plain) + "</p></div>" +
       '<div class="key-line"><b>Must know:</b> ' + esc(d.key) + "</div>" +
@@ -207,6 +213,87 @@
     drugsView(d.cats[0], id);
   }
 
+  /* ================= STUDY GUIDE ================= */
+  var SRC = { ATI: "ATI tables", LECTURE: "Lecture", ADDED: "Study aid", CORRECTED: "Corrected" };
+  function srcTag(s) { return '<span class="src src-' + s.toLowerCase() + '">' + SRC[s] + "</span>"; }
+  function gv(text) { return '<span class="fv' + (S.cover ? " covered" : "") + '" tabindex="0">' + esc(text) + "</span>"; }
+  function guideNav(key) {
+    return '<div class="filter-bar guide-bar"><a class="chip ' + (!key ? "on" : "") + '" href="#guide">Overview</a>' +
+      GSECS.map(function (g, i) { return '<a class="chip ' + (key === g.id ? "on" : "") + '" href="#guide/' + g.id + '"><span class="sys-dot sys-' + g.sys + '"></span>' + (i + 1) + ". " + esc(g.name) + (S.guide[g.id] ? " ✓" : "") + "</a>"; }).join("") +
+      '<a class="chip ' + (key === "hy" ? "on" : "") + '" href="#guide/hy">⭐ High-yield</a><a class="chip ' + (key === "notes" ? "on" : "") + '" href="#guide/notes">Notes</a></div>';
+  }
+  function guideDrug(g) {
+    var d = DRUG[g.drug];
+    return '<div class="card guide-drug sys-' + d.cats.map(function (c) { return CAT[c].sys; })[0] + '">' +
+      '<div class="row guide-drug-head"><h3>' + esc(g.title) + (g.brand ? ' <span class="brand-name">(' + esc(g.brand) + ")</span>" : "") + '</h3><span class="spacer"></span><a class="small" href="#drug/' + d.id + '">Full drug table →</a></div>' +
+      '<div class="drug-cls">' + esc(g.cls) + (g.clsFix ? " " + srcTag("CORRECTED") : "") + "</div>" +
+      (g.clsFix ? '<p class="tiny" style="margin:4px 0 0">' + esc(g.clsFix) + "</p>" : "") +
+      '<dl class="drug-fields guide-fields">' + g.rows.map(function (r) {
+        return "<dt>" + esc(r[0]) + "</dt><dd>" + gv(r[1]) + (r[2] ? '<div class="fix">' + srcTag("CORRECTED") + " " + esc(r[2]) + "</div>" : "") + "</dd>";
+      }).join("") +
+      (g.also.length && S.guideAlso ? '<dt class="also">Also know</dt><dd class="also">' + g.also.map(function (a) { return '<div class="also-row">' + srcTag(a[0]) + " " + esc(a[1]) + "</div>"; }).join("") + "</dd>" : "") +
+      "</dl></div>";
+  }
+  function guideView(key) {
+    var done = GSECS.filter(function (g) { return S.guide[g.id]; }).length;
+    var head = '<div class="row" style="margin-bottom:6px"><h1 style="margin:0">Study Guide</h1><span class="spacer"></span><span class="small muted">' + done + " of " + GSECS.length + " sections reviewed</span></div>" + guideNav(key);
+    var sec = GSEC[key];
+    if (sec) {
+      var i = GSECS.indexOf(sec), prev = GSECS[i - 1], next = GSECS[i + 1];
+      app.innerHTML = head +
+        '<div class="card topic-head sys-' + sec.sys + '"><div class="row">' + tag(sec.sys) + '<span class="spacer"></span><span class="tiny">Section ' + (i + 1) + " of " + GSECS.length + "</span></div>" +
+          '<div class="row switches">' + switchHTML("alsoT", S.guideAlso, "Show “Also know” rows") + switchHTML("coverT", S.cover, "Cover mode") + "</div>" +
+          '<h1 style="margin-top:10px">' + sec.icon + " " + esc(sec.name) + ' <span class="muted" style="font-weight:500">(' + sec.drugs.length + ")</span></h1>" +
+          '<p class="small muted" style="margin:0">' + (S.cover ? "Cover mode is on: say each takeaway out loud, then tap the blurred text to check." : "The rows are your instructor's takeaways, so learn these first. “Also know” adds context from ATI and the lectures.") + "</p></div>" +
+        sec.drugs.map(guideDrug).join("") +
+        '<div class="card guide-done"><div class="row"><button class="btn ' + (S.guide[sec.id] ? "good" : "primary") + '" id="mark">' + (S.guide[sec.id] ? "✓ Section reviewed" : "Mark section reviewed") + '</button><span class="spacer"></span><a class="btn" href="#quiz/' + sec.sys + '">Quiz ' + esc(UNIT[sec.sys].short) + "</a></div></div>" +
+        '<div class="row nav-links">' + (prev ? '<a class="btn" href="#guide/' + prev.id + '">← ' + esc(prev.name) + "</a>" : '<a class="btn" href="#guide">← Overview</a>') + '<span class="spacer"></span>' +
+          (next ? '<a class="btn primary" href="#guide/' + next.id + '">' + esc(next.name) + " →</a>" : '<a class="btn primary" href="#guide/hy">High-yield comparisons →</a>') + "</div>";
+      $("#alsoT").onclick = function () { S.guideAlso = !S.guideAlso; save(); guideView(key); };
+      $("#coverT").onclick = function () { S.cover = !S.cover; save(); guideView(key); };
+      $$(".fv").forEach(function (f) { f.onclick = f.onkeydown = function (e) { if (e.type === "keydown" && e.key !== "Enter" && e.key !== " ") return; if (e.type === "keydown") e.preventDefault(); f.classList.toggle("covered"); }; });
+      $("#mark").onclick = function () {
+        var y = window.scrollY;
+        if (S.guide[sec.id]) { delete S.guide[sec.id]; save(); } else { S.guide[sec.id] = 1; save(); addXP(15, "Section reviewed"); if (GSECS.every(function (g) { return S.guide[g.id]; })) confetti(); }
+        guideView(key); window.scrollTo(0, y);
+      };
+      return;
+    }
+    if (key === "hy") {
+      app.innerHTML = head +
+        '<p class="muted">Patterns that cut across sections, a common source of select-all-that-apply questions. From the study guide\'s High-Yield Comparisons ' + srcTag("ADDED") + "</p>" +
+        '<div class="grid grid-2">' +
+          '<div class="card"><h2>🧪 Labs to know</h2><div class="table-wrap"><table><thead><tr><th>Lab</th><th>Drugs</th></tr></thead><tbody>' + G.labs.map(function (r) { return "<tr><td><b>" + esc(r[0]) + "</b></td><td>" + esc(r[1]) + "</td></tr>"; }).join("") + "</tbody></table></div></div>" +
+          '<div class="stack"><div class="card"><h2>🍌 Potassium: which way?</h2><div class="k-grid"><div class="k-col k-up"><h4>Raises K⁺</h4><p class="tiny">Watch for hyperkalemia</p><ul>' + G.potassium.up.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + '</ul></div><div class="k-col k-down"><h4>Lowers K⁺</h4><p class="tiny">Watch for hypokalemia</p><ul>' + G.potassium.down.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + '</ul></div></div><div class="callout warn"><strong>Danger</strong>' + esc(G.potassium.danger) + "</div></div>" +
+          '<div class="card"><h2>✋ Hold or check before giving</h2><div class="table-wrap"><table><tbody>' + G.hold.map(function (r) { return "<tr><td><b>" + esc(r[0]) + "</b></td><td>" + esc(r[1]) + "</td></tr>"; }).join("") + "</tbody></table></div></div></div>" +
+        "</div>" +
+        '<div class="grid grid-2" style="margin-top:20px">' +
+          '<div class="card"><h2>⚠️ Dangerous combinations</h2><ul class="facts">' + G.combos.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + "</ul></div>" +
+          '<div class="stack"><div class="card"><h2>🤰 Contraindicated in pregnancy</h2><p style="margin:0">' + esc(G.pregnancy) + '</p></div><div class="card"><h2>🩸 Bleeding risk</h2><p style="margin:0">' + esc(G.bleeding) + "</p></div></div>" +
+        "</div>" +
+        '<div class="row nav-links" style="margin-top:20px"><a class="btn" href="#guide/' + GSECS[GSECS.length - 1].id + '">← ' + esc(GSECS[GSECS.length - 1].name) + '</a><span class="spacer"></span><a class="btn primary" href="#quiz/guide">Try the study guide questions →</a></div>';
+      return;
+    }
+    if (key === "notes") {
+      app.innerHTML = head +
+        '<div class="card"><h2>Notes on the instructor guide</h2><ol class="facts">' + G.notes.map(function (n, i) { return "<li>" + (i < 2 ? srcTag("CORRECTED") + " " : "") + "<b>" + esc(n[0]) + ".</b> " + esc(n[1]) + "</li>"; }).join("") + "</ol></div>" +
+        '<div class="card" style="margin-top:20px"><h2>In your drug tables but not on the instructor guide</h2><p class="small muted">The instructor says to still review the medication tables, so skim these too.</p><div class="row" style="flex-wrap:wrap;gap:8px">' +
+          G.notOnGuide.map(function (id) { var d = DRUG[id]; return '<a class="chip" href="#drug/' + id + '"><span class="sys-dot sys-' + unitOf(d) + '"></span>' + esc(d.name) + "</a>"; }).join("") + "</div></div>";
+      return;
+    }
+    var nDrugs = GSECS.reduce(function (n, g) { return n + g.drugs.length; }, 0);
+    var nQ = QUESTIONS.filter(function (q) { return q.guide; }).length;
+    app.innerHTML = head +
+      '<div class="grid grid-2"><div class="card"><h2>What\'s on the exam</h2><p class="small muted">Instructor guide order · ' + GSECS.length + " sections · " + nDrugs + ' drugs</p>' +
+        GSECS.map(function (g, i) { return '<a class="blueprint-row sys-' + g.sys + '" href="#guide/' + g.id + '"><span style="font-size:20px">' + g.icon + '</span><span><span class="name">' + (i + 1) + ". " + esc(g.name) + '</span><br><span class="tiny">' + esc(g.drugs.map(function (x) { return x.title; }).join(", ")) + '</span></span><span class="small" style="font-weight:700">' + (S.guide[g.id] ? "✓" : "") + "</span></a>"; }).join("") + "</div>" +
+      '<div class="stack"><div class="card"><h2>Instructor\'s study tips</h2><p style="margin:0">' + esc(G.tips) + "</p></div>" +
+        '<div class="card"><h2>How to read this guide</h2><ul class="facts small"><li><b>Plain rows</b> are the instructor\'s exam takeaways. Study these first.</li>' +
+          "<li><b>Also know</b> rows add context, tagged by source: " + srcTag("ATI") + " your ATI medication tables, " + srcTag("LECTURE") + " the recorded lectures and slides, " + srcTag("ADDED") + " memory tips and comparisons.</li>" +
+          "<li>" + srcTag("CORRECTED") + " marks a likely error in the instructor guide; see the <a href=\"#guide/notes\">notes</a>.</li>" +
+          "<li><b>Cover mode</b> blurs every takeaway so you can quiz yourself.</li></ul></div>" +
+        '<div class="card"><h2>Then practice</h2><p class="small muted">' + nQ + ' questions from the study guide\'s practice set, plus the High-Yield Comparisons tables.</p><div class="row"><a class="btn primary" href="#quiz/guide">Study guide questions</a><a class="btn" href="#guide/hy">⭐ High-yield</a></div></div></div></div>';
+  }
+
   /* ================= COMPARE ================= */
   function compare(unitId, field) {
     var opts = [["cls", "Class"]].concat(FIELDS).concat([["key", "Must know"]]);
@@ -296,20 +383,34 @@
 
   /* ================= PRACTICE QUESTIONS ================= */
   var TYPE_LABEL = { mc: "Multiple choice", sata: "Select all that apply" };
+  var DIFF = { easy: ["Easy", "recall a fact or definition"], medium: ["Medium", "apply a concept to a client"], hard: ["Hard", "multi-step or technical reasoning"] };
+  function diffChip(d) { return DIFF[d] ? '<span class="chip diff diff-' + d + '" title="' + DIFF[d][1] + '">' + DIFF[d][0] + "</span>" : ""; }
+  function qChips(q) { return tag(q.sys) + '<span class="chip">' + TYPE_LABEL[q.type] + "</span>" + diffChip(q.diff) + (q.guide ? '<span class="chip guide-chip">📋 Study guide</span>' : ""); }
+  var quizDiff = "all";
+  // unitId is a unit id, "guide" (the study guide's practice set), or empty for all
   function quiz(unitId) {
-    unitId = UNIT[unitId] ? unitId : null;
-    var pool = QUESTIONS.map(function (q, i) { return i; }).filter(function (i) { return !unitId || QUESTIONS[i].sys === unitId; });
+    unitId = UNIT[unitId] || unitId === "guide" ? unitId : null;
+    var pool = QUESTIONS.map(function (q, i) { return i; }).filter(function (i) { return !unitId || (unitId === "guide" ? QUESTIONS[i].guide : QUESTIONS[i].sys === unitId); });
+    function inDiff(i) { return quizDiff === "all" || QUESTIONS[i].diff === quizDiff; }
+    function countOf(f) { return pool.filter(f).length; }
     var answered = pool.filter(function (i) { return S.q[i] !== undefined; }).length;
     var correct = pool.filter(function (i) { return S.q[i] === 1; }).length;
     var missed = pool.filter(function (i) { return S.q[i] === 0; });
     var count = 10;
-    app.innerHTML = "<h1>Practice Questions</h1>" + unitBar(unitId, "#quiz") +
+    var bar = '<div class="filter-bar"><a class="chip ' + (!unitId ? "on" : "") + '" href="#quiz">All</a>' +
+      UNITS.map(function (u) { return '<a class="chip ' + (unitId === u.id ? "on" : "") + '" href="#quiz/' + u.id + '"><span class="sys-dot sys-' + u.id + '"></span>' + esc(u.short) + "</a>"; }).join("") +
+      '<a class="chip ' + (unitId === "guide" ? "on" : "") + '" href="#quiz/guide">📋 Study guide set</a></div>';
+    app.innerHTML = '<h1>Practice Questions</h1><p class="muted">Multiple choice and select all that apply. Every question is rated by difficulty and explains why the answer is right.</p>' + bar +
       '<div class="grid grid-2"><div class="card"><h2>Start a set</h2><p class="small muted">' + pool.length + " questions here · " + answered + " tried · " + correct + " correct</p>" +
         '<div class="row" style="margin:12px 0"><span class="small">How many?</span>' + [10, 20, "All"].map(function (n, k) { return '<button class="chip' + (k === 0 ? " on" : "") + '" data-n="' + n + '">' + n + "</button>"; }).join("") + "</div>" +
+        '<div class="row" style="margin:0 0 14px"><span class="small">Difficulty</span>' + ["all", "easy", "medium", "hard"].map(function (d) { return '<button class="chip' + (quizDiff === d ? " on" : "") + '" data-d="' + d + '">' + (d === "all" ? "All" : DIFF[d][0]) + " · " + countOf(function (i) { return d === "all" || QUESTIONS[i].diff === d; }) + "</button>"; }).join("") + "</div>" +
         '<div class="row"><button class="btn primary" id="go">Start</button>' + (missed.length ? '<button class="btn" id="redo">Redo the ' + missed.length + " I missed</button>" : "") + "</div></div>" +
-      '<div class="card"><h2>Formats</h2><ul class="facts small">' + Object.keys(TYPE_LABEL).map(function (t) { var n = pool.filter(function (i) { return QUESTIONS[i].type === t; }).length; return n ? "<li><b>" + TYPE_LABEL[t] + "</b> · " + n + "</li>" : ""; }).join("") + '</ul><p class="small muted">Answer choices are shuffled every time, so you learn the content, not the letter.</p></div></div>';
+      '<div class="card"><h2>Formats</h2><ul class="facts small">' + Object.keys(TYPE_LABEL).map(function (t) { var n = countOf(function (i) { return QUESTIONS[i].type === t; }); return n ? "<li><b>" + TYPE_LABEL[t] + "</b> · " + n + "</li>" : ""; }).join("") + "</ul>" +
+        '<h3 style="margin-top:14px">Difficulty</h3><ul class="facts small">' + Object.keys(DIFF).map(function (d) { return "<li>" + diffChip(d) + " " + DIFF[d][1] + " · " + countOf(function (i) { return QUESTIONS[i].diff === d; }) + "</li>"; }).join("") + "</ul>" +
+        '<p class="small muted">Answer choices are shuffled every time, so you learn the content, not the letter.</p></div></div>';
     $$("[data-n]").forEach(function (b) { b.onclick = function () { $$("[data-n]").forEach(function (x) { x.classList.remove("on"); }); b.classList.add("on"); count = b.getAttribute("data-n") === "All" ? 999 : +b.getAttribute("data-n"); }; });
-    $("#go").onclick = function () { runQuiz(shuffle(pool).slice(0, count), unitId); };
+    $$("[data-d]").forEach(function (b) { b.onclick = function () { $$("[data-d]").forEach(function (x) { x.classList.remove("on"); }); b.classList.add("on"); quizDiff = b.getAttribute("data-d"); }; });
+    $("#go").onclick = function () { var ids = pool.filter(inDiff); if (!ids.length) { toast("No questions at that difficulty here"); return; } runQuiz(shuffle(ids).slice(0, count), unitId); };
     if ($("#redo")) $("#redo").onclick = function () { runQuiz(shuffle(missed), unitId); };
   }
 
@@ -320,7 +421,7 @@
       var qi = ids[pos], q = QUESTIONS[qi], multi = q.type === "sata";
       var order = shuffle(q.options.map(function (o, k) { return k; }));
       app.innerHTML = '<div class="q-card card sys-' + q.sys + '"><div class="progress" style="margin-bottom:14px"><span style="width:' + (100 * pos / ids.length) + '%"></span></div>' +
-        '<div class="q-meta">' + tag(q.sys) + '<span class="chip">' + TYPE_LABEL[q.type] + '</span><span class="spacer"></span><span class="tiny">' + (pos + 1) + " / " + ids.length + " · score " + score + "</span></div>" +
+        '<div class="q-meta">' + qChips(q) + '<span class="spacer"></span><span class="tiny">' + (pos + 1) + " / " + ids.length + " · score " + score + "</span></div>" +
         '<div class="q-stem">' + esc(q.stem) + "</div>" +
         order.map(function (k) { return '<button class="opt' + (multi ? " multi" : "") + '" data-k="' + k + '"><span class="box"></span><span>' + esc(q.options[k]) + "</span></button>"; }).join("") +
         '<div id="rat"></div><div class="row" style="margin-top:14px"><span class="spacer"></span><button class="btn primary" id="submit">Check answer</button></div></div>';

@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Pharmacology Exam 2</title>
-  <meta name="description" content="Interactive study guide for NURA 350 Pharmacology Exam 2: the combined drug tables for cardiac, renal, GU, reproductive, and GI medications.">
+  <meta name="description" content="Interactive study guide for NURA 350 Pharmacology Exam 2: the instructor's Exam 2 takeaways and the combined drug tables for cardiac, renal, GU, reproductive, and GI medications.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%92%8A%3C/text%3E%3C/svg%3E">
-  <link rel="stylesheet" href="../../nura330/shared/styles.css?v=202610271900">
-  <link rel="stylesheet" href="css/pharm.css?v=202610271900">
+  <link rel="stylesheet" href="../../nura330/shared/styles.css?v=202610301600">
+  <link rel="stylesheet" href="css/pharm.css?v=202610301600">
 </head>
 <body>
   <header class="topbar">
@@ -16,6 +16,7 @@
       <a class="brand" href="#home"><span class="brand-mark">💊</span><span class="brand-text">Pharm Exam 2</span></a>
       <nav class="nav" id="nav">
         <a href="#home" data-r="home">Home</a>
+        <a href="#guide" data-r="guide">Study Guide</a>
         <a href="#drugs" data-r="drugs">Drug Tables</a>
         <a href="#compare" data-r="compare">Compare</a>
         <a href="#flash" data-r="flash">Flashcards</a>
@@ -31,6 +32,7 @@
   <main id="app" tabindex="-1"></main>
 
   <footer class="footer">
+    The Study Guide follows “Pharm Exam 2 Study Guide”, built from the instructor's Exam 2 Takeaways; tagged “Also know” rows add context from ATI and the lectures.
     Drug details come from “Exam 2 Drug Tables - Combined” (ATI Engage Series Medication Information Tables © 2025 ATI, personal study use only).
     “In plain words”, “Must know”, and the practice questions are study notes written from those tables; gray “Beyond the table” boxes are standard nursing content added to fill gaps, so check them against your textbook.
     Progress is saved in this browser only.
@@ -39,8 +41,9 @@
   <div class="toast" id="toast"></div>
   <canvas id="confetti"></canvas>
 
-  <script src="js/drugs.js?v=202610271900"></script>
-  <script src="js/practice.js?v=202610271900"></script>
-  <script src="js/app.js?v=202610271900"></script>
+  <script src="js/drugs.js?v=202610301600"></script>
+  <script src="js/guide.js?v=202610301600"></script>
+  <script src="js/practice.js?v=202610301600"></script>
+  <script src="js/app.js?v=202610301600"></script>
 </body>
 </html>
