@@ -115,7 +115,7 @@
       { x: 118, y: 108, label: "Supraclavicular nodes", text: "Above the clavicle. A hard, fixed, painless node here (>1 cm) is a classic malignancy warning: refer.", topics: ["nodes", "neck"] },
       { x: 212, y: 124, label: "Axillary nodes", text: "In the armpit; drain the arm and breast. Part of the lecture's four regional chains.", topics: ["nodes", "skinap"] },
       { x: 236, y: 182, label: "Epitrochlear nodes", text: "Inner elbow. Drain the forearm and hand; enlarge with hand infections.", topics: ["nodes", "skinap"] },
-      { x: 184, y: 252, label: "Inguinal nodes", text: "In the groin; drain the legs and genital area. Enlarged with leg or genital infections (including some STIs).", topics: ["nodes", "reprohx"] }
+      { x: 184, y: 252, label: "Inguinal nodes", text: "In the groin; drain the legs and genital area. Enlarged with leg or genital infections (including some STIs).", topics: ["nodes", "guhx"] }
     ] },
 
   { id: "fontanelles", topic: "lifespan", sys: "skin", title: "Infant skull from above", view: "0 0 340 360",
@@ -339,6 +339,45 @@
       { x: 110, y: 90, label: "Sternocleidomastoid (CN XI)", text: "Turn the head against resistance; shrug shoulders. Tests CN XI.", topics: ["neck", "cn"] },
       { x: 264, y: 156, label: "Cervical lymph nodes", text: "Finger pads, gentle circles, both sides. Expected: not palpable or small, soft, mobile, nontender.", topics: ["neck", "nodes"] },
       { x: 80, y: 286, label: "Supraclavicular node", text: "Hard, fixed, painless and >1 cm here = malignancy concern: refer.", topics: ["neck", "nodes"] }
+    ] },
+
+  /* ---------- Rectal & genitourinary ---------- */
+  { id: "urinary", kind: "structure", topic: "guap", sys: "repro", title: "Urinary tract & bladder scan", view: "0 0 360 420",
+    svg:
+      '<path class="dg-kidney" d="M92 70 C60 72 50 120 60 150 C70 180 104 186 118 160 C108 140 108 112 120 96 C116 78 106 70 92 70Z"/>' +
+      '<path class="dg-kidney" d="M268 70 C300 72 310 120 300 150 C290 180 256 186 242 160 C252 140 252 112 240 96 C244 78 254 70 268 70Z"/>' +
+      '<path class="dg-ureter" d="M116 128 C140 180 150 230 160 276 M244 128 C220 180 210 230 200 276"/>' +
+      '<path class="dg-bladder" d="M130 270 C130 240 230 240 230 270 C236 312 214 336 180 336 C146 336 124 312 130 270Z"/>' +
+      '<ellipse class="dg-urine" cx="180" cy="304" rx="40" ry="22"/>' +
+      '<path class="dg-prostate" d="M160 338 C160 330 200 330 200 338 C204 356 156 356 160 338Z"/>' +
+      '<path class="dg-ureter thin" d="M180 350 L180 404"/>' +
+      '<path class="dg-bone" d="M110 356 C140 376 220 376 250 356 L250 368 C220 388 140 388 110 368Z"/>' +
+      '<path class="dg-arrow thin" d="M300 250 L246 286"/>' +
+      '<text class="dg-lbl sm" x="180" y="22">posterior, below the ribs</text>',
+    spots: [
+      { x: 84, y: 120, label: "Kidneys", text: "Two fist-sized, bean-shaped organs, posterior below the ribcage. They filter waste into urine, regulate fluid, electrolytes, and acid-base, secrete erythropoietin, and help control BP. Weight gain, ankle swelling, and SOB can mean they're failing.", topics: ["guap", "guhx"] },
+      { x: 140, y: 200, label: "Ureters", text: "Muscular tubes, 25–30 cm, that move urine by peristalsis. A fold where each enters the bladder works as a one-way valve against reflux.", topics: ["guap"] },
+      { x: 180, y: 262, label: "Bladder", text: "Hollow, stretchy muscle behind the symphysis pubis. About 300 mL triggers the urge. Distended, it's a smooth, rounded, midline mass above the symphysis pubis.", topics: ["guap", "retention"] },
+      { x: 180, y: 304, label: "Post-void residual", text: "Scan within 10 minutes of voiding. Expected 50–100 mL; over 100 mL means the bladder isn't emptying: notify the provider.", topics: ["retention"] },
+      { x: 300, y: 250, label: "Bladder scanner", text: "Client supine, gel 2.5–4 cm above the symphysis pubis, probe pointed down toward the bladder.", topics: ["retention"] },
+      { x: 180, y: 344, label: "Prostate", text: "Wraps the urethra just below the bladder (in males). When it enlarges (BPH), it squeezes the urethra: hesitancy, weak stream, dribbling, nocturia, retention.", topics: ["gucase", "gulife"] },
+      { x: 180, y: 396, label: "Urethra", text: "Female about 3–4 cm (short, so more UTIs); male about 20 cm and carries urine and semen.", topics: ["guap", "retention"] },
+      { x: 250, y: 362, label: "Symphysis pubis", text: "The landmark for palpating a full bladder and placing the scanner gel.", topics: ["retention"] }
+    ] },
+
+  { id: "bristolbar", topic: "guexam", sys: "repro", title: "Bristol stool chart", view: "0 0 460 200",
+    svg:
+      '<rect class="dg-band z5" x="20" y="70" width="60" height="44" rx="6"/><rect class="dg-band z4" x="80" y="70" width="60" height="44"/>' +
+      '<rect class="dg-band z1" x="140" y="70" width="60" height="44"/><rect class="dg-band z1" x="200" y="70" width="60" height="44"/>' +
+      '<rect class="dg-band z3" x="260" y="70" width="60" height="44"/><rect class="dg-band z4" x="320" y="70" width="60" height="44"/><rect class="dg-band z5" x="380" y="70" width="60" height="44" rx="6"/>' +
+      '<text class="dg-lbl" x="50" y="97">1</text><text class="dg-lbl" x="110" y="97">2</text><text class="dg-lbl" x="170" y="97">3</text><text class="dg-lbl" x="230" y="97">4</text><text class="dg-lbl" x="290" y="97">5</text><text class="dg-lbl" x="350" y="97">6</text><text class="dg-lbl" x="410" y="97">7</text>' +
+      '<text class="dg-lbl sm" x="80" y="140">hard, slow</text><text class="dg-lbl sm" x="200" y="140">ideal</text><text class="dg-lbl sm" x="380" y="140">loose, fast</text>' +
+      '<text class="dg-lbl sm" x="230" y="44">7 types by shape and consistency (transit time)</text>',
+    spots: [
+      { x: 80, y: 172, label: "Types 1–2: constipation", text: "Separate hard lumps (1) or a lumpy sausage (2). Ask about fiber, fluids, activity, and meds.", topics: ["guexam"] },
+      { x: 200, y: 172, label: "Types 3–4: ideal", text: "Sausage with cracks (3) or a smooth, soft sausage (4). Chart: “Last BM today, Bristol type 4.”", topics: ["guexam", "guterms"] },
+      { x: 290, y: 172, label: "Type 5: trending loose", text: "Soft blobs with clear edges: low fiber, trending loose.", topics: ["guexam"] },
+      { x: 380, y: 172, label: "Types 6–7: diarrhea", text: "Fluffy, ragged pieces (6) or watery with no solids (7). Watch fluids and the perianal skin.", topics: ["guexam"] }
     ] }
   ];
 

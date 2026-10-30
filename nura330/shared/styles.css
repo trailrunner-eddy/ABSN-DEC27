@@ -90,6 +90,10 @@ main { max-width: 1180px; margin: 0 auto; padding: 24px 16px 80px; }
 .btn:disabled { opacity: .45; cursor: default; transform: none; }
 .chip { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 999px; font-size: .78rem; font-weight: 600; background: var(--surface-2); color: var(--ink-2); border: 1px solid var(--line); }
 .chip.on { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.chip.diff { font-weight: 700; }
+.chip.diff-easy { background: var(--good-bg); color: var(--good); border-color: transparent; }
+.chip.diff-medium { background: var(--warn-bg); color: var(--warn); border-color: transparent; }
+.chip.diff-hard { background: var(--bad-bg); color: var(--bad); border-color: transparent; }
 button.chip { cursor: pointer; }
 .sys-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex: none; }
 .sys-found { --c: var(--found); } .sys-resp { --c: var(--resp); } .sys-card1 { --c: var(--card1); }

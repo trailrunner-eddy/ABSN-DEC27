@@ -70,7 +70,7 @@ var tiles = [
       ["#topics", "📚", "Topic Pages", "Every topic on the study guide as " + (G.chainShort || "a step-by-step chain") + ", with self-check questions."],
       ["#pics", "🖼️", "Picture Lab", "Tap-to-learn diagrams for every section, plus a picture quiz from the lecture slides."],
       ["#flash", "🃏", "Flashcards", FLASHCARDS.length + " flip cards. Mark what you know and drill the rest."],
-      ["#quiz", "📝", "Practice Questions", QUESTIONS.length + " exam-style items: multiple choice, SATA, select N, cloze dropdowns, and matrix grids."],
+      ["#quiz", "📝", "Practice Questions", QUESTIONS.length + " exam-style items: " + quizFormats().join(", ") + (QUESTIONS.some(function (q) { return q.diff; }) ? ", each rated easy, medium, or hard with a full rationale." : ".")],
       ["#normal", "🔍", "Expected or Not?", "Rapid-fire findings: expected, unexpected (follow up), or report now?"],
       ["#sort", "🧺", "Sort It", "Race the clock sorting findings between look-alike categories."],
       ["#chains", "🔢", "Step Order", "Put assessment steps and sequences in the right order."],
@@ -407,21 +407,31 @@ var tiles = [
 
   /* ================= QUIZ ================= */
   var TYPE_LABEL = { mc: "Multiple choice", sata: "Select all that apply", selectn: "Select N", cloze: "Drop-down cloze", matrix: "Matrix grid" };
+  var DIFF = { easy: ["Easy", "recall a fact or definition"], medium: ["Medium", "apply a concept to a client"], hard: ["Hard", "multi-step or technical reasoning"] };
+  function diffChip(d) { return DIFF[d] ? '<span class="chip diff diff-' + d + '" title="' + DIFF[d][1] + '">' + DIFF[d][0] + "</span>" : ""; }
+  function quizFormats() { return Object.keys(TYPE_LABEL).filter(function (t) { return QUESTIONS.some(function (q) { return q.type === t; }); }).map(function (t) { return t === "mc" ? "multiple choice" : t === "sata" ? "select all that apply" : TYPE_LABEL[t]; }); }
+  var quizDiff = "all";
   function quiz(sys) {
     var pool = QUESTIONS.map(function (q, i) { return i; }).filter(function (i) { return !sys || QUESTIONS[i].sys === sys; });
     var answered = pool.filter(function (i) { return S.q[i] !== undefined; }).length;
     var correct = pool.filter(function (i) { return S.q[i] === 1; }).length;
     var missed = pool.filter(function (i) { return S.q[i] === 0; });
+    var rated = QUESTIONS.some(function (q) { return q.diff; });
+    function inDiff(i) { return quizDiff === "all" || QUESTIONS[i].diff === quizDiff; }
+    function countOf(f) { return pool.filter(f).length; }
     app.innerHTML =
-      '<h1>Practice Questions</h1><p class="muted">NGN-style items written from your lectures. Each one has a rationale tied to the mechanism.</p>' +
+      '<h1>Practice Questions</h1><p class="muted">' + (rated ? "Written from your lectures in the exam's formats (" + quizFormats().join(" and ") + "). Every question is rated by difficulty and explains why the answer is right." : "NGN-style items written from your lectures. Each one has a rationale tied to the mechanism.") + "</p>" +
       sysFilterBar(sys, "#quiz", false) +
       '<div class="grid grid-2"><div class="card"><h2>Start a set</h2><p class="small muted">' + pool.length + " questions in this pool · " + answered + " attempted · " + correct + ' correct</p>' +
         '<div class="row" style="margin:12px 0"><span class="small">How many?</span>' + [10, 20, "All"].map(function (n, k) { return '<button class="chip' + (k === 0 ? " on" : "") + '" data-n="' + n + '">' + n + "</button>"; }).join("") + "</div>" +
+        (rated ? '<div class="row" style="margin:0 0 14px"><span class="small">Difficulty</span>' + ["all", "easy", "medium", "hard"].map(function (d) { return '<button class="chip' + (quizDiff === d ? " on" : "") + '" data-d="' + d + '">' + (d === "all" ? "All" : DIFF[d][0]) + " · " + countOf(function (i) { return d === "all" || QUESTIONS[i].diff === d; }) + "</button>"; }).join("") + "</div>" : "") +
         '<div class="row"><button class="btn primary" id="go">Start</button>' + (missed.length ? '<button class="btn" id="redo">Retry my ' + missed.length + " missed</button>" : "") + "</div></div>" +
-        '<div class="card"><h2>Formats</h2><ul class="facts small">' + Object.keys(TYPE_LABEL).map(function (t) { var n = pool.filter(function (i) { return QUESTIONS[i].type === t; }).length; return n ? "<li><b>" + TYPE_LABEL[t] + "</b> · " + n + "</li>" : ""; }).join("") + "</ul></div></div>";
+        '<div class="card"><h2>Formats</h2><ul class="facts small">' + Object.keys(TYPE_LABEL).map(function (t) { var n = countOf(function (i) { return QUESTIONS[i].type === t; }); return n ? "<li><b>" + TYPE_LABEL[t] + "</b> · " + n + "</li>" : ""; }).join("") + "</ul>" +
+          (rated ? '<h3 style="margin-top:14px">Difficulty</h3><ul class="facts small">' + Object.keys(DIFF).map(function (d) { return "<li>" + diffChip(d) + " " + DIFF[d][1] + " · " + countOf(function (i) { return QUESTIONS[i].diff === d; }) + "</li>"; }).join("") + "</ul>" : "") + "</div></div>";
     var count = 10;
     $$("[data-n]").forEach(function (b) { b.onclick = function () { $$("[data-n]").forEach(function (x) { x.classList.remove("on"); }); b.classList.add("on"); count = b.getAttribute("data-n") === "All" ? 999 : +b.getAttribute("data-n"); }; });
-    $("#go").onclick = function () { runQuiz(shuffle(pool).slice(0, count), sys); };
+    $$("[data-d]").forEach(function (b) { b.onclick = function () { quizDiff = b.getAttribute("data-d"); quiz(sys); }; });
+    $("#go").onclick = function () { var ids = pool.filter(inDiff); if (!ids.length) { toast("No questions at that difficulty here"); return; } runQuiz(shuffle(ids).slice(0, count), sys); };
     if ($("#redo")) $("#redo").onclick = function () { runQuiz(shuffle(missed), sys); };
   }
 
@@ -431,7 +441,7 @@ var tiles = [
       if (pos >= ids.length) return finish();
       var qi = ids[pos], q = QUESTIONS[qi];
       var html = '<div class="q-card card sys-' + q.sys + '"><div class="progress" style="margin-bottom:14px"><span style="width:' + (100 * pos / ids.length) + '%"></span></div>' +
-        '<div class="q-meta">' + tag(q.sys) + '<span class="chip">' + TYPE_LABEL[q.type] + (q.type === "selectn" ? " · pick " + q.n : "") + '</span><span class="spacer"></span><span class="tiny">' + (pos + 1) + " / " + ids.length + " · score " + score + "</span></div>";
+        '<div class="q-meta">' + tag(q.sys) + '<span class="chip">' + TYPE_LABEL[q.type] + (q.type === "selectn" ? " · pick " + q.n : "") + "</span>" + diffChip(q.diff) + '<span class="spacer"></span><span class="tiny">' + (pos + 1) + " / " + ids.length + " · score " + score + "</span></div>";
       if (q.type === "cloze") {
         var i = 0;
         html += '<p class="small muted">Choose the option that best completes each blank.</p><div class="cloze">' + esc(q.stem).replace(/\{(\d+)\}/g, function (m, n) {
@@ -494,7 +504,7 @@ var tiles = [
       app.innerHTML = '<div class="card scoreboard"><div style="font-size:44px">' + (pct >= 85 ? "🏆" : pct >= 70 ? "💪" : "📖") + '</div><div class="big-score">' + pct + '%</div><p class="muted">' + score + " of " + ids.length + " correct</p>" +
         "<p>" + (pct >= 85 ? "Exam-ready on this set." : pct >= 70 ? "Solid. Review the rationales you missed." : "Go back to the topic pages for the systems you missed, then retry.") + "</p>" +
         '<div class="row" style="justify-content:center"><a class="btn primary" href="#quiz' + (sys ? "/" + sys : "") + '">New set</a><a class="btn" href="#topics">Topics</a></div></div>' +
-        (wrong.length ? '<h2 style="margin-top:24px">Review what you missed</h2>' + wrong.map(function (r) { var q = QUESTIONS[r.qi]; return '<div class="card sys-' + q.sys + '" style="margin-bottom:12px"><div class="q-meta">' + tag(q.sys) + '<span class="chip">' + TYPE_LABEL[q.type] + '</span></div><p><b>' + esc(q.stem.replace(/\{\d+\}/g, "___")) + '</b></p><p class="small muted">' + esc(q.why) + "</p></div>"; }).join("") : "");
+        (wrong.length ? '<h2 style="margin-top:24px">Review what you missed</h2>' + wrong.map(function (r) { var q = QUESTIONS[r.qi]; return '<div class="card sys-' + q.sys + '" style="margin-bottom:12px"><div class="q-meta">' + tag(q.sys) + '<span class="chip">' + TYPE_LABEL[q.type] + "</span>" + diffChip(q.diff) + '</div><p><b>' + esc(q.stem.replace(/\{\d+\}/g, "___")) + '</b></p><p class="small muted">' + esc(q.why) + "</p></div>"; }).join("") : "");
       if (pct >= 85) confetti();
     }
     next();
@@ -610,7 +620,7 @@ var tiles = [
       }
       var t = sets[pos], order = shuffle(t.clients.map(function (c, i) { return i; }));
       app.innerHTML = '<h1>Who First?</h1><p class="muted">ABCs, then acute over chronic, then unstable over stable. A baseline finding is rarely the priority.</p>' + sysFilterBar(sys, "#triage", false) +
-        '<div class="card sys-' + t.sys + '"><div class="q-meta">' + tag(t.sys) + '<span class="spacer"></span><span class="tiny">' + (pos + 1) + " / " + sets.length + " · score " + score + '</span></div><div class="q-stem">' + esc(t.stem) + '</div><div class="triage-grid">' +
+        '<div class="card sys-' + t.sys + '"><div class="q-meta">' + tag(t.sys) + diffChip(t.diff) + '<span class="spacer"></span><span class="tiny">' + (pos + 1) + " / " + sets.length + " · score " + score + '</span></div><div class="q-stem">' + esc(t.stem) + '</div><div class="triage-grid">' +
         order.map(function (k) { return '<button class="opt" data-k="' + k + '"><span class="box"></span><span>' + esc(t.clients[k]) + "</span></button>"; }).join("") + '</div><div id="rat"></div></div>';
       $$(".opt").forEach(function (b) { b.onclick = function () {
         var k = +b.getAttribute("data-k"), ok = k === t.answer;
