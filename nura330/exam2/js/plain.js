@@ -113,16 +113,44 @@ window.PLAIN = {
     text: "Anything sudden that involves the nerves is urgent: a drooping face, slurred speech, a new uneven pupil, sudden vision or hearing loss, the worst headache of their life, drooling with noisy breathing, or a windpipe shifted to one side. Things that have been going on for a while, like hoarseness, mouth sores, or a lump in the thyroid, still need follow-up but aren't emergencies.",
     like: "Sudden is a smoke alarm; persistent is a check-engine light."
   },
-  reproap: {
-    text: "Reproductive questions are personal, so make the person comfortable first. Talk privately, explain why you're asking and who will see the answers, use their name and pronouns, and ask about partners without assuming. If they need an interpreter, use a professional one, never a partner or family member.",
-    like: "Like setting up a quiet room before a hard conversation: the setup decides whether you'll get honest answers."
-  },
-  reprohx: {
-    text: "Ask for the first day of their last period and what their cycle is usually like. For pregnancy history use GTPAL: total pregnancies, full-term births, early births, losses before 20 weeks, and living children. Ask about partners, protection, STIs, birth control, and urinary symptoms, since bladder and reproductive problems often overlap.",
-    like: "GTPAL is like a box score: total games played, wins at full time, early finishes, games that ended early, and players still on the roster."
-  },
-  reprolife: {
-    text: "In teens, Tanner stages from 1 (child) to 5 (adult) track puberty. In older adults with a prostate, the prostate often grows and squeezes the tube that drains the bladder, so the stream gets weak, they get up at night to pee, and they feel like they can't empty. Not being able to pee at all with a swollen, painful bladder is urgent.",
+  gucase: {
+    text: "T.K. is 73 and has been getting up more than six times a night to pee, has trouble getting the stream started, and dribbles afterward. His prostate is enlarged. The prostate wraps around the tube that drains the bladder, so when it grows it pinches that tube. A PSA blood test was ordered, but a high PSA doesn't prove cancer, because an enlarged or irritated prostate raises it too.",
     like: "BPH is like a hand slowly squeezing a straw: the more it squeezes, the harder it is to drink through."
+  },
+  guap: {
+    text: "Urine is made in the kidneys, slides down two tubes (the ureters) to the bladder, and leaves through the urethra. The bladder sends the “I need to go” signal at about 300 mL. Females have a very short urethra, so germs reach the bladder easily. The anus has two rings of muscle: an inner one you can't control and an outer one you can.",
+    like: "The urinary tract is a water treatment plant (kidneys), pipes (ureters), a holding tank (bladder), and a drain (urethra)."
+  },
+  guhx: {
+    text: "Ask before you ask: get permission, say why the questions matter, and explain who will see the answers. Cover peeing, bowel movements, and reproductive health. For anyone who has periods, get the first day of the last one. Pregnancy history is recorded as GTPAL: total pregnancies, full-term births, early births, losses before 20 weeks, and living children.",
+    like: "GTPAL is like a box score: games played, full-time wins, early finishes, games called early, and players still on the roster."
+  },
+  guexam: {
+    text: "Mostly you look. Normal skin around the anus is darker, moist, hairless, and closed. Normal genitals are symmetric with no sores, swelling, or unusual discharge, and testes are about equal. Stool is rated 1 to 7 on the Bristol chart: 1–2 is constipated, 3–4 is ideal, 6–7 is diarrhea. Sudden, severe pain in the scrotum is an emergency.",
+    like: "The Bristol chart is a dial from “stuck” to “runny,” with the sweet spot in the middle."
+  },
+  urine: {
+    text: "Look at the amount, color, clarity, and smell. Pale straw is good. Dark amber means the body is holding on to water. Cloudy can mean infection. Pink or red can be blood and gets reported if there's no other explanation. Brown like tea gets escalated. To check output, divide the mL by the weight in kg times the hours; at least 0.5 is enough for an adult.",
+    like: "Urine color is a fuel gauge for hydration and a smoke detector for blood or muscle damage, but you still have to find the fire."
+  },
+  retention: {
+    text: "Retention means the bladder won't empty. A full bladder feels like a smooth ball just above the pubic bone. The bladder scanner measures what's left: scan within 10 minutes after they pee, and more than 100 mL left gets reported. To help someone go, let men stand and women sit, run the water, or put a hand in warm water. A UTI burns, smells bad, and makes people go often; older adults may just get confused.",
+    like: "A post-void residual is checking how much is left in the glass after someone says they finished drinking."
+  },
+  guhp: {
+    text: "Prevention covers vaccines (HPV starting at 9, best before any sexual activity; hepatitis B for high-risk people), birth control (only condoms also stop STIs), STI testing (HIV from 15 to 75 and in pregnancy, chlamydia and gonorrhea under 25), and cancer screening (colon from 45, Pap every 3 years from 21 to 29, PSA as a shared decision).",
+    like: "Screening ages are like a calendar of check-ups that unlock as birthdays pass."
+  },
+  gulife: {
+    text: "Kids may not be able to say where it hurts, so ask the caregiver about potty training, bedwetting, constipation, and signs of infection. Teens get privacy. Tanner stages rate puberty from 1 (child) to 5 (adult); it should start between about 8 and 13 in girls and 9 and 14 in boys. Older adults often have leaking, trouble emptying, or an enlarged prostate, but leaking is not just “getting old.”",
+    like: "Tanner stages are like the levels of a video game everyone plays in the same order, just at different speeds."
+  },
+  guinclusive: {
+    text: "Use the name and pronouns the person gives you, and ask about their body instead of assuming. Screening follows the organs a person has: a trans man with a cervix still needs Pap tests. Feminizing hormones include spironolactone, which can raise potassium; testosterone usually stops periods within a few months. Also ask about cost, bathroom access, stigma, and safety at home.",
+    like: "Ask, don't assume: it's like checking the map instead of guessing the road."
+  },
+  guterms: {
+    text: "Say exactly what you saw: “PVR 350 mL by bladder scan, provider notified” instead of “couldn't pee much.” Learn the words: dysuria is painful peeing, hematuria is blood in urine, nocturia is getting up at night, oliguria is too little urine, melena is black tarry stool, and hematochezia is bright red blood with stool.",
+    like: "Charting is a photograph in words: another nurse should picture the same thing you saw."
   }
 };

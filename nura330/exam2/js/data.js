@@ -1,7 +1,7 @@
 /* Content for the Health Assessment Exam 2 interactive guide.
-   Outline follows the "NURA 330 Exam 2 Study Guide"; details come from the Mod 4, 5, 6
-   lecture guides and slides. Mod 7 (Reproductive) has no lecture guide yet, so its pages are
-   built from the study guide outline plus standard assessment content (marked “Beyond the lectures”). */
+   Outline follows the "NURA 330 Exam 2 Study Guide"; details come from the Mod 4–7 lecture guides
+   and slides. GTPAL and Tanner stages are on the study guide but not the slides, so those pages
+   use standard references (marked “Beyond the lectures”). */
 
 window.GUIDE = {
   key: "ha-exam2-v1",
@@ -10,7 +10,7 @@ window.GUIDE = {
   heroArt: "🩺",
   heroText: "50 items (multiple choice and SATA) in 75 minutes, 20% of the course grade. For every system, practice moving from <b>anatomy → what you ask → what you examine → what you report</b>.",
   formats: ["Multiple choice", "Select all that apply"],
-  formatNote: "The exam is MC and SATA only. Practice Qs adds a few NGN formats (select N, cloze, matrix) for extra reps.",
+  formatNote: "The exam is MC and SATA only, so Practice Qs uses only these two formats. Every question is rated easy, medium, or hard.",
   chainTitle: "The assessment chain",
   chainNote: "Anatomy that matters → what you ask (subjective) → what you examine (objective) → red flags to report.",
   chainShort: "an anatomy → ask → examine → report chain",
@@ -23,7 +23,7 @@ window.SYSTEMS = [
   { id: "skin", name: "Lifespan, Skin & Lymph", short: "Skin & Lymph", icon: "🩹", weight: "Mod 4 · Older adults, integumentary & lymphatic" },
   { id: "cv", name: "Cardiovascular & Peripheral Vascular", short: "Cardio", icon: "🫀", weight: "Mod 5 · Heart, pulses, perfusion" },
   { id: "heent", name: "Head, Eyes, Ears, Nose & Throat", short: "HEENT", icon: "👁️", weight: "Mod 6 · HEENT & cranial nerves" },
-  { id: "repro", name: "Reproductive", short: "Repro", icon: "🧬", weight: "Mod 7 · built from the study guide outline" }
+  { id: "repro", name: "Rectal & Genitourinary", short: "GU & Rectal", icon: "🧬", weight: "Mod 7 · Urinary, reproductive & rectal" }
 ];
 
 window.EMPHASIS = [
@@ -34,7 +34,10 @@ window.EMPHASIS = [
   "Women having an MI often have no classic chest pain: back/neck pain, nausea, SOB, fatigue.",
   "Carotids one side at a time, never both.",
   "Cranial nerves: you don't need every detail. Link each maneuver to the nerve it tests.",
-  "A sudden facial droop during your assessment: activate the stroke response first."
+  "A sudden facial droop during your assessment: activate the stroke response first.",
+  "Post-void residual over 100 mL: notify the provider. Scan within 10 minutes of voiding.",
+  "An elevated PSA does not mean cancer: BPH, prostatitis, UTI, and recent activity raise it too.",
+  "Screening follows the anatomy present, not gender identity. Ask; don't infer."
 ];
 
 window.CRITICAL_THINKING = [
@@ -42,7 +45,7 @@ window.CRITICAL_THINKING = [
   ["How do you tell an expected finding from an unexpected one?", "Expected fits age, baseline, and context. Unexpected is new, changed, or out of range: a cue to validate and assess further, not a diagnosis. Drill it in Expected or Not?"],
   ["Which unexpected findings need escalation right now?", "Anything that threatens airway, breathing, circulation, or neuro status, or is sudden and new: central cyanosis, spreading cellulitis, unilateral warm swollen calf, new murmur or absent pulse, sudden facial droop, new unequal pupils. See Red Flags."],
   ["How do you document so another nurse could picture the finding?", "Exact numbers, locations, and grades: “2+ pitting edema bilateral ankles,” “2.5 × 3.0 cm non-blanchable erythema, right sacrum,” “S1, S2 present, RRR, no murmurs.” Never “looks fine.”"],
-  ["How do you adapt the interview to protect privacy and dignity?", "Interview privately when you can, use the client's pronouns, explain each step, get consent before touch, and use inclusive, nonjudgmental wording (especially for reproductive history)."]
+  ["How do you adapt the interview to protect privacy and dignity?", "Ask permission before sensitive questions, explain why they matter and the limits of confidentiality, offer a chaperone, and use the client's stated name, pronouns, and terms. Ask about current anatomy instead of assuming it (see Inclusive Care in Mod 7)."]
 ];
 
 window.STRATEGY = [
@@ -871,71 +874,308 @@ window.DISORDERS = [
   qa: [["During your assessment a patient develops facial drooping and slurred speech. First action?", "Activate the emergency/stroke response immediately while assessing the airway and other neuro findings."]]
 },
 
-/* ================= MOD 7: REPRODUCTIVE ================= */
+/* ================= MOD 7: RECTAL & GENITOURINARY ================= */
 {
-  id: "reproap", sys: "repro", name: "Reproductive A&P & Inclusive Interviewing",
-  sub: "Anatomy review, privacy, confidentiality, inclusive and patient-centered communication",
-  connect: ["Communication", "Health history"],
-  summary: "Reproductive history is sensitive, so set it up well: private space, explain why you ask, confirm confidentiality and its limits, ask about name and pronouns, and use anatomy-based, nonjudgmental language (“partners,” not assumptions). Normalize the questions: “I ask everyone these questions.”",
+  id: "gucase", sys: "repro", name: "Case T.K.: BPH & PSA", star: true, starLabel: "Lecture case",
+  sub: "Urinary symptoms in a 73-year-old, benign prostatic hyperplasia, what PSA does and doesn't mean",
+  connect: ["Health history", "Lab interpretation", "Teaching"],
+  summary: "T.K., 73, came in with increased frequency, trouble starting his stream, dribbling, and nocturia more than six times a night, building over 3 months. His exam was normal except an enlarged prostate: benign prostatic hyperplasia. The prostate wraps around the urethra just below the bladder, so as it grows it squeezes the outflow. The provider ordered a PSA and started tamsulosin 0.4 mg daily, the alpha-blocker from Pharm that relaxes the prostate.",
   chain: {
-    why: ["Female: ovaries, fallopian tubes, uterus, cervix, vagina, vulva, breasts", "Male: testes, epididymis, vas deferens, prostate, seminal vesicles, penis, urethra", "Hormones (estrogen, progesterone, testosterone) drive puberty and cycles"],
-    ask: ["Start general, then specific; ask permission before sensitive questions", "Use the client's terms for their body when possible", "“Do you have sex with men, women, or both?” instead of assuming"],
-    exam: ["Chaperone and draping per policy; consent before any exam", "Most nursing assessment here is history plus external inspection"],
-    flags: ["Signs of sexual abuse, coercion, or trafficking: interview alone, follow reporting laws"]
+    why: ["The prostate surrounds the urethra below the bladder", "Enlargement narrows the urethra, so urine has trouble getting out"],
+    ask: ["Frequency, hesitancy, weak stream, dribbling, nocturia, incomplete emptying", "Onset and change (T.K.: 3 months, worse this week)", "Pain, fever, incontinence (he denied all three)"],
+    exam: ["VS (T.K.: RR 22, BP 138/82, otherwise normal)", "Suprapubic area for distention; bladder scan for retention", "Provider confirms the enlarged prostate by DRE"],
+    flags: ["Can't void with a distended, painful bladder (acute retention)", "PVR over 100 mL"]
   },
+  table: {
+    cols: ["PSA", "What to know"],
+    rows: [
+      ["Purpose", "Screening for early prostate cancer, or monitoring response to prostate cancer treatment"],
+      ["Normal", "Low: total PSA under about 2.5–4.0 ng/mL; thresholds vary with age"],
+      ["High", "Does NOT automatically mean cancer. BPH, prostatitis, UTIs, and recent prostate irritation (heavy bicycling, sexual activity) raise it"],
+      ["Teaching", "Avoid ejaculation for 2 days before the blood test"]
+    ]
+  },
+  tableTitle: "Prostate-specific antigen",
   facts: [
-    "Separate gender identity, sex assigned at birth, anatomy, and sexual orientation; don't assume any from the others.",
-    "Interview adolescents privately for part of the visit and explain confidentiality limits.",
-    "Use a qualified interpreter, never a partner or family member."
+    "BPH = benign prostatic hyperplasia (the slide notes say “hypertrophy”; hyperplasia is the standard term).",
+    "BPH symptoms: frequency, hesitancy, weak stream, dribbling, nocturia, incomplete emptying, possible retention.",
+    "Tamsulosin relaxes prostate smooth muscle so urine flows more easily."
   ],
-  beyond: "No Mod 7 lecture guide or slides were in the folder yet. This page is built from the study guide's outline plus standard assessment content; check it against the Mod 7 slides when they're posted.",
-  qa: [["How do you open a sexual history in a nonjudgmental way?", "Normalize it (“I ask everyone these questions”), explain why, confirm confidentiality, and use inclusive wording without assumptions."]]
+  qa: [
+    ["T.K.'s PSA comes back elevated. Does he have cancer?", "Not necessarily: BPH, prostatitis, UTI, or recent activity can raise PSA. The provider follows up."],
+    ["What do you teach before a PSA draw?", "No ejaculation for 2 days before the test."]
+  ]
 },
 {
-  id: "reprohx", sys: "repro", name: "Reproductive History: LMP, GTPAL, STIs",
-  sub: "Menstrual history, obstetric history (GTPAL), STIs, contraception, urinary patterns",
-  connect: ["Health history", "Documentation"],
-  summary: "The core reproductive history: last menstrual period (first day of the last period) and cycle pattern; obstetric history using GTPAL; sexual history and STI risk; contraception; and urinary patterns, which often overlap with reproductive problems.",
+  id: "guap", sys: "repro", name: "Urinary, Reproductive & Rectal Anatomy",
+  sub: "Kidneys, ureters, bladder, urethra; female and male anatomy; rectum and sphincters",
+  connect: ["Anatomy", "Inspection"],
+  summary: "Urine starts in the kidneys, moves down the ureters by peristalsis, waits in the bladder (the urge comes at about 300 mL), and leaves through the urethra. The female urethra is only 3–4 cm, which is why UTIs are more common in females; the male urethra is about 20 cm and carries urine and semen. The rectum is the end of the sigmoid colon, with an involuntary internal sphincter and a voluntary external one.",
   chain: {
-    why: ["LMP dates pregnancy and flags irregular bleeding", "Urinary and reproductive tracts share space and symptoms"],
-    ask: ["LMP, cycle length, flow, pain, bleeding between periods or after menopause", "GTPAL", "Partners, protection, STI history and testing, discharge, lesions", "Contraception method and satisfaction", "Urinary: frequency, urgency, burning, stream changes, nocturia, incontinence"],
-    exam: ["Inspect external genitalia for lesions, discharge, swelling (per scope and policy)"],
-    flags: ["Postmenopausal bleeding", "Possible pregnancy with severe abdominal pain or heavy bleeding", "New genital lesions or discharge (STI testing)"]
+    why: ["Kidneys filter waste and regulate fluid, electrolytes, acid-base, BP, and RBC production (erythropoietin)", "The prostate surrounds the urethra, linking reproductive and urinary symptoms"],
+    ask: ["Urinary, bowel, and reproductive symptoms in one history, because the organs sit close together"],
+    exam: ["Bladder sits behind the symphysis pubis: palpate there for distention", "Inspect external genitalia and the perianal area"],
+    flags: ["A distended bladder you can feel above the symphysis pubis"]
+  },
+  table: {
+    cols: ["Structure", "Key facts"],
+    rows: [
+      ["Kidneys", "Two fist-sized, bean-shaped organs, posterior, below the ribcage. Filter water, salt, and urea into urine; regulate fluid, electrolytes, acid-base; secrete erythropoietin; help control BP"],
+      ["Ureters", "Muscular tubes, 25–30 cm, moving urine by peristalsis; a fold at the bladder acts as a one-way valve against reflux"],
+      ["Bladder", "Hollow, muscular, stretchy, behind the symphysis pubis; about 300 mL creates the urge"],
+      ["Urethra", "Male about 20 cm, ends at the glans. Female 3–4 cm, meatus between the clitoris and vagina"],
+      ["Female", "External (vulva): mons pubis, labia majora and minora, vestibule, urethral meatus, vaginal orifice. Internal: vagina, uterus, fallopian tubes, ovaries"],
+      ["Male", "External: penis, scrotum. Internal: testes, epididymis, vas deferens, ejaculatory duct, urethra, seminal vesicles, prostate"],
+      ["Rectum & anus", "End of the sigmoid colon; perianal area surrounds the anus. Internal sphincter involuntary, external voluntary; anus closed except to pass stool or gas"]
+    ]
+  },
+  facts: [
+    "Ovaries make eggs, estrogen, and progesterone; testes make sperm and testosterone.",
+    "The female anatomy slide labels the “ureteral meatus”; the opening is the urethral meatus (ureters have no external opening).",
+    "Kidneys are “fist-sized” (the slide's “first sized” is a typo)."
+  ],
+  beyond: "The hormone roles are added for context; the slides list the structures only.",
+  qa: [
+    ["Why do females get more UTIs?", "The urethra is only 3–4 cm long."],
+    ["Which anal sphincter is under voluntary control?", "The external sphincter. The internal sphincter is involuntary."]
+  ]
+},
+{
+  id: "guhx", sys: "repro", name: "GU & Rectal History: LMP, GTPAL, STIs",
+  sub: "Present and past urinary, bowel, and reproductive history; menstrual and obstetric history; male history",
+  connect: ["Health history", "Communication"],
+  summary: "The history is guided by the client's sex assigned at birth, gender identity, and current anatomy. Ask permission first and explain why each question matters. Cover urinary symptoms, bowel and anal symptoms, and reproductive history, then past history and family cancers. For anyone who menstruates, get the LMP (first day of the last period) and the obstetric history, recorded as GTPAL.",
+  chain: {
+    why: ["Urinary, bowel, and reproductive organs share space, so symptoms overlap", "The LMP matters before any medication, imaging, or procedure"],
+    ask: ["Urinary: urgency, frequency, nocturia, pain or burning, color/clarity/odor, hesitancy, stream force, dribbling, leaking with cough or laugh, incomplete emptying; weight gain, ankle swelling, SOB", "Anus: hemorrhoid symptoms, stool color, blood/pus/mucus, diarrhea, constipation, incontinence", "Reproductive: identity, sex assigned at birth, gender-affirming treatment, sexual practices, discharge, lesions, itching, pain", "Female: LMP, menarche, cycle, heavy bleeding/clots/cramping, pregnancies, menopause symptoms and HRT", "Male: testicular lumps, bulges, swelling, size change; self-exams"],
+    exam: ["Suprapubic or low back pain reported → check for bladder distention"],
+    flags: ["Weight gain, ankle swelling, SOB (possible kidney failure)", "Abnormal bleeding, clots, cramping → refer for gynecologic exam"]
   },
   table: {
     cols: ["Letter", "Means", "Counts"],
-    rows: [["G: Gravida", "Total pregnancies", "Including the current one; twins = 1"], ["T: Term", "Births at 37+ weeks", "Each pregnancy, not each baby"], ["P: Preterm", "Births 20–36 6/7 weeks", ""], ["A: Abortions", "Losses before 20 weeks", "Spontaneous or induced"], ["L: Living", "Living children now", "Twins = 2"]]
+    rows: [["G: Gravida", "Total pregnancies", "Including a current one; twins = 1"], ["T: Term", "Births at 37+ weeks", "Each birth event, not each baby"], ["P: Preterm", "Births 20 weeks to 36 weeks 6 days", ""], ["A: Abortions", "Pregnancies ending before 20 weeks", "Miscarriage or induced"], ["L: Living", "Currently living children", "Twins = 2"]]
   },
-  tableTitle: "GTPAL",
+  tableTitle: "Obstetric history (GTPAL)",
   facts: [
-    "LMP = the FIRST day of the last menstrual period.",
-    "Example: pregnant now, one term birth, one miscarriage at 10 weeks, one living child → G3 T1 P0 A1 L1.",
-    "Ask about urinary patterns with every reproductive history: BPH and UTIs show up there first."
+    "Past history: UTIs, BPH, kidney disease, hemorrhoids, rectal or anal surgery, reproductive surgery or cancers.",
+    "Family history: cervical, ovarian, breast, prostate, testicular, or colon cancer.",
+    "No periods after a hysterectomy; periods usually stop within 3–6 months on testosterone. A total hysterectomy (uterus and ovaries) causes menopause symptoms unless on HRT.",
+    "GTPAL examples: one term birth + one miscarriage + pregnant now = G3 T1 P0 A1 L1. Twins at 34 weeks (living) + one term birth = G2 T1 P1 A0 L3."
   ],
-  beyond: "No Mod 7 lecture guide yet: LMP, GTPAL rules, and the sexual history items are standard references from the study guide's list.",
-  qa: [["A client is pregnant with twins, had one term birth, and has one living child. GTPAL?", "G2 T1 P0 A0 L1 (the current twin pregnancy counts as one G)."], ["What does LMP mean?", "The first day of the last menstrual period."]]
+  beyond: "GTPAL is on the study guide but not in the slides; the slides ask about pregnancies, deliveries, miscarriages/abortions, and living children. The letter rules come from standard references.",
+  qa: [
+    ["What does LMP mean?", "The first day of the last menstrual period."],
+    ["Why ask about weight gain, ankle swelling, and SOB in a urinary history?", "They can signal kidney failure (fluid isn't being removed)."]
+  ]
 },
 {
-  id: "reprolife", sys: "repro", name: "Lifespan: Tanner Stages, BPH & Documentation",
-  sub: "Puberty (Tanner 1–5), menopause, BPH, expected vs. unexpected findings, charting",
-  connect: ["Inspection", "Lifespan", "Documentation"],
-  summary: "Tanner stages (1 = prepubertal to 5 = adult) rate breast, genital, and pubic hair development in teens. Older adults have menopause changes (thinner tissue, dryness) and, in people with a prostate, benign prostatic hyperplasia: an enlarged prostate squeezes the urethra, causing a weak stream, hesitancy, frequency, nocturia, and incomplete emptying.",
+  id: "guexam", sys: "repro", name: "Rectal & Genital Exam Findings",
+  sub: "Expected vs. unexpected anal, female, and male findings; the Bristol stool chart",
+  connect: ["Inspection", "Documentation"],
+  summary: "Most of the GU and rectal exam is inspection with a chaperone offered and consent first. Expected perianal skin is intact, darker than the surrounding skin, moist, and hairless, with the anus closed. Expected female genitalia are symmetric with even hair and a midline, slit- or star-shaped urethral meatus. Expected male genitalia have wrinkled scrotal skin with visible vessels, a smooth glans, a retractable foreskin, and equal testes. Classify stool with the Bristol chart.",
   chain: {
-    why: ["Puberty follows a predictable sequence", "The prostate wraps around the urethra, so enlargement blocks urine flow"],
-    ask: ["Teens: puberty timing, periods, concerns, privately", "Older adults: urinary stream, nocturia, dryness, sexual function"],
-    exam: ["Rate Tanner stage when within scope", "Look for urinary retention signs (distended bladder)"],
-    flags: ["No signs of puberty by the expected age, or very early puberty", "Can't void with a distended bladder (acute retention)", "Testicular mass or sudden testicular pain"]
+    why: ["The perianal area sits close to the reproductive organs", "Stool form reflects transit time"],
+    ask: ["Itching, pain, burning, bleeding, stool changes; genital discharge, lesions, pain"],
+    exam: ["Inspect the perianal area, external genitalia, hair distribution, skin, and symmetry", "Note discharge color and odor", "Classify stool by Bristol type"],
+    flags: ["Sudden, severe scrotal pain and swelling (torsion)", "Hard, painless testicular lump", "Foreskin stuck retracted (paraphimosis)", "Black, tarry stool (melena)"]
   },
   table: {
-    cols: ["Finding", "Expected", "Unexpected"],
-    rows: [["Teen development", "Progresses through Tanner 1–5", "Very early or delayed puberty"], ["Older adult urinary", "Mild nocturia once", "Weak stream, hesitancy, retention (BPH)"], ["External genitalia", "No lesions, discharge, swelling", "Lesions, ulcers, discharge, masses"]]
+    cols: ["Area", "Expected", "Unexpected"],
+    rows: [
+      ["Anal & perianal", "Intact; no protrusions or lesions; darker; moist and hairless; anus closed", "Inflammation, lesions, scars, fissures, external hemorrhoids, rectal prolapse, skin tags, bleeding, incontinence"],
+      ["Female", "Even hair; clear skin; symmetric; urethral meatus midline, star- or slit-shaped; clitoris round and midline. Variations: scars, atrophy", "Swelling, redness; patchy hair loss; lesions or ulcers; lice; genital warts; edema; excoriation; discolored or foul discharge; tenderness, bruising"],
+      ["Male", "Wrinkled scrotal skin; visible vasculature; smooth glans; foreskin retracts if present; testes equal", "Inflammation, edema; lesions, ulcers; nodules; lice; unequal or swollen testes"],
+      ["Bristol stool", "Types 3–4 (sausage with cracks, smooth soft sausage) = ideal", "1–2 = constipation; 5 = low fiber/trending loose; 6–7 = diarrhea"]
+    ]
   },
   facts: [
-    "BPH symptoms: weak stream, hesitancy, frequency, urgency, nocturia, dribbling, incomplete emptying.",
-    "Document objectively in the EHR with the client's own words for symptoms and exact descriptions of findings."
+    "The Bristol chart sorts stool into 7 types by shape and consistency to judge transit time.",
+    "Testicular cancer is most common in men about 15–35: a hard, painless lump needs prompt evaluation."
   ],
-  beyond: "No Mod 7 lecture guide yet: Tanner and BPH content is standard reference material matching the study guide's list.",
-  qa: [["A 70-year-old reports getting up 4 times a night to urinate with a weak stream. What does this suggest?", "BPH; assess further and report."], ["What does Tanner stage 1 mean?", "Prepubertal."]]
+  beyond: "The urgent male findings (torsion, testicular mass, paraphimosis) are added; the slides list unexpected findings without ranking them.",
+  qa: [
+    ["Bristol type 6 means what?", "Diarrhea (fluffy, ragged pieces)."],
+    ["A 16-year-old has sudden, severe scrotal pain. Priority?", "Notify the provider now: possible testicular torsion needs surgery within hours."]
+  ]
+},
+{
+  id: "urine", sys: "repro", name: "Urine Appearance & Output", star: true, starLabel: "Know the formula",
+  sub: "Urine color and what it means, nursing actions, urine output in mL/kg/hr",
+  connect: ["Inspection", "Intake & output", "Calculation"],
+  summary: "At the bedside, note amount, color, clarity, and odor, and ask about changes, symptoms, fluids, foods, and medications. Color is a screening observation, not a diagnosis. Pale straw is expected; dark amber is concentrated; cloudy may be infection; pink or red may be blood; brown or tea-colored gets escalated. Output is calculated as mL ÷ (kg × hours), and at least 0.5 mL/kg/hr is adequate for an adult.",
+  chain: {
+    why: ["Kidneys concentrate urine when the body is low on fluid", "Blood, bilirubin, and muscle breakdown products change urine color"],
+    ask: ["Change from usual, symptoms (dysuria, urgency, flank pain, fever, new confusion), fluid intake, foods, medications"],
+    exam: ["Amount, color, clarity, odor", "I&O and output in mL/kg/hr", "Obtain the ordered UA or culture with correct technique"],
+    flags: ["Unexplained visible blood, even without pain", "Brown or tea-colored urine", "Output under 0.5 mL/kg/hr"]
+  },
+  table: {
+    cols: ["Appearance", "Consider", "Nursing action"],
+    rows: [
+      ["Pale straw / clear yellow", "Expected; well hydrated", "Document color, clarity, odor, output"],
+      ["Dark yellow / amber", "Concentrated; possible dehydration", "Review intake, losses, meds, I&O, VS, mucous membranes"],
+      ["Cloudy / milky", "Cells, bacteria, crystals, mucus, contamination, possible infection", "Don't diagnose by look; ask about UTI symptoms and confusion; ordered UA/culture"],
+      ["Pink / red", "Blood, foods, medications", "Rule out menstrual contamination; report unexplained visible blood promptly"],
+      ["Brown / tea-colored", "Bilirubin, blood products, severe dehydration, muscle breakdown", "Escalate; assess jaundice, muscle pain or injury, weakness, low output, med changes"],
+      ["Orange / green / blue", "Medications, dyes, foods, sometimes infection", "Reconcile meds and foods; investigate persistent change"]
+    ]
+  },
+  facts: [
+    "Urine output (mL/kg/hr) = total urine volume (mL) ÷ [weight (kg) × collection time (hours)].",
+    "Example: 70 kg, 280 mL over 8 hours → 280 ÷ 560 = 0.5 mL/kg/hr (just adequate).",
+    "Example: 80 kg, 240 mL over 6 hours → 240 ÷ 480 = 0.5 mL/kg/hr."
+  ],
+  beyond: "The 0.5 mL/kg/hr adequacy cutoff (often rounded to about 30 mL/hr) is added; the slide gives the formula without a normal value.",
+  qa: [
+    ["70 kg, 168 mL over 8 hours. Adequate?", "168 ÷ 560 = 0.3 mL/kg/hr: below 0.5, report it."],
+    ["Pink urine in a client who is menstruating. First step?", "Rule out menstrual contamination before calling it hematuria."]
+  ]
+},
+{
+  id: "retention", sys: "repro", name: "Urinary Retention, Bladder Scan & UTI", star: true, starLabel: "PVR > 100 mL",
+  sub: "Assessing retention, bladder scanning, post-void residual, promoting voiding, UTI assessment",
+  connect: ["Palpation", "Bladder scan", "Intake & output"],
+  summary: "Retention means the bladder can't fully empty. Ask about difficulty voiding, inspect the suprapubic area, and palpate: a distended bladder is a smooth, rounded, midline mass above the symphysis pubis. A bladder scanner measures the volume; for a post-void residual (PVR), scan within 10 minutes of voiding. Expected PVR is 50–100 mL; over 100 mL, notify the provider. A UTI shows urgency, frequency, burning, blood, and foul odor, and gets a urinalysis and culture.",
+  chain: {
+    why: ["Obstruction (like BPH), weak bladder muscles, medications, or neurologic conditions keep the bladder from emptying"],
+    ask: ["Difficulty voiding, pain, burning, hesitancy, urgency, a full feeling after voiding, kidney history; in males, prostate symptoms"],
+    exam: ["Inspect suprapubic area for distention", "Palpate above the symphysis pubis; note tenderness", "Bladder scan: supine, gel 2.5–4 cm above the symphysis pubis, probe down", "Compare intake and output"],
+    flags: ["PVR over 100 mL", "Intake much greater than output", "Distended, painful bladder and unable to void"]
+  },
+  table: {
+    cols: ["UTI: subjective", "Assessment", "Interventions"],
+    rows: [["Urgency, frequency, burning with urination, blood in urine, foul odor", "Urine color, smell, amount; urinalysis and urine culture", "Antibiotics, pain medication, prevention teaching"]]
+  },
+  facts: [
+    "Promote voiding: males stand or use a urinal; females sit or squat (safe transfer); sound of running water; hand in warm water.",
+    "Small, frequent voids (the slide lists 30–75 mL/hr) can mean overflow from a bladder that isn't emptying, which is why a bladder scan follows.",
+    "Hematuria can come from menstruation or a kidney problem such as infection.",
+    "Older adults with a UTI may show only new confusion."
+  ],
+  qa: [
+    ["Bladder scan 5 minutes after voiding: 220 mL. Action?", "Over 100 mL: notify the provider."],
+    ["How long after voiding should a PVR be scanned?", "Within 10 minutes."]
+  ]
+},
+{
+  id: "guhp", sys: "repro", name: "Health Promotion: Vaccines, Contraception & Screening",
+  sub: "HPV and hepatitis B vaccines, contraception methods, STI prevention, cancer screening",
+  connect: ["Teaching", "Screening"],
+  summary: "Health promotion here is vaccines, contraception, STI prevention, and cancer screening. HPV vaccine starts at age 9 for all genders, ideally before sexual activity. Condoms are the only contraceptive that also prevents STIs. Screen for HIV at ages 15–75 and in pregnancy, chlamydia and gonorrhea in sexually active clients under 25, colorectal cancer from 45, and cervical cancer with a Pap every 3 years from 21 to 29.",
+  chain: {
+    why: ["HPV is linked to cervical, anal, and penile cancers and often causes no symptoms", "Hepatitis B spreads through blood, semen, and body fluids"],
+    ask: ["Nonjudgmental behavioral risk assessment", "Contraception needs, preferences, culture, beliefs", "Family history of colon cancer and the relative's age at diagnosis"],
+    exam: ["Prostate and genital exam yearly (DRE by the provider)", "Testicular exam with the annual physical"],
+    flags: ["Teach a new condom for every sexual encounter", "Oral contraceptives do NOT prevent STIs"]
+  },
+  table: {
+    cols: ["Topic", "Lecture recommendation"],
+    rows: [
+      ["HPV vaccine", "2–3 doses over 6 months; start at 9 for all genders; catch-up through 26; some adults 27–45 after discussion; not in pregnancy"],
+      ["Hepatitis B vaccine", "High-risk groups: healthcare workers, blood exposure, travel to endemic areas, chronic liver disease, HIV"],
+      ["Contraception", "Natural (withdrawal, fertility tracking); barrier (condoms prevent STIs and pregnancy); pharmacologic (pills, injections, spermicide); IUD (3–10 years); surgical (vasectomy, tubal ligation, permanent)"],
+      ["HIV", "Ages 15–75 and in pregnancy; yearly if high risk, once if low risk"],
+      ["Chlamydia & gonorrhea", "Sexually active under 25, multiple partners, or possible exposure"],
+      ["Colorectal", "From 45 (average risk): FOBT/FIT yearly, FIT-DNA every 3 years, flexible sigmoidoscopy every 5 years, or colonoscopy every 10 years"],
+      ["Cervical", "Ages 21–29: Pap every 3 years. Ages 30–65: co-test every 5 years, Pap alone every 3, or HPV alone every 5. May stop after 65 with normal results or after hysterectomy with cervix removed"],
+      ["Prostate", "PSA and DRE are an individual decision: from 50 for average risk, 40–45 for high risk. PSA <2.5 → every 2 years; >2.5 → yearly"],
+      ["Testicular", "Exam with the annual physical; monthly testicular self-exam"]
+    ]
+  },
+  facts: [
+    "Counsel on contraception based on lifestyle, preferences, risk, culture, and beliefs, and teach correct use.",
+    "Individualize screening after 75."
+  ],
+  qa: [
+    ["Which contraceptive also prevents STIs?", "Condoms."],
+    ["When does average-risk colorectal screening start?", "Age 45."]
+  ]
+},
+{
+  id: "gulife", sys: "repro", name: "Lifespan: Tanner Stages, BPH & Older Adults",
+  sub: "Children, adolescents and adults, older adults; Tanner stages 1–5; BPH",
+  connect: ["Lifespan", "Health history"],
+  summary: "Children need caregiver history and simple words because they may not pinpoint symptoms; ask about toilet training, bedwetting, constipation or stool holding, hydration, hygiene, and UTI signs. Adolescents and adults get a private, inclusive assessment with screening for infection, pregnancy, and STIs. Older adults are at risk for urgency, retention, incontinence, fecal leakage, BPH, and prolapse; acute confusion may signal infection, and incontinence is common but not normal aging.",
+  chain: {
+    why: ["Puberty follows a predictable sequence", "The prostate enlarges with age and squeezes the urethra"],
+    ask: ["Children: toilet training, enuresis, constipation, hygiene, congenital history", "Adolescents: privately; menstruation, pregnancy, STI risk", "Older adults: urgency, leakage, stream, mobility, cognition, meds, toilet access"],
+    exam: ["Rate Tanner stage when within scope", "Assess for retention (distended bladder, PVR)"],
+    flags: ["Puberty before 8 (girls) or 9 (boys), or none by about 13/14", "New confusion in an older adult (possible infection)", "Unable to void with a distended bladder"]
+  },
+  table: {
+    cols: ["Stage", "Breasts", "Male genitals", "Pubic hair"],
+    rows: [["1", "Prepubertal", "Childhood size", "None"], ["2", "Breast bud", "Testes and scrotum enlarge", "Sparse, fine, straight"], ["3", "Breast and areola enlarge", "Penis lengthens", "Darker, coarser, curlier"], ["4", "Areola forms a secondary mound", "Penis widens; glans develops", "Adult type, not on thighs"], ["5", "Adult", "Adult", "Adult, spreads to inner thighs"]]
+  },
+  tableTitle: "Tanner stages",
+  facts: [
+    "First sign of puberty: breast budding in girls (about 8–13); testicular enlargement in boys (about 9–14).",
+    "BPH: frequency, hesitancy, weak stream, dribbling, nocturia, incomplete emptying; provider confirms by DRE; tamsulosin relaxes the prostate.",
+    "Adolescents and adults: consider menstruation, pregnancy and postpartum changes, pelvic floor symptoms, meds, occupation; colorectal screening at 45."
+  ],
+  beyond: "Tanner stages are on the study guide but not in the slides; the table comes from standard references.",
+  qa: [
+    ["What is Tanner stage 1?", "Prepubertal."],
+    ["An 80-year-old says leaking urine is just aging. Response?", "Incontinence is common but not normal aging; assess it."]
+  ]
+},
+{
+  id: "guinclusive", sys: "repro", name: "Inclusive Care, Psychosocial & SDOH",
+  sub: "Patient-centered interviewing, psychosocial assessment, social determinants, gender-affirming care",
+  connect: ["Communication", "Psychosocial", "Health history"],
+  summary: "Ask permission before sensitive questions, explain why they matter, explain privacy and its limits, and offer a chaperone. Use the client's stated name, pronouns, and terms. Assess current anatomy, treatments, goals, screening needs, and preferences, and never infer them from identity: screening follows the anatomy present. Explore emotional response, effects on daily life, sexual and bowel concerns, self-care and access, coping, support, and safety.",
+  chain: {
+    why: ["Embarrassment, stigma, and prior trauma keep clients from sharing GU and bowel symptoms", "Hormone therapy changes anatomy, labs, and screening needs"],
+    ask: ["Emotional response, body image, comfort with exams", "Effect on sleep, work, travel, exercise, independence", "Partners and practices, STI concerns, fertility goals, contraception, identity", "Self-care, toilet access, supplies, health literacy, insurance, language", "Coping, support, coercion or violence"],
+    exam: ["Chaperone offered; privacy preserved; consent first"],
+    flags: ["Signs of coercion or partner violence: refer to social work or behavioral health"]
+  },
+  table: {
+    cols: ["Therapy", "Expected effects", "Watch for"],
+    rows: [
+      ["Feminizing: estrogen + antiandrogens (spironolactone)", "Less muscle and body/facial hair, breast development, lower libido, fat redistribution; voice usually unchanged", "Hyperkalemia with spironolactone"],
+      ["Masculinizing: testosterone", "Deeper voice, more facial and body hair, scalp hair loss, acne, more muscle, weight gain, clitoral enlargement, vaginal atrophy", "Periods usually stop in 3–6 months"],
+      ["Surgery", "Trans women: breast augmentation, orchiectomy, vaginoplasty. Trans men: chest reconstruction, metoidioplasty or phalloplasty, hysterectomy, oophorectomy", "Discuss sperm or egg preservation before treatment or surgery"]
+    ]
+  },
+  facts: [
+    "About 1.4 million U.S. adults identify as transgender (gender identity differs from sex assigned at birth).",
+    "SDOH: cost of visits, tests, bowel prep, contraception, continence supplies; health literacy; access to urology, GI, prenatal, and STI care; private, accessible toilets and restroom access at work; stigma about GU or bowel symptoms, infertility, or identity.",
+    "The slide notes list “deeper voice, increased body hair” under spironolactone; those are testosterone effects (spironolactone blocks testosterone)."
+  ],
+  beyond: "“Screening follows the anatomy present” is spelled out here; the slides say to assess anatomy and screening needs without inferring them from identity.",
+  qa: [
+    ["A transgender man asks if he still needs Pap tests. Response?", "Screening follows anatomy: yes, if he has a cervix."],
+    ["Which lab is watched with spironolactone?", "Potassium (hyperkalemia)."]
+  ]
+},
+{
+  id: "guterms", sys: "repro", name: "GU & Rectal Terms & Documentation",
+  sub: "Genitourinary and bowel terminology, normal and abnormal EHR examples",
+  connect: ["Documentation", "Terminology"],
+  summary: "Use the standard terms and chart objectively: separate what the client reports from what you observe, use numbers (PVR in mL, Bristol type), and record the LMP, obstetric history, and that a chaperone and consent were offered.",
+  chain: {
+    why: ["Precise terms let the next nurse picture the finding and see change"],
+    ask: ["Quote the client for symptoms: “reports difficulty starting stream × 3 months”"],
+    exam: ["Chart exact findings: location, size, color, volume, Bristol type"],
+    flags: ["Never “urine looks bad” or “bowels fine”"]
+  },
+  table: {
+    cols: ["Term", "Meaning"],
+    rows: [
+      ["Dysuria", "Painful or difficult urination"], ["Hematuria", "Blood in the urine"], ["Frequency / urgency", "Voiding more often than usual / a sudden, compelling need to void"],
+      ["Nocturia", "Waking at night to urinate"], ["Oliguria / polyuria", "Abnormally low output / excessive output"], ["Retention / incontinence", "Can't fully empty the bladder / involuntary leakage"],
+      ["Hematochezia", "Bright red blood with stool"], ["Melena", "Black, tarry stool (digested blood, upper GI)"], ["Fecal incontinence", "Accidental passage of stool or mucus"], ["Rectal prolapse", "Rectal tissue protrudes through the anus"]
+    ]
+  },
+  facts: [
+    "Normal: “External genitalia without lesions, erythema, edema, or discharge. Urethral meatus midline. Perianal skin intact, no hemorrhoids or fissures. Voiding clear yellow urine without difficulty; denies dysuria, frequency, urgency. Last BM today, Bristol type 4.”",
+    "Abnormal: “Client reports difficulty starting stream and dribbling × 3 months; nocturia 6×/night. Suprapubic area distended, smooth rounded mass palpated above symphysis pubis. Bladder scan PVR 350 mL. Provider notified.”"
+  ],
+  beyond: "The slides assign GU and rectal EHR documentation as practice without examples; these examples are written to match the lecture.",
+  qa: [
+    ["Bright red blood with stool is called?", "Hematochezia."],
+    ["Waking at night to urinate is called?", "Nocturia."]
+  ]
 }
 ];
 
@@ -953,7 +1193,12 @@ window.EMERGENCIES = [
   ["New unequal or nonreactive pupils", "heent", "Sluggish or blown pupil with neuro changes", "Possible herniation: escalate immediately."],
   ["Airway threat", "heent", "Drooling, can't swallow, stridor, distress", "Upper airway obstruction: call for help."],
   ["Sudden vision or hearing loss", "heent", "Abrupt loss in one or both eyes or ears", "Can be vascular or neurologic: urgent evaluation."],
-  ["Tracheal deviation", "heent", "Trachea shifted with respiratory compromise", "Mass or tension pneumothorax: escalate."]
+  ["Tracheal deviation", "heent", "Trachea shifted with respiratory compromise", "Mass or tension pneumothorax: escalate."],
+  ["Testicular torsion", "repro", "Sudden, severe scrotal pain and swelling", "Emergency needing surgery within hours: notify the provider now."],
+  ["Urinary retention", "repro", "Can't void; smooth, rounded mass above the symphysis pubis; PVR over 100 mL", "Notify the provider; compare I&O."],
+  ["Tea-colored urine", "repro", "Brown urine, often with muscle pain, weakness, or low output", "Possible muscle breakdown or bilirubin: escalate."],
+  ["Unexplained hematuria", "repro", "Visible pink or red urine with no menstrual, food, or med cause", "Report promptly, even without pain."],
+  ["Low urine output", "repro", "Under 0.5 mL/kg/hr", "Oliguria: report and review I&O."]
 ];
 
 window.LOOKALIKES = [
@@ -970,5 +1215,11 @@ window.LOOKALIKES = [
   ["Direct vs. consensual light response?", "Direct: the lit pupil constricts. Consensual: the other pupil constricts too."],
   ["Sluggish vs. pinpoint pupils?", "Sluggish: CN III compression (early herniation). Pinpoint and nonreactive: pons damage or opioid overdose."],
   ["CN VII vs. CN V?", "VII moves the face (smile, close eyes, puff cheeks). V feels the face and works the jaw."],
-  ["Pulse grade 1+ vs. 3+?", "1+ is weak/thready. 2+ is normal. 3+ is increased/strong. 4+ is bounding."]
+  ["Pulse grade 1+ vs. 3+?", "1+ is weak/thready. 2+ is normal. 3+ is increased/strong. 4+ is bounding."],
+  ["Melena vs. hematochezia?", "Melena: black, tarry stool (digested blood, upper GI). Hematochezia: bright red blood with stool."],
+  ["BPH vs. UTI?", "BPH: gradual hesitancy, weak stream, dribbling, nocturia, enlarged prostate. UTI: urgency, frequency, burning, cloudy or foul urine, hematuria; in older adults maybe only confusion."],
+  ["Term vs. preterm in GTPAL?", "Term: births at 37 weeks or later. Preterm: 20 weeks to 36 weeks 6 days. Before 20 weeks counts as A."],
+  ["Internal vs. external anal sphincter?", "Internal is involuntary. External is voluntary."],
+  ["Oliguria vs. polyuria?", "Oliguria: abnormally low output (under 0.5 mL/kg/hr). Polyuria: excessive output."],
+  ["Stress incontinence vs. retention?", "Stress incontinence: leaking with coughing or laughing. Retention: can't fully empty; small frequent voids may be overflow, so scan the bladder."]
 ];
