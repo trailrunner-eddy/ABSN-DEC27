@@ -64,3 +64,37 @@ mark { background: color-mix(in srgb, var(--warn) 35%, transparent); color: inhe
   table.glance td { display: block; padding: 2px 0; border: none; position: static !important; background: none !important; }
   table.glance td:nth-child(2) { color: var(--ink-3); font-size: .85rem; }
 }
+
+/* Study guide */
+.guide-bar .chip { font-size: .8rem; }
+.guide-drug { margin-top: 14px; border-left: 4px solid var(--c); }
+.guide-drug-head { align-items: baseline; flex-wrap: wrap; gap: 4px 10px; }
+.guide-drug-head h3 { margin: 0; }
+.guide-fields { margin: 12px 0 0; }
+.guide-fields dt.also { color: #7a4fc0; background: color-mix(in srgb, #7a4fc0 9%, var(--surface-2)); }
+.guide-fields dd.also { background: color-mix(in srgb, #7a4fc0 5%, var(--surface)); }
+.also-row + .also-row { margin-top: 6px; }
+.fix { margin-top: 6px; font-size: .88rem; color: var(--ink-2); }
+.guide-done { margin-top: 14px; }
+.src { display: inline-block; font-size: .68rem; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; padding: 1px 7px; border-radius: 999px; vertical-align: 1px; white-space: nowrap; }
+.src-ati { background: color-mix(in srgb, #4b5fc9 16%, transparent); color: #4b5fc9; }
+.src-lecture { background: color-mix(in srgb, #1f8a5b 16%, transparent); color: #1f8a5b; }
+.src-added { background: color-mix(in srgb, #7a4fc0 16%, transparent); color: #7a4fc0; }
+.src-corrected { background: var(--bad-bg); color: var(--bad); }
+:root[data-theme="dark"] .src-ati { color: #9fb0ff; } :root[data-theme="dark"] .src-lecture { color: #6fd3a3; } :root[data-theme="dark"] .src-added, :root[data-theme="dark"] .guide-fields dt.also { color: #c7a8ff; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .src-ati { color: #9fb0ff; } :root:not([data-theme="light"]) .src-lecture { color: #6fd3a3; } :root:not([data-theme="light"]) .src-added, :root:not([data-theme="light"]) .guide-fields dt.also { color: #c7a8ff; } }
+.guide-chip { background: color-mix(in srgb, var(--accent) 12%, var(--surface)); text-decoration: none; }
+.k-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 12px; }
+.k-col { padding: 10px 12px; border-radius: 10px; min-width: 0; overflow-wrap: anywhere; }
+.k-col h4 { margin: 0; } .k-col p { margin: 0 0 4px; } .k-col ul { margin: 0; padding-left: 18px; }
+.k-up { background: var(--bad-bg); } .k-down { background: var(--warn-bg); }
+
+/* Difficulty ratings */
+.chip.diff { font-weight: 700; }
+.chip.diff-easy { background: var(--good-bg); color: var(--good); border-color: transparent; }
+.chip.diff-medium { background: var(--warn-bg); color: var(--warn); border-color: transparent; }
+.chip.diff-hard { background: var(--bad-bg); color: var(--bad); border-color: transparent; }
+@media (max-width: 640px) {
+  .guide-bar { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; }
+  .guide-bar .chip { flex: none; }
+}
