@@ -144,7 +144,7 @@
       var el = document.getElementById("nx-time"); if (!el) { stopTimer(); return; }
       var t = (Date.now() - t0) / 1000;
       el.textContent = limit ? fmt(limit - t) + " left" : fmt(t);
-      if (limit && t >= limit) { stopTimer(); for (var i = pos; i < list.length; i++) results.push({ x: list[i], ok: false, resp: null }); finish(true); }
+      if (limit && t >= limit) { stopTimer(); for (var i = pos; i < list.length; i++) results.push({ x: list[i], ok: false, pts: 0, resp: null }); finish(true); }
     }, 500);
 
     function draw() {
@@ -191,12 +191,29 @@
       if (!sel.length || (k === "selectn" && sel.length !== q.n)) return null;
       return sel;
     }
+    /* Select-all-that-apply partial credit: (right picks - wrong picks) / number of right answers, never below 0.
+       e.g. 3 right answers: pick 2 right = 2/3; pick 3 right + 1 wrong = 2/3. Other types are all-or-nothing. */
+    function credit(type, sel, ans) {
+      var hit = sel.filter(function (k) { return ans.indexOf(k) > -1; }).length;
+      var full = sel.length === ans.length && hit === ans.length;
+      if (type !== "sata") return allOrNothing(full);
+      var net = Math.max(0, hit - (sel.length - hit));
+      return { sata: true, net: net, of: ans.length, pts: net / ans.length, ok: net === ans.length };
+    }
+    function allOrNothing(ok) { return { sata: false, net: ok ? 1 : 0, of: 1, pts: ok ? 1 : 0, ok: ok }; }
+    function fmtPts(p) { return String(Math.round(p * 100) / 100); }
+    function verdict(c) {
+      return '<div class="rationale ' + (c.ok ? "ok" : c.pts > 0 ? "part" : "no") + '"><strong>' + (c.ok ? "Correct!" : c.pts > 0 ? "Partial credit." : "Not quite.") +
+        (c.sata ? " " + c.net + "/" + c.of + " points" : "") + "</strong>";
+    }
+    function partChip(c) { return c && c.sata && c.pts > 0 && !c.ok ? '<span class="chip">' + c.net + "/" + c.of + " points</span>" : ""; }
+
     function score(x, r) {
       var q = x.q, k = x.kind;
-      if (k === "cloze") return q.blanks.every(function (b, i) { return r[i] === b.answer; });
-      if (k === "matrix") return q.rows.every(function (row, i) { return r[i] === row[1]; });
+      if (k === "cloze") return allOrNothing(q.blanks.every(function (b, i) { return r[i] === b.answer; }));
+      if (k === "matrix") return allOrNothing(q.rows.every(function (row, i) { return r[i] === row[1]; }));
       var ans = typeof q.answer === "number" ? [q.answer] : q.answer;
-      return r.length === ans.length && r.every(function (i) { return ans.indexOf(i) > -1; });
+      return credit(k, r, ans);
     }
     function reveal(x, r) {
       var q = x.q, k = x.kind;
@@ -216,12 +233,12 @@
     function submit() {
       var x = list[pos], r = read(x);
       if (!r) { note(x.kind === "cloze" ? "Fill every blank." : x.kind === "matrix" ? "Answer every row." : x.kind === "selectn" ? "Pick exactly " + x.q.n + "." : "Choose an answer first."); return; }
-      var ok = score(x, r);
-      results.push({ x: x, ok: ok, resp: r });
+      var cr = score(x, r), ok = cr.ok;
+      results.push({ x: x, ok: ok, pts: cr.pts, cr: cr, resp: r });
       st().seen[x.id] = ok ? 1 : 0; ctx.save();
       if (mode === "exam") { pos++; draw(); return; }
       reveal(x, r);
-      $("#rat").innerHTML = '<div class="rationale ' + (ok ? "ok" : "no") + '"><strong>' + (ok ? "Correct!" : "Not quite.") + "</strong>" + esc(x.q.why || "") + "</div>";
+      $("#rat").innerHTML = verdict(cr) + esc(x.q.why || "") + "</div>";
       var btn = $("#submit"); btn.textContent = pos + 1 >= list.length ? "See results" : "Next question →";
       btn.onclick = function () { pos++; draw(); };
       btn.focus();
@@ -243,23 +260,23 @@
       stopTimer();
       var n = results.length;
       if (!n) { builder(bank); return; }
-      var ok = results.filter(function (r) { return r.ok; }).length, pct = Math.round(100 * ok / n), secs = (Date.now() - t0) / 1000;
+      var full = results.filter(function (r) { return r.ok; }).length, ok = results.reduce(function (s, r) { return s + r.pts; }, 0), pct = Math.round(100 * ok / n), secs = (Date.now() - t0) / 1000;
       var byTopic = {}, byType = {}, byDiff = {};
       Object.keys(DIFFS).forEach(function (k) { byDiff[DIFFS[k]] = { n: 0, ok: 0 }; });
       results.forEach(function (r) {
         var a = (r.x.course.code || r.x.course.name) + " · " + r.x.topicName, b = TYPES[r.x.kind];
-        (byTopic[a] = byTopic[a] || { n: 0, ok: 0 }).n++; if (r.ok) byTopic[a].ok++;
-        (byType[b] = byType[b] || { n: 0, ok: 0 }).n++; if (r.ok) byType[b].ok++;
-        var d = DIFFS[r.x.diff]; (byDiff[d] = byDiff[d] || { n: 0, ok: 0 }).n++; if (r.ok) byDiff[d].ok++;
+        (byTopic[a] = byTopic[a] || { n: 0, ok: 0 }).n++; byTopic[a].ok += r.pts;
+        (byType[b] = byType[b] || { n: 0, ok: 0 }).n++; byType[b].ok += r.pts;
+        var d = DIFFS[r.x.diff]; (byDiff[d] = byDiff[d] || { n: 0, ok: 0 }).n++; byDiff[d].ok += r.pts;
       });
       var nx = st(); nx.hist.unshift({ d: Date.now(), n: n, pct: pct, mode: mode }); nx.hist = nx.hist.slice(0, 30); ctx.save();
       var wrong = results.filter(function (r) { return !r.ok; });
-      app.innerHTML = '<div class="card scoreboard"><div style="font-size:44px">' + (pct >= 85 ? "🏆" : pct >= 70 ? "💪" : "📖") + '</div><div class="big-score">' + pct + '%</div><p class="muted">' + ok + " of " + n + " correct · " + fmt(secs) + (early && n < list.length ? " · ended early" : "") + "</p>" +
+      app.innerHTML = '<div class="card scoreboard"><div style="font-size:44px">' + (pct >= 85 ? "🏆" : pct >= 70 ? "💪" : "📖") + '</div><div class="big-score">' + pct + '%</div><p class="muted">' + fmtPts(ok) + " of " + n + " points · " + full + " fully correct · " + fmt(secs) + (early && n < list.length ? " · ended early" : "") + "</p>" +
         "<p>" + (pct >= 85 ? "Strong. Try a longer exam or switch to Exam mode." : pct >= 70 ? "Solid. Read the rationales below, then retry your missed questions." : "Review the topics below with the lowest scores, then build an exam from just those.") + "</p>" +
         '<div class="row" style="justify-content:center"><button class="btn primary" id="again">Build another exam</button>' + (wrong.length ? '<button class="btn" id="retry">Retry the ' + wrong.length + " I missed</button>" : "") + "</div></div>" +
         '<div class="grid grid-2" style="margin-top:18px"><div class="card"><h3>By topic</h3>' + bars(byTopic) + '</div><div class="card"><h3>By question type</h3>' + bars(byType) + '</div><div class="card"><h3>By difficulty</h3>' + bars(byDiff) + "</div></div>" +
         (wrong.length ? '<h2 style="margin-top:24px">Review what you missed</h2>' + wrong.map(function (r) { var q = r.x.q;
-          return '<div class="card" style="margin-bottom:12px;border-left:5px solid ' + r.x.color + '"><div class="q-meta"><span class="chip">' + esc(r.x.course.code || r.x.course.name) + " · " + esc(r.x.short) + '</span><span class="chip">' + TYPES[r.x.kind] + "</span>" + diffChip(r.x.diff) + (r.resp ? "" : '<span class="chip">Not answered</span>') + "</div><p><b>" + esc(q.stem.replace(/\{\d+\}/g, "___")) + '</b></p><p class="small"><b style="color:var(--good)">Answer:</b> ' + esc(answerText(r.x)) + '</p><p class="small muted">' + esc(q.why || "") + "</p></div>";
+          return '<div class="card" style="margin-bottom:12px;border-left:5px solid ' + r.x.color + '"><div class="q-meta"><span class="chip">' + esc(r.x.course.code || r.x.course.name) + " · " + esc(r.x.short) + '</span><span class="chip">' + TYPES[r.x.kind] + "</span>" + diffChip(r.x.diff) + partChip(r.cr) + (r.resp ? "" : '<span class="chip">Not answered</span>') + "</div><p><b>" + esc(q.stem.replace(/\{\d+\}/g, "___")) + '</b></p><p class="small"><b style="color:var(--good)">Answer:</b> ' + esc(answerText(r.x)) + '</p><p class="small muted">' + esc(q.why || "") + "</p></div>";
         }).join("") : "");
       $("#again").onclick = function () { builder(bank); window.scrollTo(0, 0); };
       if ($("#retry")) $("#retry").onclick = function () { run(shuffle(wrong.map(function (r) { return r.x; })), mode, timed); };
