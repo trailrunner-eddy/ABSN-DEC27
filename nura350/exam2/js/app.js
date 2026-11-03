@@ -414,51 +414,122 @@
     if ($("#redo")) $("#redo").onclick = function () { runQuiz(shuffle(missed), unitId); };
   }
 
+  /* Select-all-that-apply partial credit: (right picks - wrong picks) / number of right answers, never below 0.
+     e.g. 3 right answers: pick 2 right = 2/3; pick 3 right + 1 wrong = 2/3. Other types are all-or-nothing. */
+  function credit(type, sel, ans) {
+    var hit = sel.filter(function (k) { return ans.indexOf(k) > -1; }).length;
+    var full = sel.length === ans.length && hit === ans.length;
+    if (type !== "sata") return allOrNothing(full);
+    var net = Math.max(0, hit - (sel.length - hit));
+    return { sata: true, net: net, of: ans.length, pts: net / ans.length, ok: net === ans.length };
+  }
+  function allOrNothing(ok) { return { sata: false, net: ok ? 1 : 0, of: 1, pts: ok ? 1 : 0, ok: ok }; }
+  function fmtPts(p) { return String(Math.round(p * 100) / 100); }
+  function verdict(c) {
+    return '<div class="rationale ' + (c.ok ? "ok" : c.pts > 0 ? "part" : "no") + '"><strong>' + (c.ok ? "Correct!" : c.pts > 0 ? "Partial credit." : "Not quite.") +
+      (c.sata ? " " + c.net + "/" + c.of + " points" : "") + "</strong>";
+  }
+  function partChip(c) { return c && c.sata && c.pts > 0 && !c.ok ? '<span class="chip">' + c.net + "/" + c.of + " points</span>" : ""; }
+
+  /* A set keeps every answer, so ← Previous reopens an answered question with its
+     marks and rationale. Only the newest unanswered question needs Submit. */
   function runQuiz(ids, unitId) {
-    var pos = 0, score = 0, results = [];
-    function next() {
+    var pos = 0, results = [], orders = [];
+    function score() { return results.reduce(function (s, r) { return s + r.cr.pts; }, 0); }
+    function show(p) {
+      pos = p;
       if (pos >= ids.length) return finish();
-      var qi = ids[pos], q = QUESTIONS[qi], multi = q.type === "sata";
-      var order = shuffle(q.options.map(function (o, k) { return k; }));
-      app.innerHTML = '<div class="q-card card sys-' + q.sys + '"><div class="progress" style="margin-bottom:14px"><span style="width:' + (100 * pos / ids.length) + '%"></span></div>' +
-        '<div class="q-meta">' + qChips(q) + '<span class="spacer"></span><span class="tiny">' + (pos + 1) + " / " + ids.length + " · score " + score + "</span></div>" +
-        '<div class="q-stem">' + esc(q.stem) + "</div>" +
-        order.map(function (k) { return '<button class="opt' + (multi ? " multi" : "") + '" data-k="' + k + '"><span class="box"></span><span>' + esc(q.options[k]) + "</span></button>"; }).join("") +
-        '<div id="rat"></div><div class="row" style="margin-top:14px"><span class="spacer"></span><button class="btn primary" id="submit">Check answer</button></div></div>';
-      $$(".opt").forEach(function (b) { b.onclick = function () {
-        if (!multi) $$(".opt").forEach(function (x) { x.classList.remove("sel"); });
-        b.classList.toggle("sel");
-      }; });
+      var qi = ids[pos], q = QUESTIONS[qi], done = results[pos], last = results.length;
+      var html = '<div class="q-card card sys-' + q.sys + '"><div class="progress" style="margin-bottom:14px"><span style="width:' + (100 * last / ids.length) + '%"></span></div>' +
+        '<div class="q-meta">' + qChips(q) + (done ? '<span class="chip">Reviewing</span>' : "") + '<span class="spacer"></span><span class="tiny">' + (pos + 1) + " / " + ids.length + " · score " + fmtPts(score()) + "</span></div>";
+      if (q.type === "cloze") {
+        orders[pos] = orders[pos] || q.blanks.map(function (b) { return shuffle(b.options.map(function (o, k) { return k; })); });
+        html += '<p class="small muted">Choose the option that best completes each blank.</p><div class="cloze">' + esc(q.stem).replace(/\{(\d+)\}/g, function (m, n) {
+          var b = q.blanks[+n];
+          return '<select data-b="' + n + '"><option value="">Select…</option>' + orders[pos][+n].map(function (k) { return '<option value="' + k + '">' + esc(b.options[k]) + "</option>"; }).join("") + "</select>";
+        }) + "</div>";
+      } else if (q.type === "matrix") {
+        html += '<div class="q-stem">' + esc(q.stem) + '</div><div class="table-wrap"><table class="matrix"><thead><tr><th></th>' + q.cols.map(function (c) { return "<th>" + esc(c) + "</th>"; }).join("") + "</tr></thead><tbody>" +
+          q.rows.map(function (r, ri) { return "<tr><td>" + esc(r[0]) + "</td>" + q.cols.map(function (c, ci) { return '<td data-r="' + ri + '" data-c="' + ci + '"><input type="radio" name="m' + ri + '" value="' + ci + '" aria-label="' + esc(r[0] + ": " + c) + '"></td>'; }).join("") + "</tr>"; }).join("") + "</tbody></table></div>";
+      } else {
+        var multi = q.type !== "mc";
+        orders[pos] = orders[pos] || shuffle(q.options.map(function (o, k) { return k; }));
+        html += '<div class="q-stem">' + esc(q.stem) + "</div>" + orders[pos].map(function (k) { return '<button class="opt' + (multi ? " multi" : "") + '" data-k="' + k + '"><span class="box"></span><span>' + esc(q.options[k]) + "</span></button>"; }).join("");
+      }
+      html += '<div id="rat"></div><div class="row q-nav" style="margin-top:16px"><button class="btn" id="prev"' + (pos ? "" : " disabled") + '>← Previous</button>' +
+        (last < ids.length && last - pos > 1 ? '<button class="btn small" id="resume">Jump to question ' + (last + 1) + "</button>" : "") +
+        '<span class="spacer"></span><button class="btn primary" id="submit">Submit</button></div></div>';
+      app.innerHTML = '<div class="row" style="margin-bottom:14px"><button class="btn small" id="end">← End set</button></div>' + html;
+
+      $("#end").onclick = function () { if (results.length) finish(); else quiz(unitId); };
+      $("#prev").onclick = function () { if (pos) { show(pos - 1); window.scrollTo(0, 0); } };
+      if ($("#resume")) $("#resume").onclick = function () { show(last); window.scrollTo(0, 0); };
+      if (done) { reveal(q, done.resp); explain(q, done.cr); return; }
+      if (q.type === "mc" || q.type === "sata" || q.type === "selectn") {
+        $$(".opt").forEach(function (b) { b.onclick = function () {
+          if (q.type === "mc") $$(".opt").forEach(function (x) { if (x !== b) x.classList.remove("sel"); });
+          if (q.type === "selectn" && !b.classList.contains("sel") && $$(".opt.sel").length >= q.n) { toast("Pick exactly " + q.n); return; }
+          b.classList.toggle("sel");
+        }; });
+      }
       $("#submit").onclick = function () { grade(q, qi); };
     }
-    function grade(q, qi) {
+    function read(q) {
+      if (q.type === "cloze") { var v = $$(".cloze select").map(function (s) { return s.value; }); if (v.indexOf("") > -1) { toast("Fill every blank"); return null; } return v.map(Number); }
+      if (q.type === "matrix") { var p = q.rows.map(function (r, ri) { var c = app.querySelector('input[name="m' + ri + '"]:checked'); return c ? +c.value : -1; }); if (p.indexOf(-1) > -1) { toast("Answer every row"); return null; } return p; }
       var sel = $$(".opt.sel").map(function (b) { return +b.getAttribute("data-k"); });
-      if (!sel.length) { toast("Choose an answer first"); return; }
-      var ans = q.type === "mc" ? [q.answer] : q.answer;
-      var ok = sel.length === ans.length && sel.every(function (k) { return ans.indexOf(k) > -1; });
-      $$(".opt").forEach(function (b) {
-        var k = +b.getAttribute("data-k"); b.disabled = true; var isA = ans.indexOf(k) > -1, isS = sel.indexOf(k) > -1;
-        b.classList.remove("sel"); if (isA && isS) b.classList.add("right"); else if (isS) b.classList.add("wrong"); else if (isA) b.classList.add("right", "missed");
-        b.querySelector(".box").textContent = isA ? "✓" : isS ? "✕" : "";
-      });
-      S.q[qi] = ok ? 1 : 0;
-      if (ok) { score++; addXP(10); } save();
-      results.push({ qi: qi, ok: ok });
-      $("#rat").innerHTML = '<div class="rationale ' + (ok ? "ok" : "no") + '"><strong>' + (ok ? "Correct!" : "Not quite.") + "</strong>" + esc(q.why) + "</div>";
+      if (!sel.length) { toast("Choose an answer first"); return null; }
+      if (q.type === "selectn" && sel.length !== q.n) { toast("Pick exactly " + q.n); return null; }
+      return sel;
+    }
+    function check(q, r) {
+      if (q.type === "cloze") return allOrNothing(q.blanks.every(function (b, i) { return r[i] === b.answer; }));
+      if (q.type === "matrix") return allOrNothing(q.rows.every(function (row, i) { return r[i] === row[1]; }));
+      return credit(q.type, r, q.type === "mc" ? [q.answer] : q.answer);
+    }
+    function reveal(q, r) {
+      if (q.type === "cloze") {
+        $$(".cloze select").forEach(function (s) { var n = +s.getAttribute("data-b"), b = q.blanks[n], good = r[n] === b.answer; s.value = String(r[n]); s.classList.add(good ? "right" : "wrong"); s.disabled = true;
+          if (!good) { var span = document.createElement("span"); span.className = "small"; span.style.color = "var(--good)"; span.style.fontWeight = "700"; span.textContent = " → " + b.options[b.answer]; s.after(span); } });
+      } else if (q.type === "matrix") {
+        q.rows.forEach(function (row, ri) { var pick = app.querySelector('input[name="m' + ri + '"][value="' + r[ri] + '"]'); if (pick) pick.checked = true;
+          app.querySelector('td[data-r="' + ri + '"][data-c="' + row[1] + '"]').classList.add("right"); if (r[ri] !== row[1]) app.querySelector('td[data-r="' + ri + '"][data-c="' + r[ri] + '"]').classList.add("wrong"); });
+        $$(".matrix input").forEach(function (x) { x.disabled = true; });
+      } else {
+        var ans = q.type === "mc" ? [q.answer] : q.answer;
+        $$(".opt").forEach(function (b) { var k = +b.getAttribute("data-k"); b.disabled = true; var isA = ans.indexOf(k) > -1, isS = r.indexOf(k) > -1;
+          b.classList.remove("sel"); if (isA && isS) b.classList.add("right"); else if (isS) b.classList.add("wrong"); else if (isA) b.classList.add("right", "missed");
+          b.querySelector(".box").textContent = isA ? "✓" : isS ? "✕" : ""; });
+      }
+    }
+    function explain(q, cr) {
+      $("#rat").innerHTML = verdict(cr) + esc(q.why) + "</div>";
       var btn = $("#submit"); btn.textContent = pos + 1 >= ids.length ? "See results" : "Next question →";
-      btn.onclick = function () { pos++; next(); window.scrollTo(0, 0); };
-      btn.focus();
+      btn.onclick = function () { show(pos + 1); window.scrollTo(0, 0); };
+    }
+    function grade(q, qi) {
+      var r = read(q); if (!r) return;
+      var cr = check(q, r), ok = cr.ok;
+      reveal(q, r);
+      S.q[qi] = ok ? 1 : (S.q[qi] === 1 ? 1 : 0);
+      if (cr.pts) addXP(Math.round(10 * cr.pts)); save();
+      results[pos] = { qi: qi, ok: ok, cr: cr, resp: r };
+      $(".q-card .progress span").style.width = (100 * results.length / ids.length) + "%";
+      $(".q-meta .tiny").textContent = (pos + 1) + " / " + ids.length + " · score " + fmtPts(score());
+      explain(q, cr);
+      $("#submit").focus();
     }
     function finish() {
-      var pct = Math.round(100 * score / ids.length);
+      var n = results.length, sc = score(), pct = Math.round(100 * sc / n), full = results.filter(function (r) { return r.ok; }).length;
       var wrong = results.filter(function (r) { return !r.ok; });
-      app.innerHTML = '<div class="card scoreboard"><div style="font-size:44px">' + (pct >= 85 ? "🏆" : pct >= 70 ? "💪" : "📖") + '</div><div class="big-score">' + pct + '%</div><p class="muted">' + score + " of " + ids.length + " correct</p>" +
+      app.innerHTML = '<div class="card scoreboard"><div style="font-size:44px">' + (pct >= 85 ? "🏆" : pct >= 70 ? "💪" : "📖") + '</div><div class="big-score">' + pct + '%</div><p class="muted">' + fmtPts(sc) + " of " + n + " points · " + full + " fully correct" + (n < ids.length ? " · ended early" : "") + "</p>" +
         "<p>" + (pct >= 85 ? "Exam-ready on this set." : pct >= 70 ? "Solid. Review the rationales you missed." : "Go back to the drug tables for the units you missed, then retry.") + "</p>" +
-        '<div class="row" style="justify-content:center"><a class="btn primary" href="#quiz' + (unitId ? "/" + unitId : "") + '">New set</a><a class="btn" href="#drugs">Drug tables</a></div></div>' +
-        (wrong.length ? '<h2 style="margin-top:24px">Review what you missed</h2>' + wrong.map(function (r) { var q = QUESTIONS[r.qi]; return '<div class="card sys-' + q.sys + '" style="margin-bottom:12px"><div class="q-meta">' + tag(q.sys) + '<span class="chip">' + TYPE_LABEL[q.type] + "</span></div><p><b>" + esc(q.stem) + '</b></p><p class="small muted">' + esc(q.why) + "</p></div>"; }).join("") : "");
+        '<div class="row" style="justify-content:center"><button class="btn primary" id="newset">New set</button><a class="btn" href="#drugs">Drug tables</a></div></div>' +
+        (wrong.length ? '<h2 style="margin-top:24px">Review what you missed</h2>' + wrong.map(function (r) { var q = QUESTIONS[r.qi]; return '<div class="card sys-' + q.sys + '" style="margin-bottom:12px"><div class="q-meta">' + tag(q.sys) + '<span class="chip">' + TYPE_LABEL[q.type] + "</span>" + diffChip(q.diff) + partChip(r.cr) + '</div><p><b>' + esc(q.stem.replace(/\{\d+\}/g, "___")) + '</b></p><p class="small muted">' + esc(q.why) + "</p></div>"; }).join("") : "");
+      $("#newset").onclick = function () { quiz(unitId); window.scrollTo(0, 0); };
       if (pct >= 85) confetti();
     }
-    next();
+    show(0);
   }
 
   /* ================= NAME GAME ================= */

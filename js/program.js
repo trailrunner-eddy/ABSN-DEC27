@@ -50,7 +50,8 @@ window.PROGRAM = {
             { mod: "Exam 1 · Mods 1–3", title: "Mod 3 · Respiratory Assessment", file: "Exam 1/Lecture Guides/Mod 3 - Respiratory Assessment Lecture Guide.pdf", web: "mod-3-respiratory-assessment.pdf", topics: [["Breath sounds", "advbs"]] },
             { mod: "Exam 2 · Mods 4–7", title: "Mod 4 · Integumentary & Lymphatic Systems", file: "Exam 2/Lecture Guides/Mod 4 - Integumentary and Lymphatic Systems Lecture Guide.pdf", web: "mod-4-integumentary-and-lymphatic-systems.pdf", topics: [["Pressure injuries", "pi"], ["Braden", "braden"]] },
             { mod: "Exam 2 · Mods 4–7", title: "Mod 5 · Cardiovascular Assessment", file: "Exam 2/Lecture Guides/Mod 5 - Cardiovascular Assessment Lecture Guide.pdf", web: "mod-5-cardiovascular-assessment.pdf", topics: [["Heart sounds", "heartsounds"], ["Pulses", "pulses"]] },
-            { mod: "Exam 2 · Mods 4–7", title: "Mod 6 · HEENT", file: "Exam 2/Lecture Guides/Mod 6 - HEENT Lecture Guide.pdf", web: "mod-6-heent.pdf", topics: [["Cranial nerves", "cn"]] }
+            { mod: "Exam 2 · Mods 4–7", title: "Mod 6 · HEENT", file: "Exam 2/Lecture Guides/Mod 6 - HEENT Lecture Guide.pdf", web: "mod-6-heent.pdf", topics: [["Cranial nerves", "cn"]] },
+            { mod: "Exam 2 · Mods 4–7", title: "Mod 7 · GU & Rectal Assessment", file: "Exam 2/Lecture Guides/Mod 7 - GU and Rectal Assessment Lecture Guide.pdf", web: "mod-7-gu-and-rectal-assessment.pdf", topics: [["Bladder scan & PVR", "retention"], ["Urine output", "urine"]] }
           ],
           exams: [
             {
@@ -65,9 +66,9 @@ window.PROGRAM = {
               name: "Exam 2", status: "ready",
               path: "nura330/exam2/index.html",
               bank: ["js/data.js", "js/practice.js"],
-              blurb: "Lifespan, skin & lymph, cardiovascular, HEENT & reproductive.",
-              topics: ["Skin & Lymph", "Cardiovascular", "HEENT", "Reproductive"],
-              stats: "4 section overviews · 31 topics · 18 diagrams · 67 questions · 110 flashcards"
+              blurb: "Lifespan, skin & lymph, cardiovascular, HEENT, and rectal & genitourinary. Questions are MC and SATA like the exam, each rated by difficulty.",
+              topics: ["Skin & Lymph", "Cardiovascular", "HEENT", "GU & Rectal"],
+              stats: "4 section overviews · 38 topics · 20 diagrams · 96 questions · 146 flashcards"
             },
             { name: "Final Exam", status: "planned" }
           ]
