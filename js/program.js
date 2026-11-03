@@ -75,22 +75,25 @@ window.PROGRAM = {
         },
         {
           id: "nura340", code: "NURA 340", name: "Pathology", icon: "🫀", color: "#c8463d",
-          lectureFolder: "../Sem 1/Patho/Exam 2/Lecture Guides/",
+          lectureFolder: "../Sem 1/Patho/",
           lectureWebFolder: "nura340/lecture-guides/",
           lectureExam: "Exam 2",
           lectureGuides: [
-            { mod: "Diseases of the Respiratory System", title: "Respiratory System Structure & Function", file: "Mod 3 - Respiratory System Structure and Function Lecture Guide.pdf", web: "mod-3-respiratory-system-structure-and-function.pdf", topics: [["Acid-base", "acidbase"], ["Pneumonia", "pneumonia"]] },
-            { mod: "Diseases of the Respiratory System", title: "Upper Respiratory Diseases", file: "Mod 3 - Upper Respiratory Diseases Lecture Guide.pdf", web: "mod-3-upper-respiratory-diseases.pdf", topics: [["Upper respiratory infections", "uri"]] },
-            { mod: "Diseases of the Respiratory System", title: "Lower Respiratory Diseases", file: "Mod 3 - Lower Respiratory Diseases Lecture Guide.pdf", web: "mod-3-lower-respiratory-diseases.pdf", topics: [["Pneumonia", "pneumonia"], ["TB", "tb"], ["Asthma", "asthma"], ["COPD", "copd"], ["Lung injuries", "trauma"]] },
-            { mod: "Diseases of the Cardiovascular System I", title: "Structure & Function of the Cardiovascular System", file: "Mod 5 - Structure and Function of the Cardiovascular System Lecture Guide.pdf", web: "mod-5-structure-and-function-of-the-cardiovascular-system.pdf", topics: [["Hypertension", "htn"], ["Fluid & electrolytes", "fluid"]] },
-            { mod: "Diseases of the Cardiovascular System I", title: "Diseases of the Arterial System", file: "Mod 5 - Diseases of the Arterial System Lecture Guide.pdf", web: "mod-5-diseases-of-the-arterial-system.pdf", topics: [["Hypertension", "htn"], ["Atherosclerosis", "athero"], ["PAD & emboli", "pad"], ["Aneurysms", "aneurysm"]] },
-            { mod: "Diseases of the Cardiovascular System I", title: "Diseases of the Venous System", file: "Mod 5 - Diseases of the Venous System Lecture Guide.pdf", web: "mod-5-diseases-of-the-venous-system.pdf", topics: [["CVI, DVT & PE", "venous"]] },
-            { mod: "Diseases of the Cardiovascular System II", title: "Cardiac Valves & Ischemic Heart Disease", file: "Mod 6 - Cardiac Valves & Ischemic Heart Disease Lecture Guide.pdf", web: "mod-6-cardiac-valves-and-ischemic-heart-disease.pdf", topics: [["Valves", "valves"], ["Angina & MI", "acs"], ["Peri/myo/endocarditis", "itis"]] },
-            { mod: "Diseases of the Cardiovascular System II", title: "Heart Failure & Arrhythmias", file: "Mod 6 - Heart Failure & Arrhythmias Lecture Guide.pdf", web: "mod-6-heart-failure-and-arrhythmias.pdf", topics: [["Heart failure", "hf"], ["Dysrhythmias", "rhythm"]] },
-            { mod: "Diseases of the Renal & Genitourinary System", title: "Structure & Function of the Renal System & Urinary Tract", file: "Mod 7 -Structure & Function of the Renal System & Urinary Tract Lecture Guide.pdf", web: "mod-7-structure-and-function-of-the-renal-system-and-urinary-tract.pdf", topics: [["Fluid & electrolytes", "fluid"], ["AKI", "aki"]] },
-            { mod: "Diseases of the Renal & Genitourinary System", title: "Diseases of the Renal System", file: "Mod 7 - Diseases of the Renal System Lecture Guide.pdf", web: "mod-7-diseases-of-the-renal-system.pdf", topics: [["AKI", "aki"], ["CKD", "ckd"], ["Glomerulonephritis", "gn"], ["Nephrotic syndrome", "nephrotic"]] },
-            { mod: "Diseases of the Renal & Genitourinary System", title: "Diseases of the Urinary Tract", file: "Mod 7 - Diseases of the Urinary Tract Lecture Guide.pdf", web: "mod-7-diseases-of-the-urinary-tract.pdf", topics: [["Cystitis", "cystitis"], ["Pyelonephritis", "pyelo"], ["Renal calculi", "stones"]] },
-            { mod: "Diseases of the Renal & Genitourinary System", title: "Diseases of the Male Reproductive System", file: "Mod 7 - Diseases of the Male Reproductive System Lecture Guide.pdf", web: "mod-7-diseases-of-the-male-reproductive-system.pdf", topics: [["BPH", "bph"], ["Prostatitis", "prostatitis"]] }
+            { mod: "Diseases of the Respiratory System", title: "Respiratory System Structure & Function", file: "Exam 2/Lecture Guides/Mod 3 - Respiratory System Structure and Function Lecture Guide.pdf", web: "mod-3-respiratory-system-structure-and-function.pdf", topics: [["Acid-base", "acidbase"], ["Pneumonia", "pneumonia"]] },
+            { mod: "Diseases of the Respiratory System", title: "Upper Respiratory Diseases", file: "Exam 2/Lecture Guides/Mod 3 - Upper Respiratory Diseases Lecture Guide.pdf", web: "mod-3-upper-respiratory-diseases.pdf", topics: [["Upper respiratory infections", "uri"]] },
+            { mod: "Diseases of the Respiratory System", title: "Lower Respiratory Diseases", file: "Exam 2/Lecture Guides/Mod 3 - Lower Respiratory Diseases Lecture Guide.pdf", web: "mod-3-lower-respiratory-diseases.pdf", topics: [["Pneumonia", "pneumonia"], ["TB", "tb"], ["Asthma", "asthma"], ["COPD", "copd"], ["Lung injuries", "trauma"]] },
+            { mod: "Diseases of the Cardiovascular System I", title: "Structure & Function of the Cardiovascular System", file: "Exam 2/Lecture Guides/Mod 5 - Structure and Function of the Cardiovascular System Lecture Guide.pdf", web: "mod-5-structure-and-function-of-the-cardiovascular-system.pdf", topics: [["Hypertension", "htn"], ["Fluid & electrolytes", "fluid"]] },
+            { mod: "Diseases of the Cardiovascular System I", title: "Diseases of the Arterial System", file: "Exam 2/Lecture Guides/Mod 5 - Diseases of the Arterial System Lecture Guide.pdf", web: "mod-5-diseases-of-the-arterial-system.pdf", topics: [["Hypertension", "htn"], ["Atherosclerosis", "athero"], ["PAD & emboli", "pad"], ["Aneurysms", "aneurysm"]] },
+            { mod: "Diseases of the Cardiovascular System I", title: "Diseases of the Venous System", file: "Exam 2/Lecture Guides/Mod 5 - Diseases of the Venous System Lecture Guide.pdf", web: "mod-5-diseases-of-the-venous-system.pdf", topics: [["CVI, DVT & PE", "venous"]] },
+            { mod: "Diseases of the Cardiovascular System II", title: "Cardiac Valves & Ischemic Heart Disease", file: "Exam 2/Lecture Guides/Mod 6 - Cardiac Valves & Ischemic Heart Disease Lecture Guide.pdf", web: "mod-6-cardiac-valves-and-ischemic-heart-disease.pdf", topics: [["Valves", "valves"], ["Angina & MI", "acs"], ["Peri/myo/endocarditis", "itis"]] },
+            { mod: "Diseases of the Cardiovascular System II", title: "Heart Failure & Arrhythmias", file: "Exam 2/Lecture Guides/Mod 6 - Heart Failure & Arrhythmias Lecture Guide.pdf", web: "mod-6-heart-failure-and-arrhythmias.pdf", topics: [["Heart failure", "hf"], ["Dysrhythmias", "rhythm"]] },
+            { mod: "Diseases of the Renal & Genitourinary System", title: "Structure & Function of the Renal System & Urinary Tract", file: "Exam 2/Lecture Guides/Mod 7 -Structure & Function of the Renal System & Urinary Tract Lecture Guide.pdf", web: "mod-7-structure-and-function-of-the-renal-system-and-urinary-tract.pdf", topics: [["Fluid & electrolytes", "fluid"], ["AKI", "aki"]] },
+            { mod: "Diseases of the Renal & Genitourinary System", title: "Diseases of the Renal System", file: "Exam 2/Lecture Guides/Mod 7 - Diseases of the Renal System Lecture Guide.pdf", web: "mod-7-diseases-of-the-renal-system.pdf", topics: [["AKI", "aki"], ["CKD", "ckd"], ["Glomerulonephritis", "gn"], ["Nephrotic syndrome", "nephrotic"]] },
+            { mod: "Diseases of the Renal & Genitourinary System", title: "Diseases of the Urinary Tract", file: "Exam 2/Lecture Guides/Mod 7 - Diseases of the Urinary Tract Lecture Guide.pdf", web: "mod-7-diseases-of-the-urinary-tract.pdf", topics: [["Cystitis", "cystitis"], ["Pyelonephritis", "pyelo"], ["Renal calculi", "stones"]] },
+            { mod: "Diseases of the Renal & Genitourinary System", title: "Diseases of the Male Reproductive System", file: "Exam 2/Lecture Guides/Mod 7 - Diseases of the Male Reproductive System Lecture Guide.pdf", web: "mod-7-diseases-of-the-male-reproductive-system.pdf", topics: [["BPH", "bph"], ["Prostatitis", "prostatitis"]] },
+            { mod: "Final · Diseases of the GI System", title: "Diseases of the Upper GI System", file: "Final/Lecture Guide/Diseases of the Upper GI System Lecture Guide.pdf", web: "final-diseases-of-the-upper-gi-system.pdf", topics: [["GERD", "gerd"], ["PUD", "pud"], ["Upper GI bleed", "ugib"]] },
+            { mod: "Final · Diseases of the GI System", title: "Diseases of the Lower GI System", file: "Final/Lecture Guide/Diseases of the Lower GI System Lecture Guide.pdf", web: "final-diseases-of-the-lower-gi-system.pdf", topics: [["C. diff", "cdiff"], ["Appendicitis", "appendicitis"], ["Crohn's vs. UC", "uc"]] },
+            { mod: "Final · Diseases of the GI System", title: "Diseases of the Liver & Gallbladder", file: "Final/Lecture Guide/Diseases of the Liver and Gallbladder Lecture Guide.pdf", web: "final-diseases-of-the-liver-and-gallbladder.pdf", topics: [["Gallstones", "gallstones"], ["Cirrhosis", "cirrhosis"], ["Hepatitis", "hepc"]] }
           ],
           exams: [
             { name: "Exam 1", status: "planned" },
@@ -103,7 +106,14 @@ window.PROGRAM = {
               topics: ["Respiratory", "Cardiac 1", "Cardiac 2", "Kidney", "GU & Repro"],
               stats: "6 section overviews · 28 topics · 33 diagrams · 55 MC & SATA questions · 100 flashcards"
             },
-            { name: "Final Exam", status: "planned" }
+            {
+              name: "Final Exam", status: "ready",
+              path: "nura340/final/index.html",
+              bank: ["js/data.js", "js/practice.js"],
+              blurb: "GI unit from the three Final lecture guides: upper GI, lower GI, and liver & gallbladder. No instructor study guide yet, so questions are NCLEX-style and provisional, each rated by difficulty.",
+              topics: ["Upper GI", "Lower GI", "Liver & GB"],
+              stats: "4 section overviews · 24 topics · 4 diagrams · 101 NCLEX-style questions · 108 flashcards"
+            }
           ]
         },
         {
