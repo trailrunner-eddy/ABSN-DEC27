@@ -47,17 +47,18 @@ window.SECTIONS = {
     ]
   },
   repro: {
-    lead: "Mod 7 · Reproductive Assessment. No Mod 7 lecture guide or slides were in the course folder yet, so this section follows the study guide outline.",
+    diagram: "urinary",
+    lead: "Mod 7 · Rectal & Genitourinary Assessment.",
     summary: [
-      "Reproductive assessment is mostly a careful, respectful history. Set up privacy, explain why you're asking and what stays confidential, use the client's name, pronouns, and preferred terms, and ask about partners without assuming. A qualified interpreter is used, never a partner or relative.",
-      "The history covers the last menstrual period (first day), obstetric history (GTPAL), sexual history and STI risk, contraception, and urinary patterns, which overlap with reproductive problems. Across the lifespan, Tanner stages track puberty, and in older adults with a prostate, BPH shows up as urinary symptoms. Document objectively and in the client's own words for symptoms."
+      "This module ties the urinary tract, reproductive organs, and rectum together because they sit side by side and their symptoms overlap. The lecture case is T.K., 73, with frequency, hesitancy, dribbling, and nocturia from an enlarged prostate (BPH). Remember that a high PSA isn't a cancer diagnosis. The history starts with permission and an explanation, is guided by the client's sex assigned at birth, gender identity, and current anatomy, and covers urinary, bowel, and reproductive symptoms, the LMP, and obstetric history (GTPAL).",
+      "The exam is mostly inspection: expected vs. unexpected anal, female, and male findings, stool by Bristol type, and urine by color, clarity, and output (mL ÷ kg ÷ hours, at least 0.5 mL/kg/hr). For retention, palpate above the symphysis pubis and scan within 10 minutes of voiding; a PVR over 100 mL is reported. Add health promotion (HPV vaccine, condoms, screening ages), lifespan (Tanner stages, BPH, incontinence isn't normal aging), and inclusive, gender-affirming care: screening follows the anatomy present."
     ],
     structure: [
-      "Female: ovaries, fallopian tubes, uterus, cervix, vagina, vulva, breasts.",
-      "Male: testes, epididymis, vas deferens, seminal vesicles, prostate, urethra, penis.",
-      "LMP = first day of the last period.",
-      "GTPAL: gravida, term, preterm, abortions, living.",
-      "Tanner 1 (prepubertal) → 5 (adult)."
+      "Kidneys → ureters (peristalsis) → bladder (urge at about 300 mL) → urethra (female 3–4 cm, male about 20 cm).",
+      "Female: vulva, vagina, uterus, fallopian tubes, ovaries. Male: penis, scrotum, testes, epididymis, vas deferens, seminal vesicles, prostate.",
+      "Rectum: end of the sigmoid colon; internal sphincter involuntary, external voluntary.",
+      "PVR 50–100 mL expected; >100 mL notify. Bristol 3–4 ideal.",
+      "GTPAL: gravida, term, preterm, abortions, living. Tanner 1 (prepubertal) → 5 (adult)."
     ]
   }
 };

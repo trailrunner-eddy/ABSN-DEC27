@@ -138,21 +138,21 @@
   function fmt(s) { s = Math.max(0, Math.round(s)); return Math.floor(s / 60) + ":" + ("0" + (s % 60)).slice(-2); }
 
   function run(list, mode, timed) {
-    var pos = 0, results = [], t0 = Date.now(), limit = timed ? list.length * 90 : 0, perm = null;
+    var pos = 0, results = [], t0 = Date.now(), limit = timed ? list.length * 90 : 0, perms = [];
     stopTimer();
     timerId = setInterval(function () {
       var el = document.getElementById("nx-time"); if (!el) { stopTimer(); return; }
       var t = (Date.now() - t0) / 1000;
       el.textContent = limit ? fmt(limit - t) + " left" : fmt(t);
-      if (limit && t >= limit) { stopTimer(); for (var i = pos; i < list.length; i++) results.push({ x: list[i], ok: false, resp: null }); finish(true); }
+      if (limit && t >= limit) { stopTimer(); for (var i = results.length; i < list.length; i++) results.push({ x: list[i], ok: false, pts: 0, resp: null }); finish(true); }
     }, 500);
 
     function draw() {
       if (pos >= list.length) return finish(false);
-      var x = list[pos], q = x.q, k = x.kind;
+      var x = list[pos], q = x.q, k = x.kind, done = mode === "tutor" ? results[pos] : null, last = results.length;
       var html = '<div class="row" style="margin-bottom:14px"><button class="btn small" id="quit">← End exam</button><span class="spacer"></span><span class="chip">⏱ <span id="nx-time">' + (limit ? fmt(limit - (Date.now() - t0) / 1000) + " left" : fmt((Date.now() - t0) / 1000)) + '</span></span></div>' +
-        '<div class="q-card card" style="border-left:5px solid ' + x.color + '"><div class="progress" style="margin-bottom:14px"><span style="width:' + (100 * pos / list.length) + '%"></span></div>' +
-        '<div class="q-meta"><span class="chip">' + esc(x.course.code || x.course.name) + " · " + esc(x.short) + '</span><span class="chip">' + TYPES[k] + (k === "selectn" ? " · pick " + q.n : "") + "</span>" + diffChip(x.diff) + '<span class="spacer"></span><span class="tiny">' + (pos + 1) + " / " + list.length + "</span></div>";
+        '<div class="q-card card" style="border-left:5px solid ' + x.color + '"><div class="progress" style="margin-bottom:14px"><span style="width:' + (100 * last / list.length) + '%"></span></div>' +
+        '<div class="q-meta"><span class="chip">' + esc(x.course.code || x.course.name) + " · " + esc(x.short) + '</span><span class="chip">' + TYPES[k] + (k === "selectn" ? " · pick " + q.n : "") + "</span>" + diffChip(x.diff) + (done ? '<span class="chip">Reviewing</span>' : "") + '<span class="spacer"></span><span class="tiny">' + (pos + 1) + " / " + list.length + "</span></div>";
       if (k === "cloze") {
         html += '<p class="small muted">Choose the option that best completes each blank.</p><div class="cloze">' + esc(q.stem).replace(/\{(\d+)\}/g, function (m, n) {
           var b = q.blanks[+n];
@@ -163,10 +163,11 @@
           q.rows.map(function (r, ri) { return "<tr><td>" + esc(r[0]) + "</td>" + q.cols.map(function (c, ci) { return '<td data-r="' + ri + '" data-c="' + ci + '"><input type="radio" name="m' + ri + '" value="' + ci + '" aria-label="' + esc(r[0] + ": " + c) + '"></td>'; }).join("") + "</tr>"; }).join("") + "</tbody></table></div>";
       } else {
         var multi = k === "sata" || k === "selectn";
-        perm = shuffle(q.options.map(function (o, i) { return i; }));
+        var perm = perms[pos] = perms[pos] || shuffle(q.options.map(function (o, i) { return i; }));
         html += '<div class="q-stem">' + esc(q.stem) + "</div>" + perm.map(function (i) { return '<button class="opt' + (multi ? " multi" : "") + '" data-k="' + i + '"><span class="box"></span><span>' + esc(q.options[i]) + "</span></button>"; }).join("");
       }
-      html += '<div class="row" style="margin-top:16px"><span class="tiny">' + (mode === "exam" ? "Exam mode: you can't go back, just like the NCLEX." : "") + '</span><span class="spacer"></span><button class="btn primary" id="submit">' + (mode === "exam" ? (pos + 1 >= list.length ? "Finish exam" : "Next →") : "Submit") + '</button></div><div class="callout" id="nx-note" style="display:none;margin-top:10px"></div><div id="rat"></div></div>';
+      html += '<div class="row" style="margin-top:16px">' + (mode === "exam" ? '<span class="tiny">Exam mode: you can\'t go back, just like the NCLEX.</span>' :
+        '<button class="btn" id="prev"' + (pos ? "" : " disabled") + '>← Previous</button>' + (last < list.length && last - pos > 1 ? '<button class="btn small" id="resume">Jump to question ' + (last + 1) + "</button>" : "")) + '<span class="spacer"></span><button class="btn primary" id="submit">' + (mode === "exam" ? (pos + 1 >= list.length ? "Finish exam" : "Next →") : "Submit") + '</button></div><div class="callout" id="nx-note" style="display:none;margin-top:10px"></div><div id="rat"></div></div>';
       app.innerHTML = html;
       window.scrollTo(0, 0);
 
@@ -180,7 +181,20 @@
         if (!b.classList.contains("armed")) { b.classList.add("armed"); b.textContent = "Tap again to end · answered questions are scored"; setTimeout(function () { if (b.isConnected) { b.classList.remove("armed"); b.textContent = "← End exam"; } }, 4000); return; }
         stopTimer(); finish(true);
       };
+      if ($("#prev")) $("#prev").onclick = function () { if (pos) { pos--; draw(); } };
+      if ($("#resume")) $("#resume").onclick = function () { pos = last; draw(); };
+      if (done) { fill(x, done.resp); reveal(x, done.resp); explain(x, done.cr); return; }
       $("#submit").onclick = submit;
+    }
+    /* Put a saved response back on screen when a tutor-mode question is reopened. */
+    function fill(x, r) {
+      if (x.kind === "cloze") $$(".cloze select").forEach(function (s) { s.value = String(r[+s.getAttribute("data-b")]); });
+      else if (x.kind === "matrix") r.forEach(function (c, ri) { var i = app.querySelector('input[name="m' + ri + '"][value="' + c + '"]'); if (i) i.checked = true; });
+    }
+    function explain(x, cr) {
+      $("#rat").innerHTML = verdict(cr) + esc(x.q.why || "") + "</div>";
+      var btn = $("#submit"); btn.textContent = pos + 1 >= list.length ? "See results" : "Next question →";
+      btn.onclick = function () { pos++; draw(); };
     }
 
     function read(x) {
@@ -191,12 +205,29 @@
       if (!sel.length || (k === "selectn" && sel.length !== q.n)) return null;
       return sel;
     }
+    /* Select-all-that-apply partial credit: (right picks - wrong picks) / number of right answers, never below 0.
+       e.g. 3 right answers: pick 2 right = 2/3; pick 3 right + 1 wrong = 2/3. Other types are all-or-nothing. */
+    function credit(type, sel, ans) {
+      var hit = sel.filter(function (k) { return ans.indexOf(k) > -1; }).length;
+      var full = sel.length === ans.length && hit === ans.length;
+      if (type !== "sata") return allOrNothing(full);
+      var net = Math.max(0, hit - (sel.length - hit));
+      return { sata: true, net: net, of: ans.length, pts: net / ans.length, ok: net === ans.length };
+    }
+    function allOrNothing(ok) { return { sata: false, net: ok ? 1 : 0, of: 1, pts: ok ? 1 : 0, ok: ok }; }
+    function fmtPts(p) { return String(Math.round(p * 100) / 100); }
+    function verdict(c) {
+      return '<div class="rationale ' + (c.ok ? "ok" : c.pts > 0 ? "part" : "no") + '"><strong>' + (c.ok ? "Correct!" : c.pts > 0 ? "Partial credit." : "Not quite.") +
+        (c.sata ? " " + c.net + "/" + c.of + " points" : "") + "</strong>";
+    }
+    function partChip(c) { return c && c.sata && c.pts > 0 && !c.ok ? '<span class="chip">' + c.net + "/" + c.of + " points</span>" : ""; }
+
     function score(x, r) {
       var q = x.q, k = x.kind;
-      if (k === "cloze") return q.blanks.every(function (b, i) { return r[i] === b.answer; });
-      if (k === "matrix") return q.rows.every(function (row, i) { return r[i] === row[1]; });
+      if (k === "cloze") return allOrNothing(q.blanks.every(function (b, i) { return r[i] === b.answer; }));
+      if (k === "matrix") return allOrNothing(q.rows.every(function (row, i) { return r[i] === row[1]; }));
       var ans = typeof q.answer === "number" ? [q.answer] : q.answer;
-      return r.length === ans.length && r.every(function (i) { return ans.indexOf(i) > -1; });
+      return credit(k, r, ans);
     }
     function reveal(x, r) {
       var q = x.q, k = x.kind;
@@ -216,15 +247,14 @@
     function submit() {
       var x = list[pos], r = read(x);
       if (!r) { note(x.kind === "cloze" ? "Fill every blank." : x.kind === "matrix" ? "Answer every row." : x.kind === "selectn" ? "Pick exactly " + x.q.n + "." : "Choose an answer first."); return; }
-      var ok = score(x, r);
-      results.push({ x: x, ok: ok, resp: r });
+      var cr = score(x, r), ok = cr.ok;
+      results[pos] = { x: x, ok: ok, pts: cr.pts, cr: cr, resp: r };
       st().seen[x.id] = ok ? 1 : 0; ctx.save();
       if (mode === "exam") { pos++; draw(); return; }
       reveal(x, r);
-      $("#rat").innerHTML = '<div class="rationale ' + (ok ? "ok" : "no") + '"><strong>' + (ok ? "Correct!" : "Not quite.") + "</strong>" + esc(x.q.why || "") + "</div>";
-      var btn = $("#submit"); btn.textContent = pos + 1 >= list.length ? "See results" : "Next question →";
-      btn.onclick = function () { pos++; draw(); };
-      btn.focus();
+      $(".q-card .progress span").style.width = (100 * results.length / list.length) + "%";
+      explain(x, cr);
+      $("#submit").focus();
     }
 
     function answerText(x) {
@@ -243,23 +273,23 @@
       stopTimer();
       var n = results.length;
       if (!n) { builder(bank); return; }
-      var ok = results.filter(function (r) { return r.ok; }).length, pct = Math.round(100 * ok / n), secs = (Date.now() - t0) / 1000;
+      var full = results.filter(function (r) { return r.ok; }).length, ok = results.reduce(function (s, r) { return s + r.pts; }, 0), pct = Math.round(100 * ok / n), secs = (Date.now() - t0) / 1000;
       var byTopic = {}, byType = {}, byDiff = {};
       Object.keys(DIFFS).forEach(function (k) { byDiff[DIFFS[k]] = { n: 0, ok: 0 }; });
       results.forEach(function (r) {
         var a = (r.x.course.code || r.x.course.name) + " · " + r.x.topicName, b = TYPES[r.x.kind];
-        (byTopic[a] = byTopic[a] || { n: 0, ok: 0 }).n++; if (r.ok) byTopic[a].ok++;
-        (byType[b] = byType[b] || { n: 0, ok: 0 }).n++; if (r.ok) byType[b].ok++;
-        var d = DIFFS[r.x.diff]; (byDiff[d] = byDiff[d] || { n: 0, ok: 0 }).n++; if (r.ok) byDiff[d].ok++;
+        (byTopic[a] = byTopic[a] || { n: 0, ok: 0 }).n++; byTopic[a].ok += r.pts;
+        (byType[b] = byType[b] || { n: 0, ok: 0 }).n++; byType[b].ok += r.pts;
+        var d = DIFFS[r.x.diff]; (byDiff[d] = byDiff[d] || { n: 0, ok: 0 }).n++; byDiff[d].ok += r.pts;
       });
       var nx = st(); nx.hist.unshift({ d: Date.now(), n: n, pct: pct, mode: mode }); nx.hist = nx.hist.slice(0, 30); ctx.save();
       var wrong = results.filter(function (r) { return !r.ok; });
-      app.innerHTML = '<div class="card scoreboard"><div style="font-size:44px">' + (pct >= 85 ? "🏆" : pct >= 70 ? "💪" : "📖") + '</div><div class="big-score">' + pct + '%</div><p class="muted">' + ok + " of " + n + " correct · " + fmt(secs) + (early && n < list.length ? " · ended early" : "") + "</p>" +
+      app.innerHTML = '<div class="card scoreboard"><div style="font-size:44px">' + (pct >= 85 ? "🏆" : pct >= 70 ? "💪" : "📖") + '</div><div class="big-score">' + pct + '%</div><p class="muted">' + fmtPts(ok) + " of " + n + " points · " + full + " fully correct · " + fmt(secs) + (early && n < list.length ? " · ended early" : "") + "</p>" +
         "<p>" + (pct >= 85 ? "Strong. Try a longer exam or switch to Exam mode." : pct >= 70 ? "Solid. Read the rationales below, then retry your missed questions." : "Review the topics below with the lowest scores, then build an exam from just those.") + "</p>" +
         '<div class="row" style="justify-content:center"><button class="btn primary" id="again">Build another exam</button>' + (wrong.length ? '<button class="btn" id="retry">Retry the ' + wrong.length + " I missed</button>" : "") + "</div></div>" +
         '<div class="grid grid-2" style="margin-top:18px"><div class="card"><h3>By topic</h3>' + bars(byTopic) + '</div><div class="card"><h3>By question type</h3>' + bars(byType) + '</div><div class="card"><h3>By difficulty</h3>' + bars(byDiff) + "</div></div>" +
         (wrong.length ? '<h2 style="margin-top:24px">Review what you missed</h2>' + wrong.map(function (r) { var q = r.x.q;
-          return '<div class="card" style="margin-bottom:12px;border-left:5px solid ' + r.x.color + '"><div class="q-meta"><span class="chip">' + esc(r.x.course.code || r.x.course.name) + " · " + esc(r.x.short) + '</span><span class="chip">' + TYPES[r.x.kind] + "</span>" + diffChip(r.x.diff) + (r.resp ? "" : '<span class="chip">Not answered</span>') + "</div><p><b>" + esc(q.stem.replace(/\{\d+\}/g, "___")) + '</b></p><p class="small"><b style="color:var(--good)">Answer:</b> ' + esc(answerText(r.x)) + '</p><p class="small muted">' + esc(q.why || "") + "</p></div>";
+          return '<div class="card" style="margin-bottom:12px;border-left:5px solid ' + r.x.color + '"><div class="q-meta"><span class="chip">' + esc(r.x.course.code || r.x.course.name) + " · " + esc(r.x.short) + '</span><span class="chip">' + TYPES[r.x.kind] + "</span>" + diffChip(r.x.diff) + partChip(r.cr) + (r.resp ? "" : '<span class="chip">Not answered</span>') + "</div><p><b>" + esc(q.stem.replace(/\{\d+\}/g, "___")) + '</b></p><p class="small"><b style="color:var(--good)">Answer:</b> ' + esc(answerText(r.x)) + '</p><p class="small muted">' + esc(q.why || "") + "</p></div>";
         }).join("") : "");
       $("#again").onclick = function () { builder(bank); window.scrollTo(0, 0); };
       if ($("#retry")) $("#retry").onclick = function () { run(shuffle(wrong.map(function (r) { return r.x; })), mode, timed); };
