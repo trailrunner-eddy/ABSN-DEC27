@@ -133,7 +133,16 @@ window.PROGRAM = {
         },
         {
           id: "nutrition", code: "", name: "Nutrition", icon: "🥗", color: "#4b5fc9",
-          exams: []
+          exams: [
+            {
+              name: "Nutrition Exam", status: "ready",
+              path: "nutrition/exam/index.html",
+              bank: ["js/data.js", "js/practice.js"],
+              blurb: "Built around the nine Key Concepts: nutrition as a vital sign, healing, breathing, heart, kidney, GI, lifespan and diabetes, anemia and cancer, and tube feeding and TPN. NCLEX-style questions, each rated by difficulty.",
+              topics: ["Foundations", "Assessment", "Heart & Kidney", "GI", "Lifespan & DM", "Tube feeds & TPN"],
+              stats: "10 section overviews · 35 topics · 3 diagrams · 122 NCLEX-style questions · 149 flashcards"
+            }
+          ]
         }
       ]
     },
