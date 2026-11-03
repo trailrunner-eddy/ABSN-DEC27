@@ -220,13 +220,13 @@
   function guideNav(key) {
     return '<div class="filter-bar guide-bar"><a class="chip ' + (!key ? "on" : "") + '" href="#guide">Overview</a>' +
       GSECS.map(function (g, i) { return '<a class="chip ' + (key === g.id ? "on" : "") + '" href="#guide/' + g.id + '"><span class="sys-dot sys-' + g.sys + '"></span>' + (i + 1) + ". " + esc(g.name) + (S.guide[g.id] ? " ✓" : "") + "</a>"; }).join("") +
-      '<a class="chip ' + (key === "hy" ? "on" : "") + '" href="#guide/hy">⭐ High-yield</a><a class="chip ' + (key === "notes" ? "on" : "") + '" href="#guide/notes">Notes</a></div>';
+      '<a class="chip ' + (key === "hy" ? "on" : "") + '" href="#guide/hy">⭐ High-yield</a><a class="chip ' + (key === "stems" ? "on" : "") + '" href="#guide/stems">🔤 Name decoder</a><a class="chip ' + (key === "notes" ? "on" : "") + '" href="#guide/notes">Notes</a></div>';
   }
   function guideDrug(g) {
     var d = DRUG[g.drug];
     return '<div class="card guide-drug sys-' + d.cats.map(function (c) { return CAT[c].sys; })[0] + '">' +
       '<div class="row guide-drug-head"><h3>' + esc(g.title) + (g.brand ? ' <span class="brand-name">(' + esc(g.brand) + ")</span>" : "") + '</h3><span class="spacer"></span><a class="small" href="#drug/' + d.id + '">Full drug table →</a></div>' +
-      '<div class="drug-cls">' + esc(g.cls) + (g.clsFix ? " " + srcTag("CORRECTED") : "") + (g.added ? " " + srcTag("EXTRA") : "") + "</div>" +
+      '<div class="drug-cls">' + esc(g.cls) + (g.clsFix ? " " + srcTag("CORRECTED") : "") + (g.added ? " " + srcTag("EXTRA") : "") + "</div>" + stemPill(d.id) +
       (g.added ? '<p class="tiny" style="margin:4px 0 0">All 44 drugs are in play. These rows come from your ATI drug table and the lecture, not the instructor\'s takeaways.</p>' : "") +
       (g.clsFix ? '<p class="tiny" style="margin:4px 0 0">' + esc(g.clsFix) + "</p>" : "") +
       '<dl class="drug-fields guide-fields">' + g.rows.map(function (r) {
@@ -275,6 +275,7 @@
         '<div class="row nav-links" style="margin-top:20px"><a class="btn" href="#guide/' + GSECS[GSECS.length - 1].id + '">← ' + esc(GSECS[GSECS.length - 1].name) + '</a><span class="spacer"></span><a class="btn primary" href="#quiz/guide">Try the study guide questions →</a></div>';
       return;
     }
+    if (key === "stems") { decoderView(head); return; }
     if (key === "notes") {
       app.innerHTML = head +
         '<div class="card"><h2>Notes on the instructor guide</h2><ol class="facts">' + G.notes.map(function (n, i) { return "<li>" + (i < 2 ? srcTag("CORRECTED") + " " : "") + "<b>" + esc(n[0]) + ".</b> " + esc(n[1]) + "</li>"; }).join("") + "</ol></div>" +
@@ -293,6 +294,7 @@
           "<li>" + srcTag("EXTRA") + " marks the " + G.added.length + " drugs the instructor guide skipped; all 44 are in play, so they're built from your ATI tables and lectures.</li>" +
           "<li>" + srcTag("CORRECTED") + " marks a likely error in the instructor guide; see the <a href=\"#guide/notes\">notes</a>.</li>" +
           "<li><b>Cover mode</b> blurs every takeaway so you can quiz yourself.</li></ul></div>" +
+        '<a class="card stem-teaser" href="#guide/stems"><h2>🔤 Name decoder</h2><p class="small" style="margin:0">The ending of a drug name often gives away its class: <b>-olol</b> is a beta blocker, <b>-pril</b> an ACE inhibitor. See which of the 44 exam drugs follow a stem and which ones you just have to memorize.</p><span class="btn primary" style="margin-top:12px">Open the decoder →</span></a>' +
         '<div class="card"><h2>Then practice</h2><p class="small muted">' + nQ + ' questions from the study guide\'s practice set, plus the High-Yield Comparisons tables.</p><div class="row"><a class="btn primary" href="#quiz/guide">Study guide questions</a><a class="btn" href="#guide/hy">⭐ High-yield</a><a class="btn" href="#quiz/added">➕ Added drugs</a></div></div></div></div>';
   }
 
@@ -583,6 +585,80 @@
     ask();
   }
 
+  /* ================= NAME DECODER (stems.js) ================= */
+  var STEMS = window.STEMS || [], NO_STEM = window.NO_STEM || [], STEM_OF = {};
+  STEMS.forEach(function (s) { s.drugs.forEach(function (id) { (STEM_OF[id] = STEM_OF[id] || []).push(s); }); });
+  function stemName(name, s) {
+    var low = name.toLowerCase();
+    for (var k = 0; k < s.hit.length; k++) {
+      var i = low.indexOf(s.hit[k]);
+      if (i > -1) return esc(name.slice(0, i)) + '<span class="stem-hit">' + esc(name.slice(i, i + s.hit[k].length)) + "</span>" + esc(name.slice(i + s.hit[k].length));
+    }
+    return esc(name);
+  }
+  function stemPill(id) {
+    var list = STEM_OF[id];
+    if (!list) return '<a class="stem-pill none" href="#guide/stems">🔤 No class stem: memorize this one</a>';
+    return list.map(function (s) { return '<a class="stem-pill" href="#guide/stems">🔤 <b>' + esc(s.stem) + "</b> = " + esc(s.cls) + "</a>"; }).join(" ");
+  }
+  function drugChip(id, s) {
+    var d = DRUG[id], sec = ON_GUIDE[id];
+    return '<a class="stem-drug" href="' + (sec ? "#guide/" + sec.id : "#drug/" + id) + '">' + (s ? stemName(d.name, s) : esc(d.name)) + "</a>";
+  }
+  function stemUnit(s) { return unitOf(DRUG[s.drugs[0]]); }
+  function decode(q) {
+    q = q.trim().toLowerCase().replace(/[^a-z]/g, "");
+    if (q.length < 3) return "";
+    var exam = DRUGS.filter(function (d) { return d.name.toLowerCase().replace(/[^a-z]/g, "").indexOf(q) === 0; })[0];
+    var hits = STEMS.filter(function (s) { return s.hit.some(function (h) { return q.indexOf(h) > -1; }); });
+    if (exam && !STEM_OF[exam.id]) {
+      var ns = NO_STEM.filter(function (x) { return x.drug === exam.id; })[0];
+      return '<div class="stem-result none"><b>' + esc(exam.name) + "</b> is on your exam: " + esc(exam.cls) + ". Its name has no class stem, so memorize it." + (ns ? '<div class="small">' + esc(ns.hook) + "</div>" : "") + "</div>";
+    }
+    if (exam) hits = STEM_OF[exam.id];
+    if (!hits.length) return '<div class="stem-result miss">None of this exam\'s stems match. The drug still has a class; its name just doesn\'t use one of these endings.</div>';
+    return hits.map(function (s) {
+      return '<div class="stem-result sys-' + stemUnit(s) + '">' + (exam ? "<b>" + stemName(exam.name, s) + "</b> is on your exam. " : "") + "<b>" + esc(s.stem) + "</b> → " + esc(s.cls) +
+        '<div class="small" style="margin-top:6px">On this exam: ' + s.drugs.map(function (id) { return drugChip(id, s); }).join(" ") + "</div></div>";
+    }).join("");
+  }
+  function decoderView(head) {
+    var withStem = DRUGS.filter(function (d) { return STEM_OF[d.id]; }).length;
+    var cov = function (t) { return S.cover ? '<span class="fv covered" tabindex="0" role="button" aria-label="Tap to reveal">' + t + "</span>" : t; };
+    var byUnit = UNITS.map(function (u) {
+      var list = STEMS.filter(function (s) { return stemUnit(s) === u.id; });
+      if (!list.length) return "";
+      return '<h2 class="stem-unit">' + tag(u.id) + " " + esc(u.name) + "</h2>" +
+        '<div class="stem-grid">' + list.map(function (s) {
+          return '<div class="stem-tile sys-' + u.id + '"><div class="stem-big">' + esc(s.stem) + '</div><div class="drug-cls">' + cov(esc(s.cls)) + "</div>" +
+            '<div class="stem-drugs">' + s.drugs.map(function (id) { return drugChip(id, s); }).join("") + "</div>" +
+            '<p class="small stem-tip">' + cov(esc(s.tip)) + "</p>" +
+            (s.more ? '<p class="tiny" style="margin:0">Same stem, not on this exam: ' + esc(s.more) + "</p>" : "") + "</div>";
+        }).join("") + "</div>";
+    }).join("");
+    app.innerHTML = head +
+      '<div class="card topic-head stem-head"><div class="row switches">' + switchHTML("coverT", S.cover, "Cover mode: hide the classes") + "</div>" +
+        '<h1 style="margin-top:10px">🔤 Name decoder</h1>' +
+        '<p class="small muted" style="margin:0">Many generic names end (or start) with a stem that tells you the class. <b>' + withStem + " of your " + DRUGS.length + " exam drugs</b> follow one. The other " + (DRUGS.length - withStem) + " don't, so they're at the bottom to memorize. Tap a drug to jump to its study guide section. " + srcTag("ADDED") + "</p>" +
+        '<div class="stem-meter" role="img" aria-label="' + withStem + " of " + DRUGS.length + ' drugs follow a stem"><span style="width:' + Math.round(100 * withStem / DRUGS.length) + '%"></span></div>' +
+        '<label class="small" for="stemQ" style="display:block;margin-top:14px;font-weight:700">Decode a name (any drug, even one not on the exam)</label>' +
+        '<input id="stemQ" class="hl-input" type="search" placeholder="e.g. atenolol, amlodipine, omeprazole" autocomplete="off" autocapitalize="off" spellcheck="false">' +
+        '<div id="stemOut" aria-live="polite"></div></div>' +
+      byUnit +
+      '<h2 class="stem-unit">🧠 No stem: memorize these ' + NO_STEM.length + "</h2>" +
+      '<p class="small muted" style="margin-top:0">Their names don\'t give the class away, so learn each one with its hook.</p>' +
+      '<div class="stem-grid">' + NO_STEM.map(function (x) {
+        var d = DRUG[x.drug];
+        return '<div class="stem-tile no-stem sys-' + unitOf(d) + '"><div class="stem-drugs" style="margin-top:0">' + drugChip(d.id) + '</div><div class="drug-cls">' + cov(esc(d.cls)) + '</div><p class="small stem-tip">' + cov(esc(x.hook)) + "</p></div>";
+      }).join("") + "</div>" +
+      '<div class="callout" style="margin-top:20px"><strong>Stems are a shortcut, not a guarantee</strong>Watch the look-alikes: progesterone and testosterone both end in -sterone, and diltiazem is a calcium channel blocker without -dipine. When a question gives a brand name, translate it to the generic first.</div>' +
+      '<div class="row nav-links" style="margin-top:20px"><a class="btn" href="#guide/hy">← High-yield</a><span class="spacer"></span><a class="btn primary" href="#names/suffix">Drill stems in the Name Game →</a></div>';
+    $("#coverT").onclick = function () { S.cover = !S.cover; save(); var y = window.scrollY; decoderView(head); window.scrollTo(0, y); };
+    $$(".fv").forEach(function (f) { f.onclick = f.onkeydown = function (e) { if (e.type === "keydown" && e.key !== "Enter" && e.key !== " ") return; if (e.type === "keydown") e.preventDefault(); f.classList.toggle("covered"); }; });
+    var inp = $("#stemQ");
+    inp.oninput = function () { $("#stemOut").innerHTML = decode(inp.value); };
+  }
+
   /* ================= MEMORY AIDS ================= */
   function memory() {
     app.innerHTML = "<h1>Memory Aids</h1>" +
@@ -591,7 +667,7 @@
       "</tbody></table></div></div>" +
       '<div class="card" style="margin-top:20px"><h2>Name endings that give away the class</h2><div class="table-wrap"><table><thead><tr><th>Ending</th><th>Class</th><th>Example</th></tr></thead><tbody>' +
         SUFFIXES.map(function (s) { return "<tr><td><b>" + esc(s[0]) + "</b></td><td>" + esc(s[1]) + "</td><td>" + esc(s[2]) + "</td></tr>"; }).join("") +
-      '</tbody></table></div><div class="row" style="margin-top:12px"><a class="btn primary" href="#names/suffix">Drill the suffixes</a><a class="btn" href="#names/cat">Drill the categories</a></div></div>';
+      '</tbody></table></div><div class="row" style="margin-top:12px"><a class="btn primary" href="#guide/stems">Open the name decoder</a><a class="btn" href="#names/suffix">Drill the suffixes</a><a class="btn" href="#names/cat">Drill the categories</a></div></div>';
   }
 
   /* ---------- Confetti ---------- */

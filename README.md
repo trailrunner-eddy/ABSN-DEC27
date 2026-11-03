@@ -19,3 +19,7 @@ Each exam guide's practice questions live in `window.QUESTIONS` (listed under `b
 - `guide: true` (Pharm) marks questions from the instructor-based study guide, shown in the guide's "Study guide set".
 
 In every practice set, ← Previous reopens questions you already answered with your picks, the correct answer, and the rationale, so you can review mid-set without finishing it. NCLEX Prep allows this in Tutor mode; Exam mode stays forward-only like the real NCLEX.
+
+## Name decoder (Pharm)
+
+`nura350/exam2/js/stems.js` lists drug-name stems (like `-olol` = beta blocker) with the exam drugs that match each one, plus `NO_STEM` for exam drugs whose names don't follow a stem. It powers the Study Guide's "Name decoder" page, the stem pill on each guide drug, and the Name Game's suffix mode. For a new pharm exam, copy the file and point `drugs` at that exam's drug ids.
