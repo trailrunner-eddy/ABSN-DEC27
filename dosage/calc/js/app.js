@@ -86,7 +86,18 @@
     return '<li class="step"><div class="step-label"><span class="step-n">' + (i + 1) + "</span>" + esc(label) + "</div>" + body + "</li>";
   }
   function stepsHTML(p) { return '<ol class="steps">' + p.steps.map(stepHTML).join("") + "</ol>"; }
-  function stemHTML(p) { return '<div class="q-stem">' + p.lines.map(function (l) { return '<div class="stem-line">' + esc(l) + "</div>"; }).join("") + '<div class="stem-q">' + esc(p.q) + "</div></div>"; }
+  /* Abbreviations in problem text get a dotted underline; hover, focus, or tap shows the meaning above. */
+  var ABBR = {
+    "PRN": "As needed", "PO": "By mouth (per os)", "IV push": "Given directly into the vein with a syringe", "IV": "Intravenous (into a vein)",
+    "IM": "Intramuscular (into a muscle)", "subcut": "Subcutaneous (into the fatty tissue under the skin)",
+    "NS": "Normal saline (0.9% sodium chloride)", "D5W": "5% dextrose in water", "D5 ½NS": "5% dextrose in half-strength (0.45%) normal saline",
+    "D5 ¼NS": "5% dextrose in quarter-strength (0.225%) normal saline", "KCl": "Potassium chloride", "ER": "Extended release",
+    "mEq": "Milliequivalent", "gtt": "Drops (guttae)", "mcg": "Microgram", "tsp": "Teaspoon", "Tbsp": "Tablespoon", "oz": "Ounce", "lb": "Pound",
+    "hr": "Hour", "min": "Minute", "kg": "Kilogram", "mg": "Milligram", "mL": "Milliliter", "L": "Liter", "g": "Gram"
+  };
+  var ABBR_RE = new RegExp("(^|[^A-Za-z0-9½¼])(" + Object.keys(ABBR).sort(function (a, b) { return b.length - a.length; }).map(function (k) { return k.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }).join("|") + ")(?![A-Za-z0-9])", "g");
+  function abbr(text) { return esc(text).replace(ABBR_RE, function (m, pre, k) { return pre + '<abbr class="ab" tabindex="0" data-tip="' + esc(ABBR[k]) + '">' + k + "</abbr>"; }); }
+  function stemHTML(p) { return '<div class="q-stem">' + p.lines.map(function (l) { return '<div class="stem-line">' + abbr(l) + "</div>"; }).join("") + '<div class="stem-q">' + abbr(p.q) + "</div></div>"; }
   function answerText(p) { return fmt(p.answer) + " " + p.unit; }
 
   /* ---------- Answer checking ---------- */
@@ -326,7 +337,7 @@
         '<div class="row" style="justify-content:center"><button class="btn primary" id="newset">New set</button><a class="btn" href="#learn">Lessons</a></div></div>' +
         (wrong.length ? '<h2 style="margin-top:24px">Review what you missed</h2>' + wrong.map(function (i) {
           var p = BYID[ids[i]], r = results[i];
-          return '<details class="card miss sys-' + p.cat + '"><summary><div class="q-meta"><span class="chip">' + esc(TOPIC[p.tid].name) + "</span>" + diffChip(p.diff) + '</div><div class="miss-stem">' + esc(p.lines.join(" ") + " " + p.q) + '</div><div class="small">You: <b class="bad-t">' + esc(r.raw) + "</b> · Answer: <b class=\"good-t\">" + esc(answerText(p)) + "</b></div></summary>" + stepsHTML(p) + "</details>";
+          return '<details class="card miss sys-' + p.cat + '"><summary><div class="q-meta"><span class="chip">' + esc(TOPIC[p.tid].name) + "</span>" + diffChip(p.diff) + '</div><div class="miss-stem">' + abbr(p.lines.join(" ") + " " + p.q) + '</div><div class="small">You: <b class="bad-t">' + esc(r.raw) + "</b> · Answer: <b class=\"good-t\">" + esc(answerText(p)) + "</b></div></summary>" + stepsHTML(p) + "</details>";
         }).join("") : "");
       $("#newset").onclick = function () { practice(key); window.scrollTo(0, 0); };
       if (pct >= 90 && n >= 5) confetti();
@@ -368,6 +379,23 @@
     var dark = S.theme === "dark" || (S.theme === "auto" && window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches);
     S.theme = dark ? "light" : "dark"; save(); applyTheme();
   };
+  /* One floating tooltip for every abbreviation, kept inside the screen. */
+  var tip = document.createElement("div"); tip.className = "ab-tip"; tip.setAttribute("role", "tooltip"); tip.hidden = true; document.body.appendChild(tip);
+  var tipFor = null;
+  function showTip(el) {
+    tipFor = el; tip.textContent = el.getAttribute("data-tip"); tip.hidden = false;
+    var r = el.getBoundingClientRect(), w = tip.offsetWidth, h = tip.offsetHeight;
+    var left = Math.max(8, Math.min(innerWidth - w - 8, r.left + r.width / 2 - w / 2)), top = r.top - h - 8;
+    if (top < 8) top = r.bottom + 8;
+    tip.style.left = left + "px"; tip.style.top = top + "px";
+  }
+  function hideTip() { tip.hidden = true; tipFor = null; }
+  document.addEventListener("mouseover", function (e) { var a = e.target.closest && e.target.closest(".ab"); if (a) showTip(a); else if (tipFor && !tipFor.contains(document.activeElement)) hideTip(); });
+  document.addEventListener("focusin", function (e) { if (e.target.classList && e.target.classList.contains("ab")) showTip(e.target); });
+  document.addEventListener("focusout", function (e) { if (e.target === tipFor) hideTip(); });
+  document.addEventListener("click", function (e) { var a = e.target.closest && e.target.closest(".ab"); if (a) { e.preventDefault(); showTip(a); } else hideTip(); });
+  window.addEventListener("scroll", hideTip, { passive: true });
+  window.addEventListener("hashchange", hideTip);
   applyTheme();
   document.getElementById("xp").textContent = S.xp;
   route();
