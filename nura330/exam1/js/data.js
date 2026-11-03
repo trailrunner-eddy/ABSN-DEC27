@@ -9,7 +9,7 @@ window.GUIDE = {
   heroArt: "🫁",
   heroText: "50 items (multiple choice and SATA) in 75 minutes, 15% of the course grade. Respiratory (20–22 Qs) and the general survey and health history (18–20 Qs) carry the most weight. Exam 1 is behind you, but this material comes back on the final.",
   formats: ["Multiple choice", "Select all that apply"],
-  formatNote: "The exam is MC and SATA only. Practice Qs adds a few NGN formats (select N, cloze, matrix) for extra reps.",
+  formatNote: "The exam is MC and SATA only, so Practice Qs uses only these two formats. Every question is rated easy, medium, or hard.",
   chainTitle: "The assessment chain",
   chainNote: "What it is and why it matters → what you ask (subjective) → what you do or observe (objective) → what to report or avoid.",
   chainShort: "a why → ask → examine → report chain",
