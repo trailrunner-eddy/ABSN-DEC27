@@ -121,7 +121,15 @@ window.PROGRAM = {
         },
         {
           id: "dosage", code: "", name: "Dosage Calc", icon: "🧮", color: "#c27a17",
-          exams: []
+          exams: [
+            {
+              name: "Med Math & IV Rates", status: "ready",
+              path: "dosage/calc/index.html",
+              blurb: "Learn dimensional analysis, then practice medication math and IV flow rates with typed answers and step-by-step solutions. Only the ATI conversion chart is given, like the exam.",
+              topics: ["Med math", "IV flow rates", "ATI chart"],
+              stats: "11 lessons · 200 problems (100 med math, 100 IV) · easy to hard"
+            }
+          ]
         },
         {
           id: "nutrition", code: "", name: "Nutrition", icon: "🥗", color: "#4b5fc9",
