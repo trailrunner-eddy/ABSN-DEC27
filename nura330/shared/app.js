@@ -435,13 +435,30 @@ var tiles = [
     if ($("#redo")) $("#redo").onclick = function () { runQuiz(shuffle(missed), sys); };
   }
 
+  /* Select-all-that-apply partial credit: (right picks - wrong picks) / number of right answers, never below 0.
+     e.g. 3 right answers: pick 2 right = 2/3; pick 3 right + 1 wrong = 2/3. Other types are all-or-nothing. */
+  function credit(type, sel, ans) {
+    var hit = sel.filter(function (k) { return ans.indexOf(k) > -1; }).length;
+    var full = sel.length === ans.length && hit === ans.length;
+    if (type !== "sata") return allOrNothing(full);
+    var net = Math.max(0, hit - (sel.length - hit));
+    return { sata: true, net: net, of: ans.length, pts: net / ans.length, ok: net === ans.length };
+  }
+  function allOrNothing(ok) { return { sata: false, net: ok ? 1 : 0, of: 1, pts: ok ? 1 : 0, ok: ok }; }
+  function fmtPts(p) { return String(Math.round(p * 100) / 100); }
+  function verdict(c) {
+    return '<div class="rationale ' + (c.ok ? "ok" : c.pts > 0 ? "part" : "no") + '"><strong>' + (c.ok ? "Correct!" : c.pts > 0 ? "Partial credit." : "Not quite.") +
+      (c.sata ? " " + c.net + "/" + c.of + " points" : "") + "</strong>";
+  }
+  function partChip(c) { return c && c.sata && c.pts > 0 && !c.ok ? '<span class="chip">' + c.net + "/" + c.of + " points</span>" : ""; }
+
   function runQuiz(ids, sys) {
     var pos = 0, score = 0, results = [];
     function next() {
       if (pos >= ids.length) return finish();
       var qi = ids[pos], q = QUESTIONS[qi];
       var html = '<div class="q-card card sys-' + q.sys + '"><div class="progress" style="margin-bottom:14px"><span style="width:' + (100 * pos / ids.length) + '%"></span></div>' +
-        '<div class="q-meta">' + tag(q.sys) + '<span class="chip">' + TYPE_LABEL[q.type] + (q.type === "selectn" ? " · pick " + q.n : "") + "</span>" + diffChip(q.diff) + '<span class="spacer"></span><span class="tiny">' + (pos + 1) + " / " + ids.length + " · score " + score + "</span></div>";
+        '<div class="q-meta">' + tag(q.sys) + '<span class="chip">' + TYPE_LABEL[q.type] + (q.type === "selectn" ? " · pick " + q.n : "") + "</span>" + diffChip(q.diff) + '<span class="spacer"></span><span class="tiny">' + (pos + 1) + " / " + ids.length + " · score " + fmtPts(score) + "</span></div>";
       if (q.type === "cloze") {
         var i = 0;
         html += '<p class="small muted">Choose the option that best completes each blank.</p><div class="cloze">' + esc(q.stem).replace(/\{(\d+)\}/g, function (m, n) {
@@ -468,12 +485,12 @@ var tiles = [
       $("#submit").onclick = function () { grade(q, qi); };
     }
     function grade(q, qi) {
-      var ok = false;
+      var ok = false, cr = null;
       if (q.type === "mc" || q.type === "sata" || q.type === "selectn") {
         var sel = $$(".opt.sel").map(function (b) { return +b.getAttribute("data-k"); });
         if (!sel.length) { toast("Choose an answer first"); return; }
         var ans = q.type === "mc" ? [q.answer] : q.answer;
-        ok = sel.length === ans.length && sel.every(function (k) { return ans.indexOf(k) > -1; });
+        cr = credit(q.type, sel, ans); ok = cr.ok;
         $$(".opt").forEach(function (b) { var k = +b.getAttribute("data-k"); b.disabled = true; var isA = ans.indexOf(k) > -1, isS = sel.indexOf(k) > -1;
           b.classList.remove("sel"); if (isA && isS) b.classList.add("right"); else if (isS) b.classList.add("wrong"); else if (isA) b.classList.add("right", "missed");
           b.querySelector(".box").textContent = isA ? "✓" : isS ? "✕" : ""; });
@@ -490,21 +507,22 @@ var tiles = [
         q.rows.forEach(function (r, ri) { var cell = app.querySelector('td[data-r="' + ri + '"][data-c="' + r[1] + '"]'); cell.classList.add("right"); if (picks[ri] !== r[1]) { ok = false; app.querySelector('td[data-r="' + ri + '"][data-c="' + picks[ri] + '"]').classList.add("wrong"); } });
         $$(".matrix input").forEach(function (x) { x.disabled = true; });
       }
+      if (!cr) cr = allOrNothing(ok);
       S.q[qi] = ok ? 1 : (S.q[qi] === 1 ? 1 : 0);
-      if (ok) { score++; addXP(10); } save();
-      results.push({ qi: qi, ok: ok });
-      $("#rat").innerHTML = '<div class="rationale ' + (ok ? "ok" : "no") + '"><strong>' + (ok ? "Correct!" : "Not quite.") + "</strong>" + esc(q.why) + "</div>";
+      score += cr.pts; if (cr.pts) addXP(Math.round(10 * cr.pts)); save();
+      results.push({ qi: qi, ok: ok, cr: cr });
+      $("#rat").innerHTML = verdict(cr) + esc(q.why) + "</div>";
       var btn = $("#submit"); btn.textContent = pos + 1 >= ids.length ? "See results" : "Next question →";
       btn.onclick = function () { pos++; next(); };
       btn.focus();
     }
     function finish() {
-      var pct = Math.round(100 * score / ids.length);
+      var pct = Math.round(100 * score / ids.length), full = results.filter(function (r) { return r.ok; }).length;
       var wrong = results.filter(function (r) { return !r.ok; });
-      app.innerHTML = '<div class="card scoreboard"><div style="font-size:44px">' + (pct >= 85 ? "🏆" : pct >= 70 ? "💪" : "📖") + '</div><div class="big-score">' + pct + '%</div><p class="muted">' + score + " of " + ids.length + " correct</p>" +
+      app.innerHTML = '<div class="card scoreboard"><div style="font-size:44px">' + (pct >= 85 ? "🏆" : pct >= 70 ? "💪" : "📖") + '</div><div class="big-score">' + pct + '%</div><p class="muted">' + fmtPts(score) + " of " + ids.length + " points · " + full + " fully correct</p>" +
         "<p>" + (pct >= 85 ? "Exam-ready on this set." : pct >= 70 ? "Solid. Review the rationales you missed." : "Go back to the topic pages for the systems you missed, then retry.") + "</p>" +
         '<div class="row" style="justify-content:center"><a class="btn primary" href="#quiz' + (sys ? "/" + sys : "") + '">New set</a><a class="btn" href="#topics">Topics</a></div></div>' +
-        (wrong.length ? '<h2 style="margin-top:24px">Review what you missed</h2>' + wrong.map(function (r) { var q = QUESTIONS[r.qi]; return '<div class="card sys-' + q.sys + '" style="margin-bottom:12px"><div class="q-meta">' + tag(q.sys) + '<span class="chip">' + TYPE_LABEL[q.type] + "</span>" + diffChip(q.diff) + '</div><p><b>' + esc(q.stem.replace(/\{\d+\}/g, "___")) + '</b></p><p class="small muted">' + esc(q.why) + "</p></div>"; }).join("") : "");
+        (wrong.length ? '<h2 style="margin-top:24px">Review what you missed</h2>' + wrong.map(function (r) { var q = QUESTIONS[r.qi]; return '<div class="card sys-' + q.sys + '" style="margin-bottom:12px"><div class="q-meta">' + tag(q.sys) + '<span class="chip">' + TYPE_LABEL[q.type] + "</span>" + diffChip(q.diff) + partChip(r.cr) + '</div><p><b>' + esc(q.stem.replace(/\{\d+\}/g, "___")) + '</b></p><p class="small muted">' + esc(q.why) + "</p></div>"; }).join("") : "");
       if (pct >= 85) confetti();
     }
     next();
