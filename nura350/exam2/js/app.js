@@ -121,7 +121,7 @@
     var other = d.cats.filter(function (c) { return c !== catId; });
     return '<details class="card drug-card sys-' + u + '" id="d-' + d.id + '"' + (open ? " open" : "") + ">" +
       '<summary><div class="drug-head"><h3>' + title(d) + (S.drugs[d.id] ? ' <span class="chip good-chip">✓</span>' : "") + '</h3><div class="drug-cls">' + esc(d.cls) + (d.note ? " · " + esc(d.note) : "") + "</div></div></summary>" +
-      (ON_GUIDE[d.id] ? '<p class="small"><a class="chip guide-chip" href="#guide/' + ON_GUIDE[d.id].id + '">📋 On the study guide: ' + esc(ON_GUIDE[d.id].name) + "</a></p>" : '<p class="small muted">Not on the instructor\'s study guide, but still in your drug tables.</p>') +
+      (ON_GUIDE[d.id] ? '<p class="small"><a class="chip guide-chip" href="#guide/' + ON_GUIDE[d.id].id + '">📋 ' + (G.added.indexOf(d.id) > -1 ? "Added to the study guide: " : "On the study guide: ") + esc(ON_GUIDE[d.id].name) + "</a></p>" : '<p class="small muted">Not on the instructor\'s study guide, but still in your drug tables.</p>') +
       (other.length ? '<p class="small muted">Also in: ' + other.map(function (c) { return '<a href="#drugs/' + c + '">' + esc(CAT[c].name) + "</a>"; }).join(", ") + "</p>" : "") +
       '<div class="plain-card card plain-box"' + (S.plain ? "" : " hidden") + '><h4>🗣 In plain words</h4><p>' + esc(d.plain) + "</p></div>" +
       '<div class="key-line"><b>Must know:</b> ' + esc(d.key) + "</div>" +
@@ -214,8 +214,8 @@
   }
 
   /* ================= STUDY GUIDE ================= */
-  var SRC = { ATI: "ATI tables", LECTURE: "Lecture", ADDED: "Study aid", CORRECTED: "Corrected" };
-  function srcTag(s) { return '<span class="src src-' + s.toLowerCase() + '">' + SRC[s] + "</span>"; }
+  var SRC = { ATI: "ATI tables", LECTURE: "Lecture", ADDED: "Study aid", CORRECTED: "Corrected", EXTRA: "Added: not on instructor guide" };
+  function srcTag(s) { return '<span class="src src-' + (s === "EXTRA" ? "added" : s.toLowerCase()) + '">' + SRC[s] + "</span>"; }
   function gv(text) { return '<span class="fv' + (S.cover ? " covered" : "") + '" tabindex="0">' + esc(text) + "</span>"; }
   function guideNav(key) {
     return '<div class="filter-bar guide-bar"><a class="chip ' + (!key ? "on" : "") + '" href="#guide">Overview</a>' +
@@ -226,7 +226,8 @@
     var d = DRUG[g.drug];
     return '<div class="card guide-drug sys-' + d.cats.map(function (c) { return CAT[c].sys; })[0] + '">' +
       '<div class="row guide-drug-head"><h3>' + esc(g.title) + (g.brand ? ' <span class="brand-name">(' + esc(g.brand) + ")</span>" : "") + '</h3><span class="spacer"></span><a class="small" href="#drug/' + d.id + '">Full drug table →</a></div>' +
-      '<div class="drug-cls">' + esc(g.cls) + (g.clsFix ? " " + srcTag("CORRECTED") : "") + "</div>" +
+      '<div class="drug-cls">' + esc(g.cls) + (g.clsFix ? " " + srcTag("CORRECTED") : "") + (g.added ? " " + srcTag("EXTRA") : "") + "</div>" +
+      (g.added ? '<p class="tiny" style="margin:4px 0 0">All 44 drugs are in play. These rows come from your ATI drug table and the lecture, not the instructor\'s takeaways.</p>' : "") +
       (g.clsFix ? '<p class="tiny" style="margin:4px 0 0">' + esc(g.clsFix) + "</p>" : "") +
       '<dl class="drug-fields guide-fields">' + g.rows.map(function (r) {
         return "<dt>" + esc(r[0]) + "</dt><dd>" + gv(r[1]) + (r[2] ? '<div class="fix">' + srcTag("CORRECTED") + " " + esc(r[2]) + "</div>" : "") + "</dd>";
@@ -277,8 +278,8 @@
     if (key === "notes") {
       app.innerHTML = head +
         '<div class="card"><h2>Notes on the instructor guide</h2><ol class="facts">' + G.notes.map(function (n, i) { return "<li>" + (i < 2 ? srcTag("CORRECTED") + " " : "") + "<b>" + esc(n[0]) + ".</b> " + esc(n[1]) + "</li>"; }).join("") + "</ol></div>" +
-        '<div class="card" style="margin-top:20px"><h2>In your drug tables but not on the instructor guide</h2><p class="small muted">The instructor says to still review the medication tables, so skim these too.</p><div class="row" style="flex-wrap:wrap;gap:8px">' +
-          G.notOnGuide.map(function (id) { var d = DRUG[id]; return '<a class="chip" href="#drug/' + id + '"><span class="sys-dot sys-' + unitOf(d) + '"></span>' + esc(d.name) + "</a>"; }).join("") + "</div></div>";
+        '<div class="card" style="margin-top:20px"><h2>Added so all 44 drugs are covered</h2><p class="small muted">The instructor guide skipped these, but the instructor says all 44 drugs are in play. Each now has a guide entry built from your ATI drug tables and the lectures, plus its own practice questions.</p><div class="row" style="flex-wrap:wrap;gap:8px">' +
+          G.added.map(function (id) { var d = DRUG[id]; return '<a class="chip" href="#guide/' + ON_GUIDE[id].id + '"><span class="sys-dot sys-' + unitOf(d) + '"></span>' + esc(d.name) + " · " + esc(ON_GUIDE[id].name) + "</a>"; }).join("") + '</div><div class="row" style="margin-top:12px"><a class="btn primary" href="#quiz/added">Practice the added drugs</a></div></div>';
       return;
     }
     var nDrugs = GSECS.reduce(function (n, g) { return n + g.drugs.length; }, 0);
@@ -289,9 +290,10 @@
       '<div class="stack"><div class="card"><h2>Instructor\'s study tips</h2><p style="margin:0">' + esc(G.tips) + "</p></div>" +
         '<div class="card"><h2>How to read this guide</h2><ul class="facts small"><li><b>Plain rows</b> are the instructor\'s exam takeaways. Study these first.</li>' +
           "<li><b>Also know</b> rows add context, tagged by source: " + srcTag("ATI") + " your ATI medication tables, " + srcTag("LECTURE") + " the recorded lectures and slides, " + srcTag("ADDED") + " memory tips and comparisons.</li>" +
+          "<li>" + srcTag("EXTRA") + " marks the " + G.added.length + " drugs the instructor guide skipped; all 44 are in play, so they're built from your ATI tables and lectures.</li>" +
           "<li>" + srcTag("CORRECTED") + " marks a likely error in the instructor guide; see the <a href=\"#guide/notes\">notes</a>.</li>" +
           "<li><b>Cover mode</b> blurs every takeaway so you can quiz yourself.</li></ul></div>" +
-        '<div class="card"><h2>Then practice</h2><p class="small muted">' + nQ + ' questions from the study guide\'s practice set, plus the High-Yield Comparisons tables.</p><div class="row"><a class="btn primary" href="#quiz/guide">Study guide questions</a><a class="btn" href="#guide/hy">⭐ High-yield</a></div></div></div></div>';
+        '<div class="card"><h2>Then practice</h2><p class="small muted">' + nQ + ' questions from the study guide\'s practice set, plus the High-Yield Comparisons tables.</p><div class="row"><a class="btn primary" href="#quiz/guide">Study guide questions</a><a class="btn" href="#guide/hy">⭐ High-yield</a><a class="btn" href="#quiz/added">➕ Added drugs</a></div></div></div></div>';
   }
 
   /* ================= COMPARE ================= */
@@ -385,12 +387,12 @@
   var TYPE_LABEL = { mc: "Multiple choice", sata: "Select all that apply" };
   var DIFF = { easy: ["Easy", "recall a fact or definition"], medium: ["Medium", "apply a concept to a client"], hard: ["Hard", "multi-step or technical reasoning"] };
   function diffChip(d) { return DIFF[d] ? '<span class="chip diff diff-' + d + '" title="' + DIFF[d][1] + '">' + DIFF[d][0] + "</span>" : ""; }
-  function qChips(q) { return tag(q.sys) + '<span class="chip">' + TYPE_LABEL[q.type] + "</span>" + diffChip(q.diff) + (q.guide ? '<span class="chip guide-chip">📋 Study guide</span>' : ""); }
+  function qChips(q) { return tag(q.sys) + '<span class="chip">' + TYPE_LABEL[q.type] + "</span>" + diffChip(q.diff) + (q.guide ? '<span class="chip guide-chip">📋 Study guide</span>' : "") + (q.added ? '<span class="chip guide-chip">➕ Added drug</span>' : ""); }
   var quizDiff = "all";
-  // unitId is a unit id, "guide" (the study guide's practice set), or empty for all
+  // unitId is a unit id, "guide" (the study guide's practice set), "added" (the drugs added to the guide), or empty for all
   function quiz(unitId) {
-    unitId = UNIT[unitId] || unitId === "guide" ? unitId : null;
-    var pool = QUESTIONS.map(function (q, i) { return i; }).filter(function (i) { return !unitId || (unitId === "guide" ? QUESTIONS[i].guide : QUESTIONS[i].sys === unitId); });
+    unitId = UNIT[unitId] || unitId === "guide" || unitId === "added" ? unitId : null;
+    var pool = QUESTIONS.map(function (q, i) { return i; }).filter(function (i) { return !unitId || (unitId === "guide" ? QUESTIONS[i].guide : unitId === "added" ? QUESTIONS[i].added : QUESTIONS[i].sys === unitId); });
     function inDiff(i) { return quizDiff === "all" || QUESTIONS[i].diff === quizDiff; }
     function countOf(f) { return pool.filter(f).length; }
     var answered = pool.filter(function (i) { return S.q[i] !== undefined; }).length;
@@ -399,7 +401,8 @@
     var count = 10;
     var bar = '<div class="filter-bar"><a class="chip ' + (!unitId ? "on" : "") + '" href="#quiz">All</a>' +
       UNITS.map(function (u) { return '<a class="chip ' + (unitId === u.id ? "on" : "") + '" href="#quiz/' + u.id + '"><span class="sys-dot sys-' + u.id + '"></span>' + esc(u.short) + "</a>"; }).join("") +
-      '<a class="chip ' + (unitId === "guide" ? "on" : "") + '" href="#quiz/guide">📋 Study guide set</a></div>';
+      '<a class="chip ' + (unitId === "guide" ? "on" : "") + '" href="#quiz/guide">📋 Study guide set</a>' +
+      '<a class="chip ' + (unitId === "added" ? "on" : "") + '" href="#quiz/added">➕ Added drugs</a></div>';
     app.innerHTML = '<h1>Practice Questions</h1><p class="muted">Multiple choice and select all that apply. Every question is rated by difficulty and explains why the answer is right.</p>' + bar +
       '<div class="grid grid-2"><div class="card"><h2>Start a set</h2><p class="small muted">' + pool.length + " questions here · " + answered + " tried · " + correct + " correct</p>" +
         '<div class="row" style="margin:12px 0"><span class="small">How many?</span>' + [10, 20, "All"].map(function (n, k) { return '<button class="chip' + (k === 0 ? " on" : "") + '" data-n="' + n + '">' + n + "</button>"; }).join("") + "</div>" +

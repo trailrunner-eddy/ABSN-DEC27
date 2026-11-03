@@ -82,10 +82,25 @@ window.GUIDE = {
         rows: [["Therapeutic use", "Ischemic stroke, PE, DVT; MI, unstable chest pain, dysrhythmias."],
                ["Nursing priorities", "Monitor pulse and BP; monitor for bleeding; monitor aPTT to adjust infusion dosing; monitor for thrombocytopenia."]],
         also: [["ADDED", "Antidote: protamine sulfate. Thrombocytopenia warning = heparin-induced thrombocytopenia (HIT)."]] },
+      { drug: "enoxaparin", added: true, title: "Enoxaparin", brand: "Lovenox", cls: "Anticoagulant, low molecular weight heparin (LMWH)",
+        rows: [["Action", "Inhibits factor X, so clots can't form or grow."],
+               ["Therapeutic use", "Prevent DVT; treat DVT with or without PE; prevent ischemic complications of NSTEMI and unstable angina."],
+               ["Nursing priorities", "Monitor for bleeding and thrombocytopenia (platelets). Watch for allergic reaction."],
+               ["Adverse effects", "Hemorrhage."]],
+        also: [["LECTURE", "Given subcutaneously; very common in the hospital for immobile clients and after orthopedic repairs or replacements, to prevent DVTs."],
+               ["ADDED", "Inject deep subQ in the abdomen at least 2 inches from the umbilicus; don't expel the air bubble or rub the site. Unlike IV heparin, no routine aPTT. Protamine sulfate partially reverses it."]] },
       { drug: "aspirin", title: "Aspirin", brand: "Bayer", cls: "Salicylate, antiplatelet",
         rows: [["Therapeutic use", "Pain; cardiovascular and ischemic risk reduction (antiplatelet effect)."],
                ["Nursing assessment", "Monitor for GI bleeding: black/dark stools, abdominal pain, nausea, hematemesis. Monitor GI symptoms."]],
         also: [["LECTURE", "Avoid other NSAIDs. No aspirin in children (Reye's syndrome)."]] },
+      { drug: "clopidogrel", added: true, title: "Clopidogrel", brand: "Plavix", cls: "Platelet aggregation inhibitor (antiplatelet)",
+        rows: [["Action", "Irreversibly blocks the platelet P2Y12 (ADP) receptor so platelets can't clump on vessel walls."],
+               ["Therapeutic use", "Unstable angina; secondary prevention after MI, stroke, or peripheral arterial disease; keeps coronary stents from reclosing."],
+               ["Nursing priorities", "Monitor for bleeding and bruising. Check hemoglobin and hematocrit. Assess for rash and pruritus (allergic reaction)."],
+               ["Client teaching", "Report unexpected bleeding or bruising. Avoid high-injury activities. Tell every provider you take it. Take with food to decrease GI upset."]],
+        also: [["LECTURE", "The antiplatelet prototype: prevents platelets from clumping so blood keeps flowing through the vessel. Monitor bleeding and CBC (H&H), and watch for rash and itching."],
+               ["ATI", "Contraindicated with active bleeding, peptic ulcer disease, bleeding disorders, thrombocytopenia. Adverse: major bleeding, GI ulceration, thrombotic thrombocytopenic purpura (rare)."],
+               ["ADDED", "Like aspirin it works on platelets, not clotting factors, and it doesn't dissolve a clot (only alteplase does). The block is permanent for the life of the platelet, so it's usually stopped before surgery as the provider directs."]] },
       { drug: "alteplase", title: "Alteplase", brand: "Activase", cls: "Thrombolytic (tPA)",
         rows: [["Action", "Breaks down fibrin and fibrinogen to dissolve the thrombus. The only true clot buster."],
                ["Nursing priority", "Monitor for bleeding. Monitor aPTT, CBC, fibrinogen. Assess neurological status. Monitor BP."],
@@ -142,7 +157,15 @@ window.GUIDE = {
         rows: [["Side effects", "Flushing, dyspepsia, headache, dizziness, hypotension."],
                ["Interactions", "Nitrates, alpha-adrenergic receptor antagonists (e.g., tamsulosin, doxazosin)."]],
         also: [["ADDED", "Both interactions mean the same thing: stacked vasodilation causes severe hypotension."],
-               ["LECTURE", "Taken about 1 hour before sexual activity."]] }
+               ["LECTURE", "Taken about 1 hour before sexual activity."]] },
+      { drug: "oxybutynin", added: true, title: "Oxybutynin", brand: "Ditropan", cls: "Anticholinergic, urinary antispasmodic",
+        rows: [["Therapeutic use", "Overactive bladder: relaxes the bladder (detrusor) muscle to decrease urgency and frequency."],
+               ["Nursing priorities", "Assess voiding pattern and residual urine. Monitor level of consciousness."],
+               ["Side effects", "Dry mouth, constipation, blurred vision, nausea, dizziness, drowsiness."],
+               ["Contraindications", "Urinary retention, intestinal obstruction, narrow-angle glaucoma."]],
+        also: [["LECTURE", "Lots of side effects because it's anticholinergic; dry mouth is very common. Overactive bladder becomes more common with age, so think of older adults."],
+               ["ATI", "Adverse: confusion, hallucinations, tachycardia, chest pain, angioedema. Avoid driving until the effect is known; use caution with CNS depressants; rotate transdermal patch sites."],
+               ["ADDED", "Anticholinergic \"dry\" effects: can't see, can't pee, can't spit, can't poop. Same family as dicyclomine and scopolamine."]] }
     ] },
     { id: "hormone", name: "Reproductive Hormone Therapy", sys: "gu", icon: "⚧️", drugs: [
       { drug: "estradiol", title: "Estrogens / Estradiol", brand: "", cls: "Hormone, estrogen", clsFix: "The instructor guide labels this \"Hormone, androgen\" (see note 2).",
@@ -153,7 +176,24 @@ window.GUIDE = {
         rows: [["Therapeutic use", "Increase male characteristics (low testosterone, transgender clients); delayed puberty; hypogonadism; androgen-responsive breast cancer."],
                ["Adverse effects", "DVT, liver toxicity, stroke, suicidal thoughts, PE, anaphylaxis."]],
         also: [["LECTURE", "Monitor I&O and weight (fluid retention). Mostly IM; also gel, cream, patch."],
-               ["ADDED", "Gel can transfer to others by skin contact."]] }
+               ["ADDED", "Gel can transfer to others by skin contact."]] },
+      { drug: "progesterone", added: true, title: "Progesterone", brand: "Prometrium", cls: "Synthetic progestogen, steroidal antiandrogen",
+        rows: [["Action", "Causes secretory changes in the endometrium (can thicken the lining, so cycles may change); relaxes uterine smooth muscle; inhibits the pituitary."],
+               ["Therapeutic use", "Suppresses endogenous androgens, reducing masculine characteristics; often used in gender-affirming care."],
+               ["Nursing priorities", "Assess for thromboembolism (chest pain, dyspnea, DVT). Monitor mood, liver function, BP, weekly weight, and blood glucose."],
+               ["Adverse effects", "DVT, PE, MI, liver toxicity and tumors, meningiomas."],
+               ["Contraindications", "Peanut allergy, thromboembolism, breast cancer, liver impairment, severe depression, cardiovascular disease, pregnancy."]],
+        also: [["LECTURE", "DVT is the most serious adverse effect. Teach to take it as prescribed (a missed pill can affect contraception) and how to self-check for DVT. Also used for abnormal uterine bleeding, HRT, and endometrial cancer."],
+               ["ATI", "Side effects: fatigue, weakness, glucose intolerance. Avoid alcohol. Fatigue in the first week, so avoid driving if affected. Take a missed dose when remembered, but never double."],
+               ["ADDED", "Why peanuts: the Prometrium capsule is made with peanut oil."]] },
+      { drug: "combination-estrogen-progestin", added: true, title: "Combination Estrogen-Progestin", brand: "Ortho Tri-Cyclen, Yaz", cls: "Combined oral contraceptive",
+        rows: [["Action", "Prevents ovulation, changes the uterine lining, and thickens cervical mucus so sperm can't enter."],
+               ["Therapeutic use", "Birth control; acne; benign breast disease; ovarian cysts; premenstrual syndrome."],
+               ["Nursing priorities", "Confirm the client is not pregnant or breastfeeding. Take a health history for clot and stroke risk: blood clots, breast cancer, MI, stroke, migraines, uncontrolled hypertension, smoking."],
+               ["Contraindications", "Pregnancy, breastfeeding, history of blood clots, breast cancer, MI, stroke, uncontrolled hypertension, migraine with aura, less than 21 days postpartum, smoking."],
+               ["Client teaching", "Start the pills exactly as directed. Withdrawal bleeding on the low- or no-dose days is expected. After missed doses, use a backup method of birth control."]],
+        also: [["LECTURE", "Assess clot history, smoking, signs of DVT, and possible pregnancy: a pregnant client cannot be started on an oral contraceptive."],
+               ["ADDED", "Warning signs to report, \"ACHES\": Abdominal pain, Chest pain, Headache (severe), Eye problems (vision loss), Severe leg pain. They match the ATI adverse effects (stroke, MI, PE, DVT, liver problems)."]] }
     ] },
     { id: "ulcer", name: "GI Meds: Antacids and Ulcer Meds", sys: "gi", icon: "🍽️", drugs: [
       { drug: "calcium-carbonate", title: "Calcium Carbonate", brand: "Tums", cls: "Antacid",
@@ -164,6 +204,13 @@ window.GUIDE = {
         rows: [["Therapeutic use", "Decreases acid reflux; heals duodenal ulcers and esophagitis."],
                ["Precautions", "Long-term use; clients planning or suspecting pregnancy."]],
         also: [["ATI", "Blocks the stomach's acid pump (H⁺/K⁺-ATPase). Long-term risks: bone fractures, C. diff, low B12, low magnesium. Avoid alcohol, aspirin, NSAIDs; report black tarry stools."]] },
+      { drug: "famotidine", added: true, title: "Famotidine", brand: "Pepcid", cls: "Antiulcer agent, H2 receptor antagonist (\"-tidine\")",
+        rows: [["Action", "Blocks H2 (histamine) receptors on the stomach's parietal cells, reducing acid secretion."],
+               ["Therapeutic use", "Short-term treatment of PUD, GERD, heartburn, hypersecretory conditions; prevents stress-induced GI bleeding in critically ill clients."],
+               ["Nursing priorities", "Monitor CBC with differential. Assess epigastric or abdominal pain and blood in stool or emesis. Monitor older adults for confusion."],
+               ["Adverse effects", "Confusion, cardiac arrhythmias, blood disorders (agranulocytosis, aplastic anemia, thrombocytopenia, neutropenia), drug-induced hepatitis."]],
+        also: [["ATI", "Side effects: drowsiness, headache, constipation or diarrhea. Don't smoke; avoid aspirin, NSAIDs, alcohol. Report black tarry stools, fever, sore throat, rash, or confusion. Don't take maximum doses for more than 2 weeks without the provider."],
+               ["ADDED", "Compare: pantoprazole (PPI) shuts off the acid pump itself and is stronger; famotidine blocks one of the pump's \"on\" signals (histamine); calcium carbonate only neutralizes acid that's already there."]] },
       { drug: "sucralfate", title: "Sucralfate", brand: "Carafate", cls: "GI protectant",
         rows: [["Therapeutic use", "Acute duodenal ulcers."],
                ["Administration", "Give orally on an empty stomach, four times a day: 1 hour before each of the three meals and at bedtime."]],
@@ -181,7 +228,14 @@ window.GUIDE = {
         also: [["ATI", "Used for nausea from chemo, radiation, anesthesia, and pregnancy. Serotonin syndrome risk rises with SSRIs, SNRIs, triptans, fentanyl, tramadol. Contraindicated with congenital long QT syndrome."]] },
       { drug: "metoclopramide", title: "Metoclopramide", brand: "Reglan", cls: "Antiemetic, dopamine receptor antagonist",
         rows: [["Nursing priority", "Assess for: Parkinsonian symptoms (trouble speaking or swallowing, shuffling gait, mask-like face); dystonia (repetitive twisting contractions, inability to move eyes); tardive dyskinesia (involuntary movements of tongue, face, neck)."]],
-        also: [["ATI", "Speeds gastric emptying. These extrapyramidal symptoms may be irreversible. Contraindicated with GI obstruction or bleed, seizures, Parkinson's. On the Beers list (caution in older adults)."]] }
+        also: [["ATI", "Speeds gastric emptying. These extrapyramidal symptoms may be irreversible. Contraindicated with GI obstruction or bleed, seizures, Parkinson's. On the Beers list (caution in older adults)."]] },
+      { drug: "scopolamine", added: true, title: "Scopolamine", brand: "Transderm Scop", cls: "Anticholinergic antiemetic",
+        rows: [["Therapeutic use", "Prevent motion sickness and postoperative nausea and vomiting (PONV)."],
+               ["Administration", "Apply the patch at least 4 hours before travel to clean, dry, hairless skin behind the ear and press to stick. Lasts 3 days; showering is fine. Wash hands after handling and don't touch the eyes. Remove before an MRI (the patch has a metal layer that can burn)."],
+               ["Side effects", "Dry mouth, blurred vision, dilated pupils, drowsiness, tachycardia, urinary hesitancy."],
+               ["Contraindications", "Angle-closure glaucoma, GI obstruction, belladonna alkaloid allergy, pregnancy with pre-eclampsia."]],
+        also: [["ATI", "Watch for anticholinergic toxicity: flushed skin, tachycardia, agitation, confusion, urinary retention. Avoid alcohol and CNS depressants; it can cause overheating in hot weather; ice chips or sugarless gum for dry mouth."],
+               ["ADDED", "Compare the antiemetics by receptor: ondansetron blocks serotonin (5-HT3), metoclopramide blocks dopamine, scopolamine blocks acetylcholine in the brain's balance pathway, which is why it's the motion-sickness drug."]] }
     ] },
     { id: "bowel", name: "Bowel Disorder Meds", sys: "gi", icon: "🌀", drugs: [
       { drug: "dicyclomine", title: "Dicyclomine", brand: "Bentyl", cls: "Antispasmodic, anticholinergic",
@@ -191,7 +245,14 @@ window.GUIDE = {
       { drug: "rifaximin", title: "Rifaximin", brand: "Xifaxan", cls: "Antibiotic",
         rows: [["Therapeutic use", "Decrease symptoms of IBS-D; decrease severity of traveler's diarrhea from E. coli."],
                ["Adverse effects", "C. difficile-associated diarrhea."]],
-        also: [["ATI", "Do not use for diarrhea with fever or blood. Finish the full course; report worsening or bloody diarrhea."]] }
+        also: [["ATI", "Do not use for diarrhea with fever or blood. Finish the full course; report worsening or bloody diarrhea."]] },
+      { drug: "sulfasalazine", added: true, title: "Sulfasalazine", brand: "Azulfidine", cls: "5-aminosalicylate (5-ASA)",
+        rows: [["Action", "Produces an anti-inflammatory effect in the colon."],
+               ["Therapeutic use", "Reduce manifestations of ulcerative colitis."],
+               ["Nursing priorities", "Assess for sulfonamide or salicylate allergy. Assess for severe rash. Monitor I&O. Assess abdominal pain and bowel habits."],
+               ["Adverse effects", "Toxic epidermal necrolysis, agranulocytosis, aplastic anemia, hypersensitivity."]],
+        also: [["ATI", "Contraindicated with intestinal or urinary obstruction. Side effects: nausea, vomiting, indigestion, loss of appetite, headache, fever. Report rash, mouth ulcers, bruising, wheezing, or fever. Remission may take 3 to 6 weeks."],
+               ["ADDED", "The name holds the allergy check: \"sulfa\" (sulfonamide) + \"salazine\" (salicylate). Fever, sore throat, or mouth sores can signal agranulocytosis. Drink plenty of fluids; urine or skin may turn orange-yellow."]] }
     ] }
   ],
 
@@ -199,8 +260,10 @@ window.GUIDE = {
   labs: [
     ["PT / INR", "Warfarin"],
     ["aPTT", "Heparin (adjust infusion), alteplase"],
-    ["Platelets", "Heparin (thrombocytopenia)"],
-    ["Liver function", "Atorvastatin, gemfibrozil, ezetimibe, niacin; testosterone (liver toxicity)"],
+    ["Platelets", "Heparin, enoxaparin (thrombocytopenia)"],
+    ["CBC", "Clopidogrel (H&H); famotidine and sulfasalazine (blood disorders such as agranulocytosis)"],
+    ["Liver function", "Atorvastatin, gemfibrozil, ezetimibe, niacin; testosterone and progesterone (liver toxicity)"],
+    ["Blood glucose", "Progesterone (glucose intolerance)"],
     ["Renal function (BUN, creatinine)", "Lisinopril, losartan"],
     ["Potassium", "Furosemide, HCTZ (low); spironolactone, lisinopril, losartan (high); digoxin (low K⁺ → toxicity)"],
     ["Sodium", "HCTZ (hyponatremia)"],
@@ -219,24 +282,29 @@ window.GUIDE = {
     ["Metoprolol, diltiazem", "HR and BP (bradycardia, hypotension)"],
     ["Furosemide", "Potassium and BP before giving"],
     ["Atorvastatin", "Liver function before giving"],
-    ["Misoprostol, estrogen", "Pregnancy status (contraindicated)"]
+    ["Misoprostol, estrogen, combined oral contraceptive, progesterone", "Pregnancy status (contraindicated)"],
+    ["Oxybutynin", "Voiding pattern and residual urine (contraindicated with urinary retention)"],
+    ["Sulfasalazine", "Sulfa and salicylate allergy"]
   ],
   combos: [
     "Sildenafil + nitroglycerin (or + alpha-blockers like tamsulosin/doxazosin) → severe hypotension.",
-    "Estrogen + smoking → blood clots, cardiac events.",
-    "Warfarin/aspirin/apixaban + NSAIDs → bleeding.",
+    "Estrogen or the combined pill + smoking → blood clots, cardiac events.",
+    "Warfarin/aspirin/apixaban/clopidogrel/enoxaparin + NSAIDs (or each other) → bleeding.",
+    "Oxybutynin + scopolamine + dicyclomine → stacked anticholinergic effects (confusion, urinary retention), especially in older adults.",
     "Ondansetron + serotonergic drugs → serotonin syndrome.",
     "Calcium carbonate + enteric-coated meds → separate by 1 hour."
   ],
-  pregnancy: "Misoprostol (miscarriage), estrogens, atorvastatin (ATI); pantoprazole is a precaution.",
-  bleeding: "Warfarin, heparin, apixaban, aspirin, alteplase (clopidogrel and enoxaparin from the lectures too). Watch for black/tarry stools, hematemesis, bruising, bleeding gums, hematuria, neuro changes (intracranial bleeding).",
+  pregnancy: "Misoprostol (miscarriage), estrogens, the combined oral contraceptive, progesterone, atorvastatin (ATI); pantoprazole is a precaution.",
+  bleeding: "Warfarin, heparin, enoxaparin, apixaban, aspirin, clopidogrel, alteplase. Watch for black/tarry stools, hematemesis, bruising, bleeding gums, hematuria, neuro changes (intracranial bleeding).",
 
-  notOnGuide: ["enoxaparin", "clopidogrel", "oxybutynin", "progesterone", "combination-estrogen-progestin", "famotidine", "scopolamine", "sulfasalazine"],
+  /* drugs in the 44-drug tables that the instructor guide skipped; added: true on their entries above */
+  added: ["enoxaparin", "clopidogrel", "oxybutynin", "progesterone", "combination-estrogen-progestin", "famotidine", "scopolamine", "sulfasalazine"],
 
   notes: [
     ["Doxazosin use", "The instructor guide lists \"hypertension, stable angina,\" the same wording as the nifedipine slide, so it may have been copied. Your ATI table lists hypertension and BPH, which matches its alpha-1 blocking action. Ask your instructor which they expect."],
     ["Estrogen heading", "The instructor guide labels estrogens/estradiol as \"Hormone, androgen\" (the label belongs to testosterone, beside it). Estradiol is an estrogen."],
     ["Aspirin and alteplase", "Slides 10 and 11 of the instructor guide are the same (aspirin and alteplase); the second adds \"only true clot buster.\" Both are combined here."],
+    ["Added drugs", "The instructor guide skipped 8 of the 44 drugs, but the instructor says all 44 are in play. Their rows come from your ATI drug tables and the recorded lectures, and they're marked Added."],
     ["\"Also know\" rows", "These come from your ATI medication tables and the recorded lectures; they add context but were not singled out by the instructor."]
   ]
 };
