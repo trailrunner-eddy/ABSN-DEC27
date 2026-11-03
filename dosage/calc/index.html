@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dosage Calc Lab</title>
+  <meta name="description" content="Learn medication math and IV flow rates with step-by-step lessons, then practice 200 problems modeled on the Dosage Calc example sheets, using only the ATI conversion chart.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A7%AE%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../../nura330/shared/styles.css?v=202611031700">
+  <link rel="stylesheet" href="css/dosage.css?v=202611031900">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="icon-btn" href="../../index.html#course/dosage" title="Back to ABSN Study Hub" aria-label="Back to ABSN Study Hub" style="text-decoration:none">🎓</a>
+      <a class="brand" href="#home"><span class="brand-mark">🧮</span><span class="brand-text">Dosage Calc</span></a>
+      <nav class="nav" id="nav">
+        <a href="#home" data-r="home">Home</a>
+        <a href="#learn" data-r="learn">Learn</a>
+        <a href="#practice" data-r="practice">Practice</a>
+        <a href="#chart" data-r="chart">ATI Chart</a>
+      </nav>
+      <span class="xp" title="Study points earned"><span>⚡</span><span id="xp">0</span><span class="xp-label">XP</span></span>
+      <button class="icon-btn" id="theme" title="Toggle light/dark" aria-label="Toggle theme">🌓</button>
+    </div>
+  </header>
+
+  <main id="app" tabindex="-1"></main>
+
+  <footer class="footer">
+    Problems are modeled on the Dosage Calc example sheets (medication math and IV flow rates) and follow their rules: leading zeros, no trailing zeros, round to the nearest tenth unless stated, and whole numbers for gtt/min.
+    Only conversions on ATI's Household Measurements Conversion Guide are treated as given. Every answer and every solution step was checked by a script that re-multiplies the fractions and confirms the units cancel.
+    Drug strengths are realistic study examples; always follow the actual order, label, and your facility's policy. Progress is saved in this browser only.
+  </footer>
+
+  <div class="toast" id="toast"></div>
+  <div class="sheet" id="sheet" hidden></div>
+  <canvas id="confetti"></canvas>
+
+  <script src="js/problems.js?v=202611031900"></script>
+  <script src="js/lessons.js?v=202611031900"></script>
+  <script src="js/app.js?v=202611031900"></script>
+</body>
+</html>
