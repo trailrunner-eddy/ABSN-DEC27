@@ -2,6 +2,7 @@
    moa, use, contra: condensed from "Exam 2 Drug Tables - Combined" (ATI).
    se / ae: only the effects that point to this drug, not ones most drugs share (plain nausea, headache, GI upset).
    ==text== marks wording that is on the instructor's Exam 2 study guide; it renders highlighted and underlined.
+   np: nursing priorities (study-guide wording highlighted; otherwise from ATI and the guide's "added" rows).
    sg: other study-guide takeaways that don't fit the four fields (nursing priorities, administration, interactions).
    Drugs the instructor guide skipped (window.GUIDE.added) have no highlights. */
 window.CARDS = {
@@ -12,7 +13,8 @@ window.CARDS = {
     se: "==Dizziness, fatigue, headache, nausea, nasal congestion, drowsiness; orthostatic hypotension and syncope can occur==, especially after the first dose or a dose increase.",
     ae: "Intraoperative floppy iris syndrome (IFIS); priapism (rare).",
     contra: "Allergy to the drug or class. Use cautiously with a history of orthostatic hypotension or severe liver impairment.",
-    sg: [["Nursing priorities", "==Monitor BP.=="]]
+    np: "==Monitor BP.==",
+    sg: []
   },
   "hydralazine-hydrochloride": {
     moa: "==Decreases peripheral resistance but at the same time raises cardiac output==; acts directly on vascular smooth muscle.",
@@ -20,7 +22,8 @@ window.CARDS = {
     se: "Flushing, tachycardia, peripheral edema.",
     ae: "==Dizziness, anxiety, reflex tachycardia, heart failure, edema==; systemic lupus erythematosus (SLE)-like syndrome.",
     contra: "Hypersensitivity.",
-    sg: [["Nursing priorities", "==Monitor BP.=="]]
+    np: "==Monitor BP.==",
+    sg: []
   },
   "lisinopril": {
     moa: "Inhibits ACE so angiotensin I can't become angiotensin II: less vasoconstriction and less aldosterone, so sodium is excreted and potassium is retained.",
@@ -28,7 +31,8 @@ window.CARDS = {
     se: "==Dry, persistent cough, dizziness, hypotension==; taste changes.",
     ae: "==Angioedema, hyperkalemia==; renal insufficiency, blood dyscrasias.",
     contra: "History of angioedema, pregnancy, bilateral renal artery stenosis, hyperkalemia, ARNI (sacubitril/valsartan) within the last 36 hr.",
-    sg: [["Nursing priorities", "==Monitor BP and renal function (serum creatinine, BUN). Assess for angioedema and breathing difficulty.=="]]
+    np: "==Monitor BP and renal function (serum creatinine, BUN). Assess for angioedema and breathing difficulty.==",
+    sg: []
   },
   "losartan": {
     moa: "Blocks angiotensin II from binding its receptors in blood vessels, causing vasodilation.",
@@ -36,7 +40,8 @@ window.CARDS = {
     se: "Dizziness, nasal congestion, back pain. No ACE-inhibitor cough.",
     ae: "==Hyperkalemia, angioedema, severe hypotension, renal impairment (rare).==",
     contra: "Allergy to ARBs, pregnancy, severe kidney or liver impairment.",
-    sg: [["Nursing priorities", "==Monitor BP, electrolytes, renal function. Monitor for angioedema.=="]]
+    np: "==Monitor BP, electrolytes, renal function. Monitor for angioedema.==",
+    sg: []
   },
   "metoprolol": {
     moa: "Blocks beta1 receptors in the heart, lowering heart rate, contractility, and cardiac output, which reduces cardiac workload and oxygen demand.",
@@ -44,7 +49,8 @@ window.CARDS = {
     se: "Fatigue, cold extremities, erectile dysfunction, decreased libido; masks hypoglycemia signs and causes glucose intolerance.",
     ae: "Bradycardia, heart block, severe hypotension, worsening heart failure, bronchospasm, hypoglycemia, depression.",
     contra: "Bradycardia, 2nd or 3rd degree heart block, cardiogenic shock, uncompensated heart failure, pulmonary edema, sick sinus syndrome, cocaine-induced chest pain, untreated pheochromocytoma.",
-    sg: [["Nursing priorities", "==Monitor BP and HR; watch for heart failure: shortness of breath, edema, weight gain.=="]]
+    np: "==Monitor BP and HR; watch for heart failure: shortness of breath, edema, weight gain.==",
+    sg: []
   },
   "nifedipine": {
     moa: "Blocks calcium influx across cell membranes, dilating coronary and peripheral arterioles.",
@@ -52,7 +58,8 @@ window.CARDS = {
     se: "Facial flushing, headache, palpitations, gingival hyperplasia.",
     ae: "Peripheral edema, reflex tachycardia, bradycardia, heart block, hypotension, rebound hypertension if stopped abruptly.",
     contra: "Calcium channel blocker allergy, heart block, sick sinus syndrome, renal or hepatic impairment, pregnancy, breastfeeding.",
-    sg: [["Nursing priorities", "==Monitor BP; monitor for edema; monitor for tachycardia/bradycardia.=="]]
+    np: "==Monitor BP; monitor for edema; monitor for tachycardia/bradycardia.==",
+    sg: []
   },
   "nitroglycerin": {
     moa: "==Converts to nitric oxide (NO), relaxing vascular smooth muscle → vasodilation.== Dilates coronary arteries (more blood flow) and veins (less preload), lowering myocardial oxygen demand.",
@@ -60,7 +67,8 @@ window.CARDS = {
     se: "Headache (expected), flushing, orthostatic hypotension, dizziness; dermatitis with the patch.",
     ae: "Profound hypotension, reflex tachycardia, syncope and falls, methemoglobinemia.",
     contra: "==PDE-5 inhibitors (sildenafil)==, increased intracranial pressure, right-sided MI, severe anemia, hypovolemia, shock, pericardial tamponade or constrictive pericarditis.",
-    sg: [["Nursing priorities", "==Monitor BP and O₂. Do not take with PDE-5 inhibitors (sildenafil).=="]]
+    np: "==Monitor BP and O₂. Do not take with PDE-5 inhibitors (sildenafil).==",
+    sg: []
   },
 
   /* ---------- Cholesterol ---------- */
@@ -70,7 +78,8 @@ window.CARDS = {
     se: "Mild GI effects (gas, constipation); usually well tolerated.",
     ae: "==Myopathies, myalgia, rhabdomyolysis, acute kidney injury, hepatotoxicity==; increased blood glucose, memory loss.",
     contra: "Severe liver impairment, pregnancy, breastfeeding, statin allergy.",
-    sg: [["Nursing priorities", "==Assess liver function before giving. Monitor for myopathies.=="]]
+    np: "==Assess liver function before giving. Monitor for myopathies.==",
+    sg: []
   },
   "ezetimibe": {
     moa: "==Inhibits absorption of cholesterol in the small intestine.==",
@@ -78,7 +87,8 @@ window.CARDS = {
     se: "Rhinorrhea, sore throat.",
     ae: "Myopathy and rhabdomyolysis (most likely when combined with a statin), hepatotoxicity.",
     contra: "Pregnancy, breastfeeding, active liver disease, elevated liver enzymes.",
-    sg: [["Nursing priorities", "==Baseline liver enzymes and lipid panel. Monitor for muscle pain. Watch for liver injury: fatigue, anorexia, abdominal pain, jaundice, dark urine.=="]]
+    np: "==Baseline liver enzymes and lipid panel. Monitor for muscle pain. Watch for liver injury: fatigue, anorexia, abdominal pain, jaundice, dark urine.==",
+    sg: []
   },
   "gemfibrozil": {
     moa: "Activates PPAR-alpha in the liver and fat tissue, boosting the enzyme that breaks down triglycerides; lowers VLDL and raises HDL.",
@@ -86,7 +96,8 @@ window.CARDS = {
     se: "Dyspepsia, abdominal pain.",
     ae: "Cholelithiasis (gallstones), hepatotoxicity, myopathy, rhabdomyolysis.",
     contra: "Active liver or gallbladder disease, severe renal dysfunction.",
-    sg: [["Nursing priorities", "==Monitor/report GI or gallbladder manifestations and myopathies. Monitor liver function tests and triglycerides.=="]]
+    np: "==Monitor/report GI or gallbladder manifestations and myopathies. Monitor liver function tests and triglycerides.==",
+    sg: []
   },
   "niacin": {
     moa: "Prevents lipolysis in fat tissue and slows fatty acid synthesis in the liver.",
@@ -94,7 +105,8 @@ window.CARDS = {
     se: "==Flushing, generalized pruritus, burning sensation of the face and chest.==",
     ae: "==Hyperuricemia, gout==; hepatotoxicity, macular edema.",
     contra: "Regular alcohol use, active peptic ulcer disease, active liver disease, arterial bleeding, pregnancy, lactation.",
-    sg: [["Nursing priorities", "==Monitor for flushing and/or pruritus; assess lipid levels.=="]]
+    np: "==Monitor for flushing and/or pruritus; assess lipid levels.==",
+    sg: []
   },
 
   /* ---------- Anticoagulants ---------- */
@@ -104,7 +116,8 @@ window.CARDS = {
     se: "Minor bleeding, reperfusion PVCs.",
     ae: "==Hemorrhage==, including intracranial hemorrhage; reperfusion arrhythmias (V-tach); anaphylaxis.",
     contra: "Active or internal bleeding, recent intracranial hemorrhage, BP above 180/110, intracranial lesions, ischemic stroke or major head trauma in the last 3 months, recent brain or spine surgery, surgery in the last 3 weeks, possible aortic dissection, pregnancy.",
-    sg: [["Nursing priorities", "==Monitor for bleeding. Monitor aPTT, CBC, fibrinogen. Assess neurological status. Monitor BP.=="]]
+    np: "==Monitor for bleeding. Monitor aPTT, CBC, fibrinogen. Assess neurological status. Monitor BP.==",
+    sg: []
   },
   "apixaban": {
     moa: "Inhibits factor Xa (and thrombin-induced platelet aggregation).",
@@ -112,7 +125,8 @@ window.CARDS = {
     se: "Epistaxis, bruising, bleeding that takes longer to stop.",
     ae: "Hemorrhage, including spontaneous GI or bladder bleeding; anemia.",
     contra: "==Bleeding (history of GI bleed), severe liver damage, prosthetic heart valves==; spinal puncture or anesthesia, pregnancy or lactation, triple-positive antiphospholipid syndrome.",
-    sg: [["Nursing priorities", "==Monitor for DVT, stroke, bleeding, peripheral vascular disease, PE.=="]]
+    np: "==Monitor for DVT, stroke, bleeding, peripheral vascular disease, PE.==",
+    sg: []
   },
   "aspirin": {
     moa: "Inhibits prostaglandin production (less inflammation, fever, and pain) and reduces platelet aggregation.",
@@ -120,7 +134,8 @@ window.CARDS = {
     se: "Epigastric distress, dyspepsia.",
     ae: "GI ulceration and bleeding, salicylate toxicity (tinnitus), Reye syndrome in children, intracranial hemorrhage.",
     contra: "Salicylate allergy (or ibuprofen cross-allergy), bleeding disorders, peptic ulcer disease or gastritis, children (Reye syndrome), asthma (bronchospasm).",
-    sg: [["Nursing assessment", "==Monitor for GI bleeding: black/dark stools, abdominal pain, nausea, hematemesis. Monitor GI symptoms.=="]]
+    np: "==Monitor for GI bleeding: black/dark stools, abdominal pain, nausea, hematemesis. Monitor GI symptoms.==",
+    sg: []
   },
   "clopidogrel": {
     moa: "Irreversibly blocks the platelet P2Y12 (ADP) receptor so platelets can't clump; activated by liver CYP enzymes.",
@@ -128,6 +143,7 @@ window.CARDS = {
     se: "Bruising, nosebleeds, rash, pruritus.",
     ae: "Major bleeding, thrombotic thrombocytopenic purpura (TTP, rare), gastric ulceration and bleeding.",
     contra: "Active bleeding, peptic ulcer disease, bleeding disorders, thrombocytopenia, anaphylaxis to clopidogrel.",
+    np: "Monitor for bleeding and bruising. Check hemoglobin and hematocrit. Assess for rash and pruritus (allergic reaction).",
     sg: []
   },
   "enoxaparin": {
@@ -136,6 +152,7 @@ window.CARDS = {
     se: "Bleeding, thrombocytopenia, injection-site bruising.",
     ae: "Hemorrhage.",
     contra: "Active bleeding, known allergy.",
+    np: "Monitor for bleeding and thrombocytopenia (platelets). Watch for allergic reaction.",
     sg: []
   },
   "heparin": {
@@ -144,7 +161,8 @@ window.CARDS = {
     se: "Bleeding, thrombocytopenia.",
     ae: "Hemorrhage, heparin-induced thrombocytopenia, anaphylaxis.",
     contra: "Uncontrollable bleeding, severe thrombocytopenia, pregnancy, lumbar or regional anesthesia, surgery of the brain, eyes, or spinal cord.",
-    sg: [["Nursing priorities", "==Monitor pulse and BP; monitor for bleeding; monitor aPTT to adjust infusion dosing; monitor for thrombocytopenia.=="]]
+    np: "==Monitor pulse and BP; monitor for bleeding; monitor aPTT to adjust infusion dosing; monitor for thrombocytopenia.==",
+    sg: []
   },
   "warfarin": {
     moa: "==Interrupts the vitamin K cycle, reducing active clotting factors.==",
@@ -152,7 +170,8 @@ window.CARDS = {
     se: "Bleeding of mucous membranes, bruising.",
     ae: "Hemorrhage, toxicity (high INR). Antidote: vitamin K.",
     contra: "Pregnancy, uncontrollable bleeding, vitamin K deficiency, thrombocytopenia, alcohol use disorder or liver disease, lumbar puncture, regional anesthesia, brain, eye, or spinal cord surgery.",
-    sg: [["Nursing priorities", "==Monitor pulse and BP. Monitor PT/INR. Monitor for bleeding.=="]]
+    np: "==Monitor pulse and BP. Monitor PT/INR. Monitor for bleeding.==",
+    sg: []
   },
 
   /* ---------- Dysrhythmias & contractility ---------- */
@@ -162,6 +181,7 @@ window.CARDS = {
     se: "Facial flushing, metallic taste, a brief pause (asystole) on the monitor.",
     ae: "==Arrhythmias such as V-tach, MI, palpitations, difficulty breathing==; bronchospasm, hypotension.",
     contra: "Sick sinus syndrome, 2nd or 3rd degree AV block, MI or ischemia, breastfeeding, hypersensitivity.",
+    np: "Continuous ECG with HR and BP; a brief pause and flushing are expected. Assess respirations and lung sounds for bronchospasm in clients with asthma.",
     sg: []
   },
   "amiodarone": {
@@ -170,6 +190,7 @@ window.CARDS = {
     se: "Photosensitivity, anorexia, fatigue.",
     ae: "Pulmonary fibrosis, bradycardia, hypotension, worsening arrhythmia, ARDS, toxic epidermal necrolysis, ataxia.",
     contra: "Iodine or amiodarone allergy, 2nd or 3rd degree AV block, severe sick sinus syndrome, cardiogenic shock, bradycardia without a pacemaker, breastfeeding. ==Precautions: thyroid disorder, severe liver disease, severe pulmonary disease.==",
+    np: "Continuous ECG when starting (oral or IV): HR, BP, rhythm, PR and QT intervals. Report bradycardia or worsening arrhythmia. Watch for pulmonary toxicity (new cough, dyspnea).",
     sg: []
   },
   "digoxin": {
@@ -178,7 +199,8 @@ window.CARDS = {
     se: "Asymptomatic bradycardia, anorexia, nausea and vomiting (early toxicity signs).",
     ae: "Symptomatic bradycardia, heart blocks and arrhythmias, visual changes (yellow-green halos), confusion.",
     contra: "Ventricular dysrhythmias, heart block, low potassium or magnesium, Wolff-Parkinson-White syndrome, MI, hypersensitivity.",
-    sg: [["Nursing priority", "==Take the apical heart rate; hold the dose if HR <60/min.=="]]
+    np: "==Take the apical heart rate; hold the dose if HR <60/min.==",
+    sg: []
   },
   "diltiazem": {
     moa: "Class IV calcium channel blocker: keeps calcium out of the slow channels of heart and vascular muscle.",
@@ -186,7 +208,8 @@ window.CARDS = {
     se: "Peripheral edema, weight gain, nocturia.",
     ae: "==Bradycardia, hypotension, heart failure==; Stevens-Johnson syndrome, liver toxicity.",
     contra: "2nd or 3rd degree AV block without a pacemaker, hypotension, recent MI, breastfeeding, hypersensitivity.",
-    sg: [["Nursing priority", "==BP, HR, ECG.=="]]
+    np: "==BP, HR, ECG.==",
+    sg: []
   },
 
   /* ---------- Diuretics ---------- */
@@ -196,7 +219,8 @@ window.CARDS = {
     se: "Hypokalemia and other electrolyte losses, orthostatic hypotension, photosensitivity, tinnitus, hyperuricemia.",
     ae: "Ototoxicity and hearing loss, severe electrolyte imbalance, hyperglycemia, Stevens-Johnson syndrome, blood dyscrasias.",
     contra: "Anuria, hepatic coma, dehydration or electrolyte imbalance, hypersensitivity.",
-    sg: [["Nursing priority", "==Assess potassium and BP before giving.=="]]
+    np: "==Assess potassium and BP before giving.==",
+    sg: []
   },
   "hydrochlorothiazide": {
     moa: "==Increases sodium and water excretion by preventing sodium reabsorption in the distal tubule== (blocks the Na-Cl transporter); potassium and magnesium are lost too.",
@@ -204,7 +228,8 @@ window.CARDS = {
     se: "Hyperglycemia, hyperuricemia (gout), hyperlipidemia, photosensitivity, orthostatic hypotension.",
     ae: "==Electrolyte imbalances: hypokalemia, hyponatremia, dehydration==; acute angle-closure glaucoma, pancreatitis, metabolic alkalosis.",
     contra: "Sulfa allergy (cross-reactivity), anuria, hypotension, electrolyte imbalance, severe liver disease, adrenal insufficiency, breastfeeding.",
-    sg: [["Nursing priority", "==BP, daily weights, edema, electrolytes.=="]]
+    np: "==BP, daily weights, edema, electrolytes.==",
+    sg: []
   },
   "mannitol": {
     moa: "Osmotic diuretic: raises plasma osmolality, pulling water out of the brain and CSF into the blood; it isn't reabsorbed by the tubule, so water and sodium follow it out.",
@@ -212,6 +237,7 @@ window.CARDS = {
     se: "Thirst, dry mouth.",
     ae: "==Dehydration, pulmonary edema, worsening heart failure, seizures, confusion.==",
     contra: "==Anuria, pulmonary edema, active intracranial bleeding==; severe dehydration.",
+    np: "Assess neuro status (ICP), lung sounds, urine output, electrolytes, and renal function. Watch for fluid overload and pulmonary edema, or dehydration.",
     sg: []
   },
   "spironolactone": {
@@ -220,7 +246,8 @@ window.CARDS = {
     se: "Gynecomastia, breast tenderness, menstrual irregularities, erectile dysfunction, deepening voice, hirsutism.",
     ae: "Hyperkalemia (muscle weakness, palpitations, dysrhythmias), Stevens-Johnson syndrome, agranulocytosis.",
     contra: "Hyperkalemia, renal failure, anuria, pregnancy (teratogenic), hypersensitivity.",
-    sg: [["Nursing priority", "==Monitor serum potassium. If hyperkalemia occurs, monitor for cardiac dysrhythmias.=="]]
+    np: "==Monitor serum potassium. If hyperkalemia occurs, monitor for cardiac dysrhythmias.==",
+    sg: []
   },
 
   /* ---------- Urinary, sexual, hormones ---------- */
@@ -230,6 +257,7 @@ window.CARDS = {
     se: "Anticholinergic: dry mouth, constipation, blurred vision, drowsiness.",
     ae: "Confusion and hallucinations (older adults), tachycardia, angioedema.",
     contra: "Urinary retention, intestinal obstruction, narrow-angle glaucoma, hypersensitivity.",
+    np: "Assess voiding pattern and residual urine. Monitor level of consciousness.",
     sg: []
   },
   "tamsulosin": {
@@ -238,7 +266,8 @@ window.CARDS = {
     se: "==Dizziness, headache, hypotension==; ejaculatory disorders.",
     ae: "Intraoperative floppy iris syndrome (tell the eye surgeon before cataract surgery).",
     contra: "Hypersensitivity to tamsulosin or sulfa.",
-    sg: [["Nursing priority", "==Assess BPH urinary symptoms before and after giving. Monitor BP.=="]]
+    np: "==Assess BPH urinary symptoms before and after giving. Monitor BP.==",
+    sg: []
   },
   "sildenafil": {
     moa: "Inhibits phosphodiesterase type 5, increasing blood flow to the penis.",
@@ -246,6 +275,7 @@ window.CARDS = {
     se: "==Flushing, dyspepsia, headache, dizziness, hypotension.==",
     ae: "Priapism (erection over 4 hr), MI, sudden vision or hearing loss.",
     contra: "Nitrate use, severe hypotension, recent stroke or MI, hepatic impairment, hypersensitivity.",
+    np: "Confirm the ED diagnosis and screen for nitrate or alpha-blocker use. Monitor BP. Teach: erection over 4 hr needs emergency care.",
     sg: [["Interactions", "==Nitrates, alpha-adrenergic receptor antagonists (e.g., tamsulosin, doxazosin).== Together they cause severe hypotension."]]
   },
   "combination-estrogen-progestin": {
@@ -254,6 +284,7 @@ window.CARDS = {
     se: "Breakthrough bleeding or spotting, breast tenderness, brown skin patches (melasma).",
     ae: "Blood clots, stroke, and MI (warning signs ACHES: abdominal pain, chest pain, headache, eye or vision changes, severe leg pain); liver injury (jaundice, dark urine).",
     contra: "Smoking, history of blood clots, stroke, or MI, breast cancer, uncontrolled hypertension, migraine with aura, pregnancy, breastfeeding, less than 21 days postpartum.",
+    np: "Confirm the client is not pregnant or breastfeeding. Take a health history for clot and stroke risk: blood clots, breast cancer, MI, stroke, migraines, uncontrolled hypertension, smoking.",
     sg: []
   },
   "estradiol": {
@@ -262,6 +293,7 @@ window.CARDS = {
     se: "Breast tenderness, edema, gynecomastia and testicular atrophy in males, hypercalcemia, hyperglycemia.",
     ae: "Thromboembolism, stroke, MI; breast, endometrial, and ovarian cancers.",
     contra: "==Estrogen allergy; thromboembolic disease (DVT, PE, MI); history of breast cancer; liver impairment; undiagnosed vaginal bleeding; pregnancy.==",
+    np: "Monitor BP, weekly weight, I&O, glucose, and liver function. Assess for clots, stroke, and MI warning signs; ask about smoking.",
     sg: [["Interactions", "==Smoking increases risk of thromboembolic and cardiac adverse effects.=="]]
   },
   "progesterone": {
@@ -270,6 +302,7 @@ window.CARDS = {
     se: "Glucose intolerance, fatigue, mood changes.",
     ae: "DVT, PE, MI; liver toxicity and tumors; meningiomas.",
     contra: "Peanut allergy (oil base), thromboembolism, breast cancer, cardiovascular disease, liver impairment, severe depression, pregnancy.",
+    np: "Assess for thromboembolism (chest pain, dyspnea, DVT). Monitor mood, liver function, BP, weekly weight, and blood glucose.",
     sg: []
   },
   "testosterone": {
@@ -278,6 +311,7 @@ window.CARDS = {
     se: "Acne, deepening voice, facial hair, clitoral enlargement; gynecomastia in males.",
     ae: "==DVT, liver toxicity, stroke, suicidal thoughts, PE, anaphylaxis.==",
     contra: "Breast or prostate cancer in males, pregnancy, lactation, hypersensitivity.",
+    np: "Monitor I&O and weigh twice a week. Watch for DVT/PE, liver toxicity, gynecomastia, priapism, and misuse. Gel: others must not touch the application site.",
     sg: []
   },
 
@@ -288,7 +322,8 @@ window.CARDS = {
     se: "Drowsiness, restlessness.",
     ae: "Extrapyramidal symptoms and tardive dyskinesia, which may be irreversible.",
     contra: "GI obstruction or bleeding, seizure disorders, Parkinson's disease, history of tardive dyskinesia, MAOIs, hypersensitivity.",
-    sg: [["Nursing priority", "==Assess for: Parkinsonian symptoms (trouble speaking or swallowing, shuffling gait, mask-like face); dystonia (repetitive twisting contractions, inability to move eyes); tardive dyskinesia (involuntary movements of tongue, face, neck).=="]]
+    np: "==Assess for: Parkinsonian symptoms (trouble speaking or swallowing, shuffling gait, mask-like face); dystonia (repetitive twisting contractions, inability to move eyes); tardive dyskinesia (involuntary movements of tongue, face, neck).==",
+    sg: []
   },
   "ondansetron": {
     moa: "Blocks serotonin 5-HT3 receptors to decrease nausea and vomiting.",
@@ -296,7 +331,8 @@ window.CARDS = {
     se: "Headache, constipation.",
     ae: "==QT prolongation, serotonin syndrome==; fetal cleft palate or septal defects; Stevens-Johnson syndrome.",
     contra: "Congenital long QT syndrome, use with apomorphine, hypersensitivity.",
-    sg: [["Nursing priority", "==ECG and monitor sodium, potassium, calcium, magnesium in clients with cardiac risk factors.=="]]
+    np: "==ECG and monitor sodium, potassium, calcium, magnesium in clients with cardiac risk factors.==",
+    sg: []
   },
   "scopolamine": {
     moa: "Anticholinergic: blocks acetylcholine (M1 receptors) in the CNS.",
@@ -304,6 +340,7 @@ window.CARDS = {
     se: "Dry mouth, blurred vision, dilated pupils, drowsiness, urinary hesitancy.",
     ae: "Anticholinergic toxicity: flushed skin, tachycardia, agitation, confusion, urinary retention.",
     contra: "Angle-closure glaucoma, GI obstruction, belladonna alkaloid allergy, pregnancy with pre-eclampsia.",
+    np: "Monitor for anticholinergic toxicity: urinary retention, flushed skin, tachycardia, agitation, confusion. Apply the patch 4 hr before travel; remove before MRI.",
     sg: []
   },
   "calcium-carbonate": {
@@ -312,8 +349,8 @@ window.CARDS = {
     se: "Constipation.",
     ae: "Hypercalcemia, renal calculi, bradycardia with overuse.",
     contra: "Hypercalcemia, renal calculi, renal failure, hyperparathyroidism.",
-    sg: [["Client teaching", "==Do not take enteric-coated medications within 1 hour.=="],
-         ["Nursing priority", "==Assess presenting symptoms and the abdomen. Monitor calcium and phosphorus levels.=="]]
+    np: "==Assess presenting symptoms and the abdomen. Monitor calcium and phosphorus levels.==",
+    sg: [["Client teaching", "==Do not take enteric-coated medications within 1 hour.=="]]
   },
   "famotidine": {
     moa: "Blocks H2 (histamine) receptors on the stomach's parietal cells, reducing acid secretion.",
@@ -321,6 +358,7 @@ window.CARDS = {
     se: "Drowsiness, headache.",
     ae: "Confusion (older adults), cardiac arrhythmias, blood disorders (agranulocytosis, aplastic anemia, thrombocytopenia), drug-induced hepatitis.",
     contra: "Hypersensitivity.",
+    np: "Monitor CBC with differential. Assess epigastric or abdominal pain and blood in stool or emesis. Monitor older adults for confusion.",
     sg: []
   },
   "pantoprazole": {
@@ -329,6 +367,7 @@ window.CARDS = {
     se: "Flatulence, abdominal pain.",
     ae: "With long-term use: bone fractures, C. difficile infection, vitamin B12 deficiency.",
     contra: "Hypersensitivity to benzimidazoles. ==Precautions: long-term use; clients planning or suspecting pregnancy.==",
+    np: "Monitor liver function and magnesium. Assess epigastric pain and blood in stool or emesis. With long-term use, watch bone health and B12.",
     sg: []
   },
   "misoprostol": {
@@ -337,7 +376,8 @@ window.CARDS = {
     se: "Diarrhea, uterine cramping, spotting, dysmenorrhea.",
     ae: "Miscarriage.",
     contra: "==Pregnancy, hypersensitivity.==",
-    sg: [["Nursing priority", "==Assess abdominal and epigastric pain; blood in stools; assess female clients for pregnancy.=="]]
+    np: "==Assess abdominal and epigastric pain; blood in stools; assess female clients for pregnancy.==",
+    sg: []
   },
   "sucralfate": {
     moa: "Forms a thick paste that sticks to the ulcer surface and protects it.",
@@ -345,6 +385,7 @@ window.CARDS = {
     se: "Constipation.",
     ae: "Hyperglycemia (with the suspension).",
     contra: "Hypersensitivity.",
+    np: "Assess abdominal pain and stool for blood (occult and frank). Monitor I&O and bowel movements (constipation).",
     sg: [["Administration", "==Give orally on an empty stomach, four times a day: 1 hour before each of the three meals and at bedtime.=="]]
   },
   "dicyclomine": {
@@ -353,6 +394,7 @@ window.CARDS = {
     se: "==Dry mouth, thirst, dry skin, drowsiness, dizziness (anticholinergic).==",
     ae: "CNS effects (confusion, hallucinations, agitation); cardiovascular effects.",
     contra: "Infants under 6 months, breastfeeding, glaucoma, myasthenia gravis, obstructive uropathy, GI obstruction, severe ulcerative colitis, reflux esophagitis, unstable cardiovascular status.",
+    np: "Monitor IBS manifestations. Watch for anticholinergic effects (confusion, urinary retention), especially in older adults.",
     sg: []
   },
   "rifaximin": {
@@ -361,6 +403,7 @@ window.CARDS = {
     se: "Few; mostly mild nausea or dizziness (it stays in the gut).",
     ae: "==C. difficile-associated diarrhea.==",
     contra: "Diarrhea with fever or blood, diarrhea from other organisms, hypersensitivity.",
+    np: "Monitor bowel frequency and consistency, bloating, and cramping. Report bloody or worsening diarrhea (C. diff).",
     sg: []
   },
   "sulfasalazine": {
@@ -369,6 +412,7 @@ window.CARDS = {
     se: "Orange-yellow urine or skin; loss of appetite.",
     ae: "Toxic epidermal necrolysis, agranulocytosis, aplastic anemia, hypersensitivity.",
     contra: "Sulfa or salicylate allergy, intestinal or urinary obstruction.",
+    np: "Assess for sulfonamide or salicylate allergy. Assess for severe rash. Monitor I&O. Assess abdominal pain and bowel habits.",
     sg: []
   }
 };
