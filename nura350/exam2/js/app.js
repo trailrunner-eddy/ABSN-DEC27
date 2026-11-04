@@ -39,7 +39,7 @@
   function cardRows(d) {
     var c = CARDS[d.id];
     if (!c) return FIELDS.map(function (f) { return "<dt>" + f[1] + "</dt><dd>" + fvh(esc(d[f[0]])) + "</dd>"; }).join("");
-    return "<dt>MOA</dt><dd>" + fvh(hl(c.moa)) + "</dd>" +
+    return "<dt>MOA</dt><dd>" + fvh(hl(c.moa)) + (c.moaS ? '<div class="moa-simple"><span class="moa-simple-k">Simply put</span>' + fvh(esc(c.moaS)) + "</div>" : "") + "</dd>" +
       "<dt>Therapeutic use</dt><dd>" + fvh(hl(c.use)) + "</dd>" +
       '<dt>Side &amp; adverse effects</dt><dd><div class="sae"><span class="sae-k">Side</span>' + fvh(hl(c.se)) + '</div><div class="sae"><span class="sae-k adv">Adverse</span>' + fvh(hl(c.ae)) + "</div></dd>" +
       "<dt>Contraindications</dt><dd>" + fvh(hl(c.contra)) + "</dd>" +
