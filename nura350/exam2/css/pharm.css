@@ -120,3 +120,15 @@ mark { background: color-mix(in srgb, var(--warn) 35%, transparent); color: inhe
 .stem-pill.none { color: var(--ink-3); background: var(--surface-2); }
 .stem-teaser { display: block; text-decoration: none; color: inherit; border-top: 5px solid var(--accent); }
 .stem-teaser:hover { border-color: var(--accent); }
+
+/* Standard drug cards: study-guide highlights */
+mark.sg { background: color-mix(in srgb, var(--warn) 32%, transparent); text-decoration: underline; text-decoration-color: var(--warn); text-decoration-thickness: 2px; text-underline-offset: 3px; padding: 0 1px; }
+.sg-legend { margin: 6px 0 0; color: var(--ink-2); }
+.sae + .sae { margin-top: 6px; }
+.sae-k { display: inline-block; min-width: 64px; margin-right: 6px; font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-3); }
+.sae-k.adv { color: var(--bad, #c0392b); }
+.drug-fields dt.sg-dt { color: var(--ink-2); background: color-mix(in srgb, var(--warn) 12%, var(--surface-2)); }
+.ati-more { margin: 0 18px 12px; }
+.ati-more > summary { cursor: pointer; font-size: .88rem; color: var(--ink-2); padding: 4px 0 8px; }
+.ati-more .drug-fields { margin: 0; }
+.fv.covered mark.sg { background: transparent; }
