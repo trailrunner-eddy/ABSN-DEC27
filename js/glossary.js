@@ -1,0 +1,1050 @@
+/* Sitewide medical glossary.
+   Finds medical terms in any page's text and underlines them with a dotted line.
+   Hover (computer) or tap (phone) a term to see a short definition.
+
+   To add a term: add a line to GLOSSARY below.
+     ["term|other spelling|another", "Definition."]
+   The first name is the one shown in the popup. Plurals (s, es, -y→-ies, -us→-i,
+   -um→-a, -is→-es) are matched automatically. A name written in ALL CAPS
+   (like COPD) only matches in capitals, so "pad" never matches "PAD".
+
+   Text inside buttons, answer choices, links, flashcards, form fields, and
+   anything marked data-no-gloss is left alone, so a definition never gives
+   away an answer you have to pick. */
+(function () {
+  "use strict";
+  if (window.__glossaryLoaded) return;
+  window.__glossaryLoaded = true;
+
+  var GLOSSARY = [
+    /* ---------- Word parts you see everywhere ---------- */
+    ["myopathy", "Disease of muscle tissue that causes weakness; statins can cause it (watch for muscle aches)."],
+    ["rhabdomyolysis", "Rapid breakdown of skeletal muscle that releases myoglobin into the blood, which can damage the kidneys. Watch for dark (tea-colored) urine."],
+    ["myalgia", "Muscle pain or aching."],
+    ["neuropathy", "Damage to nerves, often causing numbness, tingling, burning, or weakness (commonly in the hands and feet)."],
+    ["paresthesia", "Abnormal sensation such as tingling, prickling, or pins and needles."],
+    ["paralysis", "Loss of the ability to move part or all of the body."],
+    ["ataxia", "Loss of coordination, causing an unsteady gait or clumsy movements."],
+    ["dystonia", "Involuntary, sustained muscle contractions that cause twisting or abnormal postures."],
+    ["tardive dyskinesia", "Late, often permanent involuntary movements (lip smacking, tongue thrusting) caused by long-term antipsychotic or metoclopramide use."],
+    ["dyskinesia", "Involuntary, uncontrolled movements."],
+    ["extrapyramidal symptoms|extrapyramidal", "Drug-induced movement problems such as tremor, rigidity, restlessness, and muscle spasms (from antipsychotics, metoclopramide)."],
+    ["encephalopathy", "Brain dysfunction causing confusion, altered mental status, or decreased consciousness."],
+    ["hepatic encephalopathy", "Confusion and altered mental status caused by ammonia building up when the liver fails. Look for asterixis."],
+    ["asterixis", "Flapping tremor of the hands when the wrists are extended; a sign of hepatic encephalopathy."],
+    ["dementia", "Chronic, progressive decline in memory and thinking that interferes with daily life."],
+    ["delirium", "Sudden, fluctuating confusion and inattention, usually caused by an acute illness or drug; often reversible."],
+    ["syncope", "Fainting: a brief loss of consciousness from reduced blood flow to the brain."],
+    ["vertigo", "A spinning sensation, as if you or the room is moving."],
+    ["tinnitus", "Ringing, buzzing, or roaring in the ears."],
+    ["nystagmus", "Involuntary, rhythmic jerking movements of the eyes."],
+    ["diplopia", "Double vision."],
+    ["presbyopia", "Age-related loss of the ability to focus on near objects."],
+    ["presbycusis", "Age-related, gradual hearing loss, usually high-pitched sounds first."],
+    ["ptosis", "Drooping of the upper eyelid."],
+    ["anisocoria", "Pupils of unequal size."],
+    ["glaucoma", "Increased pressure inside the eye that damages the optic nerve and can cause blindness."],
+    ["cataract", "Clouding of the lens of the eye, causing blurry vision."],
+    ["xerophthalmia", "Severe dryness of the eye from vitamin A deficiency; can lead to night blindness."],
+    ["myasthenia gravis", "Autoimmune disease in which antibodies block nerve signals to muscles, causing weakness that worsens with activity."],
+    ["poikilothermia", "Inability to regulate temperature; the limb feels cool (one of the 6 Ps of arterial occlusion)."],
+    ["pallor", "Unusual paleness of the skin."],
+    ["pulselessness", "No palpable pulse in a limb (one of the 6 Ps of acute arterial occlusion)."],
+
+    /* ---------- Respiratory ---------- */
+    ["dyspnea", "Shortness of breath or difficulty breathing."],
+    ["orthopnea", "Shortness of breath when lying flat, relieved by sitting up (a sign of heart failure)."],
+    ["paroxysmal nocturnal dyspnea|PND", "Waking up suddenly at night short of breath; a sign of left-sided heart failure."],
+    ["tachypnea", "Abnormally fast breathing (adult rate above 20 breaths per minute)."],
+    ["bradypnea", "Abnormally slow breathing (adult rate below 12 breaths per minute)."],
+    ["apnea", "Temporary stop in breathing."],
+    ["hyperventilation", "Breathing too fast or deeply, blowing off CO2 and causing respiratory alkalosis."],
+    ["hypoventilation", "Breathing too slowly or shallowly, retaining CO2 and causing respiratory acidosis."],
+    ["hypoxia", "Too little oxygen reaching the tissues."],
+    ["hypoxemia", "Low oxygen level in the blood (low PaO2 or SpO2)."],
+    ["hypercapnia|hypercarbia", "Too much carbon dioxide (CO2) in the blood."],
+    ["cyanosis", "Bluish color of the skin, lips, or nail beds from low blood oxygen."],
+    ["clubbing", "Rounded, enlarged fingertips with a lost nail angle; a sign of long-term low oxygen."],
+    ["hemoptysis", "Coughing up blood or blood-streaked sputum from the lungs."],
+    ["sputum", "Mucus coughed up from the lower airways."],
+    ["crackles|rales", "Fine or coarse popping sounds on inspiration caused by fluid in the small airways or alveoli."],
+    ["rhonchi", "Low-pitched snoring or gurgling lung sounds from secretions in the large airways; may clear with coughing."],
+    ["wheezes|wheeze|wheezing", "High-pitched whistling sounds from air moving through narrowed airways."],
+    ["stridor", "High-pitched, harsh sound on inspiration from upper-airway obstruction; an emergency."],
+    ["pleural friction rub|friction rub", "Grating or creaking sound when inflamed pleural layers rub together."],
+    ["adventitious breath sounds|adventitious", "Abnormal lung sounds, such as crackles, wheezes, rhonchi, or stridor."],
+    ["vesicular", "Soft, low-pitched normal breath sounds heard over most of the lung fields."],
+    ["bronchovesicular", "Medium-pitched normal breath sounds heard near the main bronchi (between the scapulae and beside the sternum)."],
+    ["hyperresonance|hyperresonant", "Booming percussion sound over air-filled lung, as in emphysema or pneumothorax."],
+    ["dullness", "Thud-like percussion sound over dense tissue or fluid, such as consolidation or effusion."],
+    ["tympany", "Drum-like percussion sound over air-filled organs, such as the stomach or bowel."],
+    ["consolidation", "Lung tissue filled with fluid, pus, or cells instead of air, as in pneumonia."],
+    ["atelectasis", "Collapse of alveoli or part of a lung, so that area cannot exchange gas."],
+    ["alveoli|alveolus|alveolar", "Tiny air sacs at the end of the airways where oxygen and CO2 are exchanged."],
+    ["bronchi|bronchus", "The large airways that branch from the trachea into each lung."],
+    ["bronchioles|bronchiole", "Small airways that branch off the bronchi and lead to the alveoli."],
+    ["surfactant", "Substance lining the alveoli that lowers surface tension so they do not collapse."],
+    ["pleura|pleurae", "Thin membrane covering the lungs (visceral) and lining the chest wall (parietal)."],
+    ["pleural effusion", "Buildup of fluid between the layers of the pleura, compressing the lung."],
+    ["effusion", "Abnormal collection of fluid in a body space."],
+    ["empyema", "Pus in the pleural space."],
+    ["pneumothorax", "Air in the pleural space that causes all or part of a lung to collapse."],
+    ["tension pneumothorax", "Pneumothorax in which trapped air builds pressure and shifts the heart and trachea; a life-threatening emergency."],
+    ["hemothorax", "Blood in the pleural space."],
+    ["pleurisy|pleuritis", "Inflammation of the pleura, causing sharp chest pain with breathing."],
+    ["pleuritic", "Describes sharp chest pain that worsens with breathing or coughing, typical of pleural irritation."],
+    ["bronchospasm", "Sudden tightening of the muscles around the airways, narrowing them."],
+    ["bronchitis", "Inflammation of the bronchi, causing cough and mucus."],
+    ["chronic bronchitis", "Type of COPD with a productive cough at least 3 months a year for 2 years in a row."],
+    ["emphysema", "Type of COPD in which alveolar walls are destroyed, trapping air in the lungs."],
+    ["asthma", "Chronic inflammatory airway disease with reversible bronchospasm, wheezing, and cough."],
+    ["status asthmaticus", "Severe asthma attack that does not respond to usual treatment; an emergency."],
+    ["pneumonia", "Infection of the lung tissue that fills the alveoli with fluid or pus."],
+    ["tuberculosis|TB", "Contagious airborne lung infection caused by Mycobacterium tuberculosis."],
+    ["cystic fibrosis", "Inherited disease that makes thick, sticky mucus that blocks the lungs and pancreas."],
+    ["pulmonary embolism|PE", "A clot (usually from a leg DVT) that travels to and blocks an artery in the lungs."],
+    ["pulmonary edema", "Fluid in the alveoli and lung tissue, causing crackles, dyspnea, and frothy sputum."],
+    ["pulmonary hypertension", "High blood pressure in the arteries of the lungs, which strains the right side of the heart."],
+    ["cor pulmonale", "Right-sided heart failure caused by lung disease."],
+    ["ARDS|acute respiratory distress syndrome", "Severe, sudden lung injury in which leaky alveoli fill with fluid, causing hypoxemia that does not improve with oxygen."],
+    ["COPD", "Chronic obstructive pulmonary disease: lasting airflow limitation from emphysema and/or chronic bronchitis."],
+    ["pulmonary fibrosis|fibrosis", "Scarring and thickening of tissue; in the lungs it makes them stiff and impairs gas exchange."],
+    ["pharyngitis", "Inflammation of the throat (pharynx); a sore throat."],
+    ["laryngitis", "Inflammation of the voice box (larynx), causing hoarseness or loss of voice."],
+    ["sinusitis", "Inflammation or infection of the sinuses."],
+    ["rhinitis", "Inflammation of the nasal lining, causing a runny or stuffy nose and sneezing."],
+    ["rhinorrhea", "Runny nose."],
+    ["epistaxis", "Nosebleed."],
+    ["tonsillitis", "Inflammation of the tonsils."],
+    ["epiglottitis", "Swelling of the epiglottis that can block the airway; an emergency (drooling, tripod position)."],
+    ["croup", "Viral infection in young children causing swelling below the vocal cords and a barking cough."],
+    ["tripod position", "Sitting and leaning forward with hands on the knees to make breathing easier; a sign of respiratory distress."],
+    ["accessory muscles", "Neck and chest muscles (such as the sternocleidomastoid and scalenes) used to breathe when breathing is hard."],
+    ["retractions", "Skin pulling in between or below the ribs during inspiration; a sign of respiratory distress."],
+    ["barrel chest", "Rounded chest with equal front-to-back and side-to-side width, from long-term air trapping (as in emphysema)."],
+    ["pursed-lip breathing|pursed lip breathing", "Breathing out slowly through pursed lips to keep airways open longer and release trapped air."],
+    ["tactile fremitus|fremitus", "Vibration felt on the chest wall when the client speaks; increased with consolidation, decreased with air or fluid."],
+    ["egophony", "When spoken \"ee\" sounds like \"ay\" through the stethoscope; suggests consolidation."],
+    ["bronchophony", "Spoken words sound unusually loud and clear through the stethoscope; suggests consolidation."],
+    ["whispered pectoriloquy", "Whispered words heard clearly through the stethoscope; suggests consolidation."],
+    ["mediastinum|mediastinal", "The space in the middle of the chest between the lungs that holds the heart, trachea, and great vessels."],
+    ["dead space", "Air in the airways or ventilated alveoli that does not take part in gas exchange."],
+    ["V/Q mismatch|ventilation-perfusion mismatch", "When airflow and blood flow in the lungs do not match, reducing oxygen exchange."],
+    ["leukotrienes|leukotriene", "Inflammatory chemicals that cause bronchoconstriction and mucus production (targeted by montelukast)."],
+    ["alpha-1 antitrypsin|antitrypsin", "Protein that protects the lungs from enzyme damage; an inherited deficiency causes early emphysema."],
+    ["elastase", "Enzyme from white blood cells that breaks down elastic tissue in the lungs."],
+    ["pneumocystis|Pneumocystis jirovecii", "Fungus that causes pneumonia in people with weakened immune systems (such as HIV/AIDS)."],
+
+    /* ---------- Cardiovascular ---------- */
+    ["tachycardia", "Fast heart rate (adult rate above 100 beats per minute)."],
+    ["bradycardia", "Slow heart rate (adult rate below 60 beats per minute)."],
+    ["dysrhythmia|arrhythmia", "Abnormal heart rhythm."],
+    ["tachyarrhythmia", "Abnormal heart rhythm with a fast rate."],
+    ["atrial fibrillation|AFib|A-fib", "Chaotic quivering of the atria causing an irregularly irregular rhythm; raises the risk of clots and stroke."],
+    ["atrial flutter", "Fast, regular atrial rhythm with a sawtooth pattern on the ECG."],
+    ["ventricular fibrillation|V-fib|VFib", "Chaotic quivering of the ventricles with no effective pumping; cardiac arrest that needs immediate defibrillation."],
+    ["ventricular tachycardia|V-tach|VTach", "Very fast rhythm starting in the ventricles; can become pulseless and life-threatening."],
+    ["supraventricular tachycardia|SVT", "Fast heart rhythm that starts above the ventricles."],
+    ["premature ventricular contraction|PVC", "Early, extra heartbeat that starts in the ventricles."],
+    ["fibrillation", "Rapid, chaotic, ineffective quivering of heart muscle fibers."],
+    ["asystole", "No electrical activity in the heart (flatline)."],
+    ["palpitations|palpitation", "Feeling your heart pounding, racing, or skipping beats."],
+    ["hypertension|HTN", "High blood pressure (consistently 130/80 mm Hg or higher)."],
+    ["hypotension", "Low blood pressure (generally below 90/60 mm Hg)."],
+    ["orthostatic hypotension|postural hypotension", "Drop in blood pressure when standing up, causing dizziness or fainting."],
+    ["hypertensive crisis", "Severe blood pressure elevation (above 180/120 mm Hg) that can damage organs."],
+    ["angina|angina pectoris", "Chest pain from reduced blood flow (ischemia) to the heart muscle."],
+    ["stable angina", "Predictable chest pain brought on by exertion and relieved by rest or nitroglycerin."],
+    ["unstable angina", "New, worsening, or at-rest chest pain not relieved by rest; a warning sign of a heart attack."],
+    ["Prinzmetal angina|variant angina", "Chest pain at rest caused by coronary artery spasm."],
+    ["myocardial infarction|MI|heart attack", "Death of heart muscle from a blocked coronary artery."],
+    ["STEMI", "ST-elevation myocardial infarction: a heart attack with a full-thickness blockage, shown by ST elevation on the ECG."],
+    ["NSTEMI", "Non-ST-elevation myocardial infarction: a heart attack without ST elevation, usually a partial blockage."],
+    ["infarction|infarct", "Death of tissue from loss of blood supply."],
+    ["ischemia|ischemic", "Not enough blood flow (and oxygen) to a tissue; reversible if restored quickly."],
+    ["necrosis|necrotic", "Death of cells or tissue."],
+    ["troponin", "Protein released into the blood when heart muscle is damaged; the main lab marker of a heart attack."],
+    ["BNP|B-type natriuretic peptide", "Hormone released by stretched ventricles; high levels suggest heart failure."],
+    ["CAD|coronary artery disease", "Narrowing of the coronary arteries (usually from atherosclerosis), reducing blood flow to the heart."],
+    ["heart failure|HF|CHF|congestive heart failure", "The heart cannot pump enough blood to meet the body's needs, causing fluid to back up."],
+    ["left-sided heart failure|left sided heart failure", "Weak left ventricle causes fluid to back up into the lungs: crackles, dyspnea, orthopnea."],
+    ["right-sided heart failure|right sided heart failure", "Weak right ventricle causes fluid to back up into the body: JVD, edema, liver enlargement."],
+    ["ejection fraction|EF", "Percentage of blood the left ventricle pumps out with each beat (normal is about 55 to 70%)."],
+    ["cardiac output", "Amount of blood the heart pumps each minute (heart rate times stroke volume)."],
+    ["stroke volume", "Amount of blood pumped out of the ventricle with each beat."],
+    ["preload", "How much the ventricle is stretched by blood filling it before it contracts (volume)."],
+    ["afterload", "The resistance the ventricle must pump against to eject blood (pressure)."],
+    ["contractility", "How forcefully the heart muscle squeezes."],
+    ["cardiomyopathy", "Disease of the heart muscle that makes it harder to pump."],
+    ["hypertrophic cardiomyopathy", "Abnormally thick heart muscle that stiffens the ventricle; a cause of sudden death in young athletes."],
+    ["dilated cardiomyopathy", "Enlarged, weakened ventricles that pump poorly."],
+    ["hypertrophy|hypertrophic", "Increase in the size of cells, making an organ or muscle larger (such as a thickened heart wall)."],
+    ["atrophy", "Wasting or shrinking of a tissue or organ."],
+    ["hyperplasia", "Increase in the number of cells, which enlarges a tissue (as in BPH)."],
+    ["myocardium|myocardial", "The heart muscle (middle layer of the heart wall)."],
+    ["endocardium", "The thin inner lining of the heart chambers and valves."],
+    ["pericardium|pericardial", "The sac that surrounds the heart."],
+    ["epicardium", "The outer layer of the heart wall."],
+    ["pericarditis", "Inflammation of the pericardium; chest pain is often relieved by sitting up and leaning forward."],
+    ["myocarditis", "Inflammation of the heart muscle, often from a virus."],
+    ["endocarditis", "Infection or inflammation of the inner lining of the heart, usually the valves."],
+    ["infective endocarditis", "Infection of the heart valves by bacteria in the bloodstream, forming clumps called vegetations."],
+    ["vegetations|vegetation", "Clumps of bacteria, platelets, and fibrin on heart valves in infective endocarditis."],
+    ["cardiac tamponade|tamponade", "Fluid in the pericardial sac squeezes the heart so it cannot fill; an emergency."],
+    ["Beck's triad|Beck triad", "Signs of cardiac tamponade: low blood pressure, JVD, and muffled heart sounds."],
+    ["pulsus paradoxus", "Drop in systolic blood pressure of more than 10 mm Hg during inspiration; seen in tamponade."],
+    ["rheumatic heart disease", "Heart valve damage from rheumatic fever, which follows an untreated strep throat."],
+    ["rheumatic fever", "Inflammatory reaction to untreated strep throat that can damage the heart valves."],
+    ["atrium|atria|atrial", "Upper chamber of the heart that receives blood."],
+    ["ventricle|ventricular", "Lower chamber of the heart that pumps blood out."],
+    ["septum", "Wall dividing the left and right sides of the heart (or of the nose)."],
+    ["mitral valve|mitral", "Valve between the left atrium and left ventricle."],
+    ["tricuspid valve|tricuspid", "Valve between the right atrium and right ventricle."],
+    ["aortic valve", "Valve between the left ventricle and the aorta."],
+    ["pulmonic valve|pulmonic", "Valve between the right ventricle and the pulmonary artery."],
+    ["semilunar valves|semilunar", "The aortic and pulmonic valves, which let blood leave the ventricles."],
+    ["atrioventricular valves|AV valves", "The mitral and tricuspid valves, between the atria and ventricles."],
+    ["stenosis|stenotic", "Abnormal narrowing; a stenotic valve does not open fully, so blood is forced through a small opening."],
+    ["regurgitation|regurgitant", "Backward leaking of blood through a valve that does not close fully."],
+    ["insufficiency", "A valve that does not close completely (same as regurgitation), or an organ that is not working enough."],
+    ["mitral valve prolapse", "Mitral valve leaflets bulge back into the left atrium; may cause a click and murmur."],
+    ["prolapse", "Slipping or bulging of an organ or structure out of its normal position."],
+    ["murmur", "Swishing or whooshing heart sound from turbulent blood flow, often through a damaged valve."],
+    ["bruit", "Whooshing sound heard over a narrowed artery (such as the carotid or abdominal aorta)."],
+    ["thrill", "A palpable vibration felt over the heart or an artery from turbulent blood flow."],
+    ["S1", "The first heart sound (lub): closing of the mitral and tricuspid valves at the start of systole."],
+    ["S2", "The second heart sound (dub): closing of the aortic and pulmonic valves at the start of diastole."],
+    ["S3", "An extra heart sound right after S2 (ventricular gallop); often a sign of heart failure in adults."],
+    ["S4", "An extra heart sound right before S1 (atrial gallop), from a stiff ventricle."],
+    ["systole|systolic", "The phase when the ventricles contract and pump blood out (the top blood pressure number)."],
+    ["diastole|diastolic", "The phase when the ventricles relax and fill with blood (the bottom blood pressure number)."],
+    ["PMI|point of maximal impulse", "Where the heartbeat is felt most strongly on the chest, normally at the 5th intercostal space, midclavicular line."],
+    ["apical pulse", "Heart rate counted with a stethoscope over the apex of the heart for one full minute."],
+    ["jugular venous distention|JVD", "Bulging neck veins from high pressure in the right side of the heart, as in right-sided heart failure."],
+    ["sinoatrial node|SA node", "The heart's natural pacemaker in the right atrium (fires 60 to 100 times a minute)."],
+    ["atrioventricular node|AV node", "Tissue that delays the electrical signal between the atria and the ventricles."],
+    ["Purkinje fibers|Purkinje", "Fibers that spread the electrical signal through the ventricles so they contract."],
+    ["bundle of His", "Conduction pathway that carries the signal from the AV node to the ventricles."],
+    ["depolarization", "Electrical activation of heart cells, which triggers contraction."],
+    ["repolarization", "Recovery of heart cells back to their resting electrical state."],
+    ["ECG|EKG|electrocardiogram", "Test that records the heart's electrical activity."],
+    ["echocardiogram", "Ultrasound of the heart that shows its structure, valves, and pumping (ejection fraction)."],
+    ["atherosclerosis|atherosclerotic", "Buildup of fatty plaque in artery walls that narrows and hardens them."],
+    ["arteriosclerosis", "Thickening and hardening of artery walls."],
+    ["plaque", "A deposit of fat, cholesterol, and cells in an artery wall (or bacteria on teeth)."],
+    ["aneurysm", "A weak, bulging area in the wall of an artery that can rupture."],
+    ["abdominal aortic aneurysm|AAA", "A bulge in the abdominal aorta; may feel like a pulsating mass. Do not palpate deeply."],
+    ["aortic dissection|dissection", "A tear in the inner layer of the aorta that lets blood split the wall layers; sudden tearing pain, an emergency."],
+    ["PAD|peripheral artery disease|peripheral arterial disease", "Narrowed arteries (usually in the legs) that reduce blood flow, causing pain with walking, cool pale skin, and weak pulses."],
+    ["PVD|peripheral vascular disease", "Disease of blood vessels outside the heart and brain (arteries or veins)."],
+    ["claudication|intermittent claudication", "Leg cramping or pain with walking that goes away with rest, from poor arterial blood flow."],
+    ["rest pain", "Leg or foot pain even at rest from severe arterial insufficiency; often relieved by dangling the leg."],
+    ["Raynaud's phenomenon|Raynaud phenomenon|Raynaud's|Raynaud", "Spasm of small arteries in fingers and toes from cold or stress, turning them white, then blue, then red."],
+    ["Buerger's disease|Buerger disease|thromboangiitis obliterans", "Inflammation and clotting of small and medium vessels in the hands and feet, strongly linked to smoking."],
+    ["vasospasm|vasospastic", "Sudden narrowing of a blood vessel from muscle spasm."],
+    ["vasoconstriction", "Narrowing of blood vessels, which raises blood pressure and reduces blood flow."],
+    ["vasodilation|vasodilator", "Widening of blood vessels, which lowers blood pressure and increases blood flow."],
+    ["perfusion", "Blood flow through tissues, delivering oxygen and nutrients."],
+    ["capillary refill", "Time for color to return to a nail bed after pressing it; normal is under 3 seconds."],
+    ["collateral circulation|collaterals|collateral", "New or extra small vessels that grow to reroute blood around a blockage."],
+    ["arterioles|arteriole", "Small branches of arteries that lead into capillaries and control blood pressure."],
+    ["capillaries|capillary", "The tiniest blood vessels, where oxygen and nutrients pass to the tissues."],
+    ["endothelium|endothelial", "The thin layer of cells lining the inside of blood vessels."],
+    ["tunica intima|intima", "The inner layer of a blood vessel wall."],
+    ["tunica media", "The middle, muscular layer of a blood vessel wall."],
+    ["tunica adventitia|adventitia", "The outer layer of a blood vessel wall."],
+    ["venous insufficiency|chronic venous insufficiency", "Weak vein valves let blood pool in the legs, causing swelling, brown skin discoloration, and ulcers near the ankles."],
+    ["varicose veins|varicose", "Enlarged, twisted veins (usually in the legs) caused by weak or leaky valves."],
+    ["DVT|deep vein thrombosis|deep venous thrombosis", "A blood clot in a deep vein, usually in the leg; can break off and cause a pulmonary embolism."],
+    ["thrombophlebitis|phlebitis", "Inflammation of a vein, often with a clot."],
+    ["thrombus|thrombi", "A blood clot attached to a vessel wall."],
+    ["thrombosis|thrombotic", "Formation of a blood clot inside a vessel."],
+    ["embolus|emboli|embolism|embolic", "A clot, fat, or air bubble that travels through the bloodstream and lodges in a smaller vessel."],
+    ["thromboembolism|thromboembolic", "A clot that forms in one place, breaks off, and blocks a vessel somewhere else."],
+    ["D-dimer|D dimer", "Blood test for clot breakdown fragments; a negative result helps rule out DVT or PE, but a positive one is not specific."],
+    ["CTPA|CT pulmonary angiography", "CT scan with IV contrast that shows clots in the lung arteries; the main test to confirm a PE."],
+    ["VTE|venous thromboembolism", "Clots in the veins, including DVT and pulmonary embolism."],
+    ["Virchow's triad|Virchow triad|Virchow's|Virchow", "Three factors that cause clots: venous stasis, vessel wall injury, and hypercoagulability."],
+    ["stasis", "Slowed or stopped flow of a body fluid, such as blood pooling in the veins."],
+    ["hypercoagulability|hypercoagulable", "A state in which the blood clots more easily than normal."],
+    ["thrombophilia", "An inherited or acquired tendency to form blood clots."],
+    ["hemosiderin", "Iron-containing pigment from broken-down red blood cells that stains the lower legs brown in venous insufficiency."],
+    ["stasis dermatitis", "Itchy, scaly, discolored skin on the lower legs from poor venous return."],
+    ["venous stasis ulcer|venous ulcer", "Shallow, irregular, moist wound near the inner ankle caused by poor venous return."],
+    ["arterial ulcer", "Deep, round, painful wound with a pale base on the toes or feet, from poor arterial blood flow."],
+    ["shock", "Not enough blood flow to the organs to meet their oxygen needs; life-threatening."],
+    ["cardiogenic shock", "Shock caused by the heart failing to pump (for example, after a large MI)."],
+    ["hypovolemic shock", "Shock caused by losing too much blood or fluid."],
+    ["septic shock", "Shock caused by an overwhelming infection that dilates blood vessels."],
+    ["anaphylactic shock", "Shock caused by a severe allergic reaction."],
+    ["obstructive shock", "Shock caused by something blocking blood flow (such as a large PE, tamponade, or tension pneumothorax)."],
+    ["hypovolemia|hypovolemic", "Low blood or fluid volume in the body."],
+    ["hypervolemia|fluid volume excess", "Too much fluid in the bloodstream."],
+    ["edema", "Swelling caused by fluid trapped in the tissues."],
+    ["pitting edema", "Swelling that leaves a dent after you press on it; graded 1+ to 4+."],
+    ["brawny edema", "Hard, thick, non-pitting swelling with brown skin, seen in chronic venous insufficiency."],
+    ["anasarca", "Severe, generalized swelling throughout the body."],
+    ["periorbital edema|periorbital", "Swelling around the eyes; common in nephrotic syndrome."],
+    ["hydrostatic pressure|hydrostatic", "Pressure of fluid pushing out of blood vessels into tissues."],
+    ["oncotic pressure|oncotic|colloid osmotic pressure", "Pull of proteins (mainly albumin) that keeps fluid inside blood vessels."],
+    ["RAAS|renin-angiotensin-aldosterone system", "Hormone system that raises blood pressure by narrowing vessels and making the kidneys hold onto sodium and water."],
+    ["renin", "Enzyme released by the kidneys when blood pressure or blood flow drops; starts the RAAS."],
+    ["angiotensin II|angiotensin", "Hormone that narrows blood vessels and triggers aldosterone release, raising blood pressure."],
+    ["aldosterone", "Adrenal hormone that makes the kidneys keep sodium and water and excrete potassium."],
+    ["ADH|antidiuretic hormone|vasopressin", "Hormone from the pituitary that makes the kidneys hold onto water."],
+    ["bradykinin", "Chemical that widens blood vessels; its buildup from ACE inhibitors causes dry cough and angioedema."],
+    ["hemodynamics|hemodynamic", "The forces and flow of blood through the heart and vessels."],
+    ["remodeling", "Changes in the size, shape, and function of the heart after injury or long-term strain."],
+    ["reperfusion", "Restoring blood flow to tissue after a blockage."],
+    ["PCI|percutaneous coronary intervention", "Procedure that opens a blocked coronary artery with a balloon and often a stent, through a catheter."],
+    ["CABG|coronary artery bypass graft", "Surgery that uses a vessel from elsewhere to route blood around a blocked coronary artery."],
+    ["stent", "Small mesh tube placed in a vessel to hold it open."],
+    ["thrombolytic|fibrinolytic", "Clot-busting drug (such as alteplase) that dissolves an existing clot."],
+    ["anticoagulant", "Drug that slows clotting so clots do not form or grow (such as heparin or warfarin); it does not dissolve existing clots."],
+    ["antiplatelet", "Drug that stops platelets from clumping together (such as aspirin or clopidogrel)."],
+    ["diuretic", "Drug that makes the kidneys remove more sodium and water, increasing urine output."],
+    ["fibrin", "Protein threads that form the mesh of a blood clot."],
+    ["fibrinogen", "Clotting protein that is converted into fibrin to form a clot."],
+    ["thrombin", "Enzyme that converts fibrinogen into fibrin during clotting."],
+    ["plasminogen|plasmin", "Plasmin is the body's clot-dissolving enzyme; plasminogen is its inactive form that thrombolytics activate."],
+    ["prothrombin", "Clotting protein made by the liver; converted to thrombin during clotting."],
+    ["PT/INR|INR", "Blood tests of how long clotting takes; used to monitor warfarin."],
+    ["aPTT|PTT", "Blood test of clotting time; used to monitor heparin."],
+    ["dyslipidemia|hyperlipidemia", "Abnormal blood fat levels, such as high LDL cholesterol or triglycerides."],
+    ["hypertriglyceridemia", "High triglyceride levels in the blood."],
+    ["LDL", "Low-density lipoprotein, the \"bad\" cholesterol that builds plaque in arteries."],
+    ["HDL", "High-density lipoprotein, the \"good\" cholesterol that carries cholesterol away from arteries."],
+    ["triglycerides|triglyceride", "A type of fat in the blood that stores energy; high levels raise heart disease and pancreatitis risk."],
+
+    /* ---------- Blood ---------- */
+    ["anemia", "Too few red blood cells or too little hemoglobin, so the blood carries less oxygen."],
+    ["iron deficiency anemia", "Anemia from low iron, with small, pale (microcytic, hypochromic) red blood cells."],
+    ["pernicious anemia", "Anemia from vitamin B12 deficiency because the stomach lacks intrinsic factor to absorb B12."],
+    ["megaloblastic anemia|macrocytic anemia", "Anemia with large, immature red blood cells, from low vitamin B12 or folate."],
+    ["aplastic anemia", "Bone marrow failure in which too few blood cells of all types are made."],
+    ["hemolytic anemia", "Anemia caused by red blood cells being destroyed faster than they are made."],
+    ["microcytic", "Describes red blood cells that are smaller than normal (as in iron deficiency)."],
+    ["macrocytic", "Describes red blood cells that are larger than normal (as in B12 or folate deficiency)."],
+    ["intrinsic factor", "Protein made by the stomach that is needed to absorb vitamin B12."],
+    ["hemoglobin|Hgb", "Iron-containing protein in red blood cells that carries oxygen."],
+    ["hematocrit|Hct", "Percentage of blood volume made up of red blood cells."],
+    ["erythropoietin|EPO", "Hormone made by the kidneys that tells the bone marrow to make red blood cells."],
+    ["hemolysis|hemolytic", "Breaking apart of red blood cells."],
+    ["thrombocytopenia|thrombocytopenic", "Low platelet count, which raises the risk of bleeding."],
+    ["heparin-induced thrombocytopenia|HIT", "Immune reaction to heparin that drops platelets and paradoxically causes clots."],
+    ["leukopenia", "Low white blood cell count, which raises infection risk."],
+    ["neutropenia", "Low neutrophil count, which greatly raises infection risk."],
+    ["agranulocytosis", "Dangerously low level of granulocytes (mainly neutrophils); watch for fever and sore throat."],
+    ["leukocytosis", "High white blood cell count, usually from infection or inflammation."],
+    ["blood dyscrasias|blood dyscrasia|dyscrasias", "Disorders of the blood cells, such as anemia, low platelets, or low white cells."],
+    ["neutrophils|neutrophil", "The most common white blood cells; first responders to bacterial infection."],
+    ["eosinophils|eosinophil|eosinophilic", "White blood cells involved in allergies and parasitic infections."],
+    ["macrophages|macrophage", "Immune cells that engulf and digest germs and debris."],
+    ["platelets|platelet", "Cell fragments in the blood that clump together to start a clot."],
+    ["petechiae", "Tiny red or purple pinpoint spots from bleeding under the skin; seen with low platelets."],
+    ["purpura", "Purple patches from bleeding under the skin, larger than petechiae."],
+    ["ecchymosis", "A bruise: purple discoloration from blood leaking under the skin."],
+    ["hematoma", "A collection of blood outside a vessel that forms a lump."],
+    ["methemoglobinemia", "Blood disorder in which hemoglobin cannot carry oxygen well, causing chocolate-brown blood and cyanosis."],
+    ["antiphospholipid syndrome", "Autoimmune disorder that makes the blood clot too easily."],
+    ["sickle cell disease|sickle cell", "Inherited disease in which red blood cells become sickle-shaped, block small vessels, and break down early."],
+    ["lymphadenopathy", "Swollen or enlarged lymph nodes."],
+    ["splenomegaly", "Enlarged spleen."],
+    ["hepatomegaly", "Enlarged liver."],
+    ["lymphoma", "Cancer of the lymphocytes (immune cells in the lymph nodes)."],
+
+    /* ---------- Renal & urinary ---------- */
+    ["nephron", "The tiny filtering unit of the kidney (about a million per kidney)."],
+    ["glomerulus|glomeruli|glomerular", "Tiny cluster of capillaries in the nephron that filters blood to start making urine."],
+    ["Bowman's capsule|Bowman capsule", "Cup-shaped part of the nephron that surrounds the glomerulus and collects the filtrate."],
+    ["tubule|tubular", "Small tube in the nephron where water and solutes are reabsorbed or secreted."],
+    ["loop of Henle", "U-shaped part of the nephron that concentrates urine; loop diuretics act here."],
+    ["reabsorption", "Moving water and substances from the kidney tubules back into the blood."],
+    ["filtration", "Pushing fluid and small particles out of the blood through a filter (like the glomerulus)."],
+    ["GFR|glomerular filtration rate|eGFR", "How much blood the kidneys filter each minute; the best measure of kidney function (normal is about 90 to 120)."],
+    ["BUN|blood urea nitrogen", "Waste product from protein breakdown cleared by the kidneys; rises with kidney injury or dehydration."],
+    ["creatinine", "Muscle waste product cleared by the kidneys; the most reliable blood marker of kidney function."],
+    ["creatinine clearance", "How fast the kidneys clear creatinine from the blood; estimates GFR."],
+    ["azotemia", "Buildup of nitrogen wastes (BUN and creatinine) in the blood from poor kidney function."],
+    ["uremia|uremic", "Symptoms from waste buildup in kidney failure, such as nausea, itching, confusion, and a urine smell on the breath."],
+    ["AKI|acute kidney injury", "Sudden drop in kidney function over hours to days; often reversible."],
+    ["CKD|chronic kidney disease", "Gradual, permanent loss of kidney function over at least 3 months."],
+    ["ESRD|ESKD|end-stage renal disease|end-stage kidney disease", "Kidney failure (stage 5 CKD) that needs dialysis or a transplant."],
+    ["prerenal", "Kidney injury caused by reduced blood flow to the kidneys (such as dehydration, shock, or heart failure)."],
+    ["intrarenal|intrinsic renal", "Kidney injury caused by damage to the kidney tissue itself (such as ATN or glomerulonephritis)."],
+    ["postrenal", "Kidney injury caused by blocked urine flow after the kidneys (such as stones or an enlarged prostate)."],
+    ["ATN|acute tubular necrosis", "Damage and death of kidney tubule cells from ischemia or toxins; the most common intrarenal cause of AKI."],
+    ["nephrotoxins|nephrotoxin|nephrotoxic", "Substances that damage the kidneys, such as NSAIDs, aminoglycosides, and contrast dye."],
+    ["glomerulonephritis", "Inflammation of the glomeruli, causing blood and protein in the urine, swelling, and high blood pressure; often after strep infection."],
+    ["post-streptococcal glomerulonephritis|poststreptococcal glomerulonephritis", "Glomerulonephritis that develops 1 to 3 weeks after a strep throat or skin infection; cola-colored urine."],
+    ["nephritic syndrome|nephritic", "Kidney inflammation with blood in the urine, high blood pressure, and some protein loss."],
+    ["nephrotic syndrome|nephrotic", "Kidney disorder with heavy protein loss in the urine, low albumin, high cholesterol, and severe swelling."],
+    ["pyelonephritis|pyelo", "Bacterial infection of the kidney, causing fever, flank pain, and CVA tenderness."],
+    ["polycystic kidney disease|PKD", "Inherited disease in which fluid-filled cysts grow in the kidneys and destroy them over time."],
+    ["hydronephrosis", "Swelling of the kidney from urine backing up because of a blockage."],
+    ["nephrolithiasis|urolithiasis|renal calculi|kidney stones", "Stones that form in the kidney or urinary tract, causing severe flank pain and blood in the urine."],
+    ["calculi|calculus", "Stones that form in the body, such as kidney stones or gallstones."],
+    ["renal colic", "Severe, wave-like flank pain from a kidney stone moving down the ureter."],
+    ["CVA tenderness|costovertebral angle tenderness", "Pain when tapping the back over the kidney; a sign of pyelonephritis."],
+    ["dialysis", "Treatment that filters wastes and extra fluid from the blood when the kidneys fail."],
+    ["hemodialysis", "Dialysis that pumps blood through an outside filter machine, usually through an AV fistula."],
+    ["peritoneal dialysis", "Dialysis that uses the lining of the abdomen as a filter, with fluid placed into and drained from the belly."],
+    ["dialysate", "The cleansing fluid used in dialysis to pull wastes out of the blood."],
+    ["AV fistula|arteriovenous fistula", "Surgical connection of an artery and vein in the arm for hemodialysis access; feel for a thrill, listen for a bruit."],
+    ["fistula", "An abnormal connection between two body parts (or a surgical one for dialysis)."],
+    ["oliguria|oliguric", "Very low urine output (less than 400 mL a day, or under 0.5 mL/kg per hour)."],
+    ["anuria", "Little or no urine output (less than 100 mL a day)."],
+    ["polyuria", "Passing large amounts of urine."],
+    ["nocturia", "Waking up at night to urinate."],
+    ["dysuria", "Painful or burning urination."],
+    ["hematuria", "Blood in the urine."],
+    ["proteinuria|albuminuria", "Protein in the urine; a sign of kidney (glomerular) damage."],
+    ["pyuria", "White blood cells (pus) in the urine; a sign of infection."],
+    ["bacteriuria", "Bacteria in the urine."],
+    ["urinalysis|UA", "Lab test of a urine sample for color, protein, blood, white cells, bacteria, and more."],
+    ["leukocyte esterase", "Enzyme from white blood cells; a positive urine test suggests a UTI."],
+    ["nitrites|nitrite", "Made when certain bacteria break down urine nitrates; a positive urine test suggests a UTI."],
+    ["specific gravity", "Measure of how concentrated urine is (normal about 1.005 to 1.030)."],
+    ["hesitancy", "Trouble starting the urine stream."],
+    ["urinary retention", "Being unable to empty the bladder completely."],
+    ["incontinence", "Loss of bladder (or bowel) control, causing leakage."],
+    ["stress incontinence", "Urine leakage when coughing, sneezing, laughing, or lifting."],
+    ["urge incontinence|overactive bladder", "A sudden, strong urge to urinate followed by leakage."],
+    ["overflow incontinence", "Dribbling from a bladder that is too full and cannot empty, often from blockage like BPH."],
+    ["UTI|urinary tract infection", "Bacterial infection anywhere in the urinary tract, most often the bladder."],
+    ["cystitis", "Inflammation or infection of the bladder."],
+    ["interstitial cystitis", "Chronic bladder pain and urgency without infection."],
+    ["urethritis", "Inflammation of the urethra, often from a sexually transmitted infection."],
+    ["ureter", "Tube that carries urine from a kidney to the bladder."],
+    ["urethra", "Tube that carries urine from the bladder out of the body."],
+    ["suprapubic", "The area just above the pubic bone, over the bladder."],
+    ["neurogenic bladder", "Bladder that does not work properly because of nerve damage."],
+    ["catheterization|catheter", "Placing a thin tube into the body, such as into the bladder to drain urine."],
+    ["CAUTI", "Catheter-associated urinary tract infection."],
+    ["urosepsis", "Sepsis that starts from a urinary tract infection."],
+    ["urobilinogen", "Substance made from bilirubin in the gut; found in small amounts in normal urine."],
+    ["osmolality|osmolarity", "Concentration of particles dissolved in a fluid such as blood or urine."],
+    ["osmotic diuresis", "Increased urine output caused by particles (like glucose or mannitol) pulling water into the urine."],
+    ["diuresis", "Increased urine production."],
+    ["calcitriol", "Active form of vitamin D made by the kidneys; helps absorb calcium."],
+    ["renal osteodystrophy", "Bone disease from CKD caused by calcium, phosphorus, and vitamin D imbalances."],
+    ["Wilms tumor", "Kidney cancer in young children, often found as a smooth abdominal mass; do not palpate it."],
+
+    /* ---------- Male reproductive ---------- */
+    ["BPH|benign prostatic hyperplasia|benign prostatic hypertrophy", "Noncancerous enlargement of the prostate that squeezes the urethra and makes urination hard."],
+    ["prostatitis", "Inflammation or infection of the prostate."],
+    ["prostate cancer", "Cancer of the prostate gland; often slow-growing and found with PSA and a rectal exam."],
+    ["PSA|prostate-specific antigen", "Protein made by the prostate; high blood levels can mean BPH, prostatitis, or cancer."],
+    ["DRE|digital rectal exam", "Exam in which the provider feels the prostate with a gloved finger through the rectum."],
+    ["TURP|transurethral resection of the prostate", "Surgery that removes excess prostate tissue through the urethra; watch for bleeding and clots after."],
+    ["epididymitis", "Inflammation of the epididymis (the coiled tube behind the testis), causing scrotal pain and swelling."],
+    ["orchitis", "Inflammation of a testis, often from mumps or a bacterial infection."],
+    ["testicular torsion|torsion", "Twisting of the spermatic cord that cuts off the testis's blood supply; a surgical emergency."],
+    ["Prehn sign|Prehn's sign", "Lifting the scrotum relieves pain in epididymitis but not in testicular torsion."],
+    ["cremasteric reflex", "Stroking the inner thigh pulls the testis up; usually absent in testicular torsion."],
+    ["hydrocele", "Painless fluid collection around a testis; glows when a light is shined through it."],
+    ["varicocele", "Enlarged veins in the scrotum that feel like a bag of worms."],
+    ["spermatocele", "Painless fluid-filled cyst on the epididymis."],
+    ["cryptorchidism", "A testis that has not descended into the scrotum."],
+    ["phimosis", "Foreskin too tight to pull back over the head of the penis."],
+    ["paraphimosis", "Retracted foreskin stuck behind the head of the penis, causing swelling; an emergency."],
+    ["priapism", "Prolonged, painful erection (over 4 hours) not caused by arousal; an emergency."],
+    ["erectile dysfunction", "Being unable to get or keep an erection firm enough for sex."],
+    ["Peyronie's disease|Peyronie disease", "Scar tissue in the penis that causes a curved, painful erection."],
+    ["hypospadias", "Birth defect in which the urethral opening is on the underside of the penis."],
+    ["epispadias", "Birth defect in which the urethral opening is on the top of the penis."],
+    ["gynecomastia", "Enlargement of breast tissue in males."],
+    ["hypogonadism", "The testes or ovaries make too little sex hormone."],
+    ["androgens|androgen", "Male sex hormones, such as testosterone."],
+    ["antiandrogen", "Drug that blocks the effects of male hormones."],
+    ["genitalia", "The external and internal reproductive organs."],
+    ["scrotum|scrotal", "The pouch of skin that holds the testes."],
+    ["perineum|perineal", "The area between the genitals and the anus."],
+    ["chlamydia", "Common bacterial sexually transmitted infection, often without symptoms."],
+    ["gonorrhea", "Bacterial sexually transmitted infection that can cause discharge and painful urination."],
+    ["syphilis", "Bacterial sexually transmitted infection that starts with a painless sore (chancre)."],
+    ["dysmenorrhea", "Painful menstrual periods."],
+    ["endometrium|endometrial", "The inner lining of the uterus."],
+    ["eclampsia", "Seizures in a pregnant client with preeclampsia; an emergency."],
+    ["preeclampsia", "High blood pressure with organ damage (often protein in the urine) after 20 weeks of pregnancy."],
+    ["teratogenic|teratogen", "Able to cause birth defects."],
+
+    /* ---------- GI & liver ---------- */
+    ["dysphagia", "Difficulty swallowing."],
+    ["odynophagia", "Painful swallowing."],
+    ["dyspepsia", "Indigestion: upper abdominal discomfort, fullness, or burning."],
+    ["GERD|gastroesophageal reflux disease", "Stomach acid repeatedly flows back into the esophagus, causing heartburn."],
+    ["esophagitis", "Inflammation of the esophagus."],
+    ["Barrett's esophagus|Barrett esophagus|Barrett's", "Precancerous change in the lower esophagus lining from long-term acid reflux."],
+    ["achalasia", "The lower esophageal sphincter does not relax, so food has trouble passing into the stomach."],
+    ["hiatal hernia", "Part of the stomach pushes up through the diaphragm into the chest."],
+    ["hernia|herniation", "An organ or tissue pushing through a weak spot in the muscle or tissue that holds it."],
+    ["esophageal varices|varices|variceal", "Swollen, fragile veins in the esophagus or stomach from portal hypertension; can bleed massively."],
+    ["portal hypertension", "High blood pressure in the portal vein (which carries blood from the gut to the liver), usually from cirrhosis."],
+    ["gastritis", "Inflammation of the stomach lining."],
+    ["peptic ulcer disease|PUD|peptic ulcer", "Sores in the lining of the stomach or duodenum, often from H. pylori or NSAIDs."],
+    ["ulcer", "An open sore on the skin or on a mucous membrane."],
+    ["H. pylori|Helicobacter pylori", "Bacteria that live in the stomach and cause gastritis and peptic ulcers."],
+    ["Zollinger-Ellison syndrome", "Tumors that make excess gastrin, causing too much stomach acid and severe ulcers."],
+    ["gastroparesis", "Delayed stomach emptying, often from diabetic nerve damage."],
+    ["dumping syndrome", "Food moves too fast into the small intestine after stomach surgery, causing cramping, diarrhea, and dizziness after eating."],
+    ["gastrectomy", "Surgical removal of all or part of the stomach."],
+    ["hematemesis", "Vomiting blood (bright red or coffee-ground)."],
+    ["coffee-ground emesis|coffee ground emesis", "Vomit that looks like coffee grounds from partly digested blood; a sign of upper GI bleeding."],
+    ["emesis", "Vomit or the act of vomiting."],
+    ["melena", "Black, tarry, sticky stool from digested blood; a sign of upper GI bleeding."],
+    ["hematochezia", "Bright red or maroon blood in the stool; usually a sign of lower GI bleeding."],
+    ["occult blood", "Blood in the stool that cannot be seen, found only with a lab test."],
+    ["steatorrhea", "Pale, bulky, greasy, foul-smelling stools from poor fat absorption."],
+    ["tenesmus", "Constant feeling of needing to pass stool even when the bowel is empty."],
+    ["flatus|flatulence", "Gas passed from the rectum."],
+    ["peristalsis", "Wave-like muscle contractions that move food through the digestive tract."],
+    ["motility", "Movement of food and waste through the digestive tract."],
+    ["malabsorption", "The intestine cannot properly absorb nutrients from food."],
+    ["celiac disease|celiac", "Autoimmune reaction to gluten that damages the small intestine and causes malabsorption."],
+    ["inflammatory bowel disease|IBD", "Chronic inflammation of the gut; includes Crohn's disease and ulcerative colitis."],
+    ["Crohn's disease|Crohn disease|Crohn's|Crohns", "IBD that can affect any part of the GI tract in patchy, full-thickness segments (skip lesions)."],
+    ["ulcerative colitis|UC", "IBD causing continuous inflammation of the colon lining, starting at the rectum; bloody diarrhea."],
+    ["colitis", "Inflammation of the colon."],
+    ["irritable bowel syndrome|IBS", "Chronic belly pain with diarrhea and/or constipation without visible damage to the gut."],
+    ["diverticula|diverticulum", "Small pouches that bulge out through weak spots in the colon wall."],
+    ["diverticulosis", "Having diverticula in the colon, usually without symptoms."],
+    ["diverticulitis", "Inflammation or infection of diverticula, often with left lower quadrant pain and fever."],
+    ["appendicitis", "Inflammation of the appendix; pain often starts near the navel and moves to the right lower quadrant."],
+    ["McBurney's point|McBurney point|McBurney", "Spot in the right lower quadrant where appendicitis pain is often worst."],
+    ["Rovsing's sign|Rovsing sign|Rovsing", "Pressing the left lower quadrant causes pain in the right lower quadrant; suggests appendicitis."],
+    ["rebound tenderness", "Pain when pressure on the abdomen is quickly released; a sign of peritoneal irritation."],
+    ["psoas sign", "Pain when lifting the right leg against resistance; suggests appendicitis."],
+    ["obturator sign", "Pain with internal rotation of the bent right hip; suggests appendicitis."],
+    ["peritonitis", "Inflammation of the lining of the abdominal cavity, often from a rupture; rigid, board-like abdomen."],
+    ["peritoneum|peritoneal", "The membrane that lines the abdominal cavity and covers the organs."],
+    ["guarding", "Tightening the abdominal muscles to protect a painful area."],
+    ["ileus|paralytic ileus", "The intestines stop moving food along, without a physical blockage."],
+    ["bowel obstruction", "Something blocks the intestine so contents cannot pass; causes pain, distention, and vomiting."],
+    ["volvulus", "Twisting of a loop of intestine that blocks it."],
+    ["intussusception", "One part of the intestine slides into the next part, like a telescope; seen in young children."],
+    ["adhesions|adhesion", "Bands of scar tissue that stick organs together, often after surgery."],
+    ["stricture", "Abnormal narrowing of a tube in the body, such as the bowel or urethra."],
+    ["Hirschsprung disease|megacolon", "Missing nerve cells in part of the colon cause a blockage and a very enlarged colon."],
+    ["pseudomembranous colitis|C. diff|C. difficile|Clostridioides difficile", "Colon infection, often after antibiotics, causing severe watery diarrhea; needs contact precautions and soap-and-water handwashing."],
+    ["hemorrhoids|hemorrhoid", "Swollen veins in the rectum or anus that can itch or bleed."],
+    ["anal fissure|fissure", "A small tear or crack, such as in the lining of the anus."],
+    ["colonoscopy", "Exam of the colon with a flexible camera tube."],
+    ["endoscopy|endoscopic|EGD", "Exam of the inside of the body (often the esophagus, stomach, and duodenum) with a flexible camera tube."],
+    ["ostomy|stoma", "A surgical opening that brings the bowel or ureter through the belly wall; the stoma is the visible part."],
+    ["colostomy", "Ostomy that brings the colon through the abdominal wall; stool is more formed."],
+    ["ileostomy", "Ostomy that brings the ileum through the abdominal wall; output is liquid and can cause dehydration."],
+    ["gastrostomy|G-tube", "Feeding tube placed through the abdominal wall into the stomach."],
+    ["jejunostomy|J-tube", "Feeding tube placed through the abdominal wall into the jejunum (small intestine)."],
+    ["nasogastric tube|NG tube", "Tube passed through the nose into the stomach for feeding or suction."],
+    ["enteral nutrition|enteral", "Feeding through the GI tract, by mouth or by a feeding tube."],
+    ["parenteral nutrition|TPN|parenteral", "Nutrition given into a vein, bypassing the GI tract."],
+    ["refeeding syndrome", "Dangerous drops in phosphorus, potassium, and magnesium when a starved person starts eating again."],
+    ["duodenum|duodenal", "The first part of the small intestine, right after the stomach."],
+    ["jejunum", "The middle part of the small intestine, where most nutrients are absorbed."],
+    ["ileum", "The last part of the small intestine; absorbs vitamin B12 and bile salts."],
+    ["sphincter", "A ring of muscle that opens and closes a passage, such as between the esophagus and stomach."],
+    ["epigastric", "The upper middle area of the abdomen, just below the breastbone."],
+    ["periumbilical", "The area around the belly button."],
+    ["pepsin|pepsinogen", "Stomach enzyme that digests protein; pepsinogen is its inactive form."],
+    ["gastrin", "Hormone that tells the stomach to make acid."],
+    ["cirrhosis", "Severe, permanent scarring of the liver that blocks blood flow and stops the liver from working."],
+    ["hepatitis", "Inflammation of the liver, often from a virus, alcohol, or drugs."],
+    ["hepatotoxicity|hepatotoxic", "Liver damage caused by a drug or chemical (such as too much acetaminophen)."],
+    ["jaundice|icterus", "Yellow skin and whites of the eyes from bilirubin buildup."],
+    ["bilirubin", "Yellow pigment from broken-down red blood cells; the liver clears it into bile."],
+    ["conjugated bilirubin|direct bilirubin", "Bilirubin the liver has processed so it can leave in bile; high levels suggest blocked bile flow or liver damage."],
+    ["unconjugated bilirubin|indirect bilirubin", "Bilirubin not yet processed by the liver; high levels suggest red cell breakdown or liver problems."],
+    ["ascites", "Buildup of fluid in the abdominal cavity, often from cirrhosis."],
+    ["paracentesis", "Removing fluid from the abdomen with a needle."],
+    ["spider angioma|spider angiomas", "Small red spot with spider-like branches on the skin; a sign of liver disease."],
+    ["caput medusae", "Swollen veins radiating from the belly button; a sign of portal hypertension."],
+    ["ammonia", "Toxic waste from protein breakdown that the liver normally clears; high levels cause hepatic encephalopathy."],
+    ["albumin", "The main protein in blood plasma; keeps fluid in the vessels. Low levels cause swelling."],
+    ["hypoalbuminemia", "Low albumin in the blood, which lets fluid leak into tissues (edema, ascites)."],
+    ["prealbumin", "Blood protein with a short half-life; a quick marker of recent nutritional status."],
+    ["cholecystitis", "Inflammation of the gallbladder, usually from a gallstone; right upper quadrant pain after fatty meals."],
+    ["cholelithiasis|gallstones|gallstone", "Stones in the gallbladder."],
+    ["choledocholithiasis", "A gallstone stuck in the common bile duct."],
+    ["cholecystectomy", "Surgical removal of the gallbladder."],
+    ["Murphy's sign|Murphy sign", "Sharp pain that stops a deep breath when pressing under the right ribs; suggests cholecystitis."],
+    ["biliary", "Relating to bile, the bile ducts, or the gallbladder."],
+    ["pancreatitis", "Inflammation of the pancreas, often from gallstones or alcohol; severe upper belly pain radiating to the back."],
+    ["amylase", "Enzyme that digests starch; high blood levels suggest pancreatitis."],
+    ["lipase", "Enzyme that digests fat; high blood levels are the key lab sign of pancreatitis."],
+    ["Cullen's sign|Cullen sign", "Bruising around the belly button; a sign of bleeding into the abdomen (as in severe pancreatitis)."],
+    ["Grey Turner's sign|Grey Turner sign|Turner's sign", "Bruising on the flanks; a sign of bleeding behind the abdomen (as in severe pancreatitis)."],
+    ["Chvostek's sign|Chvostek sign|Chvostek", "Tapping the cheek in front of the ear makes the facial muscles twitch; a sign of low calcium."],
+    ["Trousseau's sign|Trousseau sign|Trousseau", "A blood pressure cuff on the arm causes a hand spasm; a sign of low calcium."],
+    ["anorexia", "Loss of appetite."],
+    ["cachexia", "Severe weight and muscle loss from chronic illness."],
+    ["malnutrition", "Not getting the right amount of nutrients, from too little, too much, or poor absorption."],
+    ["kwashiorkor", "Severe protein deficiency with adequate calories, causing swelling and a swollen belly."],
+    ["marasmus", "Severe deficiency of calories and protein, causing extreme wasting."],
+    ["satiety", "The feeling of fullness after eating."],
+    ["early satiety", "Feeling full after eating only a small amount."],
+    ["constipation", "Infrequent, hard, or difficult-to-pass stools."],
+    ["diarrhea", "Loose, watery stools three or more times a day."],
+    ["distention|distension", "Swelling or stretching outward, such as of the abdomen or a vein."],
+    ["borborygmi", "Loud, rumbling, gurgling bowel sounds."],
+    ["botulism", "Rare, severe paralysis from a toxin made by Clostridium botulinum (from improperly canned food or honey in infants)."],
+    ["listeria|listeriosis", "Foodborne bacteria (deli meat, unpasteurized cheese) that is especially dangerous in pregnancy."],
+    ["stomatitis", "Inflammation and sores in the mouth."],
+    ["glossitis", "Inflammation of the tongue, making it red, smooth, and sore; seen with B vitamin and iron deficiencies."],
+    ["cheilosis", "Cracks at the corners of the mouth; seen with riboflavin deficiency."],
+    ["pellagra", "Niacin deficiency causing the 4 Ds: dermatitis, diarrhea, dementia, and death."],
+    ["scurvy", "Vitamin C deficiency causing bleeding gums, poor wound healing, and easy bruising."],
+    ["rickets", "Soft, weak bones in children from vitamin D deficiency."],
+    ["osteomalacia", "Soft bones in adults from vitamin D deficiency."],
+    ["beriberi", "Thiamin (vitamin B1) deficiency affecting the nerves and heart."],
+    ["Wernicke encephalopathy|Wernicke's encephalopathy", "Brain disorder from thiamin deficiency (often with alcohol use): confusion, ataxia, and eye movement problems."],
+    ["neural tube defects|neural tube defect", "Birth defects of the brain or spine (like spina bifida); folic acid lowers the risk."],
+    ["catabolism|catabolic", "Breaking down body tissues and molecules for energy."],
+    ["anabolism|anabolic", "Building up body tissues and molecules."],
+    ["homeostasis", "The body's ability to keep its internal environment stable."],
+    ["metabolism", "All the chemical processes the body uses to make and use energy."],
+    ["microbiome", "The community of bacteria and other microbes that live in and on the body, especially the gut."],
+    ["lactose intolerance", "Not enough lactase enzyme to digest milk sugar, causing gas, bloating, and diarrhea."],
+    ["lactase", "Enzyme that digests lactose (milk sugar)."],
+    ["bariatric", "Relating to treating obesity, as in weight-loss surgery."],
+    ["BMI|body mass index", "Weight in kilograms divided by height in meters squared; screens for under- and overweight."],
+    ["anthropometrics|anthropometric", "Body measurements used to assess nutrition, like height, weight, BMI, and waist size."],
+    ["aspiration", "Inhaling food, fluid, or vomit into the airway and lungs."],
+    ["aspiration pneumonia", "Lung infection caused by inhaling food, fluid, or stomach contents."],
+    ["dysgeusia", "Altered or unpleasant sense of taste."],
+
+    /* ---------- Fluids, electrolytes, acid-base ---------- */
+    ["hyperkalemia", "High potassium in the blood (above 5.0 mEq/L); can cause dangerous heart rhythms."],
+    ["hypokalemia", "Low potassium in the blood (below 3.5 mEq/L); causes muscle weakness and heart rhythm problems."],
+    ["hypernatremia", "High sodium in the blood (above 145 mEq/L), often from water loss."],
+    ["hyponatremia", "Low sodium in the blood (below 135 mEq/L); can cause confusion and seizures."],
+    ["hypercalcemia", "High calcium in the blood; causes weakness, confusion, constipation, and kidney stones."],
+    ["hypocalcemia", "Low calcium in the blood; causes tingling, muscle spasms, and positive Chvostek and Trousseau signs."],
+    ["hypermagnesemia", "High magnesium in the blood; causes low blood pressure, weak reflexes, and slow breathing."],
+    ["hypomagnesemia", "Low magnesium in the blood; causes tremors, muscle twitching, and heart rhythm problems."],
+    ["hyperphosphatemia", "High phosphate in the blood, common in CKD."],
+    ["hypophosphatemia", "Low phosphate in the blood, as seen in refeeding syndrome."],
+    ["hyperuricemia", "High uric acid in the blood; can cause gout and kidney stones."],
+    ["hyperglycemia", "High blood sugar."],
+    ["hypoglycemia", "Low blood sugar (generally below 70 mg/dL); causes shakiness, sweating, and confusion."],
+    ["DKA|diabetic ketoacidosis", "Life-threatening complication of diabetes (usually type 1) with high blood sugar, ketones, and metabolic acidosis."],
+    ["HHS|hyperosmolar hyperglycemic state", "Very high blood sugar and severe dehydration without much ketosis, usually in type 2 diabetes."],
+    ["ketones|ketone|ketosis", "Acids made when the body burns fat for fuel; high levels make the blood acidic."],
+    ["Kussmaul respirations|Kussmaul", "Deep, rapid breathing that blows off CO2 to correct metabolic acidosis (as in DKA)."],
+    ["Somogyi effect|Somogyi", "Rebound high morning blood sugar after an unnoticed low blood sugar overnight."],
+    ["dawn phenomenon", "High morning blood sugar from early-morning hormone release."],
+    ["SIADH", "Too much ADH, so the body holds water; causes dilutional hyponatremia and concentrated urine."],
+    ["diabetes insipidus|DI", "Too little ADH (or kidneys that ignore it), causing large amounts of dilute urine and thirst."],
+    ["dehydration", "Not enough water in the body."],
+    ["third spacing|third-spacing", "Fluid shifting out of the blood vessels into spaces where the body cannot use it (like the belly or tissues)."],
+    ["isotonic", "A fluid with the same concentration as blood (such as normal saline); stays in the blood vessels."],
+    ["hypertonic", "A fluid more concentrated than blood; pulls water out of cells."],
+    ["hypotonic", "A fluid less concentrated than blood; moves water into cells."],
+    ["osmosis|osmotic", "Movement of water across a membrane toward the side with more dissolved particles."],
+    ["turgor|skin turgor", "Skin's elasticity; skin that stays tented when pinched suggests dehydration."],
+    ["tenting", "Skin that stays raised after being pinched, a sign of dehydration or aging."],
+    ["acidosis|acidotic", "Too much acid in the blood (pH below 7.35)."],
+    ["alkalosis|alkalotic", "Too little acid (too much base) in the blood (pH above 7.45)."],
+    ["respiratory acidosis", "Acidic blood from retained CO2 because of poor breathing (pH below 7.35, PaCO2 above 45)."],
+    ["respiratory alkalosis", "Basic blood from blowing off too much CO2 by breathing fast (pH above 7.45, PaCO2 below 35)."],
+    ["metabolic acidosis", "Acidic blood from too much acid or too little bicarbonate (pH below 7.35, HCO3 below 22)."],
+    ["metabolic alkalosis", "Basic blood from too much bicarbonate or acid loss, such as vomiting (pH above 7.45, HCO3 above 26)."],
+    ["compensation|compensated|compensating", "The body's attempt to offset a problem. In acid-base, the lungs adjust CO2 and the kidneys adjust bicarbonate to bring pH back toward normal."],
+    ["uncompensated", "An acid-base imbalance where the other system has not yet tried to correct the pH."],
+    ["ABG|arterial blood gas", "Blood test from an artery that measures pH, PaCO2, PaO2, and bicarbonate."],
+    ["PaCO2", "Partial pressure of carbon dioxide in arterial blood; normal is 35 to 45 mm Hg (the respiratory part of acid-base)."],
+    ["PaO2", "Partial pressure of oxygen in arterial blood; normal is 80 to 100 mm Hg."],
+    ["HCO3|bicarbonate", "Base in the blood that buffers acid; normal is 22 to 26 mEq/L (the metabolic part of acid-base)."],
+    ["SpO2|oxygen saturation", "Percentage of hemoglobin carrying oxygen, measured with a pulse oximeter (normal is 95 to 100%)."],
+    ["lactic acidosis|lactic acid", "Acid buildup from cells using anaerobic metabolism when they lack oxygen (as in shock or sepsis)."],
+    ["anaerobic", "Without oxygen."],
+    ["anion gap", "Calculated lab value that helps find the cause of metabolic acidosis."],
+
+    /* ---------- Immune, infection, inflammation ---------- */
+    ["hypersensitivity", "An exaggerated immune response to something, such as an allergy."],
+    ["anaphylaxis", "Severe, life-threatening allergic reaction with airway swelling and low blood pressure; give epinephrine."],
+    ["angioedema", "Swelling deep in the skin, often of the lips, tongue, face, or throat; can block the airway (a known ACE inhibitor risk)."],
+    ["urticaria|hives", "Itchy, raised welts on the skin, often from an allergic reaction."],
+    ["pruritus", "Itching."],
+    ["histamine", "Chemical released by mast cells during allergic reactions; causes itching, swelling, and bronchospasm."],
+    ["antigen", "A substance (such as part of a germ) that triggers the immune system to make antibodies."],
+    ["antibody|immunoglobulin", "Protein made by the immune system that recognizes and helps destroy a specific germ or substance."],
+    ["IgE", "Antibody type involved in allergies and anaphylaxis."],
+    ["autoimmune", "When the immune system attacks the body's own tissues."],
+    ["immunocompromised|immunosuppressed", "Having a weakened immune system that cannot fight infection well."],
+    ["immunosuppression", "Reduced immune system activity, from disease or drugs like steroids."],
+    ["cytokines|cytokine", "Chemical messengers released by immune cells that drive inflammation."],
+    ["prostaglandins|prostaglandin", "Chemicals that cause inflammation, pain, and fever, and also protect the stomach lining and kidney blood flow (blocked by NSAIDs)."],
+    ["inflammation|inflammatory", "The body's protective response to injury or infection: redness, heat, swelling, pain, and loss of function."],
+    ["sepsis|septic", "Life-threatening body-wide response to an infection that damages organs."],
+    ["SIRS", "Systemic inflammatory response syndrome: whole-body inflammation with fever, fast heart rate, and fast breathing."],
+    ["bacteremia", "Bacteria in the bloodstream."],
+    ["pathogen", "A germ that can cause disease."],
+    ["purulent", "Containing or producing pus."],
+    ["exudate", "Fluid, cells, or pus that leaks out of tissues, usually from inflammation."],
+    ["abscess", "A walled-off pocket of pus."],
+    ["granuloma", "A small, firm cluster of immune cells that walls off something the body cannot clear (as in TB)."],
+    ["caseous necrosis|caseous", "Cheese-like dead tissue, typical of tuberculosis."],
+    ["cellulitis", "Bacterial infection of the deeper skin layers, causing a red, warm, swollen, tender area."],
+    ["impetigo", "Contagious bacterial skin infection with honey-colored crusts."],
+    ["candida|candidiasis|thrush", "Yeast that can overgrow and cause infections in the mouth, skin, or vagina."],
+    ["MRSA", "Methicillin-resistant Staphylococcus aureus, a staph infection resistant to many antibiotics."],
+    ["Staphylococcus aureus|S. aureus|staph", "Common bacteria on the skin that can cause skin, blood, and heart valve infections."],
+    ["streptococcus|strep", "Bacteria that cause infections such as strep throat; can lead to rheumatic fever or glomerulonephritis."],
+    ["E. coli|Escherichia coli", "Bacteria that normally live in the gut; the most common cause of UTIs."],
+    ["Klebsiella", "Gut bacteria that can cause pneumonia (often with thick, red currant-jelly sputum) and UTIs."],
+    ["influenza", "Contagious viral respiratory infection with fever, body aches, and cough."],
+    ["RSV|respiratory syncytial virus", "Common virus that causes colds in adults and bronchiolitis in infants."],
+    ["meningitis", "Inflammation of the membranes covering the brain and spinal cord."],
+    ["meningococcemia", "Bloodstream infection by meningococcus bacteria, causing a rapidly spreading rash; an emergency."],
+    ["airborne precautions", "Infection precautions for germs spread by tiny particles in the air (TB, measles, varicella): N95 and a negative-pressure room."],
+    ["droplet precautions", "Infection precautions for germs spread by large droplets (influenza, pertussis): surgical mask within 3 feet."],
+    ["contact precautions", "Infection precautions for germs spread by touch (C. diff, MRSA): gown and gloves."],
+    ["nosocomial|hospital-acquired", "An infection picked up in a hospital or health care setting."],
+    ["SJS|Stevens-Johnson syndrome", "Rare, severe drug reaction that causes painful blistering and peeling of the skin and mucous membranes."],
+    ["toxic epidermal necrolysis|TEN", "The most severe form of Stevens-Johnson syndrome, with widespread skin peeling."],
+    ["necrolysis", "Death and peeling away of skin layers."],
+    ["SLE|lupus|systemic lupus erythematosus", "Autoimmune disease that can affect the skin, joints, kidneys, and other organs."],
+    ["rheumatoid arthritis", "Autoimmune disease causing painful, swollen, symmetric joints."],
+    ["osteoarthritis", "Wear-and-tear breakdown of joint cartilage, causing joint pain and stiffness."],
+    ["gout", "Painful joint inflammation from uric acid crystals, often in the big toe."],
+    ["osteoporosis", "Thinning, weak bones that break easily."],
+    ["costochondritis", "Inflammation of the cartilage joining the ribs to the breastbone, causing chest wall pain that hurts when pressed."],
+
+    /* ---------- Skin & HEENT assessment ---------- */
+    ["erythema", "Redness of the skin."],
+    ["blanchable|nonblanchable|non-blanchable", "Whether redness fades (blanches) when pressed; redness that does not fade suggests a stage 1 pressure injury."],
+    ["pressure injury|pressure ulcer", "Damage to the skin and tissue from prolonged pressure, usually over a bony area."],
+    ["unstageable", "A pressure injury whose base is covered by slough or eschar, so its depth cannot be seen."],
+    ["deep tissue injury|deep tissue pressure injury", "Purple or maroon intact skin or blood blister from damage to the tissue underneath."],
+    ["slough", "Soft, moist, yellow or tan dead tissue in a wound."],
+    ["eschar", "Thick, dry, black or brown dead tissue covering a wound."],
+    ["granulation tissue|granulation", "Healthy, beefy-red, bumpy new tissue in a healing wound."],
+    ["undermining", "Tissue destruction under the wound edges, forming a lip."],
+    ["tunneling", "A channel extending from a wound into deeper tissue."],
+    ["induration", "Hardening of tissue, as with swelling or a positive TB skin test."],
+    ["maceration", "Softening and whitening of skin from staying wet."],
+    ["Braden scale|Braden", "Tool that scores pressure injury risk; lower scores mean higher risk."],
+    ["dermatitis", "Inflammation of the skin, causing red, itchy rash."],
+    ["eczema", "Chronic itchy, inflamed skin condition (atopic dermatitis)."],
+    ["epidermis|epidermal", "The outer layer of the skin."],
+    ["dermis", "The layer of skin under the epidermis that holds blood vessels, nerves, and glands."],
+    ["hypodermis|subcutaneous", "The fatty layer under the skin."],
+    ["diaphoresis|diaphoretic", "Heavy sweating."],
+    ["vitiligo", "Patches of skin that lose pigment and turn white."],
+    ["melanoma", "The most dangerous skin cancer; check moles with ABCDE (asymmetry, border, color, diameter, evolving)."],
+    ["basal cell carcinoma", "The most common skin cancer; a pearly bump that rarely spreads."],
+    ["squamous cell carcinoma", "A skin cancer that looks like a scaly, crusted lump and can spread."],
+    ["actinic keratosis", "Rough, scaly precancerous patch from sun damage."],
+    ["seborrheic keratosis", "Harmless, waxy, stuck-on brown growth common in older adults."],
+    ["senile lentigines|lentigines", "Flat brown age spots from sun exposure."],
+    ["macule", "A flat, discolored spot on the skin smaller than 1 cm."],
+    ["papule", "A small, solid, raised bump on the skin smaller than 1 cm."],
+    ["vesicle", "A small, fluid-filled blister smaller than 1 cm."],
+    ["pustule", "A small, raised bump filled with pus."],
+    ["hirsutism", "Excess dark, coarse hair in a male pattern on a female."],
+    ["alopecia", "Hair loss."],
+    ["photosensitivity", "Increased skin sensitivity to sunlight, causing easy sunburn."],
+    ["conjunctiva", "The clear membrane covering the white of the eye and the inside of the eyelids."],
+    ["conjunctivitis", "Pink eye: inflammation of the conjunctiva."],
+    ["sclera", "The white outer layer of the eye."],
+    ["PERRLA", "Pupils Equal, Round, Reactive to Light, and Accommodation: a normal pupil exam."],
+    ["accommodation", "The eye's ability to adjust its focus from far to near; pupils constrict when looking at a near object."],
+    ["consensual reflex", "When light shines in one eye, the other pupil constricts too."],
+    ["extraocular movements|extraocular|EOM", "Eye movements controlled by six muscles, tested with the six cardinal fields of gaze."],
+    ["strabismus", "Misaligned eyes that do not look in the same direction."],
+    ["Snellen chart|Snellen", "Eye chart used to test distance vision (normal 20/20)."],
+    ["tympanic membrane|eardrum", "Thin membrane between the outer and middle ear; normally pearly gray."],
+    ["otitis media", "Middle ear infection."],
+    ["otitis externa|swimmer's ear", "Infection of the outer ear canal; pain when the ear is tugged."],
+    ["cerumen", "Earwax."],
+    ["conductive hearing loss|conductive", "Hearing loss from sound being blocked in the outer or middle ear (such as wax or fluid)."],
+    ["sensorineural hearing loss|sensorineural", "Hearing loss from damage to the inner ear or the hearing nerve."],
+    ["Weber test|Weber", "Tuning fork test on the top of the head to tell conductive from sensorineural hearing loss."],
+    ["Rinne test|Rinne", "Tuning fork test comparing air conduction to bone conduction; normally air is heard longer."],
+    ["ototoxicity|ototoxic", "Damage to the ear (hearing or balance) caused by a drug, such as aminoglycosides or loop diuretics."],
+    ["thyromegaly|goiter", "Enlarged thyroid gland."],
+    ["hypothyroidism", "Underactive thyroid: fatigue, weight gain, feeling cold, constipation, and slow heart rate."],
+    ["hyperthyroidism", "Overactive thyroid: weight loss, heat intolerance, fast heart rate, and anxiety."],
+    ["thyrotoxicosis|thyroid storm", "Dangerously high thyroid hormone levels causing fever, fast heart rate, and agitation."],
+    ["hyperparathyroidism", "Overactive parathyroid glands, causing high calcium."],
+    ["pheochromocytoma", "Adrenal gland tumor that releases bursts of adrenaline, causing severe high blood pressure, headache, and sweating."],
+    ["fontanelles|fontanelle|fontanel", "Soft spots on a baby's skull where the bones have not yet joined."],
+    ["dentition", "The number, type, and arrangement of teeth."],
+    ["gingivitis", "Inflammation of the gums."],
+
+    /* ---------- General & pharm terms ---------- */
+    ["anticholinergic", "Drug effects that block acetylcholine: dry mouth, constipation, urinary retention, blurred vision, and confusion."],
+    ["acetylcholine", "A neurotransmitter that activates muscles and rest-and-digest (parasympathetic) functions."],
+    ["parasympathetic", "The rest-and-digest part of the nervous system: slows the heart and speeds digestion."],
+    ["sympathetic", "The fight-or-flight part of the nervous system: speeds the heart and raises blood pressure."],
+    ["adrenergic", "Relating to adrenaline (epinephrine) and norepinephrine or the receptors they act on."],
+    ["antiemetic", "Drug that prevents or treats nausea and vomiting."],
+    ["antispasmodic", "Drug that relaxes spasms of smooth muscle (such as in the gut or bladder)."],
+    ["antiarrhythmic", "Drug that treats abnormal heart rhythms."],
+    ["antihypertensive", "Drug that lowers blood pressure."],
+    ["antilipidemic", "Drug that lowers cholesterol or other blood fats."],
+    ["anticonvulsant", "Drug that prevents or controls seizures."],
+    ["antidote", "A substance that reverses the effects of a poison or drug overdose."],
+    ["analgesic", "Pain reliever."],
+    ["bronchodilator", "Drug that opens the airways by relaxing the muscles around them (such as albuterol)."],
+    ["corticosteroids|corticosteroid|glucocorticoid", "Steroid drugs that reduce inflammation and suppress the immune system."],
+    ["NSAIDs|NSAID", "Nonsteroidal anti-inflammatory drugs (such as ibuprofen) that reduce pain, fever, and inflammation; can harm the stomach and kidneys."],
+    ["ACE inhibitor|ACE inhibitors|ACEI", "Blood pressure drug (ends in -pril) that blocks angiotensin II production; can cause dry cough, high potassium, and angioedema."],
+    ["ARB|ARBs|angiotensin receptor blocker", "Blood pressure drug (ends in -sartan) that blocks angiotensin II receptors."],
+    ["beta blocker|beta-blocker", "Drug (ends in -olol) that slows the heart rate and lowers blood pressure."],
+    ["calcium channel blocker", "Drug that relaxes blood vessels and/or slows the heart by blocking calcium entry into muscle cells."],
+    ["statin", "Cholesterol-lowering drug (ends in -statin); watch for muscle pain (myopathy) and liver damage."],
+    ["half-life", "Time it takes for half of a drug to leave the body."],
+    ["therapeutic range", "The blood level range at which a drug works without being toxic."],
+    ["toxicity", "Harmful effects from too much of a drug or substance."],
+    ["contraindication|contraindicated", "A reason a treatment should not be given because it could cause harm."],
+    ["polypharmacy", "Taking many medications at once, which raises the risk of interactions and side effects."],
+    ["first-pass effect", "When the liver breaks down much of an oral drug before it reaches the bloodstream."],
+    ["sublingual", "Under the tongue (as with nitroglycerin tablets)."],
+    ["transdermal", "Through the skin, as with a medication patch."],
+    ["extravasation", "Leakage of an IV drug into surrounding tissue, which can damage it."],
+    ["infiltration", "Leakage of IV fluid into surrounding tissue, causing swelling and coolness."],
+    ["hallucinations|hallucination", "Seeing, hearing, or feeling things that are not there."],
+    ["serotonin syndrome", "Dangerous buildup of serotonin from drug combinations, causing agitation, fever, and muscle twitching."],
+    ["neuroleptic malignant syndrome|NMS", "Rare, life-threatening reaction to antipsychotics with high fever and severe muscle rigidity."],
+    ["tyramine", "Substance in aged cheese, cured meat, and wine that can cause a hypertensive crisis with MAOIs."],
+    ["MAOI|MAOIs|monoamine oxidase inhibitor", "Antidepressant class that interacts dangerously with tyramine-rich foods."],
+    ["Parkinson's disease|Parkinson disease|Parkinson's", "Progressive brain disorder with low dopamine, causing tremor, rigidity, and slow movement."],
+    ["migraine", "Recurring, severe, often one-sided headache, sometimes with nausea and light sensitivity."],
+    ["seizure", "A burst of abnormal electrical activity in the brain that can cause shaking, staring, or loss of consciousness."],
+    ["CVA|cerebrovascular accident|stroke", "Brain damage from a blocked or burst blood vessel in the brain."],
+    ["TIA|transient ischemic attack", "Brief stroke-like symptoms that resolve within 24 hours; a warning sign of stroke."],
+    ["intracranial pressure|ICP", "Pressure inside the skull; rising pressure is an emergency."],
+    ["hemiparesis", "Weakness on one side of the body."],
+    ["hemiplegia", "Paralysis on one side of the body."],
+    ["aphasia", "Trouble speaking or understanding language, usually from a stroke."],
+    ["dysarthria", "Slurred or slow speech from weak speech muscles."],
+    ["lethargy|lethargic", "Drowsy and sluggish but can be woken up."],
+    ["malaise", "A general feeling of discomfort, illness, or being unwell."],
+    ["prognosis", "The likely course and outcome of a disease."],
+    ["etiology", "The cause of a disease."],
+    ["pathogenesis", "How a disease develops."],
+    ["pathophysiology", "How normal body functions are disrupted by disease."],
+    ["idiopathic", "Having no known cause."],
+    ["iatrogenic", "Caused by medical treatment."],
+    ["congenital", "Present from birth."],
+    ["benign", "Not cancerous; does not spread."],
+    ["malignant|malignancy", "Cancerous; can invade nearby tissue and spread."],
+    ["metastasis|metastatic", "Spread of cancer from where it started to other parts of the body."],
+    ["exacerbation", "A flare-up or worsening of a disease."],
+    ["remission", "A period when symptoms of a disease lessen or go away."],
+    ["asymptomatic", "Showing no symptoms."],
+    ["supine", "Lying flat on the back."],
+    ["Fowler's position|Fowler position|high Fowler's|semi-Fowler's|Fowler's", "Sitting up in bed with the head raised (high Fowler's is 60 to 90 degrees, semi-Fowler's 30 to 45)."],
+    ["Trendelenburg", "Lying flat with the feet higher than the head."],
+    ["intercostal", "Between the ribs."],
+    ["midclavicular line|midclavicular", "Imaginary vertical line down the chest through the middle of the collarbone."],
+    ["midaxillary line|midaxillary", "Imaginary vertical line down the side of the chest from the middle of the armpit."],
+    ["precordium|precordial", "The area of the chest over the heart."],
+    ["xiphoid process|xiphoid", "The small pointed tip at the bottom of the breastbone."],
+    ["auscultation|auscultate", "Listening to body sounds with a stethoscope."],
+    ["palpation|palpate", "Feeling the body with the hands during an exam."],
+    ["percussion|percuss", "Tapping on the body to hear sounds that show whether tissue underneath is air-filled, fluid-filled, or solid."],
+    ["Doppler", "Ultrasound device used to hear blood flow when a pulse is too weak to feel."],
+    ["ankle-brachial index|ABI", "Ankle systolic pressure divided by arm systolic pressure; under 0.9 suggests peripheral artery disease."],
+    ["Homans sign|Homans' sign", "Calf pain when the foot is flexed upward; an old, unreliable test for DVT."],
+    ["Allen test", "Checks blood flow from the ulnar artery to the hand before an arterial puncture."],
+    ["paradoxical", "The opposite of what you would expect."],
+    ["visceral", "Relating to the internal organs."],
+    ["parietal", "Relating to the wall of a body cavity (such as the parietal pleura or peritoneum)."],
+    ["orthostatic vital signs|orthostatic", "Blood pressure and heart rate changes when moving from lying or sitting to standing."],
+    ["hypothermia", "Body temperature below 95 F (35 C)."],
+    ["hyperthermia", "Abnormally high body temperature, from heat illness or other causes."],
+    ["febrile|afebrile", "Having a fever (febrile) or not having a fever (afebrile)."],
+    ["apoptosis", "Programmed, normal cell death."],
+    ["metaplasia", "One type of mature cell is replaced by another type, often from chronic irritation (as in Barrett's esophagus)."],
+    ["dysplasia", "Abnormal cell growth that may become cancer."],
+    ["fibrous", "Made of tough connective tissue."],
+    ["collagen", "The main structural protein in skin, tendons, and connective tissue."],
+    ["cilia", "Tiny hairs lining the airways that sweep mucus and germs upward and out."],
+    ["mucosa|mucosal", "The moist lining of body cavities such as the mouth, gut, and airways."],
+    ["lumen", "The open space inside a tube such as a blood vessel or the intestine."],
+    ["hydronephrotic", "Swollen with urine from a blockage (describing a kidney)."],
+    ["myoglobin", "Oxygen-binding protein in muscle; released into the urine in rhabdomyolysis and can damage the kidneys."],
+    ["lymphatic|lymph", "System of vessels and nodes that drains extra fluid from tissues and helps fight infection."],
+    ["lymphedema", "Swelling from blocked lymph drainage, often in an arm or leg."],
+    ["integumentary", "Relating to the skin, hair, and nails."],
+    ["genitourinary|GU", "Relating to the genital and urinary organs."],
+    ["gastrointestinal|GI", "Relating to the stomach and intestines (the digestive tract)."],
+    ["endocrine", "Relating to glands that release hormones into the blood."]
+  ];
+
+  /* ---------- Build the lookup ---------- */
+  var CS = Object.create(null), CI = Object.create(null), keys = [];
+  function isCaps(s) { return s === s.toUpperCase() && /[A-Z]/.test(s); }
+  function norm(s) { return s.replace(/[\s\u00a0-]+/g, " ").replace(/\u2019/g, "'"); }
+  function addKey(name, entry, cs) {
+    var k = cs ? norm(name) : norm(name).toLowerCase(), M = cs ? CS : CI;
+    if (M[k]) return;
+    M[k] = entry;
+    keys.push(name);
+  }
+  function variants(n) {
+    var out = [n], l = n.toLowerCase();
+    if (isCaps(n)) { out.push(n + "s"); return out; }
+    if (/[^aeiou]y$/.test(l)) out.push(n.slice(0, -1) + "ies");
+    else if (/(?:osis|asis|esis)$/.test(l)) out.push(n.slice(0, -2) + "es");
+    else if (/um$/.test(l) && l.length > 5) out.push(n.slice(0, -2) + "a");
+    else if (/us$/.test(l) && l.length > 5) out.push(n.slice(0, -2) + "i");
+    else if (/(s|x|ch|sh)$/.test(l)) out.push(n + "es");
+    else if (!/(itis|ae|i)$/.test(l)) out.push(n + "s");
+    return out;
+  }
+  GLOSSARY.forEach(function (row) {
+    var names = row[0].split("|"), entry = { term: names[0], def: row[1] };
+    names.forEach(function (n) { var cs = isCaps(n); variants(n).forEach(function (v) { addKey(v, entry, cs); }); });
+  });
+  keys.sort(function (a, b) { return b.length - a.length; });
+  var RE = new RegExp("(^|[^A-Za-z0-9])(" + keys.map(function (k) {
+    return k.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/[\s-]+/g, "[\\s\\u00a0-]+").replace(/'/g, "['\u2019]");
+  }).join("|") + ")(?![A-Za-z0-9])", "gi");
+
+  // A name in capitals (PAD) only matches in capitals; everything else ignores case.
+  function lookup(m) { var n = norm(m); return CS[n] || CI[n.toLowerCase()] || null; }
+
+  /* ---------- Styles (injected so pages only need one script tag) ---------- */
+  var css =
+    ".gl-term{text-decoration:underline dotted;text-decoration-thickness:1px;text-decoration-color:color-mix(in srgb,currentColor 55%,transparent);text-underline-offset:3px;cursor:help;border-radius:3px;-webkit-tap-highlight-color:transparent}" +
+    ".gl-term:hover,.gl-term.gl-on{background:color-mix(in srgb,var(--accent,#2f6fde) 14%,transparent)}" +
+    ".gl-tip{position:fixed;z-index:2147483000;max-width:min(320px,calc(100vw - 16px));background:var(--surface,#fff);color:var(--ink,#1d2433);border:1px solid var(--line,#e2ddd2);border-left:4px solid var(--accent,#2f6fde);padding:8px 12px;border-radius:10px;font:400 .9rem/1.4 var(--font,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif);box-shadow:0 6px 24px rgba(0,0,0,.18);text-align:left;text-transform:none;letter-spacing:normal}" +
+    ".gl-tip b{display:block;font-weight:700;margin-bottom:2px}" +
+    ".gl-tip[hidden]{display:none}" +
+    "@media print{.gl-term{text-decoration:none;background:none}.gl-tip{display:none}}";
+  var st = document.createElement("style"); st.id = "gl-style"; st.textContent = css;
+  (document.head || document.documentElement).appendChild(st);
+
+  /* ---------- Wrapping terms in the page ---------- */
+  var SKIP = "script,style,noscript,template,textarea,input,select,option,button,a,label,svg,math,code,pre,kbd," +
+    "abbr,.ab,.gl-term,.gl-tip,[contenteditable],[data-no-gloss],[role=button],[role=option],[role=tab]," +
+    ".opt,.flash,.flash-face,.chip,.btn,.tile,.switch,.icon-btn,title,head";
+  var BLOCK = "p,li,td,th,dd,dt,h1,h2,h3,h4,h5,h6,blockquote,figcaption,summary,section,article,div";
+  var seenIn = new WeakMap();
+
+  function wrapText(node) {
+    var text = node.nodeValue;
+    if (!text || text.length < 2 || !/[A-Za-z]{2}/.test(text)) return;
+    var parent = node.parentElement;
+    if (!parent || parent.closest(SKIP)) return;
+    var block = parent.closest(BLOCK) || parent, seen = seenIn.get(block);
+    RE.lastIndex = 0;
+    var m, last = 0, frag = null;
+    while ((m = RE.exec(text))) {
+      var word = m[2], start = m.index + m[1].length, entry = lookup(word);
+      if (!entry) continue;
+      if (!seen) { seen = new Map(); seenIn.set(block, seen); }
+      var prev = seen.get(entry);
+      if (prev && prev.isConnected && block.contains(prev)) continue; // only the first mention in each paragraph/box
+      if (!frag) frag = document.createDocumentFragment();
+      if (start > last) frag.appendChild(document.createTextNode(text.slice(last, start)));
+      var sp = document.createElement("span");
+      sp.className = "gl-term";
+      sp.textContent = word;
+      sp.__gl = entry;
+      seen.set(entry, sp);
+      frag.appendChild(sp);
+      last = start + word.length;
+    }
+    if (!frag) return;
+    if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+    node.parentNode.replaceChild(frag, node);
+  }
+
+  function scan(root) {
+    if (!root) return;
+    if (root.nodeType === 3) { wrapText(root); return; }
+    if (root.nodeType !== 1 && root.nodeType !== 11) return;
+    if (root.nodeType === 1 && root.closest(SKIP)) return;
+    var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null), list = [], n;
+    while ((n = walker.nextNode())) list.push(n);
+    for (var i = 0; i < list.length; i++) wrapText(list[i]);
+  }
+
+  /* Pages draw their content with JavaScript, so watch for new content too. */
+  var queue = [], pending = false, obs;
+  function flush() {
+    pending = false;
+    var q = queue; queue = [];
+    for (var i = 0; i < q.length; i++) if (q[i].isConnected) scan(q[i]);
+    if (obs) obs.takeRecords(); // ignore the changes we just made ourselves
+  }
+  function enqueue(n) { queue.push(n); if (!pending) { pending = true; setTimeout(flush, 30); } }
+
+  function start() {
+    scan(document.body);
+    obs = new MutationObserver(function (muts) {
+      for (var i = 0; i < muts.length; i++) {
+        var mu = muts[i];
+        if (mu.type === "characterData") { enqueue(mu.target); continue; }
+        for (var j = 0; j < mu.addedNodes.length; j++) {
+          var a = mu.addedNodes[j];
+          if (a.nodeType === 1 && (a.classList.contains("gl-term") || a.classList.contains("gl-tip"))) continue;
+          enqueue(a);
+        }
+      }
+    });
+    obs.observe(document.body, { childList: true, subtree: true, characterData: true });
+  }
+
+  /* ---------- The popup ---------- */
+  var tip = document.createElement("div");
+  tip.className = "gl-tip"; tip.id = "gl-tip"; tip.setAttribute("role", "tooltip"); tip.hidden = true;
+  var tipFor = null, pinned = false, lastPointer = "mouse";
+
+  function place(el) {
+    var r = el.getBoundingClientRect(), w = tip.offsetWidth, h = tip.offsetHeight, vw = window.innerWidth, vh = window.innerHeight;
+    var left = Math.max(8, Math.min(r.left + r.width / 2 - w / 2, vw - w - 8));
+    var top = r.bottom + 8;
+    if (top + h > vh - 8) top = Math.max(8, r.top - h - 8);
+    tip.style.left = left + "px"; tip.style.top = top + "px";
+  }
+  function show(el, pin) {
+    var e = el.__gl || lookup(el.textContent);
+    if (!e) return;
+    if (tipFor && tipFor !== el) tipFor.classList.remove("gl-on");
+    if (!tip.isConnected) document.body.appendChild(tip);
+    tip.innerHTML = "";
+    var b = document.createElement("b"); b.textContent = e.term.charAt(0).toUpperCase() + e.term.slice(1); tip.appendChild(b);
+    tip.appendChild(document.createTextNode(e.def));
+    tip.hidden = false; tipFor = el; pinned = !!pin;
+    el.classList.add("gl-on"); el.setAttribute("aria-describedby", "gl-tip");
+    place(el);
+  }
+  function hide() {
+    tip.hidden = true; pinned = false;
+    if (tipFor) { tipFor.classList.remove("gl-on"); tipFor.removeAttribute("aria-describedby"); }
+    tipFor = null;
+  }
+  function termOf(t) { return t && t.closest ? t.closest(".gl-term") : null; }
+
+  document.addEventListener("pointerdown", function (e) { lastPointer = e.pointerType || "mouse"; }, true);
+  document.addEventListener("mouseover", function (e) {
+    if (lastPointer === "touch" || lastPointer === "pen") return;
+    var t = termOf(e.target);
+    if (t) { if (t !== tipFor) show(t, false); }
+    else if (tipFor && !pinned && !tip.contains(e.target)) hide();
+  });
+  document.addEventListener("click", function (e) {
+    var t = termOf(e.target);
+    if (t) {
+      if (t.closest("summary")) e.preventDefault(); // don't open/close the box when tapping a word
+      if (tipFor === t && pinned) hide(); else show(t, true);
+      return;
+    }
+    if (tipFor && !tip.contains(e.target)) hide();
+  });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && tipFor) hide(); });
+  window.addEventListener("scroll", function () { if (tipFor) { if (pinned) place(tipFor); else hide(); } }, true);
+  window.addEventListener("resize", function () { if (tipFor) place(tipFor); });
+
+  window.GLOSSARY = GLOSSARY;
+  window.glossaryScan = scan;
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start);
+  else start();
+})();
