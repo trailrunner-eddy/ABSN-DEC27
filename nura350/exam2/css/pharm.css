@@ -132,3 +132,5 @@ mark.sg { background: color-mix(in srgb, var(--warn) 32%, transparent); text-dec
 .ati-more > summary { cursor: pointer; font-size: .88rem; color: var(--ink-2); padding: 4px 0 8px; }
 .ati-more .drug-fields { margin: 0; }
 .fv.covered mark.sg { background: transparent; }
+.moa-simple { margin-top: 8px; padding: 7px 10px; border-radius: 8px; background: color-mix(in srgb, var(--accent) 9%, var(--surface)); }
+.moa-simple-k { display: block; font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--accent); margin-bottom: 2px; }
