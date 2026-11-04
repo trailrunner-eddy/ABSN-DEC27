@@ -17,6 +17,7 @@
   CATS.forEach(function (c) { CAT[c.id] = c; });
   DRUGS.forEach(function (d) { DRUG[d.id] = d; });
   GSECS.forEach(function (g) { GSEC[g.id] = g; g.drugs.forEach(function (x) { ON_GUIDE[x.drug] = g; }); });
+  var CARDS = window.CARDS || {};
   var FIELDS = [["moa", "MOA"], ["use", "Use"], ["contra", "Contraindications"], ["se", "Side effects"], ["ae", "Adverse effects"], ["rn", "RN assessment"], ["teach", "Client teaching"]];
 
   /* ---------- Helpers ---------- */
@@ -30,6 +31,20 @@
   function catsIn(unitId) { return CATS.filter(function (c) { return c.sys === unitId; }); }
   function tag(u) { return '<span class="tag sys-' + u + '">' + esc(UNIT[u].icon + " " + UNIT[u].short) + "</span>"; }
   function title(d) { return esc(d.name) + (d.brand ? ' <span class="brand-name">(' + esc(d.brand) + ")</span>" : ""); }
+  // ==text== in cards.js = on the instructor's study guide
+  function hl(s) { return esc(s).replace(/==([\s\S]+?)==/g, '<mark class="sg">$1</mark>'); }
+  function fvh(html) { return '<span class="fv' + (S.cover ? " covered" : "") + '" tabindex="0">' + html + "</span>"; }
+  var SG_LEGEND = '<p class="sg-legend small"><mark class="sg">Highlighted</mark> = on the instructor\'s study guide, so expect it on the exam.</p>';
+  // The four fields every drug shows, then any other study-guide takeaways for that drug
+  function cardRows(d) {
+    var c = CARDS[d.id];
+    if (!c) return FIELDS.map(function (f) { return "<dt>" + f[1] + "</dt><dd>" + fvh(esc(d[f[0]])) + "</dd>"; }).join("");
+    return "<dt>MOA</dt><dd>" + fvh(hl(c.moa)) + "</dd>" +
+      "<dt>Therapeutic use</dt><dd>" + fvh(hl(c.use)) + "</dd>" +
+      '<dt>Side &amp; adverse effects</dt><dd><div class="sae"><span class="sae-k">Side</span>' + fvh(hl(c.se)) + '</div><div class="sae"><span class="sae-k adv">Adverse</span>' + fvh(hl(c.ae)) + "</div></dd>" +
+      "<dt>Contraindications</dt><dd>" + fvh(hl(c.contra)) + "</dd>" +
+      (c.sg || []).map(function (r) { return '<dt class="sg-dt">📋 ' + esc(r[0]) + '</dt><dd class="sg-dd">' + fvh(hl(r[1])) + "</dd>"; }).join("");
+  }
   function plainTitle(d) { return d.name + (d.brand ? " (" + d.brand + ")" : ""); }
   function addXP(n, msg) { S.xp += n; save(); document.getElementById("xp").textContent = S.xp; if (msg) toast(msg + "  +" + n + " XP"); }
   var toastTimer;
@@ -125,9 +140,10 @@
       (other.length ? '<p class="small muted">Also in: ' + other.map(function (c) { return '<a href="#drugs/' + c + '">' + esc(CAT[c].name) + "</a>"; }).join(", ") + "</p>" : "") +
       '<div class="plain-card card plain-box"' + (S.plain ? "" : " hidden") + '><h4>🗣 In plain words</h4><p>' + esc(d.plain) + "</p></div>" +
       '<div class="key-line"><b>Must know:</b> ' + esc(d.key) + "</div>" +
-      '<dl class="drug-fields">' + FIELDS.map(function (f) {
-        return "<dt>" + f[1] + '</dt><dd><span class="fv' + (S.cover ? " covered" : "") + '" tabindex="0">' + esc(d[f[0]]) + "</span></dd>";
-      }).join("") + "</dl>" +
+      '<dl class="drug-fields">' + cardRows(d) + "</dl>" +
+      '<details class="ati-more"><summary>Full ATI table: every listed effect, RN assessment, client teaching</summary><dl class="drug-fields">' + FIELDS.map(function (f) {
+        return "<dt>" + f[1] + "</dt><dd>" + fvh(esc(d[f[0]])) + "</dd>";
+      }).join("") + "</dl></details>" +
       (d.beyond ? '<div class="callout beyond"><strong>Beyond the table</strong>' + esc(d.beyond) + "</div>" : "") +
       '<div class="row" style="margin-top:12px"><button class="btn small ' + (S.drugs[d.id] ? "good" : "primary") + '" data-mark="' + d.id + '">' + (S.drugs[d.id] ? "✓ Studied" : "Mark as studied") + "</button></div>" +
       "</details>";
@@ -187,7 +203,7 @@
       '<div class="card"><h2>At a glance</h2><div class="table-wrap"><table class="glance"><thead><tr><th>Drug</th><th>Class</th><th>Must know</th></tr></thead><tbody>' +
         ds.map(function (d) { return '<tr><td><a href="#drug/' + d.id + '"><b>' + esc(d.name) + "</b></a>" + (d.brand ? '<br><span class="tiny">' + esc(d.brand) + "</span>" : "") + "</td><td>" + esc(d.cls) + "</td><td>" + esc(d.key) + "</td></tr>"; }).join("") +
       "</tbody></table></div></div>" +
-      '<p class="small muted" style="margin:0">' + (S.cover ? "Cover mode is on: say each answer out loud, then tap the blurred text to check." : "Tap a drug to open its full table. Turn on cover mode to quiz yourself.") + "</p>" +
+      '<p class="small muted" style="margin:0">' + (S.cover ? "Cover mode is on: say each answer out loud, then tap the blurred text to check." : "Tap a drug to open its card. Turn on cover mode to quiz yourself.") + "</p>" + SG_LEGEND +
       ds.map(function (d) { return drugCard(d, c.id, ids.indexOf(d.id) > -1 || ds.length === 1); }).join("") +
       '<div class="row nav-links">' + (prev ? '<a class="btn" href="#drugs/' + prev.id + '">← ' + esc(prev.name) + "</a>" : "") + '<span class="spacer"></span>' +
         '<a class="btn" href="#quiz/' + c.sys + '">Quiz this unit</a>' + (next ? '<a class="btn primary" href="#drugs/' + next.id + '">' + esc(next.name) + " →</a>" : "") + "</div>";
@@ -216,6 +232,7 @@
   /* ================= STUDY GUIDE ================= */
   var SRC = { ATI: "ATI tables", LECTURE: "Lecture", ADDED: "Study aid", CORRECTED: "Corrected", EXTRA: "Added: not on instructor guide" };
   function srcTag(s) { return '<span class="src src-' + (s === "EXTRA" ? "added" : s.toLowerCase()) + '">' + SRC[s] + "</span>"; }
+  var FOUR = ["Action", "Therapeutic use", "Side effects", "Adverse effects", "Contraindications"];
   function gv(text) { return '<span class="fv' + (S.cover ? " covered" : "") + '" tabindex="0">' + esc(text) + "</span>"; }
   function guideNav(key) {
     return '<div class="filter-bar guide-bar"><a class="chip ' + (!key ? "on" : "") + '" href="#guide">Overview</a>' +
@@ -229,9 +246,9 @@
       '<div class="drug-cls">' + esc(g.cls) + (g.clsFix ? " " + srcTag("CORRECTED") : "") + (g.added ? " " + srcTag("EXTRA") : "") + "</div>" + stemPill(d.id) +
       (g.added ? '<p class="tiny" style="margin:4px 0 0">All 44 drugs are in play. These rows come from your ATI drug table and the lecture, not the instructor\'s takeaways.</p>' : "") +
       (g.clsFix ? '<p class="tiny" style="margin:4px 0 0">' + esc(g.clsFix) + "</p>" : "") +
-      '<dl class="drug-fields guide-fields">' + g.rows.map(function (r) {
+      '<dl class="drug-fields guide-fields">' + (CARDS[d.id] ? cardRows(d) + (g.added ? g.rows.filter(function (r) { return FOUR.indexOf(r[0]) < 0; }).map(function (r) { return "<dt>" + esc(r[0]) + "</dt><dd>" + gv(r[1]) + "</dd>"; }).join("") : "") : g.rows.map(function (r) {
         return "<dt>" + esc(r[0]) + "</dt><dd>" + gv(r[1]) + (r[2] ? '<div class="fix">' + srcTag("CORRECTED") + " " + esc(r[2]) + "</div>" : "") + "</dd>";
-      }).join("") +
+      }).join("")) +
       (g.also.length && S.guideAlso ? '<dt class="also">Also know</dt><dd class="also">' + g.also.map(function (a) { return '<div class="also-row">' + srcTag(a[0]) + " " + esc(a[1]) + "</div>"; }).join("") + "</dd>" : "") +
       "</dl></div>";
   }
@@ -245,7 +262,7 @@
         '<div class="card topic-head sys-' + sec.sys + '"><div class="row">' + tag(sec.sys) + '<span class="spacer"></span><span class="tiny">Section ' + (i + 1) + " of " + GSECS.length + "</span></div>" +
           '<div class="row switches">' + switchHTML("alsoT", S.guideAlso, "Show “Also know” rows") + switchHTML("coverT", S.cover, "Cover mode") + "</div>" +
           '<h1 style="margin-top:10px">' + sec.icon + " " + esc(sec.name) + ' <span class="muted" style="font-weight:500">(' + sec.drugs.length + ")</span></h1>" +
-          '<p class="small muted" style="margin:0">' + (S.cover ? "Cover mode is on: say each takeaway out loud, then tap the blurred text to check." : "The rows are your instructor's takeaways, so learn these first. “Also know” adds context from ATI and the lectures.") + "</p></div>" +
+          '<p class="small muted" style="margin:0">' + (S.cover ? "Cover mode is on: say each takeaway out loud, then tap the blurred text to check." : "Every drug shows MOA, therapeutic use, drug-specific side and adverse effects, and contraindications. “Also know” adds context from ATI and the lectures.") + "</p>" + SG_LEGEND + "</div>" +
         sec.drugs.map(guideDrug).join("") +
         '<div class="card guide-done"><div class="row"><button class="btn ' + (S.guide[sec.id] ? "good" : "primary") + '" id="mark">' + (S.guide[sec.id] ? "✓ Section reviewed" : "Mark section reviewed") + '</button><span class="spacer"></span><a class="btn" href="#quiz/' + sec.sys + '">Quiz ' + esc(UNIT[sec.sys].short) + "</a></div></div>" +
         '<div class="row nav-links">' + (prev ? '<a class="btn" href="#guide/' + prev.id + '">← ' + esc(prev.name) + "</a>" : '<a class="btn" href="#guide">← Overview</a>') + '<span class="spacer"></span>' +
