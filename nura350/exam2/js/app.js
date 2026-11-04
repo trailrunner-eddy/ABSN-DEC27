@@ -43,6 +43,7 @@
       "<dt>Therapeutic use</dt><dd>" + fvh(hl(c.use)) + "</dd>" +
       '<dt>Side &amp; adverse effects</dt><dd><div class="sae"><span class="sae-k">Side</span>' + fvh(hl(c.se)) + '</div><div class="sae"><span class="sae-k adv">Adverse</span>' + fvh(hl(c.ae)) + "</div></dd>" +
       "<dt>Contraindications</dt><dd>" + fvh(hl(c.contra)) + "</dd>" +
+      "<dt>Nursing priorities</dt><dd>" + fvh(hl(c.np)) + "</dd>" +
       (c.sg || []).map(function (r) { return '<dt class="sg-dt">📋 ' + esc(r[0]) + '</dt><dd class="sg-dd">' + fvh(hl(r[1])) + "</dd>"; }).join("");
   }
   function plainTitle(d) { return d.name + (d.brand ? " (" + d.brand + ")" : ""); }
@@ -232,7 +233,7 @@
   /* ================= STUDY GUIDE ================= */
   var SRC = { ATI: "ATI tables", LECTURE: "Lecture", ADDED: "Study aid", CORRECTED: "Corrected", EXTRA: "Added: not on instructor guide" };
   function srcTag(s) { return '<span class="src src-' + (s === "EXTRA" ? "added" : s.toLowerCase()) + '">' + SRC[s] + "</span>"; }
-  var FOUR = ["Action", "Therapeutic use", "Side effects", "Adverse effects", "Contraindications"];
+  var FOUR = ["Action", "Therapeutic use", "Side effects", "Adverse effects", "Contraindications", "Nursing priorities"];
   function gv(text) { return '<span class="fv' + (S.cover ? " covered" : "") + '" tabindex="0">' + esc(text) + "</span>"; }
   function guideNav(key) {
     return '<div class="filter-bar guide-bar"><a class="chip ' + (!key ? "on" : "") + '" href="#guide">Overview</a>' +
@@ -262,7 +263,7 @@
         '<div class="card topic-head sys-' + sec.sys + '"><div class="row">' + tag(sec.sys) + '<span class="spacer"></span><span class="tiny">Section ' + (i + 1) + " of " + GSECS.length + "</span></div>" +
           '<div class="row switches">' + switchHTML("alsoT", S.guideAlso, "Show “Also know” rows") + switchHTML("coverT", S.cover, "Cover mode") + "</div>" +
           '<h1 style="margin-top:10px">' + sec.icon + " " + esc(sec.name) + ' <span class="muted" style="font-weight:500">(' + sec.drugs.length + ")</span></h1>" +
-          '<p class="small muted" style="margin:0">' + (S.cover ? "Cover mode is on: say each takeaway out loud, then tap the blurred text to check." : "Every drug shows MOA, therapeutic use, drug-specific side and adverse effects, and contraindications. “Also know” adds context from ATI and the lectures.") + "</p>" + SG_LEGEND + "</div>" +
+          '<p class="small muted" style="margin:0">' + (S.cover ? "Cover mode is on: say each takeaway out loud, then tap the blurred text to check." : "Every drug shows MOA, therapeutic use, drug-specific side and adverse effects, contraindications, and nursing priorities. “Also know” adds context from ATI and the lectures.") + "</p>" + SG_LEGEND + "</div>" +
         sec.drugs.map(guideDrug).join("") +
         '<div class="card guide-done"><div class="row"><button class="btn ' + (S.guide[sec.id] ? "good" : "primary") + '" id="mark">' + (S.guide[sec.id] ? "✓ Section reviewed" : "Mark section reviewed") + '</button><span class="spacer"></span><a class="btn" href="#quiz/' + sec.sys + '">Quiz ' + esc(UNIT[sec.sys].short) + "</a></div></div>" +
         '<div class="row nav-links">' + (prev ? '<a class="btn" href="#guide/' + prev.id + '">← ' + esc(prev.name) + "</a>" : '<a class="btn" href="#guide">← Overview</a>') + '<span class="spacer"></span>' +
