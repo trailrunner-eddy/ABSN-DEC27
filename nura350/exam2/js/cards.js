@@ -4,6 +4,7 @@
    ==text== marks wording that is on the instructor's Exam 2 study guide; it renders highlighted and underlined.
    moaS: the same MOA in plain words, for memory recall.
    np: nursing priorities (study-guide wording highlighted; otherwise from ATI and the guide's "added" rows).
+   teach: client teaching when it differs from the ATI table (otherwise the ATI teaching is shown).
    sg: other study-guide takeaways that don't fit the four fields (nursing priorities, administration, interactions).
    Drugs the instructor guide skipped (window.GUIDE.added) have no highlights. */
 window.CARDS = {
@@ -388,7 +389,8 @@ window.CARDS = {
     ae: "Hypercalcemia, renal calculi, bradycardia with overuse.",
     contra: "Hypercalcemia, renal calculi, renal failure, hyperparathyroidism.",
     np: "==Assess presenting symptoms and the abdomen. Monitor calcium and phosphorus levels.==",
-    sg: [["Client teaching", "==Do not take enteric-coated medications within 1 hour.=="]]
+    teach: "==Do not take enteric-coated medications within 1 hour.== Take after meals and at bedtime with a full glass of water; chew chewable tablets completely. Do not take within 1 hour of other medications. May cause constipation: increase fiber, fluid, and exercise. See the provider if antacids are needed for more than 2 weeks without relief.",
+    sg: []
   },
   "famotidine": {
     moa: "Blocks H2 (histamine) receptors on the stomach's parietal cells, reducing acid secretion.",
