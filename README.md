@@ -23,3 +23,7 @@ In every practice set, ← Previous reopens questions you already answered with 
 ## Name decoder (Pharm)
 
 `nura350/exam2/js/stems.js` lists drug-name stems (like `-olol` = beta blocker) with the exam drugs that match each one, plus `NO_STEM` for exam drugs whose names don't follow a stem. It powers the Study Guide's "Name decoder" page, the stem pill on each guide drug, and the Name Game's suffix mode. For a new pharm exam, copy the file and point `drugs` at that exam's drug ids.
+
+## Medical term definitions (whole site)
+
+`js/glossary.js` is loaded on every page. It finds medical terms in the page text (like *myopathy*, *orthopnea*, *BPH*), underlines the first mention in each paragraph or box with a dotted line, and shows a short definition on hover (computer) or tap (phone). Answer choices, buttons, links, and flashcards are left alone so a definition never gives away an answer. To add a term, add a `["term|other spelling", "Definition."]` line to `GLOSSARY` in that file; plurals match automatically, and names in ALL CAPS only match in capitals. New pages need `<script src="…/js/glossary.js"></script>` after their other scripts.
