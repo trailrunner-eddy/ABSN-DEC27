@@ -33,6 +33,23 @@
   function title(d) { return esc(d.name) + (d.brand ? ' <span class="brand-name">(' + esc(d.brand) + ")</span>" : ""); }
   // ==text== in cards.js = on the instructor's study guide
   function hl(s) { return esc(s).replace(/==([\s\S]+?)==/g, '<mark class="sg">$1</mark>'); }
+  /* Tap-to-hide only works in cover mode. Outside cover mode a tap (e.g. on a
+     glossary word) just shows the definition and never hides the cell. In cover
+     mode, tapping a blurred cell reveals it (without popping a definition that
+     would give the answer away); tapping a glossary word in a revealed cell just
+     shows the definition, and tapping elsewhere in it covers it again. */
+  function bindCover() {
+    $$(".fv").forEach(function (f) {
+      f.onclick = f.onkeydown = function (e) {
+        if (!S.cover) return;
+        if (e.type === "keydown" && e.key !== "Enter" && e.key !== " ") return;
+        if (e.type === "keydown") e.preventDefault();
+        if (f.classList.contains("covered")) { f.classList.remove("covered"); e.stopPropagation(); return; }
+        if (e.type === "click" && e.target.closest && e.target.closest(".gl-term")) return;
+        f.classList.add("covered");
+      };
+    });
+  }
   function fvh(html) { return '<span class="fv' + (S.cover ? " covered" : "") + '" tabindex="0">' + html + "</span>"; }
   var SG_LEGEND = '<p class="sg-legend small"><mark class="sg">Highlighted</mark> = on the instructor\'s study guide, so expect it on the exam.</p>';
   // The four fields every drug shows, then any other study-guide takeaways for that drug
@@ -213,7 +230,7 @@
 
     $("#plainT").onclick = function () { S.plain = !S.plain; save(); drugsView(c.id, openIds()); };
     $("#coverT").onclick = function () { S.cover = !S.cover; save(); drugsView(c.id, openIds()); };
-    $$(".fv").forEach(function (f) { f.onclick = f.onkeydown = function (e) { if (e.type === "keydown" && e.key !== "Enter" && e.key !== " ") return; if (e.type === "keydown") e.preventDefault(); f.classList.toggle("covered"); }; });
+    bindCover();
     $$("[data-mark]").forEach(function (b) {
       b.onclick = function () {
         var id = b.getAttribute("data-mark"), y = window.scrollY;
@@ -271,7 +288,7 @@
           (next ? '<a class="btn primary" href="#guide/' + next.id + '">' + esc(next.name) + " →</a>" : '<a class="btn primary" href="#guide/hy">High-yield comparisons →</a>') + "</div>";
       $("#alsoT").onclick = function () { S.guideAlso = !S.guideAlso; save(); guideView(key); };
       $("#coverT").onclick = function () { S.cover = !S.cover; save(); guideView(key); };
-      $$(".fv").forEach(function (f) { f.onclick = f.onkeydown = function (e) { if (e.type === "keydown" && e.key !== "Enter" && e.key !== " ") return; if (e.type === "keydown") e.preventDefault(); f.classList.toggle("covered"); }; });
+      bindCover();
       $("#mark").onclick = function () {
         var y = window.scrollY;
         if (S.guide[sec.id]) { delete S.guide[sec.id]; save(); } else { S.guide[sec.id] = 1; save(); addXP(15, "Section reviewed"); if (GSECS.every(function (g) { return S.guide[g.id]; })) confetti(); }
@@ -674,7 +691,7 @@
       '<div class="callout" style="margin-top:20px"><strong>Stems are a shortcut, not a guarantee</strong>Watch the look-alikes: progesterone and testosterone both end in -sterone, and diltiazem is a calcium channel blocker without -dipine. When a question gives a brand name, translate it to the generic first.</div>' +
       '<div class="row nav-links" style="margin-top:20px"><a class="btn" href="#guide/hy">← High-yield</a><span class="spacer"></span><a class="btn primary" href="#names/suffix">Drill stems in the Name Game →</a></div>';
     $("#coverT").onclick = function () { S.cover = !S.cover; save(); var y = window.scrollY; decoderView(head); window.scrollTo(0, y); };
-    $$(".fv").forEach(function (f) { f.onclick = f.onkeydown = function (e) { if (e.type === "keydown" && e.key !== "Enter" && e.key !== " ") return; if (e.type === "keydown") e.preventDefault(); f.classList.toggle("covered"); }; });
+    bindCover();
     var inp = $("#stemQ");
     inp.oninput = function () { $("#stemOut").innerHTML = decode(inp.value); };
   }
