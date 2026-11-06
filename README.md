@@ -17,6 +17,7 @@ Each exam guide's practice questions live in `window.QUESTIONS` (listed under `b
 - `why`: a rationale that explains the correct answer, and why tempting distractors are wrong.
 - `sys`, `stem`, `options` as before.
 - `guide: true` (Pharm) marks questions from the instructor-based study guide, shown in the guide's "Study guide set".
+- Pharm Exam 2 extra banks load after `practice.js` so saved progress keeps its place: `practice-added.js` (`added: true`, drugs the instructor guide skipped) and `practice-more.js` (`more: true`, 50 more questions from the instructor's Exam 2 Takeaways, the quiz's "New 50" set). Add new questions in a new file at the end, not in the middle.
 
 In every practice set, ← Previous reopens questions you already answered with your picks, the correct answer, and the rationale, so you can review mid-set without finishing it. NCLEX Prep allows this in Tutor mode; Exam mode stays forward-only like the real NCLEX.
 
