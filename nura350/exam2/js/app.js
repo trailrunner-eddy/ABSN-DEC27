@@ -429,8 +429,8 @@
   var quizDiff = "all";
   // unitId is a unit id, "guide" (the study guide's practice set), "added" (the drugs added to the guide), or empty for all
   function quiz(unitId) {
-    unitId = UNIT[unitId] || unitId === "guide" || unitId === "added" ? unitId : null;
-    var pool = QUESTIONS.map(function (q, i) { return i; }).filter(function (i) { return !unitId || (unitId === "guide" ? QUESTIONS[i].guide : unitId === "added" ? QUESTIONS[i].added : QUESTIONS[i].sys === unitId); });
+    unitId = UNIT[unitId] || unitId === "guide" || unitId === "added" || unitId === "more" ? unitId : null;
+    var pool = QUESTIONS.map(function (q, i) { return i; }).filter(function (i) { return !unitId || (unitId === "guide" ? QUESTIONS[i].guide : unitId === "added" ? QUESTIONS[i].added : unitId === "more" ? QUESTIONS[i].more : QUESTIONS[i].sys === unitId); });
     function inDiff(i) { return quizDiff === "all" || QUESTIONS[i].diff === quizDiff; }
     function countOf(f) { return pool.filter(f).length; }
     var answered = pool.filter(function (i) { return S.q[i] !== undefined; }).length;
@@ -440,7 +440,8 @@
     var bar = '<div class="filter-bar"><a class="chip ' + (!unitId ? "on" : "") + '" href="#quiz">All</a>' +
       UNITS.map(function (u) { return '<a class="chip ' + (unitId === u.id ? "on" : "") + '" href="#quiz/' + u.id + '"><span class="sys-dot sys-' + u.id + '"></span>' + esc(u.short) + "</a>"; }).join("") +
       '<a class="chip ' + (unitId === "guide" ? "on" : "") + '" href="#quiz/guide">📋 Study guide set</a>' +
-      '<a class="chip ' + (unitId === "added" ? "on" : "") + '" href="#quiz/added">➕ Added drugs</a></div>';
+      '<a class="chip ' + (unitId === "added" ? "on" : "") + '" href="#quiz/added">➕ Added drugs</a>' +
+      '<a class="chip ' + (unitId === "more" ? "on" : "") + '" href="#quiz/more">🆕 New 50</a></div>';
     app.innerHTML = '<h1>Practice Questions</h1><p class="muted">Multiple choice and select all that apply. Every question is rated by difficulty and explains why the answer is right.</p>' + bar +
       '<div class="grid grid-2"><div class="card"><h2>Start a set</h2><p class="small muted">' + pool.length + " questions here · " + answered + " tried · " + correct + " correct</p>" +
         '<div class="row" style="margin:12px 0"><span class="small">How many?</span>' + [10, 20, "All"].map(function (n, k) { return '<button class="chip' + (k === 0 ? " on" : "") + '" data-n="' + n + '">' + n + "</button>"; }).join("") + "</div>" +
