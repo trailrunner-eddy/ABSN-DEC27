@@ -141,7 +141,7 @@ window.QUESTIONS = [
 },
 { sys: "resp", type: "sata", diff: "hard",
   stem: "A client with bacterial pneumonia is being monitored. Which findings suggest the pneumonia is worsening or becoming systemic? Select all that apply.",
-  options: ["New confusion", "Productive yellow sputum", "BP 88/50 with HR 124", "PaCO₂ rising from 32 to 47 as RR slows", "Temperature 100.9°F", "Crackles in the right lower lobe"],
+  options: ["New confusion", "Productive yellow sputum", "BP 88/50 with HR 124", "PaCO₂ rising from 32 to 47 mm Hg (normal 35–45) as RR slows", "Temperature 100.9°F", "Crackles in the right lower lobe"],
   answer: [0, 2, 3],
   why: "New confusion (poor brain perfusion or hypoxia), hypotension with tachycardia (sepsis), and a CO₂ that climbs after being low (the client is tiring, so respiratory alkalosis is turning into respiratory acidosis) all signal decline. Purulent sputum, fever, and local crackles are expected findings of the pneumonia itself, not signs it's getting worse."
 },
@@ -171,7 +171,7 @@ window.QUESTIONS = [
 },
 { sys: "resp", type: "sata", diff: "hard",
   stem: "A client with COPD is admitted. Which findings point to an ACUTE exacerbation rather than the client's chronic baseline? Select all that apply.",
-  options: ["Barrel chest", "Clubbing", "SpO₂ 90% on room air (the client's usual)", "pH 7.29 with PaCO₂ 68", "New fever with increased purulent sputum", "HCO₃⁻ 31 with pH 7.37"],
+  options: ["Barrel chest", "Clubbing", "SpO₂ 90% on room air (the client's usual)", "pH 7.29 (normal 7.35–7.45) with PaCO₂ 68 mm Hg (normal 35–45)", "New fever with increased purulent sputum", "HCO₃⁻ 31 mEq/L (normal 22–26) with pH 7.37 (normal 7.35–7.45)"],
   answer: [3, 4],
   why: "A falling pH means CO₂ rose faster than the kidneys can compensate (acute-on-chronic respiratory acidosis), and new fever with more purulent sputum suggests infection, the usual trigger. Barrel chest, clubbing, a usual SpO₂ around 90%, and a high HCO₃⁻ with a normal pH (compensated respiratory acidosis) are the client's chronic baseline."
 },
@@ -328,7 +328,7 @@ window.QUESTIONS = [
   why: "Left-sided failure backs blood up into the LUNGS: orthopnea, paroxysmal nocturnal dyspnea, crackles, and pink, frothy sputum. Right-sided failure backs blood into the BODY: JVD, ascites, an enlarged liver, and dependent edema. Left-sided HF is the most common cause of right-sided HF."
 },
 { sys: "card2", type: "mc", diff: "hard",
-  stem: "A client with chronic, poorly controlled heart failure has a serum sodium of 128 mEq/L. What best explains this?",
+  stem: "A client with chronic, poorly controlled heart failure has a serum sodium of 128 mEq/L (normal 135–145). What best explains this?",
   options: ["ADH, released because the body senses low output as low volume, retains free water and dilutes sodium", "Aldosterone makes the kidneys waste sodium", "BNP blocks sodium absorption in the gut", "Failing heart muscle stores sodium"],
   answer: 0,
   why: "The body reads low cardiac output as hypovolemia and turns on SNS, RAAS, and ADH. ADH holds on to free water, which dilutes sodium (dilutional hyponatremia), a sign of chronic, poorly controlled HF. Aldosterone actually RETAINS sodium while wasting potassium and magnesium (dysrhythmia risk). BNP acts on the kidneys, not the gut."
@@ -371,8 +371,8 @@ window.QUESTIONS = [
   why: "Goal ≥0.5 mL/kg/hr → 70 × 0.5 = 35 mL/hr = 210 mL in 6 hr. 120 mL is ~20 mL/hr, below threshold for ≥6 hr."
 },
 { sys: "kidney", type: "sata", diff: "medium",
-  stem: "A client with AKI has K⁺ 6.4, pH 7.28, HCO₃⁻ 16, crackles, and a 3 kg weight gain in 2 days. Which findings are most immediately life-threatening? Select all that apply.",
-  options: ["K⁺ 6.4", "Crackles with rapid weight gain", "pH 7.28", "Mild pruritus", "BUN 38", "Fatigue"],
+  stem: "A client with AKI has K⁺ 6.4 mEq/L (normal 3.5–5.0), pH 7.28 (normal 7.35–7.45), HCO₃⁻ 16 mEq/L (normal 22–26), crackles, and a 3 kg weight gain in 2 days. Which findings are most immediately life-threatening? Select all that apply.",
+  options: ["K⁺ 6.4 mEq/L (normal 3.5–5.0)", "Crackles with rapid weight gain", "pH 7.28 (normal 7.35–7.45)", "Mild pruritus", "BUN 38 mg/dL (normal 10–20)", "Fatigue"],
   answer: [0, 1, 2],
   why: "The three big AKI dangers are hyperkalemia (dysrhythmias and cardiac arrest), fluid overload (pulmonary edema, shown by crackles and fast weight gain), and metabolic acidosis. Itching, a mildly high BUN, and fatigue are expected but not immediately dangerous."
 },
@@ -384,13 +384,13 @@ window.QUESTIONS = [
 },
 { sys: "kidney", type: "mc", diff: "medium",
   stem: "Which finding confirms CKD rather than AKI?",
-  options: ["Creatinine rose from 1.0 to 1.4 in 36 hours", "eGFR 48 on three checks over 5 months", "One eGFR of 55 during pneumonia", "Urine output 0.3 mL/kg/hr for 8 hours"],
+  options: ["Creatinine rose from 1.0 to 1.4 mg/dL (normal 0.6–1.2) in 36 hours", "eGFR 48 mL/min/1.73 m² (normal 90 or higher) on three checks over 5 months", "One eGFR of 55 mL/min/1.73 m² (normal 90 or higher) during pneumonia", "Urine output 0.3 mL/kg/hr for 8 hours"],
   answer: 1,
   why: "CKD requires abnormality for ≥3 months. A rise of ≥0.3 in 48 hr and low urine output are AKI criteria; one value during acute illness is not CKD."
 },
 { sys: "kidney", type: "sata", diff: "medium",
   stem: "Which findings point to NEPHROTIC SYNDROME rather than glomerulonephritis? Select all that apply.",
-  options: ["Foamy urine", "Cola-colored urine with RBC casts", "Serum albumin 1.8 g/dL", "BP 168/100 two weeks after impetigo", "Elevated cholesterol and triglycerides", "Hematuria with a rising creatinine"],
+  options: ["Foamy urine", "Cola-colored urine with RBC casts", "Serum albumin 1.8 g/dL (normal 3.5–5.0)", "BP 168/100 two weeks after impetigo", "Elevated cholesterol and triglycerides", "Hematuria with a rising creatinine"],
   answer: [0, 2, 4],
   why: "Nephrotic syndrome is a LEAKY filter: heavy protein loss (foamy urine), low albumin, and high lipids as the liver overproduces lipoproteins. Glomerulonephritis is an INFLAMED filter: cola-colored urine with RBC casts, hypertension, and falling GFR, often after a strep infection like impetigo."
 },
@@ -503,13 +503,13 @@ window.TRIAGE = [
     clients: ["Stable angina client, pain resolved with rest 10 min ago", "Pericarditis client, sharp pain better leaning forward, troponin normal", "Client with chest pain at rest for 30 min, diaphoretic, troponin rising", "HF client with 1+ ankle edema, weight unchanged"],
     answer: 2, why: "Pain >20 min at rest with rising troponin = MI in progress: necrosis and dysrhythmia risk. The others are expected or stable." },
   { sys: "kidney", diff: "medium", stem: "Which kidney client is most at risk right now?",
-    clients: ["CKD client with chronic anemia, Hgb 10.1", "AKI client with K⁺ 6.7 and HR 48", "Nephrotic client with periorbital edema", "CKD client reporting pruritus"],
+    clients: ["CKD client with chronic anemia, Hgb 10.1 g/dL (normal female 12–16, male 14–18)", "AKI client with K⁺ 6.7 mEq/L (normal 3.5–5.0) and HR 48", "Nephrotic client with periorbital edema", "CKD client reporting pruritus"],
     answer: 1, why: "Hyperkalemia with bradycardia in AKI can progress to cardiac arrest. The others are expected chronic findings." },
   { sys: "gu", diff: "medium", stem: "Which urinary client should the nurse assess first?",
     clients: ["Cystitis client with dysuria and frequency", "BPH client with nocturia ×3", "Pyelonephritis client, BP 84/50, HR 124, urine 15 mL/hr", "Client with a passing stone, pain 6/10 after analgesic"],
     answer: 2, why: "Pyelonephritis with hypotension, tachycardia, and oliguria suggests sepsis with poor renal perfusion and possible AKI." },
   { sys: "resp", diff: "medium", stem: "A pulmonary unit. Who first?",
-    clients: ["Asthma client whose PaCO₂ went from 30 to 44 over an hour, now drowsy", "Pneumonia client, temp 101°F, productive cough", "Latent TB client asking about medication", "Spontaneous pneumothorax client with chest tube, SpO₂ 96%"],
+    clients: ["Asthma client whose PaCO₂ went from 30 to 44 mm Hg (normal 35–45) over an hour, now drowsy", "Pneumonia client, temp 101°F, productive cough", "Latent TB client asking about medication", "Spontaneous pneumothorax client with chest tube, SpO₂ 96%"],
     answer: 0, why: "In asthma a “normalizing” CO₂ plus drowsiness means fatigue and impending hypercapnic failure (status asthmaticus)." },
   { sys: "card1", diff: "medium", stem: "Post-op day 2 surgical unit. Who first?",
     clients: ["Client with unilateral calf warmth and swelling", "Client with sudden dyspnea, pleuritic chest pain, HR 126, SpO₂ 86%", "Client with incision pain 5/10", "Client with mild ankle edema bilaterally"],

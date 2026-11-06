@@ -132,7 +132,7 @@ window.QUESTIONS = [
   answer: 2,
   why: "Vomiting removes stomach acid (HCl), leaving relatively more base: metabolic alkalosis. The lecture names this directly for obstruction. Respiratory imbalances come from ventilation problems, not vomiting." },
 { sys: "found", type: "mc", diff: "hard",
-  stem: "Thirty minutes after a client begins vomiting large amounts of bright red blood, the hemoglobin is 13.8 g/dL (baseline 14.1). HR is 124, BP 98/60. How should the nurse interpret the hemoglobin?",
+  stem: "Thirty minutes after a client begins vomiting large amounts of bright red blood, the hemoglobin is 13.8 g/dL (normal female 12–16, male 14–18; baseline 14.1). HR is 124, BP 98/60. How should the nurse interpret the hemoglobin?",
   options: ["The bleeding is minor because hemoglobin is near baseline", "Plasma and RBCs are being lost together, so hemoglobin hasn't fallen yet despite real blood loss", "The lab result is probably wrong and should be repeated before acting", "A normal hemoglobin rules out an upper GI source"],
   answer: 1,
   why: "Early in an acute bleed, whole blood is lost, so the concentration of hemoglobin stays near baseline. It falls only after fluid shifts into the vessels or IV fluids dilute it. The tachycardia and soft BP show the true volume loss, which is what matters right now." },
