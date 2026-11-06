@@ -19,6 +19,9 @@
                 technical it is: "easy" (recall), "medium" (apply to a client),
                 "hard" (multi-step or technical reasoning). why explains the
                 correct answer, and the distractors when useful.
+                Any lab result gets its normal range right after it, NCLEX style:
+                "K⁺ 6.4 mEq/L (normal 3.5–5.0)". Ranges live in js/labs.js;
+                run node tools/check-labs.js to catch missing ones.
 
    Lecture guides (per course):
         lectureFolder:    folder holding the PDFs, relative to the hub on the Mac

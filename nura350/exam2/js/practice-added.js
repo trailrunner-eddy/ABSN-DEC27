@@ -31,7 +31,7 @@ window.QUESTIONS = (window.QUESTIONS || []).concat([
   answer: [0, 1, 4, 5],
   why: "Enoxaparin is given deep subQ in the abdomen away from the umbilicus, without expelling the air bubble and without rubbing the site (rubbing increases bruising). It is never given IM. Monitor platelets for thrombocytopenia and watch for bleeding." },
 { sys: "cv2", type: "mc", diff: "hard", added: true,
-  stem: "A client on enoxaparin has a platelet count that dropped from 240,000 to 85,000/mm³. What is the nurse's priority?",
+  stem: "A client on enoxaparin has a platelet count that dropped from 240,000 to 85,000/mm³ (normal 150,000–400,000). What is the nurse's priority?",
   options: ["Hold the next dose and notify the provider", "Give the dose and recheck platelets in a week", "Give vitamin K", "Switch the client to IV heparin"],
   answer: 0,
   why: "Thrombocytopenia is a listed adverse effect of enoxaparin, and a drop this large raises concern for heparin-induced thrombocytopenia. Hold and report. Vitamin K reverses warfarin, not heparins, and switching to heparin would make HIT worse; the provider decides the alternative." },
@@ -96,7 +96,7 @@ window.QUESTIONS = (window.QUESTIONS || []).concat([
   why: "ATI teaching: don't smoke; avoid aspirin, NSAIDs, alcohol; report black tarry stools (GI bleeding) and fever or sore throat (possible agranulocytosis); it may cause drowsiness. Maximum doses shouldn't be used for more than 2 weeks without the provider." },
 { sys: "gi", type: "mc", diff: "hard", added: true,
   stem: "Which lab result in a client on long-term famotidine is most important to report?",
-  options: ["WBC 2,100/mm³ with a low neutrophil count", "Potassium 4.2 mEq/L", "Hemoglobin A1C 5.4%", "Sodium 139 mEq/L"],
+  options: ["WBC 2,100/mm³ (normal 5,000–10,000) with a low neutrophil count", "Potassium 4.2 mEq/L (normal 3.5–5.0)", "Hemoglobin A1C 5.4% (normal less than 5.7%)", "Sodium 139 mEq/L (normal 135–145)"],
   answer: 0,
   why: "Famotidine can cause blood disorders (agranulocytosis, neutropenia, aplastic anemia), which is why the CBC with differential is monitored. A low WBC and neutrophil count raises infection risk. The other values are normal." },
 // ---------- Scopolamine ----------
