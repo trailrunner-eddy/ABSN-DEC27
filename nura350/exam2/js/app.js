@@ -372,7 +372,7 @@
       var d = DRUG[x.drug], u = d ? unitOf(d) : g.sys;
       x.rows.forEach(function (r) {
         FLASH.push({ k: "g:" + x.drug + ":" + r[0], u: u, guide: true,
-          q: x.title + (x.brand ? " (" + x.brand + ")" : "") + ": " + r[0].toLowerCase() + (x.added ? " (added to the study guide)?" : " on the study guide?"),
+          q: "What " + (/s$/.test(r[0]) ? "are" : "is") + " the " + r[0].toLowerCase() + " for " + x.title + (x.brand ? " (" + x.brand + ")" : "") + (x.added ? " (added to the study guide)?" : " on the study guide?"),
           a: r[1] + (r[2] ? "\n\nNote: " + r[2] : "") });
       });
     });
