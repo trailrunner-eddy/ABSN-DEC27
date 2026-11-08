@@ -63,7 +63,7 @@ window.PROGRAM = {
               bank: ["js/data.js", "js/practice.js"],
               blurb: "Intro to health assessment, general survey & health history, respiratory assessment. Exam 1 is done; use it to review for the final.",
               topics: ["Intro", "Survey & Hx", "Respiratory"],
-              stats: "3 section overviews · 26 topics · 10 diagrams · 70 questions · 93 flashcards"
+              stats: "3 section overviews · 26 topics · 10 diagrams · 70 questions · 122 flashcards"
             },
             {
               name: "Exam 2", status: "ready",
@@ -71,7 +71,7 @@ window.PROGRAM = {
               bank: ["js/data.js", "js/practice.js"],
               blurb: "Lifespan, skin & lymph, cardiovascular, HEENT, and rectal & genitourinary. Questions are MC and SATA like the exam, each rated by difficulty.",
               topics: ["Skin & Lymph", "Cardiovascular", "HEENT", "GU & Rectal"],
-              stats: "4 section overviews · 38 topics · 20 diagrams · 96 questions · 146 flashcards"
+              stats: "4 section overviews · 38 topics · 20 diagrams · 96 questions · 184 flashcards"
             },
             { name: "Final Exam", status: "planned" }
           ]
@@ -107,7 +107,7 @@ window.PROGRAM = {
               bank: ["js/data.js", "js/practice.js"],
               blurb: "Respiratory, vascular, cardiac, kidney, urinary & reproductive disorders.",
               topics: ["Respiratory", "Cardiac 1", "Cardiac 2", "Kidney", "GU & Repro"],
-              stats: "6 section overviews · 28 topics · 33 diagrams · 55 MC & SATA questions · 100 flashcards"
+              stats: "6 section overviews · 28 topics · 33 diagrams · 55 MC & SATA questions · 210 flashcards"
             },
             {
               name: "Final Exam", status: "ready",
@@ -128,7 +128,7 @@ window.PROGRAM = {
               bank: ["js/drugs.js", "js/practice.js", "js/practice-added.js", "js/practice-more.js"],
               blurb: "Your instructor's Exam 2 takeaways in exam order, plus every drug from the combined drug tables: cardiac, renal & GU, reproductive, and GI.",
               topics: ["Study Guide", "Cardiac 1", "Cardiac 2", "Renal/GU", "GI"],
-              stats: "11-section study guide · 44 drugs · 151 MC & SATA questions · 143 flashcards"
+              stats: "11-section study guide · 44 drugs · 151 MC & SATA questions · 289 flashcards"
             }
           ]
         },
@@ -153,7 +153,7 @@ window.PROGRAM = {
               bank: ["js/data.js", "js/practice.js"],
               blurb: "Built around the nine Key Concepts: nutrition as a vital sign, healing, breathing, heart, kidney, GI, lifespan and diabetes, anemia and cancer, and tube feeding and TPN. NCLEX-style questions, each rated by difficulty.",
               topics: ["Foundations", "Assessment", "Heart & Kidney", "GI", "Lifespan & DM", "Tube feeds & TPN"],
-              stats: "10 section overviews · 35 topics · 3 diagrams · 122 NCLEX-style questions · 149 flashcards"
+              stats: "10 section overviews · 35 topics · 3 diagrams · 122 NCLEX-style questions · 166 flashcards"
             }
           ]
         }

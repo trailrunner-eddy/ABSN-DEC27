@@ -117,7 +117,7 @@
       ["#guide", "📋", "Study Guide", "Your instructor's Exam 2 takeaways for " + GSECS.reduce(function (n, g) { return n + g.drugs.length; }, 0) + " drugs in " + GSECS.length + " sections, in exam order, with \"Also know\" context, High-Yield Comparisons, and cover mode."],
       ["#drugs", "💊", "Drug Tables", DRUGS.length + " drugs in " + CATS.length + " categories. Class, MOA, use, contraindications, side and adverse effects, RN assessment, and teaching, with a plain-language switch and cover mode."],
       ["#compare", "📊", "Compare", "Line up one column (say, adverse effects) across every drug in a unit to spot look-alikes."],
-      ["#flash", "🃏", "Flashcards", FLASH.length + " flip cards: class and use, brand to generic, and the one thing to remember for each drug."],
+      ["#flash", "🃏", "Flashcards", FLASH.length + " flip cards: every takeaway on the study guide (nursing priorities, adverse effects, use, action), name endings, class and use, brand to generic, and the one thing to remember for each drug."],
       ["#quiz", "📝", "Practice Questions", QUESTIONS.length + " NCLEX-style items (multiple choice and SATA), each rated easy to hard with a rationale, including the study guide's practice set."],
       ["#names", "⚡", "Name Game", "Rapid fire: brand to generic, drug to category, drug to class, and suffix to class."],
       ["#memory", "🧠", "Memory Aids", "The mnemonic for every category and the name endings that give away the class."]
@@ -366,6 +366,23 @@
     if (d.brand) FLASH.push({ k: d.id + ":brand", u: u, q: "Brand name " + d.brand.split(/,|\[/)[0].trim() + " is which generic drug?", a: d.name + " (" + d.cls + ")" });
   });
   CATS.forEach(function (c) { FLASH.push({ k: "mn:" + c.id, u: c.sys, q: "Mnemonic for " + c.name + "?", a: c.mnemonic + "\n\n" + c.decode }); });
+  // One card per takeaway on the study guide (instructor's Exam 2 takeaways, plus the drugs we added to it)
+  GSECS.forEach(function (g) {
+    g.drugs.forEach(function (x) {
+      var d = DRUG[x.drug], u = d ? unitOf(d) : g.sys;
+      x.rows.forEach(function (r) {
+        FLASH.push({ k: "g:" + x.drug + ":" + r[0], u: u, guide: true,
+          q: x.title + (x.brand ? " (" + x.brand + ")" : "") + ": " + r[0].toLowerCase() + (x.added ? " (added to the study guide)?" : " on the study guide?"),
+          a: r[1] + (r[2] ? "\n\nNote: " + r[2] : "") });
+      });
+    });
+  });
+  // Name decoder: stem → class and this exam's drugs
+  (window.STEMS || []).forEach(function (s) {
+    var ds = s.drugs.map(function (id) { return DRUG[id]; }).filter(Boolean);
+    if (!ds.length) return;
+    FLASH.push({ k: "stem:" + s.stem, u: unitOf(ds[0]), q: "Name ending " + s.stem + " means which class?", a: s.cls + ".\n\nOn this exam: " + ds.map(function (d) { return d.name; }).join(", ") + "." + (s.tip ? "\n\n" + s.tip : "") });
+  });
 
   function flash(unitId) {
     unitId = UNIT[unitId] ? unitId : null;
@@ -388,7 +405,7 @@
         '<div class="flash-stage sys-' + c.u + '">' +
           '<div class="progress" style="margin-bottom:14px"><span style="width:' + (100 * pos / deck.length) + '%"></span></div>' +
           '<div class="flash' + (flipped ? " flipped" : "") + '" id="card" role="button" tabindex="0" aria-label="Flip card">' +
-            '<div class="flash-face front"><span class="tagpos">' + tag(c.u) + '</span><div class="q">' + esc(c.q) + '</div><div class="hint">Tap or press space to flip</div></div>' +
+            '<div class="flash-face front"><span class="tagpos">' + tag(c.u) + (c.guide ? ' <span class="chip guide-chip tiny">📋 Study guide</span>' : "") + '</span><div class="q">' + esc(c.q) + '</div><div class="hint">Tap or press space to flip</div></div>' +
             '<div class="flash-face back"><span class="tagpos">' + tag(c.u) + '</span><div class="a pre">' + esc(c.a) + '</div><div class="hint">' + (S.flash[c.k] ? "Marked known" : "Did you know it?") + "</div></div>" +
           "</div>" +
           '<div class="flash-controls">' +

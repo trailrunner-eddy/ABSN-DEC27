@@ -30,3 +30,7 @@ In every practice set, ← Previous reopens questions you already answered with 
 ## Medical term definitions (whole site)
 
 `js/glossary.js` is loaded on every page. It finds medical terms in the page text (like *myopathy*, *orthopnea*, *BPH*), underlines the first mention in each paragraph or box with a dotted line, and shows a short definition on hover (computer) or tap (phone). Answer choices, buttons, links, and flashcards are left alone so a definition never gives away an answer. To add a term, add a `["term|other spelling", "Definition."]` line to `GLOSSARY` in that file; plurals match automatically, and names in ALL CAPS only match in capitals. New pages need `<script src="…/js/glossary.js"></script>` after their other scripts.
+
+## Flashcards
+
+Each guide's flashcards cover its exam study guide topic by topic (the instructor's guide where there is one: Health Assessment Exams 1–2, Patho Exam 2, Pharm Exam 2; the Nutrition study guide for Nutrition). Patho Final has no instructor guide yet, so its deck stays on the lecture guides. Saved "known" marks are stored by card position, so add new cards at the end of `window.FLASHCARDS` rather than in the middle. Pharm Exam 2 builds its deck in `js/app.js`: one card per study-guide takeaway (tagged "📋 Study guide"), one per name ending in `stems.js`, plus class/use, brand, and key-point cards for every drug.
