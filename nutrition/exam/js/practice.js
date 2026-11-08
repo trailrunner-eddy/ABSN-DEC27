@@ -162,7 +162,25 @@ window.FLASHCARDS = [
   ["cant", "TPN tubing and lipids", "Bag and tubing every 24 hr; lipids hang ≤12 hr; filter on PN tubing (not lipids)."],
   ["cant", "Cracked TPN emulsion", "Oily layer or separation: don't use; return to pharmacy."],
   ["cant", "When to wean TPN", "Gradually, once oral or enteral intake meets 50–75% of needs (prevents rebound hypoglycemia)."],
-  ["cant", "TPN fluid overload sign", "Weight gain >1 kg/day, edema."]
+  ["cant", "TPN fluid overload sign", "Weight gain >1 kg/day, edema."],
+  // Added to match the Nutrition study guide
+  ["vital", "Diet history: what to ask", "Timing, type, and amount of meals, snacks, and fluids (incl. caffeine); how food is prepared; meals out; prescribed diet; allergies and avoided foods; supplements and meds."],
+  ["vital", "Physical signs of poor nutrition", "Dry or brittle hair, dry skin, poor wound healing, loss of fat or muscle, weakness, poor coordination."],
+  ["vital", "Barrier: dementia at mealtimes", "Same time, place, and people; few distractions; simple menu; small pieces; cue \"chew, then swallow.\""],
+  ["vital", "Barrier: low income or no access", "Dietitian, label teaching, social services, food banks, community meals, Meals on Wheels."],
+  ["heal", "Albumin's role in fluid balance", "Keeps fluid in the vessels; low albumin (normal 3.5–5.0) → edema."],
+  ["heal", "Critical illness micronutrients", "High doses of vitamins C and E, selenium, zinc, copper."],
+  ["heal", "Refeeding syndrome: why it happens", "Refeeding (especially carbs) releases insulin, which drives K⁺, phosphorus, and Mg²⁺ into cells; blood levels crash → dysrhythmias, HF, seizures, confusion."],
+  ["gi", "Nausea/vomiting diet", "Clear → full liquids → advance; bland low-fat carbs (crackers, toast); oral care, HOB up, cool foods, ginger; no fluids with meals."],
+  ["gi", "Anorexia interventions", "Calm, odor-free mealtimes; small frequent meals; fluids 30 min before or after meals; supplements between meals; biggest meal early."],
+  ["gi", "Constipation diet", "Raise fiber gradually (25/38 g), fluids about 64 oz, exercise, avoid chronic laxatives."],
+  ["gi", "Diarrhea diet", "Replace fluid, potassium, and sodium; low-fiber diet short-term."],
+  ["gi", "Low-fiber vs. high-fiber diet", "Low: no whole grains or raw produce; short-term for diarrhea and malabsorption. High: bulk and peristalsis; prevents constipation and colon cancer."],
+  ["life", "Things that lower BMR", "Starvation, aging (less lean mass), hypothyroidism; opioids, muscle relaxants, barbiturates."],
+  ["life", "Older adult nutrition needs", "Fewer calories but the same or more vitamins and minerals (calcium, vitamin D, B12); protein may rise. Calcium + vitamin D + weight-bearing exercise for bone."],
+  ["life", "Type 1 vs. type 2 vs. gestational diabetes", "Type 1: autoimmune beta-cell destruction, no insulin. Type 2: insulin resistance + altered secretion. Gestational: starts in pregnancy, raises later type 2 risk."],
+  ["life", "Hypoglycemia causes and signs", "Too much insulin, late or skipped meals, extra exercise, alcohol without food. Shaky, sweaty, confused, palpitations, headache → seizures."],
+  ["life", "Hyperglycemia causes and signs", "Too little insulin, illness, infection, stress. Polydipsia, polyuria, polyphagia → ketones, Kussmaul breathing, fruity breath, ↓LOC."]
 ];
 
 window.QUESTIONS = [

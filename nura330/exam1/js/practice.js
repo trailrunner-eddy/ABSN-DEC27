@@ -99,7 +99,37 @@ window.FLASHCARDS = [
   ["resp", "Early sign of hypoxia", "Restlessness, anxiety, irritability."],
   ["resp", "Orthopnea", "Difficulty breathing when lying flat."],
   ["resp", "Productive vs. non-productive cough", "Produces sputum vs. dry."],
-  ["resp", "BNP is ordered to…", "Check whether heart failure is causing the dyspnea."]
+  ["resp", "BNP is ordered to…", "Check whether heart failure is causing the dyspnea."],
+  // Added to match the instructor's Exam 1 study guide
+  ["intro", "Percussion: what it tells you", "The density of the tissue underneath: air (resonance, tympany), fluid, or solid (dullness)."],
+  ["intro", "Inspection uses more than sight", "Sight, hearing, and smell, plus bedside equipment (monitors, O₂, lines, drains). Starts broad (general survey), then a close, systematic look."],
+  ["intro", "Clinical reasoning in assessment", "Collect cues, compare them to expected findings, cluster related cues, then decide what matters most."],
+  ["intro", "Impaired vision: nursing interventions (ATI Ch. 45)", "Announce yourself, good lighting, glasses clean and on, keep items in the same place, clock method for meal trays, clear paths."],
+  ["intro", "Impaired hearing: nursing interventions (ATI Ch. 45)", "Face the client, get their attention first, speak clearly in a lower pitch (don't shout), reduce background noise, hearing aids in and working, use teach-back."],
+  ["survey", "Fever: what it means and what to check", "Temp >38 °C (100.4 °F): infection or inflammation. HR and RR rise with it; look for a source and signs of sepsis."],
+  ["survey", "Tachycardia (HR >100): common causes", "Fever, pain, anxiety, dehydration or blood loss, hypoxia, infection. Find and treat the cause."],
+  ["survey", "Tachypnea (RR >20): what it can mean", "Hypoxia, pain, anxiety, fever, acidosis. Often the earliest sign of deterioration."],
+  ["survey", "Abnormal vital sign: clinical judgment steps", "Recheck with proper technique → compare with baseline and trend → assess the client → intervene → notify the provider → document."],
+  ["survey", "Hand hygiene and infection prevention in the room", "Hand hygiene on entering and leaving and before touching the client; PPE per the posted precautions."],
+  ["survey", "Environmental safety before you leave", "Bed low and locked, call light and belongings in reach, clear path, side rails per policy."],
+  ["survey", "Human trafficking red flags", "Someone else answers for them or holds their ID, scripted or inconsistent story, fearful or avoids eye contact, untreated injuries, doesn't know their address, branding tattoos."],
+  ["survey", "Mandatory reporting", "Nurses must report suspected abuse or neglect of children and vulnerable/older adults per state law and facility policy. Document objectively, using the client's words."],
+  ["survey", "Immunizations and preventive screenings to ask about", "Vaccines and dates (flu, Tdap, pneumococcal, COVID-19, hepatitis B, HPV) and screenings (BP, cholesterol, mammogram, Pap, colonoscopy)."],
+  ["survey", "Psychological and emotional wellness questions", "Mood, stress, coping, anxiety or depression, sleep, support system, safety and thoughts of self-harm."],
+  ["survey", "Social and lifestyle history", "Diet, physical activity, sleep and rest, tobacco/vape/alcohol/drug use, living situation, home safety."],
+  ["survey", "Objective documentation example", "Chart \"RR 28, using neck muscles, speaks 3–4 words per breath,\" not \"breathing hard\" or \"seems anxious.\""],
+  ["resp", "Alveoli", "Tiny air sacs where O₂ and CO₂ diffuse across to the pulmonary capillaries. Surfactant keeps them from collapsing."],
+  ["resp", "Pleura", "Visceral pleura covers the lung; parietal pleura lines the chest wall. Fluid between them lets them glide."],
+  ["resp", "How breathing is controlled", "Medulla and pons. The main drive is rising CO₂ (central chemoreceptors); low O₂ (carotid and aortic chemoreceptors) is the backup."],
+  ["resp", "Tachypnea / bradypnea / dyspnea", "RR >20 / RR <12 / the feeling of short or difficult breathing (subjective)."],
+  ["resp", "Pulmonary edema", "Fluid in the alveoli: crackles, dyspnea, orthopnea, pink frothy sputum, low SpO₂."],
+  ["resp", "Home respiratory modalities to ask about", "Home O₂ (L/min), inhalers, nebulizers, CPAP/BiPAP, and whether they use them as prescribed."],
+  ["resp", "Health literacy and access in the respiratory history", "Can they afford and get their inhalers? Do they know how to use them? Confirm with teach-back."],
+  ["resp", "Workplace and home exposures", "Dust, asbestos, chemicals, mold, smoke, secondhand smoke, wood stoves, vaping."],
+  ["resp", "Signs of increased work of breathing", "Nasal flaring, accessory muscle use, retractions, tripod position, pursed lips, can't speak full sentences, head bobbing in infants."],
+  ["resp", "Asymmetric chest expansion suggests", "Pneumothorax, atelectasis, consolidation, or splinting from pain. Report it."],
+  ["resp", "Charting sputum", "Amount, color, consistency, odor (\"moderate thick yellow sputum\"), not \"lots of phlegm.\""],
+  ["resp", "Charting retractions", "Name the location and degree (\"moderate intercostal and subcostal retractions\"), not just \"retracting.\""]
 ];
 
 window.QUESTIONS = [
