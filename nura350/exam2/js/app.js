@@ -372,7 +372,7 @@
       var d = DRUG[x.drug], u = d ? unitOf(d) : g.sys;
       x.rows.forEach(function (r) {
         FLASH.push({ k: "g:" + x.drug + ":" + r[0], u: u, guide: true,
-          q: x.title + (x.brand ? " (" + x.brand + ")" : "") + ": " + r[0].toLowerCase() + (x.added ? " (added to the study guide)?" : " on the study guide?"),
+          q: "What " + (/s$/.test(r[0]) ? "are" : "is") + " the " + r[0].toLowerCase() + " for " + x.title + (x.brand ? " (" + x.brand + ")" : "") + (x.added ? " (added to the study guide)?" : " on the study guide?"),
           a: r[1] + (r[2] ? "\n\nNote: " + r[2] : "") });
       });
     });
@@ -386,15 +386,17 @@
 
   function flash(unitId) {
     unitId = UNIT[unitId] ? unitId : null;
-    var only = sget("pharmFlashOnly") === "1";
-    var deck = shuffle(FLASH.filter(function (c) { return (!unitId || c.u === unitId) && (!only || !S.flash[c.k]); }));
-    var total = FLASH.filter(function (c) { return !unitId || c.u === unitId; }).length;
+    var only = sget("pharmFlashOnly") === "1", gonly = sget("pharmFlashGuide") === "1";
+    function inSet(c) { return (!unitId || c.u === unitId) && (!gonly || c.guide); }
+    var deck = shuffle(FLASH.filter(function (c) { return inSet(c) && (!only || !S.flash[c.k]); }));
+    var total = FLASH.filter(inSet).length;
     var pos = 0, flipped = false;
     function draw() {
-      var known = FLASH.filter(function (c) { return (!unitId || c.u === unitId) && S.flash[c.k]; }).length;
+      var known = FLASH.filter(function (c) { return inSet(c) && S.flash[c.k]; }).length;
       var head = '<div class="row" style="margin-bottom:6px"><h1 style="margin:0">Flashcards</h1><span class="spacer"></span><span class="small muted">' + known + " of " + total + " known</span></div>" +
         unitBar(unitId, "#flash") +
-        '<label class="row small" style="margin-bottom:14px;gap:6px"><input type="checkbox" id="only" ' + (only ? "checked" : "") + "> Only show cards I haven't marked known</label>";
+        '<label class="row small" style="margin-bottom:14px;gap:6px"><input type="checkbox" id="only" ' + (only ? "checked" : "") + "> Only show cards I haven't marked known</label>" +
+        '<label class="row small" style="margin:-8px 0 14px;gap:6px"><input type="checkbox" id="gonly" ' + (gonly ? "checked" : "") + "> Only show what's on the study guide 📋</label>";
       if (!deck.length) { app.innerHTML = head + '<div class="card empty"><div style="font-size:48px">🎉</div><h2>Every card here is marked known.</h2><p>Uncheck the filter to review them all again.</p></div>'; bindHead(); return; }
       if (pos >= deck.length) {
         app.innerHTML = head + '<div class="card empty"><div style="font-size:48px">✅</div><h2>Deck finished</h2><p>' + known + " of " + total + ' known in this set.</p><button class="btn primary" id="again">Shuffle and go again</button></div>';
@@ -422,7 +424,10 @@
       $("#no").onclick = function () { if (S.flash[c.k]) { delete S.flash[c.k]; save(); } deck.push(c); pos++; flipped = false; draw(); };
     }
     function flip() { flipped = !flipped; var el = $("#card"); if (el) el.classList.toggle("flipped", flipped); }
-    function bindHead() { var o = $("#only"); if (o) o.onchange = function () { sset("pharmFlashOnly", o.checked ? "1" : "0"); flash(unitId); }; }
+    function bindHead() {
+      var o = $("#only"); if (o) o.onchange = function () { sset("pharmFlashOnly", o.checked ? "1" : "0"); flash(unitId); };
+      var g = $("#gonly"); if (g) g.onchange = function () { sset("pharmFlashGuide", g.checked ? "1" : "0"); flash(unitId); };
+    }
     function onKey(e) {
       if (e.target.tagName === "INPUT") return;
       if (e.key === " ") { e.preventDefault(); flip(); }
