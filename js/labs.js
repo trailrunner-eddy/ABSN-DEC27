@@ -59,6 +59,7 @@
     { lab: "HDL",         names: ["HDL"],                             unit: "mg/dL", normal: "female greater than 50" }, // male: "male greater than 40"
     { lab: "Triglycerides", names: ["triglycerides", "TG"],             unit: "mg/dL", normal: "less than 150" },
     { lab: "Ammonia",     names: ["ammonia"],                         unit: "mcg/dL", normal: "10–80" },
+    { lab: "Uric acid",   names: ["uric acid"],            unit: "mg/dL", normal: "female 2.7–7.3, male 4.0–8.5" },
     { lab: "Bilirubin",   names: ["bilirubin"],            unit: "mg/dL", normal: "0.3–1.0" },
     // Cardiac and drug levels
     { lab: "BNP",         names: ["BNP"],                             unit: "pg/mL", normal: "less than 100" },

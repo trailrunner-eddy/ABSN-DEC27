@@ -125,10 +125,10 @@ window.PROGRAM = {
             {
               name: "Exam 2", status: "ready",
               path: "nura350/exam2/index.html",
-              bank: ["js/drugs.js", "js/practice.js", "js/practice-added.js", "js/practice-more.js"],
+              bank: ["js/drugs.js", "js/practice.js", "js/practice-added.js", "js/practice-more.js", "js/practice-hard.js"],
               blurb: "Your instructor's Exam 2 takeaways in exam order, plus every drug from the combined drug tables: cardiac, renal & GU, reproductive, and GI.",
               topics: ["Study Guide", "Cardiac 1", "Cardiac 2", "Renal/GU", "GI"],
-              stats: "11-section study guide · 44 drugs · 151 MC & SATA questions · 289 flashcards"
+              stats: "11-section study guide · 44 drugs · 201 MC & SATA questions · 289 flashcards"
             }
           ]
         },
