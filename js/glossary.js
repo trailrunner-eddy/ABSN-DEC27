@@ -872,7 +872,19 @@
     ["integumentary", "Relating to the skin, hair, and nails."],
     ["genitourinary|GU", "Relating to the genital and urinary organs."],
     ["gastrointestinal|GI", "Relating to the stomach and intestines (the digestive tract)."],
-    ["endocrine", "Relating to glands that release hormones into the blood."]
+    ["endocrine", "Relating to glands that release hormones into the blood."],
+    ["QT interval|QTc|QT", "Time on the ECG for the ventricles to contract and recover; a long QT can trigger a deadly arrhythmia (torsades de pointes)."],
+    ["post-void residual|PVR", "Urine left in the bladder right after voiding; a large amount means urinary retention."],
+    ["detrusor", "The smooth muscle of the bladder wall that contracts to empty the bladder."],
+    ["enteric-coated|enteric coated", "A tablet coating that stays intact in stomach acid and dissolves in the intestine."],
+    ["PDE-5 inhibitor|PDE-5 inhibitors|PDE-5", "Erectile dysfunction drugs (such as sildenafil) that dilate blood vessels; dangerous low BP with nitrates."],
+    ["angle-closure glaucoma|narrow-angle glaucoma|angle-closure", "Glaucoma where the eye's drainage angle suddenly closes, spiking eye pressure: severe eye pain, halos, vision loss; an emergency."],
+    ["creatine kinase|CK", "Enzyme released from damaged muscle; very high levels point to rhabdomyolysis."],
+    ["P2Y12", "Platelet receptor (for ADP) that helps platelets clump; clopidogrel blocks it."],
+    ["subQ|subcutaneous injection", "Injected into the fatty layer just under the skin."],
+    ["IBS-D", "Irritable bowel syndrome with diarrhea as the main bowel pattern."],
+    ["fibrate|fibrates", "Cholesterol drug class (such as gemfibrozil) that mainly lowers triglycerides and raises HDL."],
+    ["SSRI|SSRIs", "Selective serotonin reuptake inhibitor: an antidepressant (such as sertraline) that raises serotonin."]
   ];
 
   /* ---------- Build the lookup ---------- */
