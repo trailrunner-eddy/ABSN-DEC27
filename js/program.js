@@ -81,6 +81,17 @@ window.PROGRAM = {
           lectureFolder: "../Sem 1/Patho/",
           lectureWebFolder: "nura340/lecture-guides/",
           lectureExam: "Exam 2",
+          /* Reading guides: read-through references built from assigned readings (not exam guides).
+             Same fields as an exam entry; they show under "Reading guides" on the course page. */
+          readings: [
+            {
+              name: "Mod 9 GI Reading Guide", status: "ready",
+              path: "nura340/mod9-gi/index.html",
+              blurb: "Your Mod 9 readings as a page-by-page reference: how the GI system works, then upper GI, lower GI, and gallbladder & liver disorders, each in the same six color-coded sections.",
+              topics: ["GI basics", "Upper GI", "Lower GI", "Liver & GB"],
+              stats: "30 pages · 30 figures · searchable · term definitions & lab ranges"
+            }
+          ],
           lectureGuides: [
             { mod: "Diseases of the Respiratory System", title: "Respiratory System Structure & Function", file: "Exam 2/Lecture Guides/Mod 3 - Respiratory System Structure and Function Lecture Guide.pdf", web: "mod-3-respiratory-system-structure-and-function.pdf", topics: [["Acid-base", "acidbase"], ["Pneumonia", "pneumonia"]] },
             { mod: "Diseases of the Respiratory System", title: "Upper Respiratory Diseases", file: "Exam 2/Lecture Guides/Mod 3 - Upper Respiratory Diseases Lecture Guide.pdf", web: "mod-3-upper-respiratory-diseases.pdf", topics: [["Upper respiratory infections", "uri"]] },
