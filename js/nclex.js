@@ -4,7 +4,7 @@
    window.TRIAGE (priority sets) and window.SYSTEMS (topic names). */
 (function () {
   "use strict";
-  var TYPES = { mc: "Multiple choice", sata: "Select all that apply", selectn: "Select N", cloze: "Drop-down cloze", matrix: "Matrix grid", priority: "Prioritization" };
+  var TYPES = { mc: "Multiple choice", sata: "Select all that apply", selectn: "Select N", cloze: "Drop-down cloze", matrix: "Matrix grid", fill: "Fill in the blank", order: "Ordered response", priority: "Prioritization" };
   var DIFFS = { easy: "Easy", medium: "Medium", hard: "Hard", unrated: "Not rated" };
   function diffChip(d) { return d === "unrated" ? "" : '<span class="chip diff diff-' + d + '">' + DIFFS[d] + "</span>"; }
   var LENGTHS = [10, 25, 50, 75, "All"];
@@ -161,6 +161,11 @@
       } else if (k === "matrix") {
         html += '<div class="q-stem">' + esc(q.stem) + '</div><div class="table-wrap"><table class="matrix"><thead><tr><th></th>' + q.cols.map(function (c) { return "<th>" + esc(c) + "</th>"; }).join("") + "</tr></thead><tbody>" +
           q.rows.map(function (r, ri) { return "<tr><td>" + esc(r[0]) + "</td>" + q.cols.map(function (c, ci) { return '<td data-r="' + ri + '" data-c="' + ci + '"><input type="radio" name="m' + ri + '" value="' + ci + '" aria-label="' + esc(r[0] + ": " + c) + '"></td>'; }).join("") + "</tr>"; }).join("") + "</tbody></table></div>";
+      } else if (k === "fill") {
+        html += '<div class="q-stem">' + esc(q.stem) + '</div><div class="fill-row"><input id="fill" class="fill-in" type="text" inputmode="decimal" autocomplete="off" aria-label="Your answer">' + (q.unit ? '<span class="fill-unit">' + esc(q.unit) + "</span>" : "") + "</div>";
+      } else if (k === "order") {
+        if (!perms[pos]) { var o = q.options.map(function (z, i) { return i; }), sh; do { sh = shuffle(o); } while (o.length > 1 && sh.join() === o.join()); perms[pos] = sh; }
+        html += '<div class="q-stem">' + esc(q.stem) + '</div><p class="small muted">Use ↑ and ↓ to put the steps in order, first step at the top.</p><ol class="order-list" id="olist"></ol>';
       } else {
         var multi = k === "sata" || k === "selectn";
         var perm = perms[pos] = perms[pos] || shuffle(q.options.map(function (o, i) { return i; }));
@@ -183,12 +188,26 @@
       };
       if ($("#prev")) $("#prev").onclick = function () { if (pos) { pos--; draw(); } };
       if ($("#resume")) $("#resume").onclick = function () { pos = last; draw(); };
+      if (k === "order") drawOrder(q, done ? done.resp : perms[pos], !!done);
       if (done) { fill(x, done.resp); reveal(x, done.resp); explain(x, done.cr); return; }
+      if (k === "fill") { $("#fill").onkeydown = function (e) { if (e.key === "Enter") submit(); }; }
       $("#submit").onclick = submit;
+    }
+    function drawOrder(q, ord, locked) {
+      var ol = $("#olist");
+      ol.innerHTML = ord.map(function (i, n) {
+        return '<li class="order-item"><span class="order-n">' + (n + 1) + '</span><span class="order-text">' + esc(q.options[i]) + "</span>" +
+          (locked ? "" : '<span class="order-btns"><button class="btn small" data-mv="-1" data-i="' + n + '"' + (n ? "" : " disabled") + ' aria-label="Move up">↑</button><button class="btn small" data-mv="1" data-i="' + n + '"' + (n < ord.length - 1 ? "" : " disabled") + ' aria-label="Move down">↓</button></span>') + "</li>";
+      }).join("");
+      if (!locked) Array.prototype.slice.call(ol.querySelectorAll("[data-mv]")).forEach(function (b) { b.onclick = function () {
+        var i = +b.getAttribute("data-i"), j = i + +b.getAttribute("data-mv"), t = ord[i]; ord[i] = ord[j]; ord[j] = t; drawOrder(q, ord, false);
+        var nb = ol.querySelector('[data-i="' + j + '"][data-mv="' + b.getAttribute("data-mv") + '"]') || ol.querySelector('[data-i="' + j + '"]'); if (nb) nb.focus();
+      }; });
     }
     /* Put a saved response back on screen when a tutor-mode question is reopened. */
     function fill(x, r) {
       if (x.kind === "cloze") $$(".cloze select").forEach(function (s) { s.value = String(r[+s.getAttribute("data-b")]); });
+      else if (x.kind === "fill") $("#fill").value = String(r[0]);
       else if (x.kind === "matrix") r.forEach(function (c, ri) { var i = app.querySelector('input[name="m' + ri + '"][value="' + c + '"]'); if (i) i.checked = true; });
     }
     function explain(x, cr) {
@@ -199,6 +218,8 @@
 
     function read(x) {
       var q = x.q, k = x.kind;
+      if (k === "fill") { var raw = $("#fill").value.replace(/,/g, "").trim(), fv = parseFloat(raw); return raw === "" || isNaN(fv) ? null : [fv]; }
+      if (k === "order") return perms[pos].slice();
       if (k === "cloze") { var v = $$(".cloze select").map(function (s) { return s.value; }); return v.indexOf("") > -1 ? null : v.map(Number); }
       if (k === "matrix") { var p = q.rows.map(function (r, ri) { var c = app.querySelector('input[name="m' + ri + '"]:checked'); return c ? +c.value : -1; }); return p.indexOf(-1) > -1 ? null : p; }
       var sel = $$(".opt.sel").map(function (b) { return +b.getAttribute("data-k"); });
@@ -224,6 +245,8 @@
 
     function score(x, r) {
       var q = x.q, k = x.kind;
+      if (k === "fill") return allOrNothing(Math.abs(r[0] - q.answer) <= (q.tol || 0) + 1e-9);
+      if (k === "order") return allOrNothing(r.every(function (v, i) { return v === i; }));
       if (k === "cloze") return allOrNothing(q.blanks.every(function (b, i) { return r[i] === b.answer; }));
       if (k === "matrix") return allOrNothing(q.rows.every(function (row, i) { return r[i] === row[1]; }));
       var ans = typeof q.answer === "number" ? [q.answer] : q.answer;
@@ -231,7 +254,14 @@
     }
     function reveal(x, r) {
       var q = x.q, k = x.kind;
-      if (k === "cloze") {
+      if (k === "fill") {
+        var f = $("#fill"), good = score(x, r).ok; f.value = String(r[0]); f.disabled = true; f.classList.add(good ? "right" : "wrong");
+        if (!good) { var fk = document.createElement("span"); fk.className = "small fill-key"; fk.textContent = "→ " + q.answer + (q.unit ? " " + q.unit : ""); f.parentNode.appendChild(fk); }
+      } else if (k === "order") {
+        drawOrder(q, r, true);
+        $$(".order-item").forEach(function (li, i) { li.classList.add(r[i] === i ? "right" : "wrong"); });
+        if (!score(x, r).ok) $("#olist").insertAdjacentHTML("afterend", '<div class="order-key small"><b>Correct order</b><ol>' + q.options.map(function (o) { return "<li>" + esc(o) + "</li>"; }).join("") + "</ol></div>");
+      } else if (k === "cloze") {
         $$(".cloze select").forEach(function (s, i) { var b = q.blanks[+s.getAttribute("data-b")], good = +s.value === b.answer; s.classList.add(good ? "right" : "wrong"); s.disabled = true;
           if (!good) { var sp = document.createElement("span"); sp.className = "small"; sp.style.color = "var(--good)"; sp.style.fontWeight = "700"; sp.textContent = " → " + b.options[b.answer]; s.after(sp); } });
       } else if (k === "matrix") {
@@ -246,7 +276,7 @@
     }
     function submit() {
       var x = list[pos], r = read(x);
-      if (!r) { note(x.kind === "cloze" ? "Fill every blank." : x.kind === "matrix" ? "Answer every row." : x.kind === "selectn" ? "Pick exactly " + x.q.n + "." : "Choose an answer first."); return; }
+      if (!r) { note(x.kind === "fill" ? "Enter a number." : x.kind === "cloze" ? "Fill every blank." : x.kind === "matrix" ? "Answer every row." : x.kind === "selectn" ? "Pick exactly " + x.q.n + "." : "Choose an answer first."); return; }
       var cr = score(x, r), ok = cr.ok;
       results[pos] = { x: x, ok: ok, pts: cr.pts, cr: cr, resp: r };
       st().seen[x.id] = ok ? 1 : 0; ctx.save();
@@ -260,6 +290,8 @@
     function answerText(x) {
       var q = x.q;
       if (x.kind === "cloze") return q.blanks.map(function (b) { return b.options[b.answer]; }).join(" · ");
+      if (x.kind === "fill") return q.answer + (q.unit ? " " + q.unit : "");
+      if (x.kind === "order") return q.options.map(function (o, i) { return (i + 1) + ". " + o; }).join(" · ");
       if (x.kind === "matrix") return q.rows.map(function (r) { return r[0] + ": " + q.cols[r[1]]; }).join(" · ");
       var ans = typeof q.answer === "number" ? [q.answer] : q.answer;
       return ans.map(function (i) { return q.options[i]; }).join(" · ");

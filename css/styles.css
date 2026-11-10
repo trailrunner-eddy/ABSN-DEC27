@@ -300,3 +300,24 @@ td:first-child { font-weight: 600; }
   .reveal-q .ans { display: block; }
   body { background: #fff; }
 }
+
+/* Fill-in-the-blank and ordered-response questions (ATI formats) */
+.fill-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 6px 0 4px; }
+.fill-in { width: 9em; max-width: 100%; padding: 10px 12px; font-size: 1.05rem; font-weight: 600; border: 1.5px solid var(--accent); border-radius: 10px; background: var(--surface); color: inherit; }
+.fill-in.right { border-color: var(--good); background: var(--good-bg); }
+.fill-in.wrong { border-color: var(--bad); background: var(--bad-bg); }
+.fill-unit { font-weight: 600; }
+.fill-key { color: var(--good); font-weight: 700; }
+.order-list { list-style: none; padding: 0; margin: 8px 0 0; }
+.order-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; margin-bottom: 8px; border: 1.5px solid var(--line); border-radius: 12px; background: var(--surface); }
+.order-item.right { border-color: var(--good); background: var(--good-bg); }
+.order-item.wrong { border-color: var(--bad); background: var(--bad-bg); }
+.order-n { width: 26px; height: 26px; flex: none; border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: .8rem; background: var(--accent); color: var(--accent-ink); }
+.order-text { flex: 1; min-width: 0; }
+.order-btns { display: flex; gap: 4px; flex: none; }
+.order-btns .btn { padding: 4px 10px; min-width: 36px; }
+.order-key { margin-top: 10px; padding: 10px 14px; border-radius: 10px; background: var(--good-bg); }
+.order-key ol { margin: 6px 0 0; padding-left: 20px; }
+.ati-map td { vertical-align: top; }
+.ati-map td:first-child { width: 38%; font-weight: 600; }
+@media (max-width: 560px) { .ati-map td { display: block; width: auto !important; border: 0; padding: 4px 0; } .ati-map tr { display: block; border-bottom: 1px solid var(--line); padding: 8px 0; } }
