@@ -982,7 +982,33 @@
     ["subQ|subcutaneous injection", "Injected into the fatty layer just under the skin."],
     ["IBS-D", "Irritable bowel syndrome with diarrhea as the main bowel pattern."],
     ["fibrate|fibrates", "Cholesterol drug class (such as gemfibrozil) that mainly lowers triglycerides and raises HDL."],
-    ["SSRI|SSRIs", "Selective serotonin reuptake inhibitor: an antidepressant (such as sertraline) that raises serotonin."]
+    ["SSRI|SSRIs", "Selective serotonin reuptake inhibitor: an antidepressant (such as sertraline) that raises serotonin."],
+    /* ---------- Nutrition (ATI CMS) ---------- */
+    ["kosher", "Food prepared under Jewish dietary law: no pork or shellfish, and meat and dairy are never eaten together."],
+    ["halal", "Food permitted under Islamic law: no pork or alcohol, and meat from animals slaughtered in a prescribed way."],
+    ["Ramadan", "The Islamic month of fasting from sunrise to sunset; clients with diabetes need medication timing adjusted."],
+    ["A1C|HbA1c", "Hemoglobin A1C: a blood test showing average glucose over about 3 months. Goal for most adults with diabetes is under 7%."],
+    ["lanugo", "Fine, soft body hair that grows with starvation (as in anorexia nervosa) and on newborns."],
+    ["amenorrhea", "Absence of menstrual periods; in eating disorders it reflects very low body fat and hormone changes."],
+    ["Russell's sign", "Calluses or scars on the knuckles from self-induced vomiting (bulimia nervosa)."],
+    ["parotid", "The large salivary glands in front of the ears; they swell with repeated vomiting."],
+    ["macrosomia", "A newborn larger than normal (over about 4,000 g), a risk of poorly controlled diabetes in pregnancy."],
+    ["aspartame", "An artificial sweetener that breaks down into phenylalanine, so people with PKU must avoid it."],
+    ["phenylketonuria|PKU", "An inherited disorder in which the body can't break down the amino acid phenylalanine; treated with a lifelong low-phenylalanine diet."],
+    ["pyridoxine", "Vitamin B6. Given with isoniazid to prevent peripheral neuropathy."],
+    ["isoniazid|INH", "An antibiotic for tuberculosis that depletes vitamin B6 and can damage the liver."],
+    ["isotretinoin", "A vitamin A-derived acne drug; it causes birth defects, so vitamin A supplements and pregnancy must be avoided."],
+    ["lactulose", "A laxative that pulls ammonia into the colon to be passed in stool; used for hepatic encephalopathy."],
+    ["glucagon", "A hormone that raises blood glucose by releasing liver glycogen; given by injection or nasal spray for severe hypoglycemia."],
+    ["oxalate", "A compound in spinach, rhubarb, nuts, and tea that can combine with calcium to form kidney stones."],
+    ["DASH", "Dietary Approaches to Stop Hypertension: a low-sodium eating plan rich in fruits, vegetables, low-fat dairy, and whole grains."],
+    ["omega-3|omega-3 fatty acid", "Healthy fats in fatty fish, flaxseed, and walnuts that lower triglycerides and support heart health."],
+    ["PPN", "Peripheral parenteral nutrition: short-term IV nutrition (dextrose 10% or less) through a peripheral vein."],
+    ["pocketing", "Food left held in the cheek after swallowing, a sign of dysphagia and an aspiration risk."],
+    ["SNAP", "Supplemental Nutrition Assistance Program: federal food-buying benefits for low-income households."],
+    ["WIC", "Special Supplemental Nutrition Program for Women, Infants, and Children: food and nutrition help for pregnant, postpartum, and breastfeeding clients and children under 5."],
+    ["carbohydrate choice|carb choice", "A serving with 15 g of carbohydrate, used in diabetes meal planning."],
+    ["glycemic index", "How quickly a food raises blood glucose compared with pure glucose; whole grains and legumes are low."]
   ];
 
   /* ---------- Build the lookup ---------- */

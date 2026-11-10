@@ -49,12 +49,39 @@
     var h = (location.hash || "#home").slice(1).split("/");
     var r = h[0] || "home", arg = h[1], arg2 = h[2];
     $$("#nav a", document).forEach(function (a) { a.classList.toggle("active", a.getAttribute("data-r") === r || ((r === "topic" || r === "intro") && a.getAttribute("data-r") === "topics")); });
-    var views = { home: home, topics: topics, topic: topics, intro: intro, pics: pics, flash: flash, quiz: quiz, sort: sortGame, chains: chains, triage: triage, normal: normalGame, emerg: emerg };
+    var views = { ati: atiPage, home: home, topics: topics, topic: topics, intro: intro, pics: pics, flash: flash, quiz: quiz, sort: sortGame, chains: chains, triage: triage, normal: normalGame, emerg: emerg };
     (views[r] || home)(arg, arg2);
     window.scrollTo(0, 0);
     var active = $(".nav a.active", document); if (active && active.scrollIntoView) { try { active.scrollIntoView({ block: "nearest", inline: "center" }); } catch (e) {} }
   }
   window.addEventListener("hashchange", route);
+
+  /* ================= ATI CMS ================= */
+  var W_ATI = window.ATI;
+  function atiPage() {
+    var A = W_ATI; if (!A) return home();
+    var byId = {}; DISORDERS.forEach(function (d) { byId[d.id] = d; });
+    var atiQs = QUESTIONS.map(function (q, i) { return i; }).filter(function (i) { return QUESTIONS[i].ati; });
+    var atiRight = atiQs.filter(function (i) { return S.q[i] === 1; }).length;
+    function chips(ids) { return ids.filter(function (id) { return byId[id]; }).map(function (id) { var d = byId[id]; return '<a class="chip" href="#topic/' + id + '"><span class="sys-dot sys-' + d.sys + '"></span>' + esc(d.name) + (S.topics[id] ? " ✓" : "") + "</a>"; }).join(""); }
+    app.innerHTML =
+      '<h1>📋 ' + esc(A.title) + '</h1><p class="muted">' + esc(A.lead) + "</p>" +
+      '<section class="grid grid-2">' + A.facts.map(function (f) { return '<div class="card"><h3>' + esc(f[0]) + '</h3><p class="small">' + esc(f[1]) + "</p></div>"; }).join("") + "</section>" +
+      '<div class="card" style="margin-top:18px"><div class="row"><h2 style="margin:0">Practice like the real thing</h2><span class="spacer"></span><span class="small muted">' + atiQs.length + " ATI-style questions · " + atiRight + " answered correctly</span></div>" +
+        '<p class="small muted">The ATI-style set is written in ATI\'s voice across every review area, including fill-in-the-blank calculations and ordered response. The 70-question test mixes in the rest of the bank.</p>' +
+        '<div class="row"><button class="btn primary" id="ati-mock">Start the 70-question test</button><button class="btn" id="ati-set">ATI-style set only</button></div></div>' +
+      '<h2 style="margin-top:28px">ATI review areas → topics on this site</h2><p class="small muted">Tap a topic to study it. ✓ = marked studied. Spend extra time on the areas your Practice Assessment and Focused Review flag.</p>' +
+      A.units.map(function (u) {
+        return '<div class="card" style="margin-bottom:14px"><h3>' + esc(u.name) + '</h3><div class="table-wrap"><table class="ati-map"><tbody>' + u.items.map(function (it) { return "<tr><td>" + esc(it[0]) + '</td><td><div class="row">' + chips(it[1]) + "</div></td></tr>"; }).join("") + "</tbody></table></div></div>";
+      }).join("") +
+      '<section class="grid grid-2" style="margin-top:18px">' +
+        '<div class="card"><h2>Study plan</h2><ol class="facts">' + A.plan.map(function (p) { return "<li><b>" + esc(p[0]) + ".</b> " + esc(p[1]) + "</li>"; }).join("") + "</ol></div>" +
+        '<div class="stack"><div class="card"><h2>ATI Engage modules</h2><p class="small muted">Your handout recommends these for extra review. Here is where the same content lives on this site.</p>' + A.engage.map(function (e) { return '<div style="margin:10px 0"><b>' + esc(e[0]) + '</b><p class="small" style="margin:2px 0 6px">' + esc(e[1]) + '</p><div class="row">' + chips(e[2]) + "</div></div>"; }).join("") + "</div>" +
+        '<div class="card"><h2>ATI question traps</h2><ul class="facts">' + A.traps.map(function (t) { return "<li>" + esc(t) + "</li>"; }).join("") + "</ul></div></div>" +
+      "</section>";
+    $("#ati-mock").onclick = function () { runQuiz(mockIds(70), null); };
+    $("#ati-set").onclick = function () { quizSet = "ati"; quizDiff = "all"; location.hash = "#quiz"; };
+  }
 
   /* ================= HOME ================= */
   function home() {
@@ -66,7 +93,7 @@
         '<span style="font-size:20px">' + s.icon + '</span><span><span class="name">' + esc(s.name) + '</span><br><span class="tiny">' + esc(s.weight) + "</span></span>" +
         '<span class="small" style="font-weight:700">' + m + '%</span><div class="progress bar"><span style="width:' + m + '%"></span></div></a>';
     }).join("");
-var tiles = [
+var tiles = (W_ATI ? [["#ati", "📋", "ATI CMS Exam Plan", "The 70-question ATI Nutrition CMS: what's on it, a study plan, the review areas mapped to topics, and a 70-question practice test."]] : []).concat([
       ["#topics", "📚", "Topic Pages", "Every topic on the study guide as " + (G.chainShort || "a step-by-step chain") + ", with self-check questions."],
       ["#pics", "🧩", "Picture Lab", "Tap-to-learn diagrams: the digestive tract, MyPlate, and every feeding route from mouth to central line."],
       ["#flash", "🃏", "Flashcards", FLASHCARDS.length + " flip cards. Mark what you know and drill the rest."],
@@ -76,7 +103,7 @@ var tiles = [
       ["#chains", "🔢", "Step Order", "Put diet progressions, tube-feeding steps, and sequences in order."],
       ["#triage", "🚨", "Who First?", "Pick the priority client from a group of four."],
       ["#emerg", "⚠️", "Red Flags & Look-alikes", "Nutrition emergencies to escalate now, and how to tell look-alikes apart."]
-    ].map(function (t) { return '<a class="card tile" href="' + t[0] + '"><div class="emoji">' + t[1] + "</div><h3>" + t[2] + '</h3><p class="muted small">' + t[3] + "</p></a>"; }).join("");
+    ]).map(function (t) { return '<a class="card tile" href="' + t[0] + '"><div class="emoji">' + t[1] + "</div><h3>" + t[2] + '</h3><p class="muted small">' + t[3] + "</p></a>"; }).join("");
 
     app.innerHTML =
       '<section class="hero">' +
@@ -84,7 +111,7 @@ var tiles = [
           '<div class="tiny" style="color:rgba(255,255,255,.8);font-weight:700;letter-spacing:.06em;text-transform:uppercase">' + esc(G.course || "") + "</div>" +
           "<h1>" + esc(G.title || "Study Lab") + "</h1>" +
           "<p>" + (G.heroText || "") + "</p>" +
-          '<div class="row"><a class="btn" href="#topics">Start with topics</a><a class="btn ghost" href="#quiz">Quick quiz</a></div>' +
+          '<div class="row"><a class="btn" href="#topics">Start with topics</a>' + (W_ATI ? '<a class="btn ghost" href="#ati">ATI exam plan</a>' : "") + '<a class="btn ghost" href="#quiz">Quick quiz</a></div>' +
         "</div>" +
         '<div class="card"><h3>Your progress</h3><div class="ring-wrap"><div class="ring" style="--p:' + overall + '" data-label="' + overall + '%"></div>' +
           '<div class="small muted">Mastery blends flashcards you know, questions you have answered correctly, and topics you marked studied.<br><br><b>' + S.xp + " XP</b> earned · Right Call best streak <b>" + (S.best.normalStreak || 0) + "</b></div></div>" +
@@ -406,13 +433,22 @@ var tiles = [
   function sessionStorageSet(k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} }
 
   /* ================= QUIZ ================= */
-  var TYPE_LABEL = { mc: "Multiple choice", sata: "Select all that apply", selectn: "Select N", cloze: "Drop-down cloze", matrix: "Matrix grid" };
+  var TYPE_LABEL = { mc: "Multiple choice", sata: "Select all that apply", selectn: "Select N", cloze: "Drop-down cloze", matrix: "Matrix grid", fill: "Fill in the blank", order: "Ordered response" };
   var DIFF = { easy: ["Easy", "recall a fact or definition"], medium: ["Medium", "apply a concept to a client"], hard: ["Hard", "multi-step or technical reasoning"] };
   function diffChip(d) { return DIFF[d] ? '<span class="chip diff diff-' + d + '" title="' + DIFF[d][1] + '">' + DIFF[d][0] + "</span>" : ""; }
   function quizFormats() { return Object.keys(TYPE_LABEL).filter(function (t) { return QUESTIONS.some(function (q) { return q.type === t; }); }).map(function (t) { return t === "mc" ? "multiple choice" : t === "sata" ? "select all that apply" : TYPE_LABEL[t]; }); }
-  var quizDiff = "all";
+  var quizDiff = "all", quizSet = "all";
+  /* The 70-question practice test: same length as the ATI Nutrition CMS, dealt round-robin from
+     every section so each one is represented, then shuffled. */
+  function mockIds(n) {
+    var by = SYSTEMS.map(function (s) { return shuffle(QUESTIONS.map(function (q, i) { return i; }).filter(function (i) { return QUESTIONS[i].sys === s.id; })); });
+    var out = [], k = 0;
+    while (out.length < n && by.some(function (b) { return b.length; })) { var b = by[k++ % by.length]; if (b.length) out.push(b.pop()); }
+    return shuffle(out);
+  }
   function quiz(sys) {
-    var pool = QUESTIONS.map(function (q, i) { return i; }).filter(function (i) { return !sys || QUESTIONS[i].sys === sys; });
+    var pool = QUESTIONS.map(function (q, i) { return i; }).filter(function (i) { return (!sys || QUESTIONS[i].sys === sys) && (quizSet === "all" || QUESTIONS[i].ati); });
+    var atiN = QUESTIONS.filter(function (q) { return q.ati && (!sys || q.sys === sys); }).length;
     var answered = pool.filter(function (i) { return S.q[i] !== undefined; }).length;
     var correct = pool.filter(function (i) { return S.q[i] === 1; }).length;
     var missed = pool.filter(function (i) { return S.q[i] === 0; });
@@ -424,13 +460,17 @@ var tiles = [
       sysFilterBar(sys, "#quiz", false) +
       '<div class="grid grid-2"><div class="card"><h2>Start a set</h2><p class="small muted">' + pool.length + " questions in this pool · " + answered + " attempted · " + correct + ' correct</p>' +
         '<div class="row" style="margin:12px 0"><span class="small">How many?</span>' + [10, 20, "All"].map(function (n, k) { return '<button class="chip' + (k === 0 ? " on" : "") + '" data-n="' + n + '">' + n + "</button>"; }).join("") + "</div>" +
+        (atiN ? '<div class="row" style="margin:0 0 12px"><span class="small">Question set</span>' + [["all", "Everything"], ["ati", "📋 ATI-style only"]].map(function (t) { return '<button class="chip' + (quizSet === t[0] ? " on" : "") + '" data-set="' + t[0] + '">' + t[1] + (t[0] === "ati" ? " · " + atiN : "") + "</button>"; }).join("") + "</div>" : "") +
         (rated ? '<div class="row" style="margin:0 0 14px"><span class="small">Difficulty</span>' + ["all", "easy", "medium", "hard"].map(function (d) { return '<button class="chip' + (quizDiff === d ? " on" : "") + '" data-d="' + d + '">' + (d === "all" ? "All" : DIFF[d][0]) + " · " + countOf(function (i) { return d === "all" || QUESTIONS[i].diff === d; }) + "</button>"; }).join("") + "</div>" : "") +
-        '<div class="row"><button class="btn primary" id="go">Start</button>' + (missed.length ? '<button class="btn" id="redo">Retry my ' + missed.length + " missed</button>" : "") + "</div></div>" +
+        '<div class="row"><button class="btn primary" id="go">Start</button>' + (missed.length ? '<button class="btn" id="redo">Retry my ' + missed.length + " missed</button>" : "") + "</div>" +
+        (!sys && W_ATI ? '<div class="callout" style="margin-top:16px"><strong>📋 ATI-length practice test</strong>70 questions from every section, all formats and difficulties, like the real ATI Nutrition CMS. ← Previous still works, so you can review rationales as you go.<div class="row" style="margin-top:10px"><button class="btn primary" id="mock">Start the 70-question test</button></div></div>' : "") + "</div>" +
         '<div class="card"><h2>Formats</h2><ul class="facts small">' + Object.keys(TYPE_LABEL).map(function (t) { var n = countOf(function (i) { return QUESTIONS[i].type === t; }); return n ? "<li><b>" + TYPE_LABEL[t] + "</b> · " + n + "</li>" : ""; }).join("") + "</ul>" +
           (rated ? '<h3 style="margin-top:14px">Difficulty</h3><ul class="facts small">' + Object.keys(DIFF).map(function (d) { return "<li>" + diffChip(d) + " " + DIFF[d][1] + " · " + countOf(function (i) { return QUESTIONS[i].diff === d; }) + "</li>"; }).join("") + "</ul>" : "") + "</div></div>";
     var count = 10;
     $$("[data-n]").forEach(function (b) { b.onclick = function () { $$("[data-n]").forEach(function (x) { x.classList.remove("on"); }); b.classList.add("on"); count = b.getAttribute("data-n") === "All" ? 999 : +b.getAttribute("data-n"); }; });
     $$("[data-d]").forEach(function (b) { b.onclick = function () { quizDiff = b.getAttribute("data-d"); quiz(sys); }; });
+    $$("[data-set]").forEach(function (b) { b.onclick = function () { quizSet = b.getAttribute("data-set"); quiz(sys); }; });
+    if ($("#mock")) $("#mock").onclick = function () { runQuiz(mockIds(70), sys); };
     $("#go").onclick = function () { var ids = pool.filter(inDiff); if (!ids.length) { toast("No questions at that difficulty here"); return; } runQuiz(shuffle(ids).slice(0, count), sys); };
     if ($("#redo")) $("#redo").onclick = function () { runQuiz(shuffle(missed), sys); };
   }
@@ -472,6 +512,11 @@ var tiles = [
       } else if (q.type === "matrix") {
         html += '<div class="q-stem">' + esc(q.stem) + '</div><div class="table-wrap"><table class="matrix"><thead><tr><th></th>' + q.cols.map(function (c) { return "<th>" + esc(c) + "</th>"; }).join("") + "</tr></thead><tbody>" +
           q.rows.map(function (r, ri) { return "<tr><td>" + esc(r[0]) + "</td>" + q.cols.map(function (c, ci) { return '<td data-r="' + ri + '" data-c="' + ci + '"><input type="radio" name="m' + ri + '" value="' + ci + '" aria-label="' + esc(r[0] + ": " + c) + '"></td>'; }).join("") + "</tr>"; }).join("") + "</tbody></table></div>";
+      } else if (q.type === "fill") {
+        html += '<div class="q-stem">' + esc(q.stem) + '</div><div class="fill-row"><input id="fill" class="fill-in" type="text" inputmode="decimal" autocomplete="off" aria-label="Your answer">' + (q.unit ? '<span class="fill-unit">' + esc(q.unit) + "</span>" : "") + "</div>";
+      } else if (q.type === "order") {
+        if (!orders[pos]) { var o = q.options.map(function (x, k) { return k; }), sh; do { sh = shuffle(o); } while (o.length > 1 && sh.join() === o.join()); orders[pos] = sh; }
+        html += '<div class="q-stem">' + esc(q.stem) + '</div><p class="small muted">Use ↑ and ↓ to put the steps in order, first step at the top.</p><ol class="order-list" id="olist"></ol>';
       } else {
         var multi = q.type !== "mc";
         orders[pos] = orders[pos] || shuffle(q.options.map(function (o, k) { return k; }));
@@ -485,7 +530,9 @@ var tiles = [
       $("#end").onclick = function () { if (results.length) finish(); else quiz(sys); };
       $("#prev").onclick = function () { if (pos) { show(pos - 1); window.scrollTo(0, 0); } };
       if ($("#resume")) $("#resume").onclick = function () { show(last); window.scrollTo(0, 0); };
+      if (q.type === "order") drawOrder(q, done ? done.resp : orders[pos], !!done);
       if (done) { reveal(q, done.resp); explain(q, done.cr); return; }
+      if (q.type === "fill") { $("#fill").onkeydown = function (e) { if (e.key === "Enter") grade(q, qi); }; $("#fill").focus(); }
       if (q.type === "mc" || q.type === "sata" || q.type === "selectn") {
         $$(".opt").forEach(function (b) { b.onclick = function () {
           if (q.type === "mc") $$(".opt").forEach(function (x) { if (x !== b) x.classList.remove("sel"); });
@@ -495,7 +542,20 @@ var tiles = [
       }
       $("#submit").onclick = function () { grade(q, qi); };
     }
+    function drawOrder(q, ord, locked) {
+      var ol = $("#olist");
+      ol.innerHTML = ord.map(function (k, i) {
+        return '<li class="order-item" data-k="' + k + '"><span class="order-n">' + (i + 1) + '</span><span class="order-text">' + esc(q.options[k]) + "</span>" +
+          (locked ? "" : '<span class="order-btns"><button class="btn small" data-mv="-1" data-i="' + i + '"' + (i ? "" : " disabled") + ' aria-label="Move up">↑</button><button class="btn small" data-mv="1" data-i="' + i + '"' + (i < ord.length - 1 ? "" : " disabled") + ' aria-label="Move down">↓</button></span>') + "</li>";
+      }).join("");
+      if (!locked) $$("[data-mv]", ol).forEach(function (b) { b.onclick = function () {
+        var i = +b.getAttribute("data-i"), j = i + +b.getAttribute("data-mv"), t = ord[i]; ord[i] = ord[j]; ord[j] = t;
+        drawOrder(q, ord, false); var nb = ol.querySelector('[data-i="' + j + '"][data-mv="' + b.getAttribute("data-mv") + '"]') || ol.querySelector('[data-i="' + j + '"]'); if (nb) nb.focus();
+      }; });
+    }
     function read(q) {
+      if (q.type === "fill") { var raw = $("#fill").value.replace(/,/g, "").trim(), v = parseFloat(raw); if (raw === "" || isNaN(v)) { toast("Enter a number"); return null; } return [v]; }
+      if (q.type === "order") return orders[pos].slice();
       if (q.type === "cloze") { var v = $$(".cloze select").map(function (s) { return s.value; }); if (v.indexOf("") > -1) { toast("Fill every blank"); return null; } return v.map(Number); }
       if (q.type === "matrix") { var p = q.rows.map(function (r, ri) { var c = app.querySelector('input[name="m' + ri + '"]:checked'); return c ? +c.value : -1; }); if (p.indexOf(-1) > -1) { toast("Answer every row"); return null; } return p; }
       var sel = $$(".opt.sel").map(function (b) { return +b.getAttribute("data-k"); });
@@ -504,12 +564,21 @@ var tiles = [
       return sel;
     }
     function check(q, r) {
+      if (q.type === "fill") return allOrNothing(Math.abs(r[0] - q.answer) <= (q.tol || 0) + 1e-9);
+      if (q.type === "order") return allOrNothing(r.every(function (k, i) { return k === i; }));
       if (q.type === "cloze") return allOrNothing(q.blanks.every(function (b, i) { return r[i] === b.answer; }));
       if (q.type === "matrix") return allOrNothing(q.rows.every(function (row, i) { return r[i] === row[1]; }));
       return credit(q.type, r, q.type === "mc" ? [q.answer] : q.answer);
     }
     function reveal(q, r) {
-      if (q.type === "cloze") {
+      if (q.type === "fill") {
+        var f = $("#fill"), good = check(q, r).ok; f.value = String(r[0]); f.disabled = true; f.classList.add(good ? "right" : "wrong");
+        if (!good) { var sp = document.createElement("span"); sp.className = "small fill-key"; sp.textContent = "→ " + q.answer + (q.unit ? " " + q.unit : ""); f.parentNode.appendChild(sp); }
+      } else if (q.type === "order") {
+        drawOrder(q, r, true);
+        $$(".order-item").forEach(function (li, i) { li.classList.add(r[i] === i ? "right" : "wrong"); });
+        if (!check(q, r).ok) $("#olist").insertAdjacentHTML("afterend", '<div class="order-key small"><b>Correct order</b><ol>' + q.options.map(function (o) { return "<li>" + esc(o) + "</li>"; }).join("") + "</ol></div>");
+      } else if (q.type === "cloze") {
         $$(".cloze select").forEach(function (s) { var n = +s.getAttribute("data-b"), b = q.blanks[n], good = r[n] === b.answer; s.value = String(r[n]); s.classList.add(good ? "right" : "wrong"); s.disabled = true;
           if (!good) { var span = document.createElement("span"); span.className = "small"; span.style.color = "var(--good)"; span.style.fontWeight = "700"; span.textContent = " → " + b.options[b.answer]; s.after(span); } });
       } else if (q.type === "matrix") {

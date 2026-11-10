@@ -161,10 +161,10 @@ window.PROGRAM = {
             {
               name: "Nutrition Exam", status: "ready",
               path: "nutrition/exam/index.html",
-              bank: ["js/data.js", "js/practice.js"],
-              blurb: "Built around the nine Key Concepts: nutrition as a vital sign, healing, breathing, heart, kidney, GI, lifespan and diabetes, anemia and cancer, and tube feeding and TPN. NCLEX-style questions, each rated by difficulty.",
-              topics: ["Foundations", "Assessment", "Heart & Kidney", "GI", "Lifespan & DM", "Tube feeds & TPN"],
-              stats: "10 section overviews · 35 topics · 3 diagrams · 122 NCLEX-style questions · 166 flashcards"
+              bank: ["js/data.js", "js/practice.js", "js/ati.js", "js/practice-ati.js"],
+              blurb: "For the 70-question ATI Nutrition CMS: an ATI exam plan and 70-question practice test, plus the nine Key Concepts (vital sign, healing, breathing, heart, kidney, GI, lifespan and diabetes, anemia and cancer, tube feeding and TPN) and ATI topics like religious diets, supplements, and liver disease. Every question rated by difficulty.",
+              topics: ["ATI CMS plan", "Foundations", "Assessment", "Heart & Kidney", "GI & Liver", "Lifespan & DM", "Tube feeds & TPN"],
+              stats: "ATI CMS page · 40 topics · 227 questions (105 ATI-style) · 196 flashcards · 70-question practice test"
             }
           ]
         }
