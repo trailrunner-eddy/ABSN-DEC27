@@ -27,13 +27,13 @@
 
   function examCard(e, course) {
     var ready = e.status === "ready" && e.path;
-    var inner = '<span class="status ' + (ready ? "ready" : "planned") + '">' + (ready ? "Study guide ready" : "Coming soon") + "</span>" +
+    var inner = '<span class="status ' + (ready ? "ready" : "planned") + '">' + (ready ? (e.reading ? "Reading guide" : "Study guide ready") : "Coming soon") + "</span>" +
       "<h3>" + esc(e.name) + "</h3>" +
       (e.blurb ? '<p class="small muted" style="margin:0">' + esc(e.blurb) + "</p>" : "") +
       (e.topics ? '<div class="row">' + e.topics.map(function (t) { return '<span class="chip">' + esc(t) + "</span>"; }).join("") + "</div>" : "") +
       (e.stats ? '<div class="tiny">' + esc(e.stats) + "</div>" : "") +
       (e.date ? countdown(e.date) : "") +
-      (ready ? '<span class="btn primary" style="align-self:flex-start;margin-top:4px">Open study guide →</span>' : "");
+      (ready ? '<span class="btn primary" style="align-self:flex-start;margin-top:4px">' + (e.reading ? "Start reading →" : "Open study guide →") + "</span>" : "");
     return ready
       ? '<a class="card exam" style="--c:' + course.color + '" href="' + examHref(e) + '" data-open="' + esc(course.id + "|" + e.name) + '">' + inner + "</a>"
       : '<div class="card exam planned">' + inner + "</div>";
@@ -94,6 +94,7 @@
     app.innerHTML =
       '<section class="course-hero" style="--c:' + c.color + '"><div class="code">' + (c.code ? esc(c.code) + " · " : "") + esc(s.name) + '</div><h1>' + c.icon + " " + esc(c.name) + "</h1><p style=\"margin:0;opacity:.9\">" + (c.exams.length ? readyCount(c) + " of " + c.exams.length + " exam guides ready. Choose an exam." : "No exams added yet.") + "</p></section>" +
       (c.exams.length ? '<h2>Exams</h2><div class="grid grid-2">' + c.exams.map(function (e) { return examCard(e, c); }).join("") + "</div>" : '<div class="card placeholder">Exam study guides for this course will show up here.</div>') +
+      ((c.readings || []).length ? '<h2>Reading guides</h2><div class="grid grid-2">' + c.readings.map(function (e) { e.reading = true; return examCard(e, c); }).join("") + "</div>" : "") +
       lectureSection(c) +
       '<div class="row" style="margin-top:22px"><a class="btn" href="#home">← All courses</a><a class="btn" href="#nclex">🧠 NCLEX Prep</a></div>';
     Array.prototype.forEach.call(app.querySelectorAll("details[data-lec]"), function (d) {

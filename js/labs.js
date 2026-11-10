@@ -61,6 +61,17 @@
     { lab: "Ammonia",     names: ["ammonia"],                         unit: "mcg/dL", normal: "10–80" },
     { lab: "Uric acid",   names: ["uric acid"],            unit: "mg/dL", normal: "female 2.7–7.3, male 4.0–8.5" },
     { lab: "Bilirubin",   names: ["bilirubin"],            unit: "mg/dL", normal: "0.3–1.0" },
+    { lab: "ALT",         names: ["ALT"],                             unit: "units/L", normal: "4–36" },
+    { lab: "AST",         names: ["AST"],                             unit: "units/L", normal: "0–35" },
+    { lab: "Alkaline phosphatase", names: ["alkaline phosphatase", "ALP"], unit: "units/L", normal: "30–120" },
+    { lab: "GGT",         names: ["GGT"],                             unit: "units/L", normal: "female 4–25, male 8–38" },
+    { lab: "Amylase",     names: ["amylase"],                         unit: "units/L", normal: "30–122" },
+    { lab: "Lipase",      names: ["lipase"],                          unit: "units/L", normal: "0–160" },
+    { lab: "AFP",         names: ["AFP", "alpha-fetoprotein"],        unit: "ng/mL", normal: "less than 40" },
+    // Inflammation
+    { lab: "CRP",         names: ["CRP", "C-reactive protein"],       unit: "mg/dL", normal: "less than 1.0" },
+    { lab: "ESR",         names: ["ESR", "sed rate"],                 unit: "mm/hr", normal: "female 0–20, male 0–15" },
+    { lab: "Fecal calprotectin", names: ["fecal calprotectin", "calprotectin"], unit: "mcg/g", normal: "less than 50" },
     // Cardiac and drug levels
     { lab: "BNP",         names: ["BNP"],                             unit: "pg/mL", normal: "less than 100" },
     { lab: "Troponin I",  names: ["troponin"],                 unit: "ng/mL", normal: "less than 0.03" },

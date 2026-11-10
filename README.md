@@ -34,3 +34,7 @@ In every practice set, ← Previous reopens questions you already answered with 
 ## Flashcards
 
 Each guide's flashcards cover its exam study guide topic by topic (the instructor's guide where there is one: Health Assessment Exams 1–2, Patho Exam 2, Pharm Exam 2; the Nutrition study guide for Nutrition). Patho Final has no instructor guide yet, so its deck stays on the lecture guides. Saved "known" marks are stored by card position, so add new cards at the end of `window.FLASHCARDS` rather than in the middle. Pharm Exam 2 builds its deck in `js/app.js`: one card per study-guide takeaway (tagged "📋 Study guide"), one per name ending in `stems.js`, plus class/use, brand, and key-point cards for every drug.
+
+## Reading guides
+
+Read-through references built from assigned readings (not exam guides) are listed under `readings:` for a course in `js/program.js` and show under "Reading guides" on the course page. `nura340/mod9-gi/` is the Patho Mod 9 GI reading guide, built from the Word doc *N340 Module 9 GI Study Guide* with `tools/docx-reader.py` (run instructions at the top of that file). It has a contents sidebar, search, read marks, page-by-page navigation, glossary definitions, and normal ranges next to labs in each Diagnostic Criteria and Manifestations section.
