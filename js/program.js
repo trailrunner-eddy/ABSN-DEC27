@@ -107,7 +107,10 @@ window.PROGRAM = {
             { mod: "Diseases of the Renal & Genitourinary System", title: "Diseases of the Male Reproductive System", file: "Exam 2/Lecture Guides/Mod 7 - Diseases of the Male Reproductive System Lecture Guide.pdf", web: "mod-7-diseases-of-the-male-reproductive-system.pdf", topics: [["BPH", "bph"], ["Prostatitis", "prostatitis"]] },
             { mod: "Final · Diseases of the GI System", title: "Diseases of the Upper GI System", file: "Final/Lecture Guide/Diseases of the Upper GI System Lecture Guide.pdf", web: "final-diseases-of-the-upper-gi-system.pdf", topics: [["GERD", "gerd"], ["PUD", "pud"], ["Upper GI bleed", "ugib"]] },
             { mod: "Final · Diseases of the GI System", title: "Diseases of the Lower GI System", file: "Final/Lecture Guide/Diseases of the Lower GI System Lecture Guide.pdf", web: "final-diseases-of-the-lower-gi-system.pdf", topics: [["C. diff", "cdiff"], ["Appendicitis", "appendicitis"], ["Crohn's vs. UC", "uc"]] },
-            { mod: "Final · Diseases of the GI System", title: "Diseases of the Liver & Gallbladder", file: "Final/Lecture Guide/Diseases of the Liver and Gallbladder Lecture Guide.pdf", web: "final-diseases-of-the-liver-and-gallbladder.pdf", topics: [["Gallstones", "gallstones"], ["Cirrhosis", "cirrhosis"], ["Hepatitis", "hepc"]] }
+            { mod: "Final · Diseases of the GI System", title: "Diseases of the Liver & Gallbladder", file: "Final/Lecture Guide/Diseases of the Liver and Gallbladder Lecture Guide.pdf", web: "final-diseases-of-the-liver-and-gallbladder.pdf", topics: [["Gallstones", "gallstones"], ["Cirrhosis", "cirrhosis"], ["Hepatitis", "hepc"]] },
+            { mod: "Final · Diseases of the Endocrine System", title: "Diseases of the Pancreas", file: "Final/Lecture Guide/Diseases of the Pancreas Lecture Guide.pdf", web: "final-diseases-of-the-pancreas.pdf", topics: [["Type 1 DM", "t1dm"], ["DKA vs. HHS", "dkahhs"], ["Pancreatitis", "pancreatitis"]] },
+            { mod: "Final · Diseases of the Endocrine System", title: "Diseases of the Thyroid Gland", file: "Final/Lecture Guide/Diseases of the Thyroid Gland Lecture Guide.pdf", web: "final-diseases-of-the-thyroid-gland.pdf", topics: [["Hypothyroidism", "hypothyroid"], ["Hyperthyroidism", "hyperthyroid"], ["Goiter", "goiter"]] },
+            { mod: "Final · Diseases of the Endocrine System", title: "Diseases of the Pituitary & Adrenal Glands", file: "Final/Lecture Guide/Diseases of the Pituitary and Adrenal Glands Lecture Guide.pdf", web: "final-diseases-of-the-pituitary-and-adrenal-glands.pdf", topics: [["Cushing", "cushing"], ["Addison's", "addison"], ["Hyperaldosteronism", "aldo"]] }
           ],
           exams: [
             { name: "Exam 1", status: "planned" },
@@ -123,10 +126,10 @@ window.PROGRAM = {
             {
               name: "Final Exam", status: "ready",
               path: "nura340/final/index.html",
-              bank: ["js/data.js", "js/practice.js"],
-              blurb: "GI unit from the three Final lecture guides: upper GI, lower GI, and liver & gallbladder. No instructor study guide yet, so questions are NCLEX-style and provisional, each rated by difficulty.",
-              topics: ["Upper GI", "Lower GI", "Liver & GB"],
-              stats: "4 section overviews · 24 topics · 4 diagrams · 101 NCLEX-style questions · 108 flashcards"
+              bank: ["js/data.js", "js/data-endo.js", "js/practice.js", "js/practice-endo.js"],
+              blurb: "GI and endocrine units from the six Final lecture guides: upper GI, lower GI, liver & gallbladder, pancreas, thyroid, and pituitary & adrenal. No instructor study guide yet, so questions are NCLEX-style and provisional, each rated by difficulty.",
+              topics: ["Upper GI", "Lower GI", "Liver & GB", "Pancreas", "Thyroid", "Pituitary & Adrenal"],
+              stats: "7 section overviews · 42 topics · 8 diagrams · 169 NCLEX-style questions · 160 flashcards"
             }
           ]
         },

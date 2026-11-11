@@ -80,8 +80,8 @@
       '<section class="hero">' +
         '<div class="hero-main"><div class="hero-art">🌀</div>' +
           '<div class="tiny" style="color:rgba(255,255,255,.8);font-weight:700;letter-spacing:.06em;text-transform:uppercase">NURA 340 · Pathophysiology</div>' +
-          "<h1>Final Exam Study Lab · GI</h1>" +
-          "<p>Upper GI, lower GI, and liver &amp; gallbladder, built from the three Final lecture guides. For every disorder, ask <b>what normal function has been disrupted</b>, then move from <b>mechanism → physiologic change → cues → complications</b>.</p>" +
+          "<h1>Final Exam Study Lab · GI &amp; Endocrine</h1>" +
+          "<p>Upper GI, lower GI, liver &amp; gallbladder, pancreas, thyroid, and pituitary &amp; adrenal, built from the six Final lecture guides. For every disorder, ask <b>what normal function has been disrupted</b>, then move from <b>mechanism → physiologic change → cues → complications</b>.</p>" +
           '<div class="row"><a class="btn" href="#topics">Start with topics</a><a class="btn ghost" href="#quiz">Quick quiz</a></div>' +
         "</div>" +
         '<div class="card"><h3>Your progress</h3><div class="ring-wrap"><div class="ring" style="--p:' + overall + '" data-label="' + overall + '%"></div>' +
