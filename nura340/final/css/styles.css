@@ -516,6 +516,7 @@ a.chip { text-decoration: none; }
 
 /* Final GI unit: section colors and Next Gen question formats */
 .sys-upper { --c: var(--resp); } .sys-lower { --c: var(--kidney); } .sys-liver { --c: var(--card1); }
+.sys-pancreas { --c: var(--card2); } .sys-thyroid { --c: var(--gu); } .sys-adrenal { --c: var(--found); }
 .cloze { font-size: 1.05rem; line-height: 2.3; }
 .cloze select { padding: 4px 8px; border-radius: 8px; border: 1.5px solid var(--accent); background: var(--surface); color: inherit; font-weight: 600; max-width: 100%; }
 .cloze select.right { border-color: var(--good); background: var(--good-bg); }
