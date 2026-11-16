@@ -110,7 +110,12 @@ window.PROGRAM = {
             { mod: "Final · Diseases of the GI System", title: "Diseases of the Liver & Gallbladder", file: "Final/Lecture Guide/Diseases of the Liver and Gallbladder Lecture Guide.pdf", web: "final-diseases-of-the-liver-and-gallbladder.pdf", topics: [["Gallstones", "gallstones"], ["Cirrhosis", "cirrhosis"], ["Hepatitis", "hepc"]] },
             { mod: "Final · Diseases of the Endocrine System", title: "Diseases of the Pancreas", file: "Final/Lecture Guide/Diseases of the Pancreas Lecture Guide.pdf", web: "final-diseases-of-the-pancreas.pdf", topics: [["Type 1 DM", "t1dm"], ["DKA vs. HHS", "dkahhs"], ["Pancreatitis", "pancreatitis"]] },
             { mod: "Final · Diseases of the Endocrine System", title: "Diseases of the Thyroid Gland", file: "Final/Lecture Guide/Diseases of the Thyroid Gland Lecture Guide.pdf", web: "final-diseases-of-the-thyroid-gland.pdf", topics: [["Hypothyroidism", "hypothyroid"], ["Hyperthyroidism", "hyperthyroid"], ["Goiter", "goiter"]] },
-            { mod: "Final · Diseases of the Endocrine System", title: "Diseases of the Pituitary & Adrenal Glands", file: "Final/Lecture Guide/Diseases of the Pituitary and Adrenal Glands Lecture Guide.pdf", web: "final-diseases-of-the-pituitary-and-adrenal-glands.pdf", topics: [["Cushing", "cushing"], ["Addison's", "addison"], ["Hyperaldosteronism", "aldo"]] }
+            { mod: "Final · Diseases of the Endocrine System", title: "Diseases of the Pituitary & Adrenal Glands", file: "Final/Lecture Guide/Diseases of the Pituitary and Adrenal Glands Lecture Guide.pdf", web: "final-diseases-of-the-pituitary-and-adrenal-glands.pdf", topics: [["Cushing", "cushing"], ["Addison's", "addison"], ["Hyperaldosteronism", "aldo"]] },
+            { mod: "Final · Diseases of the Hematologic System", title: "Diseases of Red Blood Cells", file: "Final/Lecture Guide/Diseases of Red Blood Cells Lecture Guide.pdf", web: "final-diseases-of-red-blood-cells.pdf", topics: [["Iron deficiency", "ida"], ["B12 vs. folate", "b12"], ["Hemolytic anemia", "hemolytic"]] },
+            { mod: "Final · Diseases of the Hematologic System", title: "Sickle Cell Anemia", file: "Final/Lecture Guide/Sickle Cell Anemia Lecture Guide.pdf", web: "final-sickle-cell-anemia.pdf", topics: [["Sickle cell disease", "scd"], ["Pain crisis", "voe"], ["Acute chest", "acs"]] },
+            { mod: "Final · Diseases of the Hematologic System", title: "Diseases of Platelets", file: "Final/Lecture Guide/Diseases of Platelets Lecture Guide.pdf", web: "final-diseases-of-platelets.pdf", topics: [["Thrombocytopenia", "tcp"], ["Essential thrombocythemia", "et"], ["Acquired platelet disorders", "apfd"]] },
+            { mod: "Final · Diseases of the Hematologic System", title: "Diseases of White Blood Cells", file: "Final/Lecture Guide/Diseases of White Blood Cells Lecture Guide.pdf", web: "final-diseases-of-white-blood-cells.pdf", topics: [["Leukemias", "leuk"], ["Lymphomas", "hodgkin"], ["MDS", "mds"]] },
+            { mod: "Final · Diseases of the Hematologic System", title: "Introduction to Neoplasia & Cancer", file: "Final/Lecture Guide/Introduction to Neoplasia and Cancer Lecture Guide.pdf", web: "final-introduction-to-neoplasia-and-cancer.pdf", topics: [["Benign vs. malignant", "neo"], ["Spread", "spread"], ["Grade & stage", "grade"]] }
           ],
           exams: [
             { name: "Exam 1", status: "planned" },
@@ -126,10 +131,10 @@ window.PROGRAM = {
             {
               name: "Final Exam", status: "ready",
               path: "nura340/final/index.html",
-              bank: ["js/data.js", "js/data-endo.js", "js/practice.js", "js/practice-endo.js"],
-              blurb: "GI and endocrine units from the six Final lecture guides: upper GI, lower GI, liver & gallbladder, pancreas, thyroid, and pituitary & adrenal. No instructor study guide yet, so questions are NCLEX-style and provisional, each rated by difficulty.",
-              topics: ["Upper GI", "Lower GI", "Liver & GB", "Pancreas", "Thyroid", "Pituitary & Adrenal"],
-              stats: "7 section overviews · 42 topics · 8 diagrams · 169 NCLEX-style questions · 160 flashcards"
+              bank: ["js/data.js", "js/data-endo.js", "js/data-heme.js", "js/practice.js", "js/practice-endo.js", "js/practice-heme.js", "js/practice-deep.js"],
+              blurb: "GI, endocrine, and hematology & neoplasia from the eleven Final lecture guides, plus the instructor's Final study guide with every question answered in depth. Questions use the guide's formats (MC, SATA, select N, drop-down rationale, cloze) and include an exam-depth set.",
+              topics: ["Exam Guide", "GI", "Endocrine", "Anemias & Sickle Cell", "Platelets", "Leukemia & Lymphoma", "Neoplasia"],
+              stats: "Instructor exam guide answered · 12 section overviews · 72 topics · 316 questions (41 exam-depth) · 263 flashcards"
             }
           ]
         },

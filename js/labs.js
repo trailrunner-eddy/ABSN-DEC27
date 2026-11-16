@@ -42,6 +42,17 @@
     { lab: "Hematocrit",  names: ["hematocrit", "Hct"],                  unit: "%",     normal: "female 37–47%, male 42–52%" },
     { lab: "WBC",         names: ["WBC", "white blood cell count"],          unit: "/mm³",  normal: "5,000–10,000" },
     { lab: "Platelets",   names: ["platelet count", "platelets", "PLT"],       unit: "/mm³",  normal: "150,000–400,000" },
+    { lab: "MCV",         names: ["MCV", "mean corpuscular volume"],  unit: "fL",    normal: "80–100" },
+    { lab: "Reticulocyte count", names: ["reticulocyte count", "retic count"], unit: "%", normal: "0.5–2.0%" },
+    { lab: "ANC",         names: ["ANC", "absolute neutrophil count"], unit: "/mm³", normal: "2,200–7,700" },
+    // Iron, vitamins, and hemolysis
+    { lab: "Ferritin",    names: ["ferritin"],                        unit: "ng/mL", normal: "female 10–150, male 12–300" },
+    { lab: "Serum iron",  names: ["serum iron"],                      unit: "mcg/dL", normal: "60–170" },
+    { lab: "TIBC",        names: ["TIBC", "total iron-binding capacity"], unit: "mcg/dL", normal: "250–450" },
+    { lab: "Vitamin B12", names: ["vitamin B12", "B12 level", "serum B12"], unit: "pg/mL", normal: "200–900" },
+    { lab: "Folate",      names: ["folate level", "serum folate"],    unit: "ng/mL", normal: "2–20" },
+    { lab: "LDH",         names: ["LDH", "lactate dehydrogenase"],    unit: "units/L", normal: "100–190" },
+    { lab: "Haptoglobin", names: ["haptoglobin"],                     unit: "mg/dL", normal: "50–220" },
     // Clotting
     { lab: "INR",         names: ["INR"],                             unit: "",      normal: "0.8–1.1" },   // + "; goal on warfarin 2–3"
     { lab: "aPTT",        names: ["aPTT", "PTT"],                           unit: "seconds", normal: "30–40" },   // + "; control …"
@@ -68,6 +79,7 @@
     { lab: "Amylase",     names: ["amylase"],                         unit: "units/L", normal: "30–122" },
     { lab: "Lipase",      names: ["lipase"],                          unit: "units/L", normal: "0–160" },
     { lab: "AFP",         names: ["AFP", "alpha-fetoprotein"],        unit: "ng/mL", normal: "less than 40" },
+    { lab: "TSH",         names: ["TSH"],                             unit: "mIU/L", normal: "0.4–4.0" },
     // Inflammation
     { lab: "CRP",         names: ["CRP", "C-reactive protein"],       unit: "mg/dL", normal: "less than 1.0" },
     { lab: "ESR",         names: ["ESR", "sed rate"],                 unit: "mm/hr", normal: "female 0–20, male 0–15" },

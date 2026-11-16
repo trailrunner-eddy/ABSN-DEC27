@@ -48,7 +48,7 @@
     var h = (location.hash || "#home").slice(1).split("/");
     var r = h[0] || "home", arg = h[1], arg2 = h[2];
     $$("#nav a", document).forEach(function (a) { a.classList.toggle("active", a.getAttribute("data-r") === r || ((r === "topic" || r === "intro") && a.getAttribute("data-r") === "topics")); });
-    var views = { home: home, topics: topics, topic: topics, intro: intro, pics: pics, flash: flash, quiz: quiz, sort: sortGame, chains: chains, triage: triage, abg: abg, emerg: emerg };
+    var views = { guide: guide, home: home, topics: topics, topic: topics, intro: intro, pics: pics, flash: flash, quiz: quiz, sort: sortGame, chains: chains, triage: triage, abg: abg, emerg: emerg };
     (views[r] || home)(arg, arg2);
     window.scrollTo(0, 0);
     var active = $(".nav a.active", document); if (active && active.scrollIntoView) { try { active.scrollIntoView({ block: "nearest", inline: "center" }); } catch (e) {} }
@@ -66,10 +66,11 @@
         '<span class="small" style="font-weight:700">' + m + '%</span><div class="progress bar"><span style="width:' + m + '%"></span></div></a>';
     }).join("");
     var tiles = [
+      ["#guide", "🧭", "Exam Guide", "The instructor's Final study guide: blueprint, formats, critical-thinking questions, every Applying Foundational Concepts question answered in depth, and the lecture guide PDFs."],
       ["#topics", "📚", "Topic Pages", "Every disorder from the lecture guides as a mechanism → change → cues → worst-case chain, with the guide's questions to self-test."],
       ["#pics", "🖼️", "Picture Lab", "Tap-to-learn diagrams for each section, plus a picture quiz from the lecture slides."],
       ["#flash", "🃏", "Flashcards", FLASHCARDS.length + " flip cards. Mark what you know and drill the rest."],
-      ["#quiz", "📝", "Practice Questions", QUESTIONS.length + " NCLEX-style items (multiple choice, select all, and Next Gen formats), each rated easy, medium, or hard with a full rationale."],
+      ["#quiz", "📝", "Practice Questions", QUESTIONS.length + " items in the exam's formats (multiple choice, select all, select N, drop-down rationale, cloze), including an exam-depth set, each rated easy, medium, or hard with a full rationale."],
       ["#sort", "🧺", "Sort It", "Race the clock sorting cues between look-alike disorders."],
       ["#chains", "🔗", "Chain Builder", "Put pathophysiology steps in order, from trigger to complication."],
       ["#triage", "🚨", "Who First?", "Pick the priority client from a group of four."],
@@ -80,18 +81,18 @@
       '<section class="hero">' +
         '<div class="hero-main"><div class="hero-art">🌀</div>' +
           '<div class="tiny" style="color:rgba(255,255,255,.8);font-weight:700;letter-spacing:.06em;text-transform:uppercase">NURA 340 · Pathophysiology</div>' +
-          "<h1>Final Exam Study Lab · GI &amp; Endocrine</h1>" +
-          "<p>Upper GI, lower GI, liver &amp; gallbladder, pancreas, thyroid, and pituitary &amp; adrenal, built from the six Final lecture guides. For every disorder, ask <b>what normal function has been disrupted</b>, then move from <b>mechanism → physiologic change → cues → complications</b>.</p>" +
-          '<div class="row"><a class="btn" href="#topics">Start with topics</a><a class="btn ghost" href="#quiz">Quick quiz</a></div>' +
+          "<h1>Final Exam Study Lab · GI, Endocrine &amp; Hematology</h1>" +
+          "<p>GI, endocrine, and hematology &amp; neoplasia, built from the eleven Final lecture guides and the instructor's Final study guide. For every disorder, ask <b>what normal function has been disrupted</b>, then move from <b>mechanism → physiologic change → cues → complications</b>.</p>" +
+          '<div class="row"><a class="btn" href="#guide">Instructor\'s exam guide</a><a class="btn ghost" href="#topics">Topics</a><a class="btn ghost" href="#quiz">Quick quiz</a></div>' +
         "</div>" +
         '<div class="card"><h3>Your progress</h3><div class="ring-wrap"><div class="ring" style="--p:' + overall + '" data-label="' + overall + '%"></div>' +
           '<div class="small muted">Mastery blends flashcards you know, questions you have answered correctly, and topics you marked studied.<br><br><b>' + S.xp + " XP</b> earned</div></div>" +
           '<div class="row" style="margin-top:14px"><button class="btn small" id="reset">Reset progress</button></div></div>' +
       "</section>" +
       '<section class="grid grid-2">' +
-        '<div class="card"><h2>Lectures in this unit</h2><p class="small muted">The instructor hasn\'t published the Final study guide yet, so there\'s no blueprint. Tap a section to jump to its first topic.</p>' + rows + "</div>" +
+        '<div class="card"><h2>Lectures in this unit</h2><p class="small muted">Blueprint from the instructor\'s Final guide: GI 26–34%, Endocrine 18–24%, Hematology 18–24%, Neuro 26–34% (neuro lectures aren\'t posted yet). Tap a section to jump to its first topic.</p>' + rows + "</div>" +
         '<div class="stack"><div class="card"><h2>Heard in lecture</h2><ul class="list-clean">' + EMPHASIS.map(function (e) { return "<li>⭐ " + esc(e) + "</li>"; }).join("") + "</ul></div>" +
-        '<div class="card"><h2>Question types on the exam</h2><div class="row">' + ["Multiple choice", "Select all that apply", "Select N", "Matrix grid", "Drop-down cloze"].map(function (t) { return '<span class="chip">' + t + "</span>"; }).join("") + '</div><p class="small muted" style="margin-top:10px">No Final exam guide yet, so these are NCLEX-style. Most are MC and SATA (the formats on earlier Patho exams). The question set is provisional until the instructor publishes the guide.</p></div></div>' +
+        '<div class="card"><h2>Question types on the exam</h2><div class="row">' + EXAM_GUIDE.formats.map(function (t) { return '<span class="chip">' + t + "</span>"; }).join("") + '</div><p class="small muted" style="margin-top:10px">From the instructor\'s Final guide: ' + EXAM_GUIDE.total + '. No matrix grids. A drop-down rationale is one sentence with 2 (dyad) or 3 (triad) blanks; a cloze fills blanks across a short passage. <a href="#guide">See the full guide</a>.</p></div></div>' +
       "</section>" +
       '<h2 style="margin-top:28px">Study modes</h2><section class="grid grid-3">' + tiles + "</section>" +
       '<section class="grid grid-2" style="margin-top:28px">' +
@@ -105,6 +106,52 @@
 
   function revealQ(q, a) { return '<div class="reveal-q"><button type="button">' + esc(q) + '</button><div class="ans">' + esc(a) + "</div></div>"; }
   function bindReveal() { $$(".reveal-q button").forEach(function (b) { b.onclick = function () { b.parentNode.classList.toggle("open"); }; }); }
+
+
+  /* ================= INSTRUCTOR'S EXAM GUIDE ================= */
+  var LECTURE_GUIDES = [
+    ["GI", "Diseases of the Upper GI System", "final-diseases-of-the-upper-gi-system.pdf"],
+    ["GI", "Diseases of the Lower GI System", "final-diseases-of-the-lower-gi-system.pdf"],
+    ["GI", "Diseases of the Liver & Gallbladder", "final-diseases-of-the-liver-and-gallbladder.pdf"],
+    ["Endocrine", "Diseases of the Pancreas", "final-diseases-of-the-pancreas.pdf"],
+    ["Endocrine", "Diseases of the Thyroid Gland", "final-diseases-of-the-thyroid-gland.pdf"],
+    ["Endocrine", "Diseases of the Pituitary & Adrenal Glands", "final-diseases-of-the-pituitary-and-adrenal-glands.pdf"],
+    ["Hematology", "Diseases of Red Blood Cells", "final-diseases-of-red-blood-cells.pdf"],
+    ["Hematology", "Sickle Cell Anemia", "final-sickle-cell-anemia.pdf"],
+    ["Hematology", "Diseases of Platelets", "final-diseases-of-platelets.pdf"],
+    ["Hematology", "Diseases of White Blood Cells", "final-diseases-of-white-blood-cells.pdf"],
+    ["Hematology", "Introduction to Neoplasia & Cancer", "final-introduction-to-neoplasia-and-cancer.pdf"]
+  ];
+  function guide(unit) {
+    var G = window.EXAM_GUIDE, DIS = {};
+    DISORDERS.forEach(function (d) { DIS[d.id] = d; });
+    var units = []; G.sections.forEach(function (s) { if (units.indexOf(s.unit) < 0) units.push(s.unit); });
+    var active = units.indexOf(unit) > -1 ? unit : null;
+    var bar = '<div class="filter-bar"><a class="chip ' + (!active ? "on" : "") + '" href="#guide">All</a>' + units.map(function (u) { return '<a class="chip ' + (active === u ? "on" : "") + '" href="#guide/' + encodeURIComponent(u) + '">' + esc(u) + "</a>"; }).join("") + "</div>";
+    var secs = G.sections.filter(function (s) { return !active || s.unit === active; }).map(function (s) {
+      var d0 = DIS[(s.topics || [])[0]], cls = d0 ? " sys-" + d0.sys : "";
+      var links = (s.topics || []).filter(function (id) { return DIS[id]; }).map(function (id) { return '<a class="chip" href="#topic/' + id + '">' + esc(DIS[id].name) + "</a>"; }).join("");
+      var qa = s.pending
+        ? '<ol class="facts small">' + s.qa.map(function (x) { return "<li>" + esc(x[0]) + "</li>"; }).join("") + "</ol>"
+        : s.qa.map(function (x, i) { return revealQ((i + 1) + ". " + x[0], x[1]); }).join("");
+      return '<div class="card guide-sec' + cls + '"><div class="q-meta"><span class="chip">' + esc(s.unit) + "</span></div><h2>" + esc(s.title) + "</h2>" +
+        (s.connect ? '<p class="small muted">' + esc(s.connect) + "</p>" : "") + qa +
+        (links ? '<div class="row topic-links"><span class="small">Study it:</span>' + links + "</div>" : "") + "</div>";
+    }).join("");
+    var dl = '<div class="dl-list">' + LECTURE_GUIDES.map(function (g) {
+      return '<a href="../lecture-guides/' + g[2] + '" download><span style="font-size:20px">📄</span><span><b>' + esc(g[1]) + '</b><br><span class="tiny">' + esc(g[0]) + " · PDF lecture guide</span></span></a>";
+    }).join("") + "</div>";
+    app.innerHTML =
+      "<h1>Instructor's Final Exam Guide</h1><p class=\"muted\">The 340 Final Exam Study Guide, organized for studying. Each “Applying Foundational Concepts” question is answered at exam depth: the mechanism, how it shows up in the client, and what the nurse does first. Tap a question to reveal the answer, then try to say it yourself before you read.</p>" +
+      '<div class="grid grid-2"><div class="card"><h2>Blueprint</h2><p class="small muted">' + esc(G.total) + '</p><div class="table-wrap"><table class="guide-table"><thead><tr><th>Unit</th><th>Topics</th><th>Questions</th><th>Points</th></tr></thead><tbody>' +
+        G.blueprint.map(function (r) { return "<tr><td><b>" + esc(r[0]) + "</b></td><td class=\"small\">" + esc(r[1]) + "</td><td>" + esc(r[2]) + "</td><td>" + esc(r[3]) + "</td></tr>"; }).join("") + "</tbody></table></div>" +
+        '<div class="callout" style="margin-top:12px"><strong>Neuro isn\'t covered here yet</strong>Neuro is about a third of the exam, but its lectures haven\'t been added. Its guide questions are listed below so you can see what\'s coming.</div></div>' +
+      '<div class="stack"><div class="card"><h2>Question formats</h2><div class="row">' + G.formats.map(function (t) { return '<span class="chip">' + esc(t) + "</span>"; }).join("") + '</div><p class="small muted" style="margin-top:10px">Practice every format in <a href="#quiz">Practice Qs</a>; pick “Exam-depth only” for scenario questions like these.</p></div>' +
+      '<div class="card"><h2>Critical thinking questions</h2><p class="small muted">Ask these of every disorder on the exam.</p>' + G.critical.map(function (q, i) { return revealQ((i + 1) + ". " + q[0], q[1]); }).join("") + "</div></div></div>" +
+      '<h2 style="margin-top:24px">Applying foundational concepts</h2>' + bar + secs +
+      '<div class="card" style="margin-top:24px"><h2>Download the lecture guides</h2><p class="small muted">Printable PDF study guides for each Final lecture, written for this course. Share them with classmates.</p>' + dl + "</div>";
+    bindReveal();
+  }
 
   /* ================= TOPICS ================= */
   /* Reading order: each system's overview page, then its topics */
@@ -407,29 +454,40 @@
   function sessionStorageSet(k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} }
 
   /* ================= QUIZ ================= */
-  var TYPE_LABEL = { mc: "Multiple choice", sata: "Select all that apply", selectn: "Select N", matrix: "Matrix grid", cloze: "Drop-down cloze" };
+  var TYPE_LABEL = { mc: "Multiple choice", sata: "Select all that apply", selectn: "Select N", rationale: "Drop-down rationale", cloze: "Drop-down cloze" };
+  function kind(q) { return q.type === "cloze" && q.fmt ? "rationale" : q.type; }
+  function typeLabel(q) { return q.type === "cloze" && q.fmt ? "Drop-down rationale (" + q.fmt + ")" : TYPE_LABEL[q.type] || q.type; }
+  var UNITS = { gi: ["GI", ["found", "upper", "lower", "liver"]], endo: ["Endocrine", ["pancreas", "thyroid", "adrenal"]], heme: ["Hematology & Neoplasia", ["rbc", "sickle", "plt", "wbc", "neo"]] };
+  var quizUnit = "all", quizDeep = false;
   var DIFF = { easy: ["Easy", "recall a fact or definition"], medium: ["Medium", "apply a concept to a client"], hard: ["Hard", "multi-step or technical reasoning"] };
   function diffChip(d) { return DIFF[d] ? '<span class="chip diff diff-' + d + '" title="' + DIFF[d][1] + '">' + DIFF[d][0] + "</span>" : ""; }
   var quizDiff = "all";
   function quiz(sys) {
-    var pool = QUESTIONS.map(function (q, i) { return i; }).filter(function (i) { return !sys || QUESTIONS[i].sys === sys; });
+    var all = QUESTIONS.map(function (q, i) { return i; }).filter(function (i) { return !sys || QUESTIONS[i].sys === sys; });
+    function inUnit(i) { return sys || quizUnit === "all" || UNITS[quizUnit][1].indexOf(QUESTIONS[i].sys) > -1; }
+    var deepCount = all.filter(function (i) { return inUnit(i) && QUESTIONS[i].deep; }).length;
+    var pool = all.filter(function (i) { return inUnit(i) && (!quizDeep || QUESTIONS[i].deep); });
     var answered = pool.filter(function (i) { return S.q[i] !== undefined; }).length;
     var correct = pool.filter(function (i) { return S.q[i] === 1; }).length;
     var missed = pool.filter(function (i) { return S.q[i] === 0; });
     function inDiff(i) { return quizDiff === "all" || QUESTIONS[i].diff === quizDiff; }
     function countOf(f) { return pool.filter(f).length; }
     app.innerHTML =
-      '<h1>Practice Questions</h1><p class="muted">NCLEX-style items, mostly multiple choice and select all that apply, plus a few Next Gen formats. Provisional until the instructor publishes the Final study guide. Every question is rated by difficulty and explains why the answer is right.</p>' +
+      '<h1>Practice Questions</h1><p class="muted">Written in the formats the instructor\'s Final guide lists: multiple choice, select all that apply, select N, drop-down rationale (dyad/triad), and drop-down cloze. The <b>exam-depth set</b> asks you to connect mechanism, cue, and priority across a full scenario, like the real exam. Every question is rated by difficulty and explains why the answer is right.</p>' +
       sysFilterBar(sys, "#quiz", false) +
+      (sys ? "" : '<div class="row" style="margin:0 0 12px"><span class="small">Unit</span>' + ["all", "gi", "endo", "heme"].map(function (u) { return '<button class="chip' + (quizUnit === u ? " on" : "") + '" data-u="' + u + '">' + (u === "all" ? "All units" : UNITS[u][0]) + "</button>"; }).join("") + "</div>") +
+      '<div class="row" style="margin:0 0 16px"><span class="small">Set</span><button class="chip' + (quizDeep ? "" : " on") + '" data-deep="0">Everything</button><button class="chip' + (quizDeep ? " on" : "") + '" data-deep="1">Exam-depth only · ' + deepCount + "</button></div>" +
       '<div class="grid grid-2"><div class="card"><h2>Start a set</h2><p class="small muted">' + pool.length + " questions in this pool · " + answered + " attempted · " + correct + ' correct</p>' +
         '<div class="row" style="margin:12px 0"><span class="small">How many?</span>' + [10, 20, "All"].map(function (n, k) { return '<button class="chip' + (k === 0 ? " on" : "") + '" data-n="' + n + '">' + n + "</button>"; }).join("") + "</div>" +
         '<div class="row" style="margin:0 0 14px"><span class="small">Difficulty</span>' + ["all", "easy", "medium", "hard"].map(function (d) { return '<button class="chip' + (quizDiff === d ? " on" : "") + '" data-d="' + d + '">' + (d === "all" ? "All" : DIFF[d][0]) + " · " + countOf(function (i) { return d === "all" || QUESTIONS[i].diff === d; }) + "</button>"; }).join("") + "</div>" +
         '<div class="row"><button class="btn primary" id="go">Start</button>' + (missed.length ? '<button class="btn" id="redo">Retry my ' + missed.length + " missed</button>" : "") + "</div></div>" +
-        '<div class="card"><h2>In this pool</h2><ul class="facts small">' + Object.keys(TYPE_LABEL).map(function (t) { return "<li><b>" + TYPE_LABEL[t] + "</b> · " + countOf(function (i) { return QUESTIONS[i].type === t; }) + "</li>"; }).join("") + "</ul>" +
+        '<div class="card"><h2>In this pool</h2><ul class="facts small">' + Object.keys(TYPE_LABEL).map(function (t) { return "<li><b>" + TYPE_LABEL[t] + "</b> · " + countOf(function (i) { return kind(QUESTIONS[i]) === t; }) + "</li>"; }).join("") + "</ul>" +
           '<h3 style="margin-top:14px">Difficulty</h3><ul class="facts small">' + Object.keys(DIFF).map(function (d) { return "<li>" + diffChip(d) + " " + DIFF[d][1] + " · " + countOf(function (i) { return QUESTIONS[i].diff === d; }) + "</li>"; }).join("") + "</ul></div></div>";
     var count = 10;
     $$("[data-n]").forEach(function (b) { b.onclick = function () { $$("[data-n]").forEach(function (x) { x.classList.remove("on"); }); b.classList.add("on"); count = b.getAttribute("data-n") === "All" ? 999 : +b.getAttribute("data-n"); }; });
     $$("[data-d]").forEach(function (b) { b.onclick = function () { quizDiff = b.getAttribute("data-d"); quiz(sys); }; });
+    $$("[data-u]").forEach(function (b) { b.onclick = function () { quizUnit = b.getAttribute("data-u"); quiz(sys); }; });
+    $$("[data-deep]").forEach(function (b) { b.onclick = function () { quizDeep = b.getAttribute("data-deep") === "1"; quiz(sys); }; });
     $("#go").onclick = function () { var ids = pool.filter(inDiff); if (!ids.length) { toast("No questions at that difficulty here"); return; } runQuiz(shuffle(ids).slice(0, count), sys); };
     if ($("#redo")) $("#redo").onclick = function () { runQuiz(shuffle(missed), sys); };
   }
@@ -461,10 +519,10 @@
       if (pos >= ids.length) return finish();
       var qi = ids[pos], q = QUESTIONS[qi], done = results[pos], last = results.length;
       var html = '<div class="q-card card sys-' + q.sys + '"><div class="progress" style="margin-bottom:14px"><span style="width:' + (100 * last / ids.length) + '%"></span></div>' +
-        '<div class="q-meta">' + tag(q.sys) + '<span class="chip">' + TYPE_LABEL[q.type] + (q.type === "selectn" ? " · pick " + q.n : "") + "</span>" + diffChip(q.diff) + (done ? '<span class="chip">Reviewing</span>' : "") + '<span class="spacer"></span><span class="tiny">' + (pos + 1) + " / " + ids.length + " · score " + fmtPts(score()) + "</span></div>";
+        '<div class="q-meta">' + tag(q.sys) + '<span class="chip">' + typeLabel(q) + (q.type === "selectn" ? " · pick " + q.n : "") + "</span>" + diffChip(q.diff) + (done ? '<span class="chip">Reviewing</span>' : "") + '<span class="spacer"></span><span class="tiny">' + (pos + 1) + " / " + ids.length + " · score " + fmtPts(score()) + "</span></div>";
       if (q.type === "cloze") {
         orders[pos] = orders[pos] || q.blanks.map(function (b) { return shuffle(b.options.map(function (o, k) { return k; })); });
-        html += '<p class="small muted">Choose the option that best completes each blank.</p><div class="cloze">' + esc(q.stem).replace(/\{(\d+)\}/g, function (m, n) {
+        html += '<p class="small muted">Choose the option that best completes each blank.</p><div class="cloze">' + esc(q.stem).replace(/\n/g, "<br>").replace(/\{(\d+)\}/g, function (m, n) {
           var b = q.blanks[+n];
           return '<select data-b="' + n + '"><option value="">Select…</option>' + orders[pos][+n].map(function (k) { return '<option value="' + k + '">' + esc(b.options[k]) + "</option>"; }).join("") + "</select>";
         }) + "</div>";
@@ -545,7 +603,7 @@
       app.innerHTML = '<div class="card scoreboard"><div style="font-size:44px">' + (pct >= 85 ? "🏆" : pct >= 70 ? "💪" : "📖") + '</div><div class="big-score">' + pct + '%</div><p class="muted">' + fmtPts(sc) + " of " + n + " points · " + full + " fully correct" + (n < ids.length ? " · ended early" : "") + "</p>" +
         "<p>" + (pct >= 85 ? "Exam-ready on this set." : pct >= 70 ? "Solid. Review the rationales you missed." : "Go back to the topic pages for the systems you missed, then retry.") + "</p>" +
         '<div class="row" style="justify-content:center"><button class="btn primary" id="newset">New set</button><a class="btn" href="#topics">Topics</a></div></div>' +
-        (wrong.length ? '<h2 style="margin-top:24px">Review what you missed</h2>' + wrong.map(function (r) { var q = QUESTIONS[r.qi]; return '<div class="card sys-' + q.sys + '" style="margin-bottom:12px"><div class="q-meta">' + tag(q.sys) + '<span class="chip">' + TYPE_LABEL[q.type] + "</span>" + diffChip(q.diff) + partChip(r.cr) + '</div><p><b>' + esc(q.stem.replace(/\{\d+\}/g, "___")) + '</b></p><p class="small muted">' + esc(q.why) + "</p></div>"; }).join("") : "");
+        (wrong.length ? '<h2 style="margin-top:24px">Review what you missed</h2>' + wrong.map(function (r) { var q = QUESTIONS[r.qi]; return '<div class="card sys-' + q.sys + '" style="margin-bottom:12px"><div class="q-meta">' + tag(q.sys) + '<span class="chip">' + typeLabel(q) + "</span>" + diffChip(q.diff) + partChip(r.cr) + '</div><p><b>' + esc(q.stem.replace(/\{\d+\}/g, "___")).replace(/\n/g, "<br>") + '</b></p><p class="small muted">' + esc(q.why) + "</p></div>"; }).join("") : "");
       $("#newset").onclick = function () { quiz(sys); window.scrollTo(0, 0); };
       if (pct >= 85) confetti();
     }

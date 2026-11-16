@@ -526,3 +526,14 @@ a.chip { text-decoration: none; }
 .matrix input { width: 20px; height: 20px; accent-color: var(--accent); cursor: pointer; }
 .matrix td.right { background: var(--good-bg); }
 .matrix td.wrong { background: var(--bad-bg); }
+
+/* Hematology & Neoplasia (Final, Exam 3) */
+:root { --rbc: #b3262f; --sickle: #7148b0; --plt: #b8487c; --wbc: #23729f; --neo: #7d6230; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --rbc: #ff8a8a; --sickle: #b89bf0; --plt: #f19ac0; --wbc: #7cc4ef; --neo: #d8b878; } }
+:root[data-theme="dark"] { --rbc: #ff8a8a; --sickle: #b89bf0; --plt: #f19ac0; --wbc: #7cc4ef; --neo: #d8b878; }
+.sys-rbc { --c: var(--rbc); } .sys-sickle { --c: var(--sickle); } .sys-plt { --c: var(--plt); } .sys-wbc { --c: var(--wbc); } .sys-neo { --c: var(--neo); }
+.guide-table td, .guide-table th { vertical-align: top; }
+.guide-sec { margin-bottom: 16px; }
+.guide-sec .topic-links { margin-top: 10px; }
+.dl-list a { display: flex; gap: 10px; align-items: center; padding: 10px 12px; border: 1px solid var(--line, rgba(0,0,0,.12)); border-radius: 10px; margin-bottom: 8px; text-decoration: none; color: inherit; }
+.dl-list a:hover { border-color: var(--accent); }
