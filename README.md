@@ -44,3 +44,7 @@ Each guide's flashcards cover its exam study guide topic by topic (the instructo
 ## Reading guides
 
 Read-through references built from assigned readings (not exam guides) are listed under `readings:` for a course in `js/program.js` and show under "Reading guides" on the course page. `nura340/mod9-gi/` is the Patho Mod 9 GI reading guide, built from the Word doc *N340 Module 9 GI Study Guide* with `tools/docx-reader.py` (run instructions at the top of that file). It has a contents sidebar, search, read marks, page-by-page navigation, glossary definitions, and normal ranges next to labs in each Diagnostic Criteria and Manifestations section.
+
+## Lecture guides (PDF)
+
+Each course can list downloadable lecture guides under `lectureGuides` in `js/program.js` (see the comment at the top of that file). Only our generated guides go in the site, never instructor material. They live in `<course>/lecture-guides/`: Health Assessment in `nura330/`, Patho in `nura340/`, Pharm in `nura350/` (`exam2-*.pdf` and `final-*.pdf`). Pharm guides follow the Pharm drug-card fields (MOA with a "Simply put" line, therapeutic use, side and adverse effects, contraindications, nursing priorities, client teaching), add a drug name clue chart and key terms, and tag anything not from the lecture: DRUG TABLE (from the course's Engage medication table), ADDED, CLARIFIED, CORRECTED.
