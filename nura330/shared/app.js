@@ -24,7 +24,7 @@
   function toast(msg) { var t = document.getElementById("toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toastTimer); toastTimer = setTimeout(function () { t.classList.remove("show"); }, 1600); }
   function sysFilterBar(active, hrefBase, includeFound) {
     var out = '<div class="filter-bar"><a class="chip ' + (!active ? "on" : "") + '" href="' + hrefBase + '">All</a>';
-    SYSTEMS.forEach(function (s) { if (s.id === "found" && !includeFound) return; out += '<a class="chip ' + (active === s.id ? "on" : "") + '" href="' + hrefBase + "/" + s.id + '"><span class="sys-dot sys-' + s.id + '"></span>' + esc(s.short) + "</a>"; });
+    SYSTEMS.forEach(function (s) { if ((s.id === "found" && !includeFound) || s.soon) return; out += '<a class="chip ' + (active === s.id ? "on" : "") + '" href="' + hrefBase + "/" + s.id + '"><span class="sys-dot sys-' + s.id + '"></span>' + esc(s.short) + "</a>"; });
     return out + "</div>";
   }
 
@@ -176,6 +176,7 @@ var tiles = [
         '<div class="row">' + tag(d.sys) + (d.star ? '<span class="chip" style="color:var(--warn)">★ ' + esc(d.starLabel || "Emphasized in lecture") + "</span>" : "") + '<span class="spacer"></span><span class="tiny">' + esc(s.weight || "") + "</span></div>" +
         (PLAIN[d.id] ? '<div class="plain-switch"><button type="button" class="switch' + (S.plain ? " on" : "") + '" id="plainT" role="switch" aria-checked="' + (S.plain ? "true" : "false") + '"><span class="knob"></span></button><label for="plainT">Plain language</label></div>' : "") +
         '<h1 style="margin-top:10px">' + esc(d.name) + "</h1>" + (d.sub ? '<p class="muted">' + esc(d.sub) + "</p>" : "") +
+        (d.notice ? '<div class="callout" style="margin:10px 0"><strong>Not ready yet</strong>' + esc(d.notice) + "</div>" : "") +
         "<p>" + esc(d.summary) + "</p>" +
         '<div class="connect"><span class="small muted" style="margin-right:4px">' + esc(G.connectLabel || "Connect to:") + '</span>' + d.connect.map(function (c) { return '<span class="chip">' + esc(c) + "</span>"; }).join("") + "</div>" +
         (d.pathogens ? '<div class="pathogens" style="margin-top:10px"><span class="small muted" style="margin-right:4px">Pathogens:</span>' + d.pathogens.map(function (p) { return '<span class="pathogen">' + esc(p) + "</span>"; }).join("") + "</div>" : "") +
@@ -410,9 +411,20 @@ var tiles = [
   var DIFF = { easy: ["Easy", "recall a fact or definition"], medium: ["Medium", "apply a concept to a client"], hard: ["Hard", "multi-step or technical reasoning"] };
   function diffChip(d) { return DIFF[d] ? '<span class="chip diff diff-' + d + '" title="' + DIFF[d][1] + '">' + DIFF[d][0] + "</span>" : ""; }
   function quizFormats() { return Object.keys(TYPE_LABEL).filter(function (t) { return QUESTIONS.some(function (q) { return q.type === t; }); }).map(function (t) { return t === "mc" ? "multiple choice" : t === "sata" ? "select all that apply" : TYPE_LABEL[t]; }); }
-  var quizDiff = "all";
+  var quizDiff = "all", quizSet = "all";
+  /* Cumulative guides (the Final) mark their own new questions with fin: true and give a blueprint
+     ([system id, label, questions on the mock exam]) for a full-length mock exam. */
+  function mockIds() {
+    var want = {}, total = 0, bySys = {}, ids = [], spare = [];
+    (G.blueprint || []).forEach(function (b) { want[b[0]] = b[2]; total += b[2]; });
+    QUESTIONS.forEach(function (q, i) { (bySys[q.sys] = bySys[q.sys] || []).push(i); });
+    Object.keys(bySys).forEach(function (k) { var p = shuffle(bySys[k]), n = want[k] || 0; ids = ids.concat(p.slice(0, n)); spare = spare.concat(p.slice(n)); });
+    return shuffle(ids.concat(shuffle(spare).slice(0, Math.max(0, total - ids.length))));
+  }
   function quiz(sys) {
-    var pool = QUESTIONS.map(function (q, i) { return i; }).filter(function (i) { return !sys || QUESTIONS[i].sys === sys; });
+    var hasFin = QUESTIONS.some(function (q) { return q.fin; });
+    if (!hasFin) quizSet = "all";
+    var pool = QUESTIONS.map(function (q, i) { return i; }).filter(function (i) { return (!sys || QUESTIONS[i].sys === sys) && (quizSet === "all" || QUESTIONS[i].fin); });
     var answered = pool.filter(function (i) { return S.q[i] !== undefined; }).length;
     var correct = pool.filter(function (i) { return S.q[i] === 1; }).length;
     var missed = pool.filter(function (i) { return S.q[i] === 0; });
@@ -423,14 +435,18 @@ var tiles = [
       '<h1>Practice Questions</h1><p class="muted">' + (rated ? "Written from your lectures in the exam's formats (" + quizFormats().join(" and ") + "). Every question is rated by difficulty and explains why the answer is right." : "NGN-style items written from your lectures. Each one has a rationale tied to the mechanism.") + "</p>" +
       sysFilterBar(sys, "#quiz", false) +
       '<div class="grid grid-2"><div class="card"><h2>Start a set</h2><p class="small muted">' + pool.length + " questions in this pool · " + answered + " attempted · " + correct + ' correct</p>' +
+        (hasFin ? '<div class="row" style="margin:12px 0 0"><span class="small">Set</span>' + [["all", "Everything"], ["fin", "New for the final"]].map(function (t) { return '<button class="chip' + (quizSet === t[0] ? " on" : "") + '" data-set="' + t[0] + '">' + t[1] + " · " + QUESTIONS.filter(function (q) { return (!sys || q.sys === sys) && (t[0] === "all" || q.fin); }).length + "</button>"; }).join("") + "</div>" : "") +
         '<div class="row" style="margin:12px 0"><span class="small">How many?</span>' + [10, 20, "All"].map(function (n, k) { return '<button class="chip' + (k === 0 ? " on" : "") + '" data-n="' + n + '">' + n + "</button>"; }).join("") + "</div>" +
         (rated ? '<div class="row" style="margin:0 0 14px"><span class="small">Difficulty</span>' + ["all", "easy", "medium", "hard"].map(function (d) { return '<button class="chip' + (quizDiff === d ? " on" : "") + '" data-d="' + d + '">' + (d === "all" ? "All" : DIFF[d][0]) + " · " + countOf(function (i) { return d === "all" || QUESTIONS[i].diff === d; }) + "</button>"; }).join("") + "</div>" : "") +
         '<div class="row"><button class="btn primary" id="go">Start</button>' + (missed.length ? '<button class="btn" id="redo">Retry my ' + missed.length + " missed</button>" : "") + "</div></div>" +
         '<div class="card"><h2>Formats</h2><ul class="facts small">' + Object.keys(TYPE_LABEL).map(function (t) { var n = countOf(function (i) { return QUESTIONS[i].type === t; }); return n ? "<li><b>" + TYPE_LABEL[t] + "</b> · " + n + "</li>" : ""; }).join("") + "</ul>" +
-          (rated ? '<h3 style="margin-top:14px">Difficulty</h3><ul class="facts small">' + Object.keys(DIFF).map(function (d) { return "<li>" + diffChip(d) + " " + DIFF[d][1] + " · " + countOf(function (i) { return QUESTIONS[i].diff === d; }) + "</li>"; }).join("") + "</ul>" : "") + "</div></div>";
+          (rated ? '<h3 style="margin-top:14px">Difficulty</h3><ul class="facts small">' + Object.keys(DIFF).map(function (d) { return "<li>" + diffChip(d) + " " + DIFF[d][1] + " · " + countOf(function (i) { return QUESTIONS[i].diff === d; }) + "</li>"; }).join("") + "</ul>" : "") + "</div></div>" +
+      (G.blueprint && !sys ? '<div class="card" style="margin-top:16px"><h2>🎯 Full-length mock final</h2><p class="small muted">' + G.blueprint.reduce(function (a, b) { return a + b[2]; }, 0) + " questions drawn from every module in the same proportions as the final exam blueprint (a section without questions yet is filled from the others). The real exam gives you 75 minutes, about 1.5 minutes a question. Rationales show after each answer, and ← Previous works the whole way.</p>" + '<button class="btn primary" id="mock">Start mock final</button></div>' : "");
     var count = 10;
     $$("[data-n]").forEach(function (b) { b.onclick = function () { $$("[data-n]").forEach(function (x) { x.classList.remove("on"); }); b.classList.add("on"); count = b.getAttribute("data-n") === "All" ? 999 : +b.getAttribute("data-n"); }; });
     $$("[data-d]").forEach(function (b) { b.onclick = function () { quizDiff = b.getAttribute("data-d"); quiz(sys); }; });
+    $$("[data-set]").forEach(function (b) { b.onclick = function () { quizSet = b.getAttribute("data-set"); quiz(sys); }; });
+    if ($("#mock")) $("#mock").onclick = function () { runQuiz(mockIds(), sys); };
     $("#go").onclick = function () { var ids = pool.filter(inDiff); if (!ids.length) { toast("No questions at that difficulty here"); return; } runQuiz(shuffle(ids).slice(0, count), sys); };
     if ($("#redo")) $("#redo").onclick = function () { runQuiz(shuffle(missed), sys); };
   }
