@@ -101,6 +101,7 @@ button.chip { cursor: pointer; }
 /* NURA 330 sections */
 .sys-intro { --c: var(--found); } .sys-survey { --c: var(--kidney); } .sys-skin { --c: var(--kidney); }
 .sys-cv { --c: var(--card1); } .sys-heent { --c: var(--gu); } .sys-repro { --c: var(--card2); }
+.sys-gi { --c: var(--found); } .sys-neuro { --c: var(--gu); } .sys-msk { --c: var(--kidney); }
 .sys-dot { background: var(--c); }
 .tag { display: inline-block; font-size: .75rem; font-weight: 700; padding: 2px 9px; border-radius: 999px; color: var(--c); background: color-mix(in srgb, var(--c) 13%, transparent); }
 .progress { height: 8px; background: var(--surface-2); border-radius: 999px; overflow: hidden; }

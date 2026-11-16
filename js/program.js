@@ -46,7 +46,7 @@ window.PROGRAM = {
           id: "nura330", code: "NURA 330", name: "Health Assessment", icon: "🩺", color: "#12898f",
           lectureFolder: "../Sem 1/Health Assessment/",
           lectureWebFolder: "nura330/lecture-guides/",
-          lectureExam: "Exam 2",
+          lectureExam: "Final Exam",
           lectureGuides: [
             { mod: "Exam 1 · Mods 1–3", title: "Mod 1 · Intro to Health Assessment", file: "Exam 1/Lecture Guides/Mod 1 - Intro to Health Assessment Lecture Guide.pdf", web: "mod-1-intro-to-health-assessment.pdf", topics: [["Subjective vs. objective", "data"], ["Techniques", "inspect"]] },
             { mod: "Exam 1 · Mods 1–3", title: "Mod 2 · General Survey & Health History", file: "Exam 1/Lecture Guides/Mod 2 - General Survey & Health History Lecture Guide.pdf", web: "mod-2-general-survey-and-health-history.pdf", topics: [["General survey", "gs"], ["OLDCARTS", "hpi"]] },
@@ -54,7 +54,11 @@ window.PROGRAM = {
             { mod: "Exam 2 · Mods 4–7", title: "Mod 4 · Integumentary & Lymphatic Systems", file: "Exam 2/Lecture Guides/Mod 4 - Integumentary and Lymphatic Systems Lecture Guide.pdf", web: "mod-4-integumentary-and-lymphatic-systems.pdf", topics: [["Pressure injuries", "pi"], ["Braden", "braden"]] },
             { mod: "Exam 2 · Mods 4–7", title: "Mod 5 · Cardiovascular Assessment", file: "Exam 2/Lecture Guides/Mod 5 - Cardiovascular Assessment Lecture Guide.pdf", web: "mod-5-cardiovascular-assessment.pdf", topics: [["Heart sounds", "heartsounds"], ["Pulses", "pulses"]] },
             { mod: "Exam 2 · Mods 4–7", title: "Mod 6 · HEENT", file: "Exam 2/Lecture Guides/Mod 6 - HEENT Lecture Guide.pdf", web: "mod-6-heent.pdf", topics: [["Cranial nerves", "cn"]] },
-            { mod: "Exam 2 · Mods 4–7", title: "Mod 7 · GU & Rectal Assessment", file: "Exam 2/Lecture Guides/Mod 7 - GU and Rectal Assessment Lecture Guide.pdf", web: "mod-7-gu-and-rectal-assessment.pdf", topics: [["Bladder scan & PVR", "retention"], ["Urine output", "urine"]] }
+            { mod: "Exam 2 · Mods 4–7", title: "Mod 7 · GU & Rectal Assessment", file: "Exam 2/Lecture Guides/Mod 7 - GU and Rectal Assessment Lecture Guide.pdf", web: "mod-7-gu-and-rectal-assessment.pdf", topics: [["Bladder scan & PVR", "retention"], ["Urine output", "urine"]] },
+            { mod: "Final · Mods 8–11", title: "Mod 8 · GU, Rectal & Reproductive (final study guide map + Mod 7 guide)", file: "Final/Lecture Guides/Mod 8 - GU and Rectal Assessment Lecture Guide.pdf", web: "mod-8-gu-rectal-and-reproductive-assessment.pdf", topics: [["Bladder scan & PVR", "retention"], ["Urine output", "urine"]] },
+            { mod: "Final · Mods 8–11", title: "Mod 9 · GI & Abdominal Assessment", file: "Final/Lecture Guides/Mod 9 - GI and Abdominal Assessment Lecture Guide.pdf", web: "mod-9-gi-and-abdominal-assessment.pdf", topics: [["Bowel sounds", "bowel"], ["CVA tenderness", "cva"]] },
+            { mod: "Final · Mods 8–11", title: "Mod 10 · Neurological Assessment", file: "Final/Lecture Guides/Mod 10 - Neuro Assessment Lecture Guide.pdf", web: "mod-10-neurological-assessment.pdf", topics: [["Stroke priorities", "stroke"], ["GCS", "gcs"]] },
+            { mod: "Final · Mods 8–11", title: "Mod 11 · Musculoskeletal Assessment (coming when the slides are posted)" }
           ],
           exams: [
             {
@@ -73,7 +77,14 @@ window.PROGRAM = {
               topics: ["Skin & Lymph", "Cardiovascular", "HEENT", "GU & Rectal"],
               stats: "4 section overviews · 38 topics · 20 diagrams · 96 questions · 184 flashcards"
             },
-            { name: "Final Exam", status: "planned" }
+            {
+              name: "Final Exam", status: "ready",
+              path: "nura330/final/index.html",
+              bank: ["js/data.js", "js/practice.js"],
+              blurb: "Cumulative: every module from intro through GI and neuro, plus a full-length 50-question mock final weighted like the blueprint. Mod 11 (musculoskeletal) is a placeholder until its slides are posted.",
+              topics: ["All of Exams 1–2", "GI & Abdomen", "Neuro", "MSK (coming)"],
+              stats: "10 section overviews · 82 topics · 35 diagrams · 298 questions (132 new) · 385 flashcards"
+            }
           ]
         },
         {
