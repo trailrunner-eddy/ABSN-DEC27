@@ -152,9 +152,9 @@
       var x = list[pos], q = x.q, k = x.kind, done = mode === "tutor" ? results[pos] : null, last = results.length;
       var html = '<div class="row" style="margin-bottom:14px"><button class="btn small" id="quit">← End exam</button><span class="spacer"></span><span class="chip">⏱ <span id="nx-time">' + (limit ? fmt(limit - (Date.now() - t0) / 1000) + " left" : fmt((Date.now() - t0) / 1000)) + '</span></span></div>' +
         '<div class="q-card card" style="border-left:5px solid ' + x.color + '"><div class="progress" style="margin-bottom:14px"><span style="width:' + (100 * last / list.length) + '%"></span></div>' +
-        '<div class="q-meta"><span class="chip">' + esc(x.course.code || x.course.name) + " · " + esc(x.short) + '</span><span class="chip">' + TYPES[k] + (k === "selectn" ? " · pick " + q.n : "") + "</span>" + diffChip(x.diff) + (done ? '<span class="chip">Reviewing</span>' : "") + '<span class="spacer"></span><span class="tiny">' + (pos + 1) + " / " + list.length + "</span></div>";
+        '<div class="q-meta"><span class="chip">' + esc(x.course.code || x.course.name) + " · " + esc(x.short) + '</span><span class="chip">' + (k === "cloze" && q.fmt ? "Drop-down rationale (" + q.fmt + ")" : TYPES[k]) + (k === "selectn" ? " · pick " + q.n : "") + "</span>" + diffChip(x.diff) + (done ? '<span class="chip">Reviewing</span>' : "") + '<span class="spacer"></span><span class="tiny">' + (pos + 1) + " / " + list.length + "</span></div>";
       if (k === "cloze") {
-        html += '<p class="small muted">Choose the option that best completes each blank.</p><div class="cloze">' + esc(q.stem).replace(/\{(\d+)\}/g, function (m, n) {
+        html += '<p class="small muted">Choose the option that best completes each blank.</p><div class="cloze">' + esc(q.stem).replace(/\n/g, "<br>").replace(/\{(\d+)\}/g, function (m, n) {
           var b = q.blanks[+n];
           return '<select data-b="' + n + '"><option value="">Select…</option>' + shuffle(b.options.map(function (o, i) { return i; })).map(function (i) { return '<option value="' + i + '">' + esc(b.options[i]) + "</option>"; }).join("") + "</select>";
         }) + "</div>";

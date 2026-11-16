@@ -1,7 +1,7 @@
 /* Endocrine practice content for the Patho Final guide (loads after practice.js, so saved progress keeps its place).
    Written from the Pancreas, Thyroid Gland, and Pituitary & Adrenal Glands lecture guides and transcripts, plus
    achalasia from the N340 Module 9 GI Study Guide. No Final exam guide yet, so items are NCLEX-style
-   (mostly mc and sata, a few selectn, matrix, cloze), each with diff and a why rationale.
+   (mostly mc and sata, a few selectn and cloze), each with diff and a why rationale.
    Lab results show the normal range from js/labs.js. */
 (function () {
   function add(k) { var a = window[k] = window[k] || []; a.push.apply(a, [].slice.call(arguments, 1)); }
@@ -116,10 +116,9 @@
     options: ["Loss of stomach acid from vomiting", "Fat breakdown producing ketones because there's almost no insulin", "Retention of CO₂ from slow breathing", "Excess aldosterone causing hydrogen loss"],
     answer: 1,
     why: "Low pH with low HCO₃⁻ is metabolic acidosis. With almost no insulin, fat breaks down into fatty acids and the liver makes ketones, which are acids. Vomiting and excess aldosterone cause alkalosis; CO₂ retention is respiratory acidosis." },
-  { sys: "pancreas", type: "matrix", diff: "medium",
-    stem: "For each finding, decide whether it's more typical of DKA or HHS.",
-    cols: ["DKA", "HHS"],
-    rows: [["Kussmaul respirations", 0], ["Older client with type 2 diabetes", 1], ["Fruity breath", 0], ["Extremely high glucose with few ketones", 1], ["Metabolic acidosis", 0], ["Severe dehydration with confusion developing over days", 1]],
+  { sys: "pancreas", type: "cloze", diff: "medium",
+    stem: "For each finding, decide whether it's more typical of DKA or HHS.\n• Kussmaul respirations: {0}\n• Older client with type 2 diabetes: {1}\n• Fruity breath: {2}\n• Extremely high glucose with few ketones: {3}\n• Metabolic acidosis: {4}\n• Severe dehydration with confusion developing over days: {5}",
+    blanks: [{options:["DKA", "HHS"], answer:0}, {options:["DKA", "HHS"], answer:1}, {options:["DKA", "HHS"], answer:0}, {options:["DKA", "HHS"], answer:1}, {options:["DKA", "HHS"], answer:0}, {options:["DKA", "HHS"], answer:1}],
     why: "DKA: almost no insulin → ketones → metabolic acidosis, Kussmaul breathing, fruity breath. HHS: enough insulin to limit ketones, but glucose climbs very high over days → profound dehydration and neuro changes, usually in type 2." },
   { sys: "pancreas", type: "mc", diff: "medium",
     stem: "Why are ketones usually limited in HHS?",
@@ -202,10 +201,9 @@
     options: ["TSH and T4 are made by the same cells", "Negative feedback: low T4 raises TSH, and high T4 lowers it", "TSH breaks down T4", "T4 is converted into TSH"],
     answer: 1,
     why: "In primary disease the pituitary still works. It senses low hormone and raises TSH, or senses high hormone and lowers TSH." },
-  { sys: "thyroid", type: "matrix", diff: "hard",
-    stem: "Match each lab pattern to its interpretation.",
-    cols: ["Primary hypothyroidism", "Central hypothyroidism", "Subclinical hypothyroidism", "Primary hyperthyroidism"],
-    rows: [["↑TSH, ↓free T4", 0], ["↓free T4 with an inappropriately normal TSH", 1], ["↑TSH, normal free T4", 2], ["↓TSH, ↑free T4", 3]],
+  { sys: "thyroid", type: "cloze", diff: "hard",
+    stem: "Match each lab pattern to its interpretation.\n• ↑TSH, ↓free T4: {0}\n• ↓free T4 with an inappropriately normal TSH: {1}\n• ↑TSH, normal free T4: {2}\n• ↓TSH, ↑free T4: {3}",
+    blanks: [{options:["Primary hypothyroidism", "Central hypothyroidism", "Subclinical hypothyroidism", "Primary hyperthyroidism"], answer:0}, {options:["Primary hypothyroidism", "Central hypothyroidism", "Subclinical hypothyroidism", "Primary hyperthyroidism"], answer:1}, {options:["Primary hypothyroidism", "Central hypothyroidism", "Subclinical hypothyroidism", "Primary hyperthyroidism"], answer:2}, {options:["Primary hypothyroidism", "Central hypothyroidism", "Subclinical hypothyroidism", "Primary hyperthyroidism"], answer:3}],
     why: "Primary: TSH moves opposite to T4. Central (pituitary or hypothalamus): T4 is low but TSH doesn't rise appropriately. Subclinical: TSH is up while T4 is still normal. Hyperthyroidism: high T4 suppresses TSH." },
   { sys: "thyroid", type: "mc", diff: "easy",
     stem: "What is the most common cause of hypothyroidism?",
@@ -277,10 +275,9 @@
     options: ["Iodine is needed for thyroid cells to divide", "Low hormone production raises TSH, which stimulates gland growth", "Iodine deficiency causes autoimmune thyroiditis", "The gland swells with stored iodine"],
     answer: 1,
     why: "Without iodine, the thyroid can't make enough hormone. TSH rises through feedback, and constant TSH stimulation enlarges the gland." },
-  { sys: "thyroid", type: "matrix", diff: "medium",
-    stem: "A large goiter can compress nearby structures. Match each finding to the structure compressed.",
-    cols: ["Trachea", "Esophagus", "Recurrent laryngeal nerve"],
-    rows: [["Dysphagia", 1], ["Hoarseness", 2], ["Dyspnea or stridor", 0]],
+  { sys: "thyroid", type: "cloze", diff: "medium",
+    stem: "A large goiter can compress nearby structures. Match each finding to the structure compressed.\n• Dysphagia: {0}\n• Hoarseness: {1}\n• Dyspnea or stridor: {2}",
+    blanks: [{options:["Trachea", "Esophagus", "Recurrent laryngeal nerve"], answer:1}, {options:["Trachea", "Esophagus", "Recurrent laryngeal nerve"], answer:2}, {options:["Trachea", "Esophagus", "Recurrent laryngeal nerve"], answer:0}],
     why: "Esophagus → difficulty swallowing. Recurrent laryngeal nerves (control the vocal cords) → hoarseness. Trachea → trouble breathing, which is an airway emergency." },
   { sys: "thyroid", type: "sata", diff: "medium",
     stem: "Which history findings raise concern about a thyroid nodule? Select all that apply.",
@@ -378,10 +375,9 @@
     options: ["Cortisol rises normally after an ACTH stimulation test", "Cortisol does not rise after an ACTH stimulation test", "Cortisol stays high after dexamethasone", "Renin is low"],
     answer: 1,
     why: "In Addison's, the damaged adrenal can't respond to ACTH, so cortisol stays low. Dexamethasone suppression is a Cushing test." },
-  { sys: "adrenal", type: "matrix", diff: "hard",
-    stem: "Compare primary adrenal insufficiency (Addison's) with secondary (pituitary) adrenal insufficiency.",
-    cols: ["Addison's (primary)", "Secondary (pituitary)", "Both"],
-    rows: [["Low cortisol", 2], ["High ACTH", 0], ["Hyperpigmentation", 0], ["Aldosterone preserved", 1], ["Hyperkalemia", 0], ["Low ACTH", 1]],
+  { sys: "adrenal", type: "cloze", diff: "hard",
+    stem: "Compare primary adrenal insufficiency (Addison's) with secondary (pituitary) adrenal insufficiency.\n• Low cortisol: {0}\n• High ACTH: {1}\n• Hyperpigmentation: {2}\n• Aldosterone preserved: {3}\n• Hyperkalemia: {4}\n• Low ACTH: {5}",
+    blanks: [{options:["Addison's (primary)", "Secondary (pituitary)", "Both"], answer:2}, {options:["Addison's (primary)", "Secondary (pituitary)", "Both"], answer:0}, {options:["Addison's (primary)", "Secondary (pituitary)", "Both"], answer:0}, {options:["Addison's (primary)", "Secondary (pituitary)", "Both"], answer:1}, {options:["Addison's (primary)", "Secondary (pituitary)", "Both"], answer:0}, {options:["Addison's (primary)", "Secondary (pituitary)", "Both"], answer:1}],
     why: "Both have low cortisol. Addison's: the adrenal is damaged, so aldosterone is lost too (hyperkalemia) and ACTH rises (hyperpigmentation). Pituitary cause: ACTH is low, and aldosterone is preserved because renin and potassium still drive it." },
   { sys: "adrenal", type: "sata", diff: "medium",
     stem: "A client with Addison's disease has the flu and has been vomiting. Which findings suggest adrenal crisis? Select all that apply.",
