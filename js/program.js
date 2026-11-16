@@ -146,6 +146,20 @@ window.PROGRAM = {
         },
         {
           id: "nura350", code: "NURA 350", name: "Pharmacology", icon: "💊", color: "#a43f87",
+          lectureFolder: "../Sem 1/Pharm/",
+          lectureWebFolder: "nura350/lecture-guides/",
+          lectureExam: "Exam 2",
+          lectureGuides: [
+            { mod: "Exam 2 · Cardiac, Renal & GU", title: "Cardiovascular System, Part 1", file: "Exam 2/Lecture Guide/Pharm for the Cardiovascular System Pt 1 Lecture Guide.pdf", web: "exam2-cardiovascular-system-pt-1.pdf", topics: [] },
+            { mod: "Exam 2 · Cardiac, Renal & GU", title: "Cardiovascular System, Part 2", file: "Exam 2/Lecture Guide/Pharm for the Cardiovascular System Pt 2 Lecture Guide.pdf", web: "exam2-cardiovascular-system-pt-2.pdf", topics: [] },
+            { mod: "Exam 2 · Cardiac, Renal & GU", title: "Renal System", file: "Exam 2/Lecture Guide/Pharm for the Renal System Lecture Guide.pdf", web: "exam2-renal-system.pdf", topics: [] },
+            { mod: "Exam 2 · Cardiac, Renal & GU", title: "Genitourinary & Reproductive Systems", file: "Exam 2/Lecture Guide/Pharm for the Genitourinary and Reproductive Systems Lecture Guide.pdf", web: "exam2-genitourinary-and-reproductive-systems.pdf", topics: [] },
+            { mod: "Final · Endocrine", title: "Diabetes Mellitus", file: "Final/Lecture Guides/Pharm for Diabetes Mellitus Lecture Guide.pdf", web: "final-diabetes-mellitus.pdf", topics: [] },
+            { mod: "Final · Endocrine", title: "Thyroid Disorders", file: "Final/Lecture Guides/Pharm for Thyroid Disorders Lecture Guide.pdf", web: "final-thyroid-disorders.pdf", topics: [] },
+            { mod: "Final · Neurological", title: "Neurological System, Part 1 (anticonvulsants & duloxetine)", file: "Final/Lecture Guides/Pharm for the Neurological System Pt 1 Lecture Guide.pdf", web: "final-neurological-system-pt-1.pdf", topics: [] },
+            { mod: "Final · Neurological", title: "Neurological System, Part 2 (Parkinson's, sedatives & muscle relaxants)", file: "Final/Lecture Guides/Pharm for the Neurological System Pt 2 Lecture Guide.pdf", web: "final-neurological-system-pt-2.pdf", topics: [] },
+            { mod: "Final · Chemotherapy", title: "Chemotherapy & Growth Factors", file: "Final/Lecture Guides/Pharm for Chemotherapy Lecture Guide.pdf", web: "final-chemotherapy.pdf", topics: [] }
+          ],
           exams: [
             {
               name: "Exam 2", status: "ready",
