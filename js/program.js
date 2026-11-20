@@ -84,6 +84,14 @@ window.PROGRAM = {
               blurb: "Cumulative: every module from intro through GI and neuro, plus a full-length 50-question mock final weighted like the blueprint. Mod 11 (musculoskeletal) is a placeholder until its slides are posted.",
               topics: ["All of Exams 1–2", "GI & Abdomen", "Neuro", "MSK (coming)"],
               stats: "10 section overviews · 82 topics · 35 diagrams · 298 questions (132 new) · 385 flashcards"
+            },
+            {
+              name: "Final Practical", status: "ready",
+              path: "nura330/practical/index.html",
+              localPath: "../Sem 1/Health Assessment/Final/Practical Exam Study Guide/index.html",
+              blurb: "The 10-minute practical, step by step: the core safety and assessment routine for every patient, then a rubric walk-through (Recognize, Analyze, Prioritize, Act, Evaluate) with SBAR scripts and the NURA 320 med pass for each of the four possible patients.",
+              topics: ["Core routine", "Cardiovascular", "Respiratory", "Neuro", "Musculoskeletal"],
+              stats: "4 patient scenarios · 100-point rubric map · 10-minute pacing plan · practice checklists"
             }
           ]
         },
