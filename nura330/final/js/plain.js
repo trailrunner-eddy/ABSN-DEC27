@@ -69,8 +69,32 @@ window.PLAIN = {
     text: "Babies: watch the soft spot and listen for a high-pitched cry. Kids: use play and a kid version of the coma scale. Pregnant people: a new bad headache or blurry vision can be dangerous high blood pressure. Older adults: slower reflexes are normal, but sudden confusion is not. Ask about money, transport, language, and support.",
     like: "Like adjusting a recipe for who's eating: same ingredients, different amounts and warnings."
   },
-  mskcoming: {
-    text: "This part isn't ready yet because the musculoskeletal lecture hasn't been posted. It will cover bones, joints, and muscles: how to ask about pain and movement, how to check strength and range of motion, and what's normal at different ages.",
-    like: "Like a chapter marked “coming soon”: the outline is here, the story comes with the slides."
+  mskcase: {
+    text: "An older woman with thin, fragile bones fell and broke her hip. It hurts a lot and she can't move it well, but her foot is warm and pink with good pulses, so blood is still getting through. The nurse keeps checking the foot every 15 minutes, because swelling can cut off blood flow or nerves at any time.",
+    like: "Like checking a garden hose past a kink: as long as water still comes out the end, you keep watching the kink."
+  },
+  mskap: {
+    text: "Bones hold you up and protect your organs. Joints let bones move: knees and elbows bend like a door hinge, hips and shoulders swivel like a ball in a cup. Ligaments tie bone to bone; tendons tie muscle to bone so the muscle can pull it.",
+    like: "Like a puppet: the wood is bone, the hinges are joints, the strings are tendons pulled by muscles."
+  },
+  mskhx: {
+    text: "Ask what's wrong (pain, stiffness, swelling, weakness), how and when it started, where it is, how bad it is, what makes it better or worse, whether it's worse in the morning or at night, and what it stops the person from doing. Also ask about fever, weight loss, or numbness.",
+    like: "Like a mechanic asking what the noise is, when it started, and whether it happens going uphill."
+  },
+  mskexam: {
+    text: "Look at the joint, feel it, have the person move it, then push against them to test strength. Grade strength from 5 (normal) down to 0 (no movement). Always compare the left side with the right.",
+    like: "Like test-driving both front tires: one should handle just like the other."
+  },
+  mskregions: {
+    text: "Go from the neck down to the feet. Normal joints look the same on both sides, feel smooth, move fully, and don't hurt. Swelling, redness, warmth, lumps, grinding, crooked fingers or toes, and a curved spine are not normal.",
+    like: "Like walking around a car checking every panel for dents."
+  },
+  msknv: {
+    text: "Below any injury or cast, check that the skin is pink and warm, the person can wiggle and feel the fingers or toes, the pulse is there, and color comes back fast after a squeeze. A missing pulse, new numbness, or pain that keeps getting worse is an emergency.",
+    like: "Like checking the lights downstream after a storm: if they go out, the line is damaged."
+  },
+  msklife: {
+    text: "Babies' hips get checked for looseness. Kids' growth plates break easily and their spines get checked for curves. Older adults lose bone and muscle, stoop forward, and fall more. Safe lifting, warming up, removing tripping hazards, exercise, calcium, and vitamin D keep bones strong.",
+    like: "Like caring for a house over its lifetime: new construction, growing additions, then repairs and railings as it ages."
   }
 };

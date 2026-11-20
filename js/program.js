@@ -58,7 +58,8 @@ window.PROGRAM = {
             { mod: "Final · Mods 8–11", title: "Mod 8 · GU, Rectal & Reproductive (final study guide map + Mod 7 guide)", file: "Final/Lecture Guides/Mod 8 - GU and Rectal Assessment Lecture Guide.pdf", web: "mod-8-gu-rectal-and-reproductive-assessment.pdf", topics: [["Bladder scan & PVR", "retention"], ["Urine output", "urine"]] },
             { mod: "Final · Mods 8–11", title: "Mod 9 · GI & Abdominal Assessment", file: "Final/Lecture Guides/Mod 9 - GI and Abdominal Assessment Lecture Guide.pdf", web: "mod-9-gi-and-abdominal-assessment.pdf", topics: [["Bowel sounds", "bowel"], ["CVA tenderness", "cva"]] },
             { mod: "Final · Mods 8–11", title: "Mod 10 · Neurological Assessment", file: "Final/Lecture Guides/Mod 10 - Neuro Assessment Lecture Guide.pdf", web: "mod-10-neurological-assessment.pdf", topics: [["Stroke priorities", "stroke"], ["GCS", "gcs"]] },
-            { mod: "Final · Mods 8–11", title: "Mod 11 · Musculoskeletal Assessment (coming when the slides are posted)" }
+            { mod: "Final · Mods 8–11", title: "Mod 11 · Musculoskeletal Assessment", file: "Final/Lecture Guides/Mod 11 - Musculoskeletal Assessment Lecture Guide.pdf", web: "mod-11-musculoskeletal-assessment.pdf", topics: [["Neurovascular check", "msknv"], ["Strength & ROM", "mskexam"]] },
+            { mod: "Final · Exam study guide", title: "Final Exam Study Guide (color-coded: PowerPoint vs. written guide, Mods 1–11)", file: "Final/Exam Guide/NURA 330 Final Exam Study Guide (color-coded).pdf", web: "final-exam-study-guide.pdf", topics: [["Neurovascular check", "msknv"]] }
           ],
           exams: [
             {
@@ -81,9 +82,9 @@ window.PROGRAM = {
               name: "Final Exam", status: "ready",
               path: "nura330/final/index.html",
               bank: ["js/data.js", "js/practice.js"],
-              blurb: "Cumulative: every module from intro through GI and neuro, plus a full-length 50-question mock final weighted like the blueprint. Mod 11 (musculoskeletal) is a placeholder until its slides are posted.",
-              topics: ["All of Exams 1–2", "GI & Abdomen", "Neuro", "MSK (coming)"],
-              stats: "10 section overviews · 82 topics · 35 diagrams · 298 questions (132 new) · 385 flashcards"
+              blurb: "Cumulative: every module from intro through GI, neuro, and musculoskeletal, plus a full-length 50-question mock final weighted like the blueprint and a color-coded study guide that marks what's on the review PowerPoint vs. the written guide.",
+              topics: ["All of Exams 1–2", "GI & Abdomen", "Neuro", "MSK", "Color-coded study guide"],
+              stats: "10 section overviews · 88 topics · 36 diagrams · 339 questions (173 new) · 417 flashcards"
             },
             {
               name: "Final Practical", status: "ready",

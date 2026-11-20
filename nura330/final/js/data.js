@@ -1,16 +1,16 @@
-/* New content for the Health Assessment Final Exam guide: Mod 9 (GI & abdominal) and Mod 10 (neuro),
-   plus a clearly marked placeholder for Mod 11 (musculoskeletal) until its slides are posted.
+/* New content for the Health Assessment Final Exam guide: Mod 9 (GI & abdominal), Mod 10 (neuro),
+   and Mod 11 (musculoskeletal).
    The final is cumulative: index.html also loads the Exam 1 and Exam 2 guides, and js/merge.js joins
    everything. This file must stand alone, because NCLEX Prep loads it (with practice.js) by itself.
    Outline follows the "NURA 330 Final Exam Study Guide"; details come from the Mod 9 and Mod 10
-   lecture guides and slides. */
+   lecture guides and slides; Mod 11 from the Mod 11 slides and the Final Exam Prep review deck. */
 
 window.GUIDE = {
   key: "ha-final-v1",
   course: "NURA 330 · Health Assessment",
   title: "Final Exam Study Lab",
   heroArt: "🩺",
-  heroText: "Cumulative: 50 items (multiple choice and SATA) in 75 minutes, 25% of the course grade. Modules 1–7 are 3–4 questions each; Modules 8–11 are 4–5 each. Lynnwood: Mon Nov 30, 11:15 am (arrive 10:45). Auburn: Tue Dec 1, 11:15 am. Bring a valid ID and log in to ATI the day before.",
+  heroText: "Cumulative: 50 items (multiple choice and SATA) in 75 minutes, 25% of the course grade. Modules 1–7 are 3–4 questions each; Modules 8–11 are 4–5 each. Lynnwood: Mon Nov 30, 11:15 am (arrive 10:45). Auburn: Tue Dec 1, 11:15 am. Bring a valid ID and log in to ATI the day before. <br><a href=\"study-guide.html\" style=\"color:#fff;font-weight:700;text-decoration:underline\">📘 Open the color-coded final study guide</a> (PowerPoint vs. written guide, every module).",
   formats: ["Multiple choice", "Select all that apply"],
   formatNote: "The final is MC and SATA only, so every practice question uses those two formats and is rated easy, medium, or hard. Questions marked “New for the final” go deeper than the Exam 1 and 2 sets.",
   chainTitle: "The assessment chain",
@@ -31,7 +31,7 @@ window.GUIDE = {
 window.SYSTEMS = [
   { id: "gi", name: "GI & Abdominal Assessment", short: "GI & Abdomen", icon: "🫃", weight: "Mod 9 · 4–5 questions" },
   { id: "neuro", name: "Neurological Assessment", short: "Neuro", icon: "🧠", weight: "Mod 10 · 4–5 questions" },
-  { id: "msk", name: "Musculoskeletal Assessment", short: "MSK (coming)", icon: "🦴", weight: "Mod 11 · 4–5 questions · slides not posted yet" },
+  { id: "msk", name: "Musculoskeletal Assessment", short: "MSK", icon: "🦴", weight: "Mod 11 · 4–5 questions" },
   /* Earlier modules, so the cumulative questions below have names when NCLEX Prep loads this file alone.
      On the Final page, merge.js keeps the Exam 1 and Exam 2 versions of these instead. */
   { id: "intro", name: "Intro to Health Assessment", short: "Intro", icon: "🧭", weight: "Mod 1 · 3–4 questions" },
@@ -57,6 +57,9 @@ window.EMPHASIS = [
   "DTRs: 2+ is normal. 4+ with clonus is unexpected. Romberg should be negative.",
   "Left-brain stroke → right-sided weakness (and often aphasia).",
   "Sudden confusion in an older adult is delirium until proven otherwise, not “just aging.”",
+  "MSK: inspect → palpate → ROM → strength, and compare both sides every time. Ligaments join bone to bone; tendons join muscle to bone.",
+  "Neurovascular check below any injury or cast: color, warmth, movement, sensation, pulses, cap refill. A lost distal pulse or new numbness gets reported now.",
+  "Final review deck: urine output of at least 30 mL/hr is the common adult benchmark (≈ 0.5 mL/kg/hr for a 60 kg adult).",
   "Cumulative: SpO₂ under 92%, stridor, new asymmetric chest expansion, PVR over 100 mL, and urine output under 0.5 mL/kg/hr all get reported."
 ];
 
@@ -592,22 +595,224 @@ window.DISORDERS = [
   ]
 },
 
-/* ================= MOD 11: MUSCULOSKELETAL (PLACEHOLDER) ================= */
+/* ================= MOD 11: MUSCULOSKELETAL ================= */
 {
-  id: "mskcoming", sys: "msk", name: "Musculoskeletal Assessment (coming soon)",
-  sub: "Placeholder: the Mod 11 slides have not been posted yet",
-  connect: ["Waiting for slides"],
-  notice: "🚧 Placeholder. The Module 11 lecture slides haven't been posted yet, so this section has no lecture content, flashcards, or questions. It will be filled in from the slides when they are uploaded. Until then, use the study guide outline below and ATI Health Assess 3.0 “Musculoskeletal and neurological” and ATI RN Fundamentals Chapter 31.",
-  summary: "The final has 4–5 musculoskeletal questions. This page lists what the final study guide says to know, so you can preview it in ATI before the lecture.",
+  id: "mskcase", sys: "msk", name: "Case: Hip Fracture After a Fall",
+  sub: "85-year-old with osteoporosis, 10/10 hip pain, neurovascular checks",
+  connect: ["Clinical judgment", "Neurovascular check", "Comparison"],
+  star: true, starLabel: "Lecture case",
+  summary: "An 85-year-old woman with osteoporosis and hypertension fell in her assisted living apartment and landed on her right hip. Pain is 10/10, the hip is bruised, red, and swollen, flexion and extension are limited, and she favors the other leg. Pulses are 2+ and cap refill is under 2 seconds, so circulation is intact for now. The x-ray shows a hip fracture needing ORIF. The nursing job: frequent neurovascular checks, ice, pain control, and fall-risk thinking.",
   chain: {
-    why: ["Study guide: musculoskeletal anatomy and physiology"],
-    ask: ["Study guide: musculoskeletal subjective assessment"],
-    exam: ["Study guide: musculoskeletal objective assessment", "Study guide: expected vs. unexpected findings"],
-    flags: ["Study guide: lifespan considerations", "Study guide: SDOH considerations", "Study guide: musculoskeletal medical terminology"]
+    why: ["Osteoporosis = low bone density → a simple fall breaks a hip", "Older adults: sarcopenia, slower gait, poor balance → fall risk"],
+    ask: ["Mechanism: tripped or fell from standing? Hit the head?", "Pain 0–10, location, radiation", "History (osteoporosis, HTN), allergies, meds"],
+    exam: ["Inspect: ecchymosis, erythema, edema, alignment, gait", "Palpate pulses (femoral, pedal) and cap refill, both sides", "Skin warm/dry; sensation; can she move the toes?", "ROM of the injured hip is limited; strength deferred on the injured leg"],
+    flags: ["Loss of a distal pulse", "New numbness or tingling", "Severe pain with neurovascular changes", "Pale, cool foot or cap refill over 2 seconds"]
+  },
+  table: {
+    cols: ["Domain", "Client finding", "What it means"],
+    rows: [["Vital signs", "T 97.8 °F, P 99, R 22, BP 145/90, SpO₂ 98% RA", "HR, RR, and BP up with 10/10 pain"], ["Inspection", "Right hip ecchymosis, erythema, edema; mild knee and foot edema", "Injury and swelling"], ["Neurovascular", "Femoral and pedal pulses 2+, cap refill under 2 s, warm, dry, sensation intact", "Perfusion intact right now: keep checking"], ["Motion", "Moves toes; right hip ↓ flexion and extension; left leg full ROM", "Painful, limited ROM on the injured side"], ["Gait", "Altered, favoring the left", "Avoiding weight on the injured hip"]]
+  },
+  table2: {
+    title: "Provider orders",
+    cols: ["Order", "Detail"],
+    rows: [["Monitoring", "Neurovascular checks every 15 minutes"], ["Comfort", "Ice 20 minutes on, 20 off, as tolerated"], ["Imaging", "AP and lateral x-rays of the hip and lower extremity"], ["IV fluids", "Lactated Ringer's at 50 mL/hr"], ["Medication", "Morphine 1 mg slow IV push now"], ["Result", "Hip fracture; ORIF needed"]]
   },
   facts: [
-    "Learning objectives: identify MSK anatomy and physiology; perform MSK assessment using safe techniques; differentiate normal vs. abnormal findings; document using nursing terminology.",
-    "Already covered in Mod 10 and useful here: the 0–5 muscle strength scale, BUE/BLE testing, gait, and Romberg."
+    "Heads-up on the slides: the client injured her RIGHT hip, but the orders and x-ray on slide 5 say LEFT. In real practice, a side that doesn't match is a wrong-site safety issue: clarify with the provider before acting.",
+    "The slide lists left-leg strength as “+2,” which on the 0–5 scale would mean she can't lift the leg against gravity. With full ROM and no limits on the left, 5/5 is what the rest of the assessment suggests; treat “+2” as a slide typo.",
+    "ORIF = open reduction, internal fixation (surgery to line up and fix the bone)."
+  ],
+  beyond: "Classic hip-fracture signs from standard references: the injured leg looks shorter and turned outward (external rotation). Older adults on bed rest after a hip fracture are at risk for blood clots, pressure injuries, and delirium.",
+  qa: [
+    ["Pulses 2+, cap refill under 2 s, toes warm and moving. What does this tell you?", "Distal circulation and nerve function are intact right now; keep checking on schedule."],
+    ["Which finding would you report immediately?", "A lost or weaker distal pulse, new numbness, or pain out of proportion with neurovascular changes."],
+    ["Why did a simple fall fracture her hip?", "Osteoporosis: low bone density makes bones fragile."]
+  ]
+},
+{
+  id: "mskap", sys: "msk", name: "Musculoskeletal Anatomy & Physiology",
+  sub: "Bones, joints, ligaments vs. tendons, muscles, body regions",
+  connect: ["Anatomy", "Function"],
+  star: true, starLabel: "On the study guide",
+  summary: "The musculoskeletal system is bones, joints, ligaments, tendons, and muscles. It moves the body, protects organs, stores calcium, and makes blood cells in the marrow (hematopoiesis). Ligaments connect bone to bone; tendons connect muscle to bone. Synovial joints move freely: hinge joints (knee, elbow) flex and extend, ball-and-socket joints (hip, shoulder) move in every direction.",
+  chain: {
+    why: ["Adult skeleton: 206 bones (long, short, flat, irregular)", "Movement needs bone + joint + muscle + nerve working together", "Periosteum (bone covering) carries vessels and nerves"],
+    ask: ["Pain, stiffness, swelling, weakness, loss of function"],
+    exam: ["Know each joint's type, so you know which motions to test"],
+    flags: ["A joint that moves in a way its type shouldn't (instability)"]
+  },
+  table: {
+    cols: ["Joint type", "Movement", "Example"],
+    rows: [["Fibrous", "Immovable", "Skull sutures"], ["Cartilaginous", "Slightly movable", "Ribs to sternum; between vertebrae"], ["Synovial: hinge", "Flexion and extension", "Elbow, knee, ankle"], ["Synovial: ball and socket", "Flexion, extension, abduction, adduction, rotation, circumduction", "Hip, shoulder"], ["Synovial: condyloid", "Flexion, extension, hyperextension (side to side too)", "Wrist"]]
+  },
+  table2: {
+    title: "Region by region",
+    cols: ["Region", "Key point from the slides"],
+    rows: [["Head and neck", "Skull on 7 cervical vertebrae; nodding and rotation (SCM, trapezius)"], ["Shoulder", "Ball and socket with the greatest range of motion but less stability; rotator cuff"], ["Elbow", "Hinge of the humerus, radius, ulna; olecranon is the tip of the elbow"], ["Wrist and hand", "27 small bones (8 carpals, 5 metacarpals, 14 phalanges) for fine movement and grip"], ["Spine", "7 cervical, 12 thoracic, 5 lumbar, then the fused sacrum and coccyx; discs cushion; cervical and lumbar curves concave, thoracic convex"], ["Hip", "Ball and socket (femoral head in the acetabulum): wide motion plus weight-bearing stability"], ["Knee", "Hinge of the femur, tibia, patella; cruciate and collateral ligaments and menisci stabilize"], ["Ankle and foot", "Hinge (tibia, fibula, talus) plus 26 foot bones; malleoli are the landmarks"]]
+  },
+  facts: [
+    "Ligament = bone to bone (stabilizes the joint). Tendon = muscle to bone (moves the bone).",
+    "Three muscle types: skeletal (voluntary, attaches by tendons), smooth (organ walls), cardiac (heart).",
+    "Neuro link: voluntary movement starts in the frontal lobe; the cerebellum coordinates; the parietal lobe handles position sense (proprioception)."
+  ],
+  beyond: "The slide says the spine has 24 vertebrae in five regions and the notes say 33; both are right: 24 movable vertebrae (7 + 12 + 5) plus 5 fused sacral and 3–4 fused coccygeal.",
+  qa: [
+    ["What connects muscle to bone?", "A tendon."],
+    ["What connects bone to bone?", "A ligament."],
+    ["Which joint has the greatest range of motion?", "The shoulder (ball and socket), at the cost of stability."],
+    ["Name a hinge joint.", "Knee or elbow (also the ankle)."],
+    ["Where are blood cells made?", "Bone marrow (hematopoiesis)."]
+  ]
+},
+{
+  id: "mskhx", sys: "msk", name: "MSK Subjective Assessment",
+  sub: "Chief complaint, onset and mechanism, OLDCARTS, function, red flags",
+  connect: ["Interview", "OLDCARTS", "Function"],
+  summary: "Ask about the chief complaint (pain, stiffness, swelling, weakness, loss of function), then onset and mechanism (sudden or gradual; injury, overuse, or trauma), location and radiation, quality and severity (0–10), what makes it worse or better, timing (morning stiffness, night pain), and how it affects walking, stairs, work, sport, and daily activities. Finish with past, surgical, and family history, medications, and red flags such as fever, weight loss, and numbness.",
+  chain: {
+    why: ["Mechanism predicts injury: a twist suggests ligament, a fall suggests fracture", "Function tells you the real-life impact"],
+    ask: ["Chief complaint", "Onset and mechanism", "Location and radiation", "Quality and severity 0–10", "Aggravating and relieving factors", "Timing: morning stiffness, night pain", "Functional impact (ADLs)", "History, medications, red flags"],
+    exam: ["Use the answers to focus the exam on the joint involved"],
+    flags: ["Fever with joint pain", "Unexplained weight loss", "Numbness or tingling", "Night pain"]
+  },
+  table: {
+    cols: ["Slide item", "Example question"],
+    rows: [["Chief complaint", "“What's bothering you most: pain, stiffness, swelling, or weakness?”"], ["Onset and mechanism", "“Did it start suddenly? Did you fall, twist, or overuse it?”"], ["Location and radiation", "“Point to where it hurts. Does it spread?”"], ["Quality and severity", "“Is it sharp, dull, aching, burning? Rate it 0–10.”"], ["Aggravating/relieving", "“Is it worse with movement or weight bearing? Better with rest?”"], ["Timing", "“Is it stiff in the morning? Does pain wake you at night?”"], ["Functional impact", "“Can you walk, climb stairs, dress, work?”"], ["History and red flags", "“Any fever, weight loss, numbness? Past fractures, surgery, osteoporosis in the family?”"]]
+  },
+  facts: [
+    "The slide notes add: spinal curvature (scoliosis, kyphosis, lordosis) with pain or breathing trouble; neurologic history (head or spinal injury, stroke, seizures); tremors; heavy lifting or repetitive motion at work; exercise habits and protective gear; family neuromuscular disorders.",
+    "This is OLDCARTS from Mod 2, applied to bones and joints."
+  ],
+  beyond: "Morning stiffness lasting over an hour points toward inflammatory arthritis (such as RA); brief stiffness that eases with movement is more typical of osteoarthritis (standard reference).",
+  qa: [
+    ["Which question explores mechanism of injury?", "“How did it happen? Did you fall, twist, or overuse it?”"],
+    ["Which red flags go with MSK pain?", "Fever, unexplained weight loss, numbness."],
+    ["Why ask about stairs and dressing?", "To measure functional impact on daily activities."]
+  ]
+},
+{
+  id: "mskexam", sys: "msk", name: "MSK Objective Assessment, ROM & Strength",
+  sub: "Inspect → palpate → ROM → strength, compare sides, 0–5 scale",
+  connect: ["Inspection", "Palpation", "Range of motion", "Comparison"],
+  star: true, starLabel: "On the study guide",
+  summary: "For each region: inspect (alignment, symmetry, swelling, deformity, color), palpate (tenderness, warmth, crepitus, nodules), test range of motion (active first; passive if needed), then strength against your resistance on the 0–5 scale. Compare both sides every time, demonstrate the motion, and never push a joint past the point of pain.",
+  chain: {
+    why: ["The unaffected side is the client's own normal", "ROM tells joint function; strength tells muscle and nerve function"],
+    ask: ["Pain with movement? Where does it stop?"],
+    exam: ["Inspect, then palpate", "AROM: client moves; PROM: nurse moves", "Strength: against gravity, then against resistance (0–5)", "Pronator drift: arms out, palms up, eyes closed 10 seconds", "Measure asymmetry with a tape: >1 cm difference is notable", "Gait, posture, balance"],
+    flags: ["New weakness or asymmetry", "Crepitus with pain", "Deformity or misalignment", "Unable to bear weight"]
+  },
+  table: {
+    cols: ["Grade", "Strength scale (slide)"],
+    rows: [["5", "Normal, full resistance"], ["4", "Moves against some resistance"], ["3", "Moves against gravity only"], ["2", "Moves with gravity eliminated"], ["1", "Flicker of muscle contraction"], ["0", "No movement"]]
+  },
+  table2: {
+    title: "ROM words",
+    cols: ["Motion", "Meaning"],
+    rows: [["Flexion / extension", "Bending / straightening"], ["Hyperextension", "Beyond straight (head back, arm behind)"], ["Abduction / adduction", "Away from / toward the midline"], ["Internal / external rotation", "Turning toward / away from the body"], ["Pronation / supination", "Palm down / palm up"], ["Dorsiflexion / plantar flexion", "Toes up toward the nose / toes pointed down"], ["Inversion / eversion", "Sole turned in / out"], ["Opposition", "Thumb touches each fingertip"], ["Lateral flexion", "Bending sideways (neck or trunk)"], ["Circumduction", "Circular motion (shoulder, hip)"]]
+  },
+  facts: [
+    "BUE strength (slide): shoulder shrug, elbow flexion and extension, hand grip. BLE: hip flexion, knee extension, ankle dorsiflexion and plantar flexion.",
+    "Document a strength score for each limb, left vs. right (for example, “RUE 5/5, LUE 4/5”).",
+    "Expected variation: the dominant arm may have slightly more muscle bulk."
+  ],
+  beyond: "Standard technique: test the unaffected side first, and stop passive ROM at the first sign of pain or resistance.",
+  qa: [
+    ["Strength 3/5 means?", "Moves against gravity but not against resistance."],
+    ["AROM vs. PROM?", "Active: the client moves the joint. Passive: the nurse moves it."],
+    ["Turning the palm up is…?", "Supination."],
+    ["Moving an arm away from the body is…?", "Abduction."],
+    ["Pointing the toes toward the nose is…?", "Dorsiflexion."]
+  ]
+},
+{
+  id: "mskregions", sys: "msk", name: "Expected vs. Unexpected by Region",
+  sub: "Neck, shoulders, elbows, hands, spine, hips and knees, ankles and feet",
+  connect: ["Inspection", "Palpation", "Pattern recognition"],
+  star: true, starLabel: "On the study guide",
+  summary: "Expected: symmetric movement, functional ROM, stable joints, steady gait, smooth bones without nodules. Unexpected: swelling, redness, warmth, deformity, limited ROM, weakness, atrophy, crepitus, instability, and altered gait. Each region has its own classic unexpected findings, such as ulnar deviation in the hands, kyphosis or scoliosis in the spine, and hallux valgus in the feet.",
+  chain: {
+    why: ["Symmetry is the reference point for every region"],
+    ask: ["Which joint? One side or both?"],
+    exam: ["Head to toe: neck → shoulders → elbows → wrists/hands → spine → hips/knees → ankles/feet", "Inspect and palpate each, then ROM and strength"],
+    flags: ["Flattened shoulder (possible dislocation)", "Displaced olecranon (possible elbow dislocation)", "Boggy, mushy knee", "Ataxic or shuffling gait"]
+  },
+  table: {
+    cols: ["Region", "Expected", "Unexpected"],
+    rows: [["Head and neck", "Head erect and aligned; equal movement; jaw opens and closes (clicking is a variation)", "Asymmetry (measure; >1 cm difference), pain, spasm, altered sensation"], ["Shoulders", "Symmetric height and contour; firm; relaxed muscles", "Erythema, atrophy, swelling, spasm; flattened shoulder = possible dislocation; pain on abduction = subacromial bursa"], ["Elbows", "Hollows beside the olecranon; even color", "Swelling, erythema, effusion (gout), misalignment or displacement (dislocation), nodules (RA)"], ["Wrists and hands", "Symmetric, straight alignment, smooth joints", "Swelling or nodules (arthritis), ulnar deviation, ganglion cyst, limited motion"], ["Spine", "Head erect, level shoulders, iliac crests, and gluteal folds; concave cervical and lumbar, convex thoracic; loss of height with age is expected", "Kyphosis, lordosis, scoliosis, lateral deviation, tenderness, spasm, ataxic or shuffling gait"], ["Hips and knees", "Smooth, coordinated gait; symmetric hips and knees; hollows beside the patella", "Asymmetry, pain with movement, erythema, swelling, crepitus, boggy knee, genu varum or valgum, contracture, wide-based gait"], ["Ankles and feet", "Feet and toes straight; smooth malleoli; arch varies", "Swelling, lesions, ulcers, corns, calluses, hallux valgus, hammertoes"]]
+  },
+  facts: [
+    "Shoulder pain can come from elsewhere (gallbladder, hiatal hernia, heart, or lung): ask the client to point to it.",
+    "Forward-bend test: the lumbar curve should disappear into one C-shaped curve, with scapulae and ribs level. Uneven = possible scoliosis.",
+    "The iliac crest line should be level and cross L4.",
+    "Rheumatoid nodules: firm, nontender, freely movable lumps on the olecranon or ulna."
+  ],
+  qa: [
+    ["Fingers drifting toward the little-finger side?", "Ulnar deviation: a sign of arthritis."],
+    ["Exaggerated thoracic curve?", "Kyphosis."],
+    ["Lateral S-shaped curve of the spine?", "Scoliosis."],
+    ["Big toe angled outward?", "Hallux valgus (bunion)."],
+    ["A shoulder that looks flat instead of rounded?", "Possible dislocation: report."]
+  ]
+},
+{
+  id: "msknv", sys: "msk", name: "Neurovascular Checks & MSK Red Flags",
+  sub: "Color, warmth, movement, sensation, pulses, cap refill; when to escalate",
+  connect: ["Neurovascular check", "Prioritization", "Documentation"],
+  star: true, starLabel: "Final review: urgent",
+  summary: "Below any injury, cast, or splint, check color, warmth, movement, sensation, pulses, and capillary refill, and compare with the other side. This is CWMS from Mod 5 plus pulses and refill. Escalate right away for a lost distal pulse, new numbness, or severe pain with neurovascular changes. Document the site, severity, and a bilateral comparison.",
+  chain: {
+    why: ["Swelling inside a closed space squeezes nerves and vessels", "Nerves give the first warning (numbness, tingling)"],
+    ask: ["Numbness, tingling, pain that's getting worse"],
+    exam: ["Color (pink vs. pale or dusky)", "Warmth (warm vs. cool)", "Movement (wiggle fingers/toes)", "Sensation (light touch)", "Pulses distal to the injury, both sides", "Cap refill <2 seconds"],
+    flags: ["Lost or weaker distal pulse", "New numbness or tingling", "Severe pain with NV changes", "Pale or cool extremity, slow refill"]
+  },
+  table: {
+    cols: ["Check", "Expected", "Report"],
+    rows: [["Color", "Pink, same as the other side", "Pale, dusky, cyanotic"], ["Warmth", "Warm", "Cool or cold"], ["Movement", "Moves fingers or toes", "Can't move, or new weakness"], ["Sensation", "Normal touch", "Numbness, tingling, new loss"], ["Pulses", "Present and equal (2+)", "Weaker, absent, unequal"], ["Capillary refill", "Under 2 seconds", "Slower than 2 seconds"]]
+  },
+  facts: [
+    "Final review slide: urgent MSK findings are loss of distal pulse, new numbness, and severe pain with neurovascular changes.",
+    "In the lecture case, orders were for neurovascular checks every 15 minutes.",
+    "Chart example: “R foot pink, warm, moves toes, sensation intact, DP and PT 2+, cap refill <2 s, equal to L.”"
+  ],
+  beyond: "Compartment syndrome (standard reference): rising pressure inside a muscle compartment after a fracture or under a tight cast. Watch the 6 Ps: pain (out of proportion, worse with passive stretch), pallor, paresthesia, paralysis, pulselessness, and poikilothermia (coolness); some lists use pressure. Pulselessness is a late sign. It's an emergency.",
+  qa: [
+    ["Name the parts of a neurovascular check.", "Color, warmth, movement, sensation, pulses, capillary refill (compare sides)."],
+    ["Client in a new cast reports increasing numbness in the toes. Priority?", "Report now: possible neurovascular compromise."],
+    ["Is the earliest warning usually a pulse change or a sensation change?", "Sensation (numbness, tingling, increasing pain); a lost pulse is late."]
+  ]
+},
+{
+  id: "msklife", sys: "msk", name: "MSK Lifespan, SDOH, Health Promotion & Terms",
+  sub: "Infants, children, older adults, falls, calcium and vitamin D, terminology",
+  connect: ["Lifespan", "Health promotion", "Documentation"],
+  summary: "Infants: soft bones with more cartilage; screen hips for developmental dysplasia. Children: growth plates are vulnerable; watch posture, gait, scoliosis, and sports injuries. Older adults: bone loss (osteoporosis, fracture risk), muscle loss (sarcopenia), osteoarthritis, less ROM, kyphosis, slower gait, and more falls. Promote safe lifting, warm-ups, protective gear, fall-hazard removal, weight-bearing exercise, and calcium and vitamin D.",
+  chain: {
+    why: ["Growth plates (epiphyseal plates) are weak points in children", "Aging: bone density and muscle mass decline"],
+    ask: ["Falls, home hazards (stairs, lighting, rugs), help with ADLs", "Calcium and vitamin D intake; cost of supplements and equipment", "Work demands and sick leave"],
+    exam: ["Infants: hip stability, primitive reflexes, milestones", "Children: posture, gait, coordination, scoliosis", "Older adults: gait, balance, posture (kyphosis), ROM"],
+    flags: ["Unequal hip or leg folds in an infant", "Fall with a new inability to bear weight in an older adult"]
+  },
+  table: {
+    cols: ["Term", "Meaning"],
+    rows: [["ROM", "Degree of movement possible at a joint"], ["AROM / PROM", "Client moves the joint / examiner moves it"], ["Muscle strength", "Ability of muscles to exert force"], ["Muscle tone", "Resistance of muscles to passive movement"], ["Atrophy / hypertrophy", "Decrease / increase in muscle size"], ["Crepitus", "Crackling or grinding in a joint"], ["Tenderness", "Pain when an area is touched"], ["Edema", "Swelling from fluid"], ["Deformity", "Abnormal shape or structure"], ["Contracture", "Permanent tightening of muscle or tendon that limits movement"], ["Gait / posture", "Walking pattern / body position and alignment"], ["Symmetry", "Similarity between the two sides"]]
+  },
+  table2: {
+    title: "SDOH and the MSK client (slide)",
+    cols: ["Determinant", "Effect"],
+    rows: [["Economic stability", "Physical, low-wage jobs; little sick leave to recover; cost of equipment and supplements"], ["Education and literacy", "Understanding posture and exercise; following rehab; osteoporosis awareness"], ["Healthcare access", "Delayed care; insurance, cost, transport; limited physical therapy"], ["Living environment", "Safe places to walk; stairs, poor lighting, uneven floors raise fall risk"], ["Social support", "Help with mobility and ADLs; isolation lowers activity; caregiver strain"], ["Food and nutrition", "Food insecurity limits calcium and vitamin D"]]
+  },
+  facts: [
+    "Health promotion (slide): ergonomics (lifting, posture, workstation, assistive equipment), injury prevention (warm up, protective gear, remove fall hazards), exercise (weight-bearing, strength and balance, build up gradually), calcium and vitamin D (dairy, leafy greens, fortified foods, safe sun, supplements if advised).",
+    "Loss of height with age is an expected variation (discs flatten); a new fracture after a minor fall is not."
+  ],
+  beyond: "Infant hip screening uses the Ortolani and Barlow maneuvers (standard reference; the slide just says to evaluate hip stability).",
+  qa: [
+    ["Decline in muscle mass with aging?", "Sarcopenia."],
+    ["Which structure in children is vulnerable to injury?", "The growth (epiphyseal) plate."],
+    ["Crackling or grinding in a joint?", "Crepitus."],
+    ["Which nutrients support bone health?", "Calcium and vitamin D."]
   ]
 }
 ];
@@ -622,7 +827,11 @@ window.EMERGENCIES = [
   ["Falling GCS", "neuro", "Drop of 2 or more, new drowsiness or confusion", "Neuro decline: report immediately."],
   ["Unequal, fixed, or dilated pupil", "neuro", "New sluggish or blown pupil", "Possible increased ICP/herniation: escalate."],
   ["Preeclampsia signs", "neuro", "Pregnant client with new headache, vision changes, or seizure", "Report immediately."],
-  ["Acute delirium", "neuro", "Sudden confusion in an older adult", "Not normal aging: look for infection, meds, hypoxia; report."]
+  ["Acute delirium", "neuro", "Sudden confusion in an older adult", "Not normal aging: look for infection, meds, hypoxia; report."],
+  ["Lost distal pulse below an injury", "msk", "Weaker or absent pulse, pale or cool extremity, slow cap refill", "Possible vascular compromise: report now."],
+  ["New numbness or severe pain with NV changes", "msk", "Paresthesia, pain out of proportion, worse with passive stretch", "Possible compartment syndrome: report now."],
+  ["Fall with deformity and inability to bear weight", "msk", "Older adult after a fall: severe hip pain, limited ROM", "Possible fracture: keep immobile, NV checks, notify."],
+  ["Flattened shoulder or displaced olecranon", "msk", "Lost normal contour after an injury", "Possible dislocation: immobilize, NV check, report."]
 ];
 
 window.LOOKALIKES = [
@@ -636,5 +845,11 @@ window.LOOKALIKES = [
   ["Hemiparesis vs. hemiplegia?", "Hemiparesis: one-sided weakness. Hemiplegia: one-sided paralysis."],
   ["Sympathetic vs. parasympathetic?", "Sympathetic: fight or flight (dilated pupils, ↑HR, slowed digestion). Parasympathetic: rest and digest (constricted pupils, ↓HR, digestion)."],
   ["Delirium vs. dementia?", "Delirium: sudden, fluctuating, usually reversible: report. Dementia: gradual, progressive."],
-  ["Negative vs. positive Romberg?", "Negative: slight sway with eyes closed (expected). Positive: loses balance with eyes closed."]
+  ["Negative vs. positive Romberg?", "Negative: slight sway with eyes closed (expected). Positive: loses balance with eyes closed."],
+  ["Ligament vs. tendon?", "Ligament: bone to bone, stabilizes the joint. Tendon: muscle to bone, moves the bone."],
+  ["Active vs. passive ROM?", "AROM: the client moves the joint. PROM: the examiner moves it."],
+  ["Kyphosis vs. lordosis vs. scoliosis?", "Kyphosis: exaggerated thoracic (hunchback) curve. Lordosis: exaggerated lumbar (swayback) curve. Scoliosis: lateral S-shaped curve."],
+  ["Abduction vs. adduction?", "Abduction: away from the midline. Adduction: toward (add to) the midline."],
+  ["Pronation vs. supination?", "Pronation: palm down. Supination: palm up (holding soup)."],
+  ["Atrophy vs. contracture?", "Atrophy: muscle shrinks. Contracture: muscle or tendon permanently shortens and locks the joint."]
 ];
