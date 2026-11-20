@@ -120,6 +120,38 @@ ul.check .how b{color:var(--ink);font-weight:700}
 button.reset{font:inherit;font-size:.85rem;background:transparent;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:.3rem .7rem;cursor:pointer}
 button.reset:hover{color:var(--ink);border-color:var(--muted)}
 @media (prefers-reduced-motion:no-preference){nav.tabs a{transition:color .15s,border-color .15s}}
+
+/* roleplay scripts */
+.script .sc-bar{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin:.4rem 0 .2rem}
+.script button.sc{font:inherit;font-size:.88rem;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:4px;padding:.35rem .75rem;cursor:pointer}
+.script button.sc[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+.script button.sc:hover{border-color:var(--accent)}
+.script .legend{display:flex;flex-wrap:wrap;gap:.3rem .9rem;font-size:.8rem;color:var(--muted);margin:.3rem 0 .2rem}
+.script .legend span{display:inline-flex;align-items:center;gap:.3rem}
+.script .legend i{width:.7rem;height:.7rem;border-radius:2px;display:inline-block}
+.ph{margin-top:1.1rem}
+.ph-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:.3rem .7rem;border-bottom:2px solid var(--line);padding-bottom:.3rem;margin-bottom:.4rem}
+.ph-h h3{margin:0}
+.ph-h .mono{font-size:.8rem;color:var(--accent);font-weight:600}
+.ph-h .tag{background:var(--accent-soft);color:var(--accent)}
+ol.lines{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:.3rem}
+ol.lines li{display:grid;grid-template-columns:5.6rem 1fr;gap:.6rem;padding:.4rem .6rem;border-radius:4px;margin:0;border-left:3px solid transparent}
+ol.lines .who{font-family:var(--f-mono);font-size:.68rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;padding-top:.22rem;color:var(--muted)}
+ol.lines li.n{background:var(--accent-soft);border-left-color:var(--accent)}
+ol.lines li.n .who{color:var(--accent)}
+ol.lines li.say{background:var(--ok-soft);border-left-color:var(--ok);font-style:normal;padding:.4rem .6rem;border-radius:4px}
+ol.lines li.say .who{color:var(--ok)}
+ol.lines li.p{background:var(--band)}
+ol.lines li.dr{background:var(--warn-soft);border-left-color:var(--warn)}
+ol.lines li.dr .who{color:var(--warn)}
+ol.lines li.do{font-style:italic;color:var(--muted);font-size:.92rem;padding-block:.2rem}
+ol.lines .crit{display:inline-block;margin:.25rem 0 0;font-family:var(--f-mono);font-size:.68rem;font-weight:600;letter-spacing:.03em;color:var(--ok);background:var(--surface);border:1px solid var(--line);border-radius:3px;padding:.05rem .4rem;font-style:normal}
+ol.lines li .tx{display:block}
+ol.lines li.hid{cursor:pointer}
+ol.lines li.hid .tx{filter:blur(6px);user-select:none}
+ol.lines li.hid::after{content:"Tap to check your line";grid-column:2;font-family:var(--f-mono);font-size:.7rem;color:var(--muted);margin-top:-.15rem}
+@media (max-width:520px){ol.lines li{grid-template-columns:1fr;gap:.1rem}ol.lines li.hid::after{grid-column:1}}
+@media print{ol.lines li.hid .tx{filter:none}ol.lines li.hid::after{display:none}}
 </style>
 
 </head>
@@ -129,7 +161,7 @@ button.reset:hover{color:var(--ink);border-color:var(--muted)}
     <a class="hub" href="../../index.html#course/nura330">← ABSN Study Hub</a>
     <div class="eyebrow">NURA 330 · Final Practical · 4 possible patients</div>
     <h1>Practical Exam Study Guide</h1>
-    <p class="lede">One patient is drawn at random. Each tab walks the rubric in order (Recognize, Analyze, Prioritize, Act, Evaluate) for that patient, with the NURA 320 med pass at the end. Tick boxes as you practice; they stay checked in this browser.</p>
+    <p class="lede">One patient is drawn at random. Each tab walks the rubric in order (Recognize, Analyze, Prioritize, Act, Evaluate) for that patient, with the NURA 320 med pass and a roleplay script to practice with a partner at the end. Tick boxes as you practice; they stay checked in this browser.</p>
   </div>
   <nav class="tabs" aria-label="Scenarios">
     <div class="wrap">
@@ -331,6 +363,8 @@ button.reset:hover{color:var(--ink);border-color:var(--muted)}
       <div><div class="lbl">Teach the patient</div><ul><li>Expect to urinate more; give it in the morning so it doesn't disrupt sleep</li><li>Stand up slowly; you may feel dizzy</li><li>Eat potassium-rich foods (bananas, potatoes, oranges) unless told not to</li><li>Weigh yourself every morning and report a gain of 2–3 lb in a day or 5 lb in a week</li><li>Report muscle cramps, weakness, irregular heartbeat, or ringing in the ears</li></ul></div>
     </div>
   </div>
+
+  <div class="card script" id="script-thompson" data-script="thompson"></div>
 </section>
 
 <!-- ================= DANIEL (RESP) ================= -->
@@ -425,6 +459,8 @@ button.reset:hover{color:var(--ink);border-color:var(--muted)}
       <div><div class="lbl">Teach the patient (MDI technique)</div><ul><li>Shake the inhaler; attach the spacer</li><li>Breathe all the way out, seal lips around the mouthpiece</li><li>Press once as you start a slow, deep breath in</li><li>Hold for 10 seconds, then breathe out slowly</li><li>Wait 1 minute before the second puff</li><li>Side effects: shakiness, racing heart, nervousness</li><li>If you need it more often than prescribed, tell your provider; asthma may be getting worse</li></ul></div>
     </div>
   </div>
+
+  <div class="card script" id="script-daniel" data-script="daniel"></div>
 </section>
 
 <!-- ================= ELENA (NEURO) ================= -->
@@ -519,6 +555,8 @@ button.reset:hover{color:var(--ink);border-color:var(--muted)}
       <div><div class="lbl">Teach the patient</div><ul><li>Many cold and pain products also contain acetaminophen; read labels</li><li>Avoid alcohol while taking it</li><li>Report yellow skin or eyes, dark urine, or right upper belly pain</li><li>Tell the nurse if pain isn't better in about an hour</li></ul></div>
     </div>
   </div>
+
+  <div class="card script" id="script-elena" data-script="elena"></div>
 </section>
 
 <!-- ================= BENNETT (MSK) ================= -->
@@ -614,6 +652,8 @@ button.reset:hover{color:var(--ink);border-color:var(--muted)}
       <div><div class="lbl">Teach the patient</div><ul><li>Take with food or milk and a full glass of water</li><li>Don't combine with other NSAIDs (naproxen, aspirin) or alcohol</li><li>Report black or tarry stools, vomiting that looks like coffee grounds, stomach pain</li><li>Report swelling, less urine, or sudden weight gain</li><li>Get up slowly and call for help before walking</li></ul></div>
     </div>
   </div>
+
+  <div class="card script" id="script-bennett" data-script="bennett"></div>
 </section>
 
 <div class="toolbar"><button class="reset" id="reset" type="button">Clear all checkmarks</button><small>Clinical parameters follow common textbook values. Use your course materials and facility policy where they differ.</small></div>
@@ -655,6 +695,8 @@ button.reset:hover{color:var(--ink);border-color:var(--muted)}
   });
 })();
 </script>
+<script src="js/scripts.js?v=202611201900"></script>
+<script src="js/roleplay.js?v=202611201900"></script>
 <script src="../../js/glossary.js?v=202611201900"></script>
 <script src="../../js/labs.js?v=202611201900"></script>
 </body>
