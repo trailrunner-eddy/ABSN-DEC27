@@ -1,54 +1,45 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>NURA 330 Final Exam Study Guide</title><style>
-:root{--ppt:#d4690b;--ppt-bg:#fff3e6;--guide:#2b5fb4;--guide-bg:#edf3fd;--both:#23864a;--both-bg:#eaf7ee;--lec:#6b4aa8;--lec-bg:#f3eefb;
---red:#b3261e;--red-bg:#fdeceb;--yel:#9a7400;--yel-bg:#fff7d6;--ink:#1d2433;--muted:#5b6474;--cum:#127a80;--new:#3b3f9e}
+:root{--ppt:#c25e08;--guide:#2b5fb4;--both:#23864a;--lec:#6b4aa8;--red:#b3261e;--yel:#9a7400;--ink:#1d2433;--muted:#5b6474;--navy:#1f3560;--line:#dde2ea}
 @page{size:Letter;margin:0.6in 0.65in 0.7in}
 *{box-sizing:border-box}
-body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;color:var(--ink);font-size:10pt;line-height:1.42;margin:0;background:#fff}
-.wrap{max-width:none}
-h1{font-size:25pt;margin:0;letter-spacing:-.3px;color:#14304f}
-.sub{color:#3d5f8f;font-size:11.5pt;margin:2px 0 0}
-.cover{border-radius:14px;padding:18px 20px;background:linear-gradient(120deg,#e9f6f6,#eef0fd);border:1px solid #d5dcef;margin-bottom:12px}
-.chip{display:inline-block;font-size:7pt;font-weight:700;color:#fff;border-radius:20px;padding:1.5px 7px;letter-spacing:.3px;text-transform:uppercase;white-space:nowrap;vertical-align:1px}
-.c-both{background:var(--both)}.c-ppt{background:var(--ppt)}.c-guide{background:var(--guide)}.c-lec{background:var(--lec)}
-.legend{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;margin:10px 0 4px;font-size:9pt}
+body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;color:var(--ink);font-size:9.8pt;line-height:1.4;margin:0;background:#fff}
+h1{font-size:22pt;margin:0;letter-spacing:-.3px;color:var(--navy)}
+.sub{color:var(--muted);font-size:11pt;margin:2px 0 0}
+.cover{border-bottom:2px solid var(--navy);padding:0 0 10px;margin-bottom:10px}
+.chip{display:inline-block;font-size:6.8pt;font-weight:700;border-radius:3px;padding:0 4px;letter-spacing:.3px;text-transform:uppercase;white-space:nowrap;vertical-align:1px;border:1px solid;background:#fff}
+.c-both{color:var(--both)}.c-ppt{color:var(--ppt)}.c-guide{color:var(--guide)}.c-lec{color:var(--lec)}
+.legend{display:grid;grid-template-columns:1fr 1fr;gap:4px 14px;margin:8px 0 2px;font-size:8.8pt}
 .legend div{display:flex;gap:8px;align-items:flex-start}
-.legend .sw{flex:0 0 auto;width:92px;text-align:left}
-.box{border-radius:9px;padding:9px 12px;margin:9px 0;break-inside:avoid;border:1px solid}
-.box.red{background:var(--red-bg);border-color:#efc2bf}.box.red b.l{color:var(--red)}
-.box.yel{background:var(--yel-bg);border-color:#ecd98d}.box.yel b.l{color:var(--yel)}
-.box.blue{background:var(--guide-bg);border-color:#c8d8f3}.box.orange{background:var(--ppt-bg);border-color:#f3cfa8}
-.box.green{background:var(--both-bg);border-color:#bfe2cb}
+.legend .sw{flex:0 0 auto;width:86px}
+.box{padding:6px 10px;margin:6px 0;break-inside:avoid;border-left:3px solid var(--line);background:#f6f7f9}
+.box.red{border-left-color:var(--red)}.box.red b.l{color:var(--red)}
+.box.yel{border-left-color:#d4a800}.box.yel b.l{color:var(--yel)}
+.box.blue,.box.green,.box.orange{border-left-color:var(--navy)}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-table{border-collapse:collapse;width:100%;font-size:9.3pt;margin:6px 0 8px}
-th{background:#24324a;color:#fff;text-align:left;padding:5px 8px}
-td{border:1px solid #d6dbe6;padding:5px 8px;vertical-align:top}
-.mod{break-before:auto;margin-top:16px}
-.band{break-after:avoid}.reads,.tally{break-after:avoid}
-.mod.first{break-before:auto}
-.band{display:flex;align-items:center;gap:12px;border-radius:12px;padding:10px 14px;color:#fff;margin:0 0 8px;break-after:avoid}
-.band.cum{background:linear-gradient(110deg,#0f6f75,#1b9aa0)}.band.new{background:linear-gradient(110deg,#33378f,#5a5fc8)}
-.band .num{flex:0 0 auto;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-size:17pt;font-weight:800}
-.band h2{margin:0;font-size:15pt}.band .meta{font-size:8.6pt;opacity:.92}
-.band .qs{margin-left:auto;background:#fff;color:#24324a;border-radius:20px;padding:3px 10px;font-weight:800;font-size:9pt;white-space:nowrap}
-.reads{font-size:8.4pt;color:var(--muted);margin:0 0 6px;padding-left:2px}
+table{border-collapse:collapse;width:100%;font-size:9pt;margin:6px 0 8px}
+th{background:var(--navy);color:#fff;text-align:left;padding:4px 7px}
+td{border:1px solid var(--line);padding:4px 7px;vertical-align:top}
+.mod{break-before:auto;margin-top:14px}
+.band{display:flex;align-items:baseline;gap:10px;border-bottom:1.5px solid var(--navy);padding:0 0 3px;margin:0 0 5px;break-after:avoid}
+.band .num{font-size:15pt;font-weight:800;color:var(--navy)}
+.band h2{margin:0;font-size:13.5pt;color:var(--navy)}.band .meta{display:none}
+.band .qs{margin-left:auto;color:var(--muted);font-weight:700;font-size:9pt;white-space:nowrap}
+.reads,.tally{break-after:avoid}
+.reads{font-size:8.2pt;color:var(--muted);margin:0 0 4px}
 .reads .chip{margin-right:4px}
-.k{display:grid;grid-template-columns:150px 1fr;gap:0;border-radius:8px;margin:5px 0;break-inside:avoid;border-left:6px solid;overflow:hidden}
-.k .t{padding:6px 9px;font-weight:700;font-size:9.4pt}
-.k .t .chip{display:block;width:max-content;margin-top:4px}
-.k .d{padding:6px 10px 6px 4px}
-.k.both{border-color:var(--both);background:var(--both-bg)}.k.both .t{color:#17643a}
-.k.ppt{border-color:var(--ppt);background:var(--ppt-bg)}.k.ppt .t{color:#9b4a05}
-.k.guide{border-color:var(--guide);background:var(--guide-bg)}.k.guide .t{color:#1f4888}
-.k.lec{border-color:var(--lec);background:var(--lec-bg)}.k.lec .t{color:#51348a}
+.tally{display:none}
+.k{display:grid;grid-template-columns:132px 1fr;border-left:3px solid;border-bottom:1px solid var(--line);break-inside:avoid}
+.k .t{padding:4px 8px;font-weight:700;font-size:9.1pt;color:var(--ink)}
+.k .t .chip{display:block;width:max-content;margin-top:2px}
+.k .d{padding:4px 8px 4px 2px}
+.k.both{border-left-color:var(--both)}.k.ppt{border-left-color:var(--ppt)}.k.guide{border-left-color:var(--guide)}.k.lec{border-left-color:var(--lec)}
 .d b{color:#14233b}
-.tally{font-size:8.4pt;color:var(--muted);margin:2px 0 4px}
-h2.sec{font-size:15pt;color:#14304f;border-bottom:2px solid #c9d4e6;padding-bottom:3px;margin:16px 0 8px;break-after:avoid}
-ul{margin:4px 0 6px;padding-left:18px}li{margin:2px 0}
-.small{font-size:8.6pt;color:var(--muted)}
-.part{border-radius:12px;padding:14px 16px;margin:10px 0;color:#fff}
-.part.cum{background:#127a80}.part.new{background:#3b3f9e}
-.part h2{margin:0 0 3px;font-size:14pt}
-.dl{display:inline-block;margin-top:8px;background:#14304f;color:#fff;text-decoration:none;border-radius:8px;padding:6px 12px;font-weight:700;font-size:9.5pt}
+h2.sec{font-size:13pt;color:var(--navy);border-bottom:1.5px solid var(--navy);padding-bottom:2px;margin:14px 0 6px;break-after:avoid}
+ul{margin:3px 0 5px;padding-left:18px}li{margin:1px 0}
+.small{font-size:8.4pt;color:var(--muted)}
+.part{padding:4px 0;margin:12px 0 4px;color:var(--navy);border-top:3px double var(--navy)}
+.part h2{margin:0;font-size:12pt;text-transform:uppercase;letter-spacing:.5px}
+.part .small{color:var(--muted)!important}
 
 body{background:#f4f6fa;font-size:15px}
 .wrap{max-width:900px;margin:0 auto;padding:16px;background:#fff}
@@ -66,7 +57,7 @@ body{background:#f4f6fa;font-size:15px}
 <div><span class="sw"><span class="chip c-guide">Written guide</span></span><span>Only on the <b>written</b> “NURA 330 Final Exam Study Guide” (the broader outline).</span></div>
 <div><span class="sw"><span class="chip c-lec">Lecture</span></span><span>Detail from the lecture slides that neither review names outright, added so the facts are complete.</span></div>
 </div>
-<p class="small" style="margin:6px 0 0">Inside a green row, <b>PPT:</b> and <b>Guide:</b> mark which source says which part. 🚩 red boxes are findings to escalate. ⚠️ yellow boxes flag places where sources disagree. Counts across the guide: 77 on both · 9 PowerPoint only · 21 written guide only · 2 lecture detail.</p>
+<p class="small" style="margin:6px 0 0">In a “Both” row, <b>PowerPoint:</b> and <b>Guide:</b> mark which source says which part. 🚩 red boxes are findings to escalate. ⚠️ yellow boxes flag places where sources disagree. Counts across the guide: 77 on both · 9 PowerPoint only · 21 written guide only · 2 lecture detail.</p>
 </div>
 <div class="two">
 <div class="box blue"><span class="chip c-guide">Written guide</span> <b>Logistics</b><ul>
@@ -77,16 +68,16 @@ body{background:#f4f6fa;font-size:15px}
 <div class="box green"><span class="chip c-both">Both</span> <b>Blueprint &amp; focus</b><ul>
 <li><b>Cumulative, Modules 1–11</b></li>
 <li>Mods 1–7: ~3–4 questions each · Mods 8–11: ~4–5 each</li>
-<li><b>PPT:</b> focus on assessment skills, expected vs. unexpected findings, and clinical reasoning; prioritize findings that need follow-up or immediate action</li>
-<li><b>PPT:</b> study with the guide, the lecture slides, and ATI</li></ul></div>
+<li><b>PowerPoint:</b> focus on assessment skills, expected vs. unexpected findings, and clinical reasoning; prioritize findings that need follow-up or immediate action</li>
+<li><b>PowerPoint:</b> study with the guide, the lecture slides, and ATI</li></ul></div>
 </div>
-<div class="part cum"><h2>Part 1 · Cumulative content (Modules 1–7)</h2><div class="small" style="color:#e4f6f6">Exam 1 (Mods 1–3) and Exam 2 (Mods 4–7). About 21–28 questions.</div></div>
+<div class="part cum"><h2>Part 1 · Cumulative content (Modules 1–7)</h2><div class="small" >Exam 1 (Mods 1–3) and Exam 2 (Mods 4–7). About 21–28 questions.</div></div>
 <section class="mod first" id="mod1">
 <div style="break-inside:avoid">
 <div class="band cum"><div class="num">1</div><div><h2>Module 1 · Foundations of Health Assessment</h2><div class="meta">Cumulative content (Exams 1–2)</div></div><div class="qs">3–4 Qs</div></div>
 <p class="reads"><span class="chip c-guide">Written guide</span> <b>Readings:</b> ATI Health Assess 3.0: Intro to Health Assessment · ATI RN Fundamentals Ch 45 Sensory Perception (nursing interventions)</p>
 <p class="tally">7 on both · 2 written guide · 1 lecture</p>
-<div class="k both"><div class="t">Purpose<span class="chip c-both">Both</span></div><div class="d"><b>PPT:</b> establish a baseline, identify concerns, guide care. <b>Guide:</b> purpose and definition. ATI definition: the collection, clinical judgment, and evaluation of data to plan and deliver patient-centered care. Six purposes: baseline, database, decisions, plan care, evaluate care, promote health.</div></div>
+<div class="k both"><div class="t">Purpose<span class="chip c-both">Both</span></div><div class="d"><b>PowerPoint:</b> establish a baseline, identify concerns, guide care. <b>Guide:</b> purpose and definition. ATI definition: the collection, clinical judgment, and evaluation of data to plan and deliver patient-centered care. Six purposes: baseline, database, decisions, plan care, evaluate care, promote health.</div></div>
 </div>
 <div class="k guide"><div class="t">Nursing process & clinical reasoning<span class="chip c-guide">Written guide</span></div><div class="d">Assessment is the first step of the nursing process. Health assessment trains the first two steps of clinical judgment: <b>recognize cues</b> (history and exam) and <b>analyze cues</b> (expected vs. unexpected).</div></div>
 <div class="k both"><div class="t">Subjective vs. objective<span class="chip c-both">Both</span></div><div class="d"><b>Subjective</b> = what the client reports (symptoms, feelings, the client's perspective). The client is the <b>primary</b> source; family, caregivers, and records are <b>secondary</b>. <b>Objective</b> = what you observe or measure (signs, observable indicators, instruments such as a BP cuff or pulse oximeter).</div></div>
@@ -105,9 +96,9 @@ body{background:#f4f6fa;font-size:15px}
 <p class="tally">7 on both · 2 written guide</p>
 <div class="k both"><div class="t">General survey<span class="chip c-both">Both</span></div><div class="d">Starts at <b>first contact</b> and never really stops. Four areas: <b>physical appearance, body structure, mobility, behavior</b>.</div></div>
 </div>
-<div class="k both"><div class="t">Immediate distress first<span class="chip c-both">Both</span></div><div class="d"><b>PPT:</b> identify immediate distress before the routine assessment. <b>Guide:</b> the doorway look for respiratory, painful, neurological, or emotional distress. If the client looks unstable, stop and prioritize ABCs; the history can wait.</div></div>
+<div class="k both"><div class="t">Immediate distress first<span class="chip c-both">Both</span></div><div class="d"><b>PowerPoint:</b> identify immediate distress before the routine assessment. <b>Guide:</b> the doorway look for respiratory, painful, neurological, or emotional distress. If the client looks unstable, stop and prioritize ABCs; the history can wait.</div></div>
 <div class="k guide"><div class="t">Vital signs<span class="chip c-guide">Written guide</span></div><div class="d">Adult expected: T 36–38 °C, HR 60–100, RR 12–20, BP &lt;120/&lt;80, SpO₂ 95–100%. Judge the pattern and the client's baseline; recheck an unexpected value.</div></div>
-<div class="k both"><div class="t">Objective documentation<span class="chip c-both">Both</span></div><div class="d">Chart what you see, not what you conclude: “wringing hands, speaking rapidly,” not “anxious.” <b>PPT:</b> avoid assumptions.</div></div>
+<div class="k both"><div class="t">Objective documentation<span class="chip c-both">Both</span></div><div class="d">Chart what you see, not what you conclude: “wringing hands, speaking rapidly,” not “anxious.” <b>PowerPoint:</b> avoid assumptions.</div></div>
 <div class="k both"><div class="t">Safety & verification<span class="chip c-both">Both</span></div><div class="d">Hand hygiene, <b>two identifiers</b> (full name and date of birth), privacy. <b>AIDET:</b> Acknowledge, Introduce, Duration, Explanation, Thank you. <b>Guide adds:</b> trauma-informed care and environmental safety (clear path to the exit, ask how they want to be addressed, consent before touch).</div></div>
 <div class="k both"><div class="t">Abuse, neglect, trafficking<span class="chip c-both">Both</span></div><div class="d">Interview the client <b>privately</b>, nonjudgmental questions, follow <b>mandatory reporting</b> laws, <b>never confront</b> the suspected abuser. Red flags: injuries that don't match the story, a companion who controls the conversation, fear. Use a qualified interpreter, never a family member or partner.</div></div>
 <div class="k both"><div class="t">History components<span class="chip c-both">Both</span></div><div class="d">Chief concern <b>verbatim, in quotation marks</b> (guide); HPI; past medical and surgical history (childhood illness, chronic illness, injuries, admissions, surgeries, blood products); medications; allergies with the actual reaction; ROS.</div></div>
@@ -130,14 +121,14 @@ body{background:#f4f6fa;font-size:15px}
 <div class="k both"><div class="t">Auscultation technique<span class="chip c-both">Both</span></div><div class="d">Diaphragm <b>on bare skin</b>, slow deep breaths through an open mouth, <b>side to side</b> in a ladder pattern across anterior, lateral, and posterior fields <b>down to T10</b>.</div></div>
 <div class="k both"><div class="t">Normal breath sounds<span class="chip c-both">Both</span></div><div class="d"><b>Bronchial:</b> trachea; loud, high; expiration longer. <b>Bronchovesicular:</b> major bronchi; medium; equal. <b>Vesicular:</b> most of the lung; soft, low; inspiration longer. A normal sound in the wrong place is abnormal.</div></div>
 <div class="k both"><div class="t">Adventitious sounds<span class="chip c-both">Both</span></div><div class="d"><b>Wheezes</b> = narrowed airways. <b>Crackles</b> (fine or coarse, rales) = fluid or airways popping open. <b>Rhonchi</b> = secretions (may clear with a cough). <b>Stridor</b> = upper-airway obstruction: emergency. <b>Guide adds:</b> pleural friction rub, expiratory grunting.</div></div>
-<div class="box red"><b class="l">🚩 Escalate / report now:</b> <b>PPT:</b> new hypoxemia, severe respiratory effort, altered mental status. <b>Guide:</b> SpO₂ under 92%, acute stridor, asymmetric chest expansion, worsening shortness of breath, altered LOC or acute agitation.</div>
+<div class="box red"><b class="l">🚩 Escalate / report now:</b> <b>PowerPoint:</b> new hypoxemia, severe respiratory effort, altered mental status. <b>Guide:</b> SpO₂ under 92%, acute stridor, asymmetric chest expansion, worsening shortness of breath, altered LOC or acute agitation.</div>
 </section>
 <section class="mod" id="mod4">
 <div style="break-inside:avoid">
 <div class="band cum"><div class="num">4</div><div><h2>Module 4 · Lifespan, Skin & Lymphatic Assessment</h2><div class="meta">Cumulative content (Exams 1–2)</div></div><div class="qs">3–4 Qs</div></div>
 <p class="reads"><span class="chip c-guide">Written guide</span> <b>Readings:</b> ATI Health Assess 3.0: Skin; Breast and lymphatics; Older Adult · ATI RN Fundamentals Ch 25 Older Adults, Ch 30 Integumentary and Peripheral Vascular, Ch 55 Pressure Injury, Wounds, and Wound Management</p>
 <p class="tally">6 on both · 1 powerpoint · 2 written guide</p>
-<div class="k both"><div class="t">Assessment across the lifespan<span class="chip c-both">Both</span></div><div class="d"><b>PPT:</b> adapt to age, development, and communication needs. <b>Guide:</b> normal growth and development from infancy through older adulthood. Infants: quiet and gentle, fontanelles (anterior closes 12–18 months). Toddlers: play. Teens: privacy. Older adults: extra time, glasses and hearing aids.</div></div>
+<div class="k both"><div class="t">Assessment across the lifespan<span class="chip c-both">Both</span></div><div class="d"><b>PowerPoint:</b> adapt to age, development, and communication needs. <b>Guide:</b> normal growth and development from infancy through older adulthood. Infants: quiet and gentle, fontanelles (anterior closes 12–18 months). Toddlers: play. Teens: privacy. Older adults: extra time, glasses and hearing aids.</div></div>
 </div>
 <div class="k ppt"><div class="t">Older adult skin<span class="chip c-ppt">PowerPoint</span></div><div class="d">Fragile skin, reduced elasticity, increased injury risk.</div></div>
 <div class="k both"><div class="t">Skin assessment<span class="chip c-both">Both</span></div><div class="d">Color, warmth, moisture, <b>turgor</b>, integrity. In darker skin, look where pigment is lowest (sclera, conjunctiva, oral mucosa, palms, soles) and use touch: warmth, edema, induration.</div></div>
@@ -147,7 +138,7 @@ body{background:#f4f6fa;font-size:15px}
 <div class="k guide"><div class="t">Medical device-related pressure injury<span class="chip c-guide">Written guide</span></div><div class="d">Shaped like the device. The <b>Braden doesn't capture device risk</b>, so check under devices (tubing, masks, splints) at least twice daily.</div></div>
 <div class="k both"><div class="t">Tunneling vs. undermining<span class="chip c-both">Both</span></div><div class="d"><b>Tunneling:</b> a narrow channel into deeper tissue. <b>Undermining:</b> a wide shelf of tissue loss under the wound edge. Describe both with a <b>clock face (12 = toward the head)</b>; measure in cm with a sterile cotton-tipped applicator.</div></div>
 <div class="k both"><div class="t">Lymph nodes<span class="chip c-both">Both</span></div><div class="d">Assess <b>size and mobility</b>. Expected: not palpable or &lt;1 cm, soft, mobile, nontender. Tender and mobile = infection. Hard, fixed, &gt;1 cm, painless = concern.</div></div>
-<div class="box red"><b class="l">🚩 Escalate / report now:</b> <b>Guide:</b> central cyanosis, petechiae or purpura, rapidly spreading cellulitis, new jaundice. <b>PPT (final prioritization slide):</b> rapid infection progression, tissue breakdown, impaired perfusion.</div>
+<div class="box red"><b class="l">🚩 Escalate / report now:</b> <b>Guide:</b> central cyanosis, petechiae or purpura, rapidly spreading cellulitis, new jaundice. <b>PowerPoint (final prioritization slide):</b> rapid infection progression, tissue breakdown, impaired perfusion.</div>
 </section>
 <section class="mod" id="mod5">
 <div style="break-inside:avoid">
@@ -158,14 +149,14 @@ body{background:#f4f6fa;font-size:15px}
 </div>
 <div class="k both"><div class="t">Conduction<span class="chip c-both">Both</span></div><div class="d"><b>SA node → AV node → bundle of His → bundle branches → Purkinje fibers.</b> The SA node is the pacemaker; the AV node pauses so the ventricles fill.</div></div>
 <div class="k guide"><div class="t">Heart location<span class="chip c-guide">Written guide</span></div><div class="d">In the mediastinum. Base near the 2nd ICS; apex and <b>PMI at the 5th ICS, left midclavicular line</b>.</div></div>
-<div class="k both"><div class="t">Subjective<span class="chip c-both">Both</span></div><div class="d"><b>PPT:</b> chest pain, dyspnea, palpitations, fatigue, edema. <b>Guide:</b> PQRST and the A&P link: chest pain = ischemia, orthopnea = fluid in the lungs, palpitations = rhythm, edema = venous congestion.</div></div>
+<div class="k both"><div class="t">Subjective<span class="chip c-both">Both</span></div><div class="d"><b>PowerPoint:</b> chest pain, dyspnea, palpitations, fatigue, edema. <b>Guide:</b> PQRST and the A&P link: chest pain = ischemia, orthopnea = fluid in the lungs, palpitations = rhythm, edema = venous congestion.</div></div>
 <div class="k guide"><div class="t">MI in women; chest pain in children<span class="chip c-guide">Written guide</span></div><div class="d">Women often have <b>no classic chest pain</b>: back, neck, or jaw pain, nausea, shortness of breath, fatigue. Chest pain in children is usually not cardiac (muscle, lung, GI, anxiety), but exertional pain or fainting needs follow-up.</div></div>
-<div class="k both"><div class="t">Perfusion & extremities<span class="chip c-both">Both</span></div><div class="d"><b>PPT:</b> pulses, capillary refill, temperature, edema, CMS. Pulses graded 0–4+ (<b>2+ normal</b>), compare sides; <b>carotids one at a time</b>. Cap refill &lt;2–3 s. Edema: 1+ 0–2 mm, 2+ 3–4 mm, 3+ 5–6 mm, 4+ 8 mm. Arterial = pale, cool, hairless, weak pulses; venous = swelling, brown staining.</div></div>
-<div class="k both"><div class="t">JVD<span class="chip c-both">Both</span></div><div class="d"><b>PPT:</b> JVD with edema or dyspnea may suggest cardiac dysfunction. Check with the HOB at <b>30–45°</b>; distention = backup from the right heart (fluid overload, right-sided failure).</div></div>
+<div class="k both"><div class="t">Perfusion & extremities<span class="chip c-both">Both</span></div><div class="d"><b>PowerPoint:</b> pulses, capillary refill, temperature, edema, CMS. Pulses graded 0–4+ (<b>2+ normal</b>), compare sides; <b>carotids one at a time</b>. Cap refill &lt;2–3 s. Edema: 1+ 0–2 mm, 2+ 3–4 mm, 3+ 5–6 mm, 4+ 8 mm. Arterial = pale, cool, hairless, weak pulses; venous = swelling, brown staining.</div></div>
+<div class="k both"><div class="t">JVD<span class="chip c-both">Both</span></div><div class="d"><b>PowerPoint:</b> JVD with edema or dyspnea may suggest cardiac dysfunction. Check with the HOB at <b>30–45°</b>; distention = backup from the right heart (fluid overload, right-sided failure).</div></div>
 <div class="k both"><div class="t">A-P-E-T-M landmarks<span class="chip c-both">Both</span></div><div class="d"><b>A</b>ortic 2nd ICS right sternal border · <b>P</b>ulmonic 2nd ICS left · <b>E</b>rb's point 3rd ICS left · <b>T</b>ricuspid 4th ICS left · <b>M</b>itral 5th ICS left MCL. Diaphragm first, then bell.</div></div>
 <div class="k both"><div class="t">S1 & S2<span class="chip c-both">Both</span></div><div class="d"><b>S1</b> (lub) = AV valves (mitral, tricuspid) close; loudest at the apex. <b>S2</b> (dub) = semilunar valves (aortic, pulmonic) close; loudest at the base.</div></div>
 <div class="k guide"><div class="t">Tips for auscultation; diagnostics<span class="chip c-guide">Written guide</span></div><div class="d">Quiet room, bare skin, client relaxed; listen at each site long enough to hear S1 and S2 separately. Know the common tests by name (ECG, echocardiogram, cardiac enzymes, lipid panel) and terms (murmur, bruit, S3, S4).</div></div>
-<div class="box red"><b class="l">🚩 Escalate / report now:</b> <b>PPT:</b> new chest pain, syncope, poor perfusion, sudden pulse changes. <b>Guide:</b> abnormal findings to report and safety escalation (lecture: new murmur, S3 in an older adult, absent pulse, one warm, red, swollen calf).</div>
+<div class="box red"><b class="l">🚩 Escalate / report now:</b> <b>PowerPoint:</b> new chest pain, syncope, poor perfusion, sudden pulse changes. <b>Guide:</b> abnormal findings to report and safety escalation (lecture: new murmur, S3 in an older adult, absent pulse, one warm, red, swollen calf).</div>
 </section>
 <section class="mod" id="mod6">
 <div style="break-inside:avoid">
@@ -181,7 +172,7 @@ body{background:#f4f6fa;font-size:15px}
 <div class="k both"><div class="t">Link each cranial nerve to its test<span class="chip c-both">Both</span></div><div class="d">I smell · II acuity and fields · III, IV, VI pupils and EOMs · V facial sensation, clench jaw · VII smile, close eyes, puff cheeks · VIII hearing · IX, X “ah,” gag, swallow · XI shrug · XII tongue.</div></div>
 <div class="k guide"><div class="t">Anatomy, prep & SDOH<span class="chip c-guide">Written guide</span></div><div class="d">Equipment: penlight, otoscope, tuning fork, Snellen chart, tongue depressor. Ask about the cost of glasses or hearing aids and other barriers.</div></div>
 <div class="k guide"><div class="t">Head, face, ears, nose<span class="chip c-guide">Written guide</span></div><div class="d">Face symmetry; palpate the TMJ. Otoscope: canal clear, TM <b>pearly gray</b> and intact. Nose: patency one side at a time; palpate frontal and maxillary sinuses.</div></div>
-<div class="box red"><b class="l">🚩 Escalate / report now:</b> <b>PPT:</b> sudden vision loss, facial droop, new pupil changes with neuro symptoms. <b>Guide/lecture adds:</b> sudden hearing loss, worst headache with neuro changes, drooling with stridor, tracheal deviation.</div>
+<div class="box red"><b class="l">🚩 Escalate / report now:</b> <b>PowerPoint:</b> sudden vision loss, facial droop, new pupil changes with neuro symptoms. <b>Guide/lecture adds:</b> sudden hearing loss, worst headache with neuro changes, drooling with stridor, tracheal deviation.</div>
 </section>
 <section class="mod" id="mod7">
 <div style="break-inside:avoid">
@@ -192,31 +183,31 @@ body{background:#f4f6fa;font-size:15px}
 </div>
 <div class="k both"><div class="t">History<span class="chip c-both">Both</span></div><div class="d"><b>LMP</b> (first day of the last period), menstrual pattern, <b>GTPAL</b> (Gravida, Term, Preterm, Abortions, Living), contraception, STI history. <b>Guide adds:</b> urinary patterns.</div></div>
 <div class="k ppt"><div class="t">Symptoms to ask about<span class="chip c-ppt">PowerPoint</span></div><div class="d">Pain, discharge, lesions, bleeding, sexual concerns.</div></div>
-<div class="k both"><div class="t">Lifespan<span class="chip c-both">Both</span></div><div class="d"><b>PPT:</b> menopause, BPH. <b>Guide:</b> Tanner stages (1 prepubertal → 5 adult; stage 2 = breast budding, testicular enlargement) and BPH.</div></div>
+<div class="k both"><div class="t">Lifespan<span class="chip c-both">Both</span></div><div class="d"><b>PowerPoint:</b> menopause, BPH. <b>Guide:</b> Tanner stages (1 prepubertal → 5 adult; stage 2 = breast budding, testicular enlargement) and BPH.</div></div>
 <div class="k both"><div class="t">Inclusive, patient-centered care<span class="chip c-both">Both</span></div><div class="d">Nonjudgmental, inclusive language; ask permission and explain why; privacy, consent, confidentiality; offer a chaperone. Use the client's name and pronouns; <b>screening follows the anatomy present</b>.</div></div>
 <div class="k both"><div class="t">Documentation<span class="chip c-both">Both</span></div><div class="d">Accurate and objective; separate what the client reports from what you observe.</div></div>
 </section>
-<section class="mod"><div class="part new" style="break-after:avoid"><h2>Part 2 · New content (Modules 8–11)</h2><div class="small" style="color:#e6e7fb">GU and rectal, GI, neuro, musculoskeletal. About 16–20 questions.</div></div>
+<section class="mod"><div class="part new" style="break-after:avoid"><h2>Part 2 · New content (Modules 8–11)</h2><div class="small" >GU and rectal, GI, neuro, musculoskeletal. About 16–20 questions.</div></div>
 <section class="first" id="mod8">
 <div style="break-inside:avoid">
 <div class="band new"><div class="num">8</div><div><h2>Module 8 · GU & Rectal Assessment</h2><div class="meta">New content since Exam 2</div></div><div class="qs">4–5 Qs</div></div>
 <p class="reads"><span class="chip c-guide">Written guide</span> <b>Readings:</b> ATI Health Assess 3.0: Rectum and Genitourinary · ATI RN Fundamentals Ch 29 (abdomen), Ch 39 Nutrition and Oral Hydration</p>
 <p class="tally">8 on both · 3 powerpoint · 2 written guide</p>
-<div class="k both"><div class="t">Urinary anatomy<span class="chip c-both">Both</span></div><div class="d"><b>Kidneys → ureters → bladder → urethra.</b> <b>PPT:</b> kidneys filter waste and regulate fluid, electrolytes, and BP. Urge to void at about 300 mL. Female urethra 3–4 cm (more UTIs); male about 20 cm.</div></div>
+<div class="k both"><div class="t">Urinary anatomy<span class="chip c-both">Both</span></div><div class="d"><b>Kidneys → ureters → bladder → urethra.</b> <b>PowerPoint:</b> kidneys filter waste and regulate fluid, electrolytes, and BP. Urge to void at about 300 mL. Female urethra 3–4 cm (more UTIs); male about 20 cm.</div></div>
 </div>
 <div class="k guide"><div class="t">Rectal & anal anatomy<span class="chip c-guide">Written guide</span></div><div class="d">The rectum is the end of the sigmoid colon. Internal sphincter = <b>involuntary</b>; external = <b>voluntary</b>.</div></div>
-<div class="k both"><div class="t">Subjective<span class="chip c-both">Both</span></div><div class="d"><b>PPT:</b> frequency, urgency, dysuria, nocturia, incontinence. <b>Guide:</b> reproductive subjective assessment too.</div></div>
+<div class="k both"><div class="t">Subjective<span class="chip c-both">Both</span></div><div class="d"><b>PowerPoint:</b> frequency, urgency, dysuria, nocturia, incontinence. <b>Guide:</b> reproductive subjective assessment too.</div></div>
 <div class="k both"><div class="t">Urinary retention<span class="chip c-both">Both</span></div><div class="d">Weak stream, difficulty voiding, <b>suprapubic fullness</b>. Palpate above the symphysis pubis; <b>bladder scan</b> if indicated. Lecture: scan within 10 minutes of voiding; PVR 50–100 mL expected, <b>&gt;100 mL notify</b>.</div></div>
 <div class="k both"><div class="t">UTI<span class="chip c-both">Both</span></div><div class="d">Dysuria, urgency, frequency, suprapubic discomfort; cloudy or foul urine, blood. Older adults may show only new confusion.</div></div>
 <div class="k ppt"><div class="t">BPH<span class="chip c-ppt">PowerPoint</span></div><div class="d">Hesitancy, dribbling, nocturia, incomplete emptying (Exam 2 case: T.K., 73).</div></div>
 <div class="k ppt"><div class="t">Know these terms<span class="chip c-ppt">PowerPoint</span></div><div class="d"><b>Hematuria</b> blood in urine · <b>oliguria</b> low output · <b>polyuria</b> large output · <b>dysuria</b> painful urination · <b>nocturia</b> waking at night to void.</div></div>
 <div class="k both"><div class="t">Urine appearance<span class="chip c-both">Both</span></div><div class="d">Color, clarity, odor, amount, change from baseline. Pale straw expected; dark amber concentrated; cloudy possible infection; pink or red possible blood; brown or tea-colored escalate.</div></div>
-<div class="k both"><div class="t">Urine output calculation<span class="chip c-both">Both</span></div><div class="d"><b>PPT:</b> output (mL/hr) = total output ÷ hours; benchmark <b>≥30 mL/hr</b>; investigate low output. <b>Exam 2 lecture:</b> mL ÷ kg ÷ hours, <b>≥0.5 mL/kg/hr</b>.</div></div>
+<div class="k both"><div class="t">Urine output calculation<span class="chip c-both">Both</span></div><div class="d"><b>PowerPoint:</b> output (mL/hr) = total output ÷ hours; benchmark <b>≥30 mL/hr</b>; investigate low output. <b>Exam 2 lecture:</b> mL ÷ kg ÷ hours, <b>≥0.5 mL/kg/hr</b>.</div></div>
 <div class="k both"><div class="t">Bristol stool chart<span class="chip c-both">Both</span></div><div class="d"><b>Types 1–2</b> constipation · <b>3–4</b> formed (ideal) · <b>5–7</b> looser (diarrhea).</div></div>
 <div class="k ppt"><div class="t">Melena vs. hematochezia<span class="chip c-ppt">PowerPoint</span></div><div class="d"><b>Melena</b> = black, tarry stool (upper GI bleeding). <b>Hematochezia</b> = red blood in stool.</div></div>
-<div class="k both"><div class="t">Health promotion<span class="chip c-both">Both</span></div><div class="d">STI prevention (condoms are the only contraceptive that also prevents STIs), <b>HPV vaccine</b> (from age 9), recommended screening. <b>Guide adds:</b> Pap smear (every 3 years ages 21–29) and testicular self-exam. <b>PPT:</b> private, respectful, individualized teaching.</div></div>
+<div class="k both"><div class="t">Health promotion<span class="chip c-both">Both</span></div><div class="d">STI prevention (condoms are the only contraceptive that also prevents STIs), <b>HPV vaccine</b> (from age 9), recommended screening. <b>Guide adds:</b> Pap smear (every 3 years ages 21–29) and testicular self-exam. <b>PowerPoint:</b> private, respectful, individualized teaching.</div></div>
 <div class="k guide"><div class="t">Lifespan, SDOH, gender-affirming care, terms<span class="chip c-guide">Written guide</span></div><div class="d">Children need caregiver history; older adults: incontinence is common but <b>not normal aging</b>. Ask about barriers and supports. Gender-affirming care: ask about current anatomy and treatments, never assume.</div></div>
-<div class="box red"><b class="l">🚩 Escalate / report now:</b> <b>PPT (prioritization slide):</b> markedly low output, painful retention, signs of systemic infection.</div>
+<div class="box red"><b class="l">🚩 Escalate / report now:</b> <b>PowerPoint (prioritization slide):</b> markedly low output, painful retention, signs of systemic infection.</div>
 <div class="box yel"><b class="l">⚠️ Heads-up:</b> <b>The two output rules agree for an average adult.</b> 0.5 mL/kg/hr × 60 kg = 30 mL/hr. If a question gives a weight, use mL/kg/hr; if it only gives total mL and hours, compare with 30 mL/hr.</div>
 </section>
 </section>
@@ -236,10 +227,10 @@ body{background:#f4f6fa;font-size:15px}
 <div class="k both"><div class="t">Percussion<span class="chip c-both">Both</span></div><div class="d"><b>Tympany</b> = air (most of a healthy abdomen). <b>Dullness</b> = solid tissue, fluid, or stool.</div></div>
 <div class="k both"><div class="t">Palpation<span class="chip c-both">Both</span></div><div class="d">Light palpation for tenderness and guarding; <b>painful area last</b>. <b>Guarding</b> = tensing with pain (can be voluntary). <b>Rigidity</b> = involuntary, boardlike.</div></div>
 <div class="k ppt"><div class="t">Distention<span class="chip c-ppt">PowerPoint</span></div><div class="d">May reflect gas, fluid, stool, or obstruction.</div></div>
-<div class="k both"><div class="t">CVA tenderness<span class="chip c-both">Both</span></div><div class="d"><b>PPT:</b> possible renal concern. Client sitting; flat hand over the angle of the 12th rib and spine, strike it with the other fist; both sides.</div></div>
+<div class="k both"><div class="t">CVA tenderness<span class="chip c-both">Both</span></div><div class="d"><b>PowerPoint:</b> possible renal concern. Client sitting; flat hand over the angle of the 12th rib and spine, strike it with the other fist; both sides.</div></div>
 <div class="k ppt"><div class="t">Bleeding terms<span class="chip c-ppt">PowerPoint</span></div><div class="d"><b>Hematemesis</b> = blood in vomit · <b>melena</b> = black, tarry stool · <b>hematochezia</b> = red blood in stool.</div></div>
 <div class="k guide"><div class="t">GI/abdominal terminology<span class="chip c-guide">Written guide</span></div><div class="d">Review the Mod 9 terminology slide: dysphagia, ascites, distention, guarding, rigidity, hematemesis, melena, hematochezia.</div></div>
-<div class="box red"><b class="l">🚩 Escalate / report now:</b> <b>PPT:</b> sudden severe pain, rigidity, persistent vomiting or distention; <b>GI bleeding with instability</b> needs prompt action; <b>pulsatile abdominal mass: do not palpate, escalate</b>.</div>
+<div class="box red"><b class="l">🚩 Escalate / report now:</b> <b>PowerPoint:</b> sudden severe pain, rigidity, persistent vomiting or distention; <b>GI bleeding with instability</b> needs prompt action; <b>pulsatile abdominal mass: do not palpate, escalate</b>.</div>
 <div class="box yel"><b class="l">⚠️ Heads-up:</b> <b>Percuss vs. palpate order.</b> The PowerPoint and the written guide both list Inspect → Auscultate → Percuss → Palpate. The Mod 9 lecture slide put palpation before percussion. Go with the review deck and guide; either way, <b>auscultation always comes right after inspection</b>.</div>
 </section>
 <section class="mod" id="mod10">
@@ -260,7 +251,7 @@ body{background:#f4f6fa;font-size:15px}
 <div class="k both"><div class="t">BE FAST stroke screen<span class="chip c-both">Both</span></div><div class="d"><b>B</b>alance, <b>E</b>yes, <b>F</b>ace, <b>A</b>rms, <b>S</b>peech, <b>T</b>ime. Left-brain stroke → right-sided weakness.</div></div>
 <div class="k both"><div class="t">Stroke priorities<span class="chip c-both">Both</span></div><div class="d"><b>Document last known well</b> · activate the stroke response · <b>check blood glucose</b> (rule out hypoglycemia) · <b>NPO until swallow screen</b> · <b>time is brain</b>. Lecture adds: HOB 30°, neuro checks every 15 minutes, stat CT, SBAR.</div></div>
 <div class="k guide"><div class="t">Lifespan, SDOH, terms<span class="chip c-guide">Written guide</span></div><div class="d">Infants: high-pitched cry or bulging fontanelle = possible increased ICP. Pregnancy: new headache or vision change = possible preeclampsia. Older adults: sudden confusion is delirium, not aging. Terms: aphasia vs. dysarthria, dysphagia, ataxia, hemiparesis, paresthesia.</div></div>
-<div class="box red"><b class="l">🚩 Escalate / report now:</b> <b>PPT:</b> new facial droop, weakness, slurred speech, decreased LOC, unequal pupils, seizures, sudden weakness.</div>
+<div class="box red"><b class="l">🚩 Escalate / report now:</b> <b>PowerPoint:</b> new facial droop, weakness, slurred speech, decreased LOC, unequal pupils, seizures, sudden weakness.</div>
 </section>
 <section class="mod" id="mod11">
 <div style="break-inside:avoid">
@@ -274,14 +265,14 @@ body{background:#f4f6fa;font-size:15px}
 <div class="k both"><div class="t">Expected vs. unexpected<span class="chip c-both">Both</span></div><div class="d"><b>Expected:</b> symmetric movement, functional ROM, stable joints, steady gait. <b>Unexpected:</b> swelling, redness, warmth, deformity, limited ROM, weakness, atrophy, crepitus, instability, altered gait. Lecture examples: ulnar deviation, kyphosis, lordosis, scoliosis, hallux valgus, flattened shoulder (dislocation).</div></div>
 <div class="k ppt"><div class="t">Neurovascular check<span class="chip c-ppt">PowerPoint</span></div><div class="d"><b>Color, warmth, movement, sensation, pulses, cap refill</b>, below the injury and compared with the other side.</div></div>
 <div class="k ppt"><div class="t">Documentation<span class="chip c-ppt">PowerPoint</span></div><div class="d">Site, severity, and a bilateral comparison.</div></div>
-<div class="k both"><div class="t">Lifespan<span class="chip c-both">Both</span></div><div class="d"><b>PPT:</b> children = growth and development; older adults = bone and muscle loss, fall risk. Lecture: infants (hip dysplasia screen), children (growth plates, scoliosis), older adults (osteoporosis, sarcopenia, osteoarthritis, kyphosis).</div></div>
+<div class="k both"><div class="t">Lifespan<span class="chip c-both">Both</span></div><div class="d"><b>PowerPoint:</b> children = growth and development; older adults = bone and muscle loss, fall risk. Lecture: infants (hip dysplasia screen), children (growth plates, scoliosis), older adults (osteoporosis, sarcopenia, osteoarthritis, kyphosis).</div></div>
 <div class="k guide"><div class="t">SDOH<span class="chip c-guide">Written guide</span></div><div class="d">Physically demanding jobs without sick leave, cost of equipment and supplements, health literacy, access to physical therapy, home hazards (stairs, lighting), isolation, food insecurity limiting calcium and vitamin D.</div></div>
 <div class="k guide"><div class="t">Terminology<span class="chip c-guide">Written guide</span></div><div class="d">ROM, AROM vs. PROM, strength vs. tone, atrophy vs. hypertrophy, crepitus, contracture, gait, posture, symmetry, abduction vs. adduction, pronation vs. supination, dorsiflexion vs. plantar flexion.</div></div>
 <div class="k lec"><div class="t">Lecture case<span class="chip c-lec">Lecture</span></div><div class="d">85-year-old with osteoporosis, fall onto the hip, pain 10/10, pulses 2+ and cap refill &lt;2 s; x-ray shows hip fracture needing ORIF. Orders: NV checks every 15 minutes, ice 20 min on/off, IV LR, morphine.</div></div>
-<div class="box red"><b class="l">🚩 Escalate / report now:</b> <b>PPT:</b> loss of distal pulse, new numbness, severe pain with neurovascular changes.</div>
+<div class="box red"><b class="l">🚩 Escalate / report now:</b> <b>PowerPoint:</b> loss of distal pulse, new numbness, severe pain with neurovascular changes.</div>
 <div class="box yel"><b class="l">⚠️ Heads-up:</b> <b>Two slide errors in the Mod 11 case.</b> The client hurt her <b>right</b> hip, but the orders and x-ray say <b>left</b> (in practice: clarify a side mismatch before acting). Left-leg strength is listed as “+2,” which can't be right with full ROM; read it as 5/5.</div>
 </section>
-<section class="mod"><div class="band new" style="break-after:avoid;background:linear-gradient(110deg,#7a2a2a,#b3261e)"><div class="num">!</div><div><h2>Putting it all together: what needs immediate action?</h2><div class="meta">From the PowerPoint prioritization slide, with the written guide and lecture red flags beside it</div></div></div>
+<section class="mod"><div class="band new"><div class="num">!</div><div><h2>Putting it all together: what needs immediate action?</h2><div class="meta">From the PowerPoint prioritization slide, with the written guide and lecture red flags beside it</div></div></div>
 <table><tr><th style="width:15%">System</th><th><span class="chip c-ppt">PowerPoint</span> Immediate action (review slide)</th><th><span class="chip c-guide">Written guide</span> / <span class="chip c-lec">Lecture</span> Also report</th></tr>
 <tr><td><b>Respiratory</b></td><td>Stridor, severe dyspnea, hypoxemia, altered LOC</td><td>SpO₂ under 92%, asymmetric chest expansion, acute agitation</td></tr>
 <tr><td><b>Cardiac</b></td><td>New severe chest pain, poor perfusion, sudden pulse changes</td><td>Syncope, new murmur, absent pulse, one hot swollen calf</td></tr>
