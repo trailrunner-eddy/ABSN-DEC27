@@ -1,0 +1,661 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>[hidden]{display:none!important}body{margin:0}</style>
+<title>Health Assessment Practical</title>
+<meta name="description" content="NURA 330 Final practical exam study guide: the core routine for every patient plus a rubric walk-through for each of the four possible patients.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A9%BA%3C/text%3E%3C/svg%3E">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Barlow+Condensed:wght@500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: chart-style header with patient tabs; each patient is a wristband strip + vitals panel, then rubric sections in CJMM order */
+:root{
+  --bg:#f3f6f7; --surface:#ffffff; --ink:#15262b; --muted:#56696f; --line:#d5dfe2;
+  --accent:#0b6e77; --accent-soft:#dcefef;
+  --flag:#b42318; --flag-soft:#fde8e6; --warn:#9a5b00; --warn-soft:#fff2d6; --ok:#2f6b3a; --ok-soft:#e3f1e5;
+  --band:#e9eef0;
+  --f-display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
+  --f-body:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1719; --surface:#162125; --ink:#e3ecee; --muted:#9db0b5; --line:#2a3a3f;
+  --accent:#4fc1c9; --accent-soft:#163c40;
+  --flag:#ff8a7d; --flag-soft:#3d1c19; --warn:#f2b84b; --warn-soft:#3a2c10; --ok:#86cf92; --ok-soft:#173022;
+  --band:#1c2a2e; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1719; --surface:#162125; --ink:#e3ecee; --muted:#9db0b5; --line:#2a3a3f;
+  --accent:#4fc1c9; --accent-soft:#163c40;
+  --flag:#ff8a7d; --flag-soft:#3d1c19; --warn:#f2b84b; --warn-soft:#3a2c10; --ok:#86cf92; --ok-soft:#173022;
+  --band:#1c2a2e; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55}
+.wrap{max-width:1040px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;line-height:1.1;margin:0}
+h1{font-size:2.3rem;font-weight:700;letter-spacing:.01em}
+h2{font-size:1.65rem;font-weight:600;display:flex;align-items:baseline;gap:.6rem;flex-wrap:wrap}
+h3{font-size:1.2rem;font-weight:600;margin-block:1.1rem .4rem}
+p{margin:.4rem 0;max-width:70ch}
+ul,ol{margin:.3rem 0;padding-left:1.25rem}
+li{margin:.2rem 0}
+small,.muted{color:var(--muted)}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+strong{font-weight:700}
+
+header.top{background:var(--surface);border-bottom:1px solid var(--line)}
+header.top .wrap{padding-block:1.4rem 0}
+a.hub{display:inline-block;margin-bottom:.5rem;font-family:var(--f-mono);font-size:.78rem;color:var(--muted);text-decoration:none}
+a.hub:hover{color:var(--accent);text-decoration:underline}
+.eyebrow{font-family:var(--f-mono);font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.lede{color:var(--muted);margin-top:.4rem}
+nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+nav.tabs .wrap{display:flex;gap:.25rem;overflow-x:auto;scrollbar-width:thin}
+nav.tabs a{flex:0 0 auto;font-family:var(--f-display);font-size:1.05rem;font-weight:600;color:var(--muted);text-decoration:none;padding:.7rem .85rem .6rem;border-bottom:3px solid transparent;white-space:nowrap}
+nav.tabs a span{display:block;font-family:var(--f-mono);font-size:.68rem;font-weight:400;letter-spacing:.08em;text-transform:uppercase}
+nav.tabs a[aria-current="page"]{color:var(--ink);border-bottom-color:var(--accent)}
+nav.tabs a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+main .wrap{padding-block:1.5rem 3rem;display:flex;flex-direction:column;gap:1.25rem}
+section.panel{display:flex;flex-direction:column;gap:1.25rem}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:1.1rem 1.25rem;min-width:0}
+.card > h2{margin-bottom:.6rem}
+.pts{font-family:var(--f-mono);font-size:.78rem;font-weight:600;color:var(--accent);background:var(--accent-soft);padding:.12rem .45rem;border-radius:3px;letter-spacing:.04em}
+
+/* wristband */
+.band{display:grid;grid-template-columns:auto 1fr;background:var(--band);border:1px solid var(--line);border-radius:22px;overflow:hidden}
+.band .clasp{width:44px;background:var(--accent);display:flex;align-items:center;justify-content:center}
+.band .clasp i{width:12px;height:12px;border-radius:50%;background:var(--surface);display:block}
+.band .info{padding:.8rem 1.1rem;display:flex;flex-wrap:wrap;gap:.4rem 1.6rem;align-items:baseline;min-width:0}
+.band .nm{font-family:var(--f-display);font-size:1.6rem;font-weight:700}
+.band dl{display:flex;flex-wrap:wrap;gap:.2rem 1.2rem;margin:0}
+.band dt{font-family:var(--f-mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+.band dd{margin:0;font-family:var(--f-mono);font-size:.9rem}
+.band dl div{display:flex;flex-direction:column}
+
+.focus{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.25rem}
+.vitals{width:100%;border-collapse:collapse;font-size:.95rem}
+.vitals th,.vitals td{text-align:left;padding:.42rem .5rem;border-bottom:1px solid var(--line)}
+.vitals th{font-family:var(--f-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:400}
+.vitals td.v{font-family:var(--f-mono);font-variant-numeric:tabular-nums;font-weight:600}
+.vitals td.r{font-family:var(--f-mono);font-size:.82rem;color:var(--muted)}
+.tag{display:inline-block;font-family:var(--f-mono);font-size:.7rem;font-weight:600;padding:.08rem .4rem;border-radius:3px;letter-spacing:.04em}
+.tag.hi{background:var(--flag-soft);color:var(--flag)}
+.tag.bd{background:var(--warn-soft);color:var(--warn)}
+.tag.ok{background:var(--ok-soft);color:var(--ok)}
+.tblwrap{overflow-x:auto}
+
+.callout{border-left:4px solid var(--warn);background:var(--warn-soft);padding:.7rem .9rem;border-radius:0 4px 4px 0}
+.callout.red{border-left-color:var(--flag);background:var(--flag-soft)}
+.callout.teal{border-left-color:var(--accent);background:var(--accent-soft)}
+.callout strong:first-child{display:block;font-family:var(--f-display);font-size:1.05rem;margin-bottom:.15rem}
+
+/* checklist */
+ul.check{list-style:none;padding:0}
+ul.check li{display:grid;grid-template-columns:1.4rem 1fr;gap:.5rem;align-items:start;padding:.35rem 0;border-bottom:1px dashed var(--line)}
+ul.check li:last-child{border-bottom:0}
+ul.check input{width:1.05rem;height:1.05rem;margin-top:.22rem;accent-color:var(--accent)}
+ul.check li.done > div{color:var(--muted)}
+ul.check .how{display:block;font-size:.9rem;color:var(--muted)}
+ul.check .how b{color:var(--ink);font-weight:700}
+
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem}
+.two > div{min-width:0}
+.lbl{font-family:var(--f-mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.2rem}
+.say{font-style:italic;background:var(--band);border-radius:4px;padding:.75rem .9rem;max-width:none}
+.sbar{display:grid;grid-template-columns:2.2rem 1fr;gap:.35rem .6rem;margin:0}
+.sbar dt{font-family:var(--f-display);font-weight:700;font-size:1.3rem;color:var(--accent);line-height:1.2}
+.sbar dd{margin:0}
+.ref{width:100%;border-collapse:collapse;font-size:.92rem}
+.ref th,.ref td{padding:.4rem .5rem;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.ref th{font-family:var(--f-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:400}
+.timeline{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.5rem}
+.timeline div{border-top:3px solid var(--accent);padding-top:.4rem}
+.timeline .mono{font-size:.8rem;color:var(--accent);font-weight:600}
+.toolbar{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap}
+button.reset{font:inherit;font-size:.85rem;background:transparent;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:.3rem .7rem;cursor:pointer}
+button.reset:hover{color:var(--ink);border-color:var(--muted)}
+@media (prefers-reduced-motion:no-preference){nav.tabs a{transition:color .15s,border-color .15s}}
+</style>
+
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="hub" href="../../index.html#course/nura330">← ABSN Study Hub</a>
+    <div class="eyebrow">NURA 330 · Final Practical · 4 possible patients</div>
+    <h1>Practical Exam Study Guide</h1>
+    <p class="lede">One patient is drawn at random. Each tab walks the rubric in order (Recognize, Analyze, Prioritize, Act, Evaluate) for that patient, with the NURA 320 med pass at the end. Tick boxes as you practice; they stay checked in this browser.</p>
+  </div>
+  <nav class="tabs" aria-label="Scenarios">
+    <div class="wrap">
+      <a href="#core"><span>Every patient</span>Core routine</a>
+      <a href="#thompson"><span>Cardiovascular</span>P. Thompson</a>
+      <a href="#daniel"><span>Respiratory</span>D. Martinez</a>
+      <a href="#elena"><span>Neurological</span>E. Martinez</a>
+      <a href="#bennett"><span>Musculoskeletal</span>M. Bennett</a>
+    </div>
+  </nav>
+</header>
+
+<main><div class="wrap">
+
+<!-- ================= CORE ================= -->
+<section class="panel" id="p-core">
+  <div class="card">
+    <h2>How the 100 points break down</h2>
+    <div class="tblwrap"><table class="ref">
+      <thead><tr><th>CJMM step</th><th>Pts</th><th>What earns it</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Recognize Cues</strong></td><td class="mono">20</td><td>Safety &amp; professionalism (9) + focused history (1) + general focused assessment (5) + the one body system for your patient (5)</td></tr>
+        <tr><td><strong>Analyze Cues</strong></td><td class="mono">20</td><td>Name normal findings · name abnormal findings · explain why the abnormals matter · say what extra data you need (5 each)</td></tr>
+        <tr><td><strong>Prioritize Hypotheses</strong></td><td class="mono">20</td><td>State the #1 patient problem (10) · communicate it clearly and professionally (10)</td></tr>
+        <tr><td><strong>Generate Solutions / Take Action</strong></td><td class="mono">10</td><td>Recommend a nursing intervention or provider notification</td></tr>
+        <tr><td><strong>Evaluate Outcomes</strong></td><td class="mono">20</td><td>What you'll reassess · expected outcome · whether to escalate · sound reasoning (5 each)</td></tr>
+      </tbody>
+    </table></div>
+    <p class="muted" style="margin-top:.6rem">The listed sections add to 90 although the rubric header says 100. Ask your instructor where the other 10 come from.</p>
+    <div class="callout red" style="margin-top:.6rem"><strong>Hard limit: 10 minutes</strong>The time limit is one of the 9 professionalism points. Talk out loud the whole time; the grader can only score findings you say.</div>
+  </div>
+
+  <div class="card">
+    <h2>Suggested 10-minute pace</h2>
+    <div class="timeline">
+      <div><div class="mono">0:00–1:30</div>Knock, hand hygiene, AIDET, 2 IDs, allergies, privacy</div>
+      <div><div class="mono">1:30–3:00</div>Pain history (OPQRST/COLDSPA) + associated symptoms</div>
+      <div><div class="mono">3:00–4:30</div>Orientation ×4, general appearance, skin temp &amp; moisture all 4 limbs</div>
+      <div><div class="mono">4:30–7:30</div>Your body system (5 items, verbalize each)</div>
+      <div><div class="mono">7:30–9:30</div>Normal vs abnormal, priority, SBAR, action, reassessment plan</div>
+      <div><div class="mono">9:30–10:00</div>Bed low, 2 rails up, call light &amp; tray in reach, hand hygiene</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="toolbar"><h2>Entry &amp; safety routine <span class="pts">9 pts</span></h2></div>
+    <ul class="check" data-k="core-safety">
+      <li><div>Knock and ask permission to enter<span class="how">Scan as you walk in: <b>safety hazards</b> (spills, cords, rails), <b>signs of distress</b> (breathing hard, grimacing, confused).</span></div></li>
+      <li><div>Hand hygiene<span class="how">Foam in on entry, foam out on exit. Say it out loud.</span></div></li>
+      <li><div>Introduce self with AIDET<span class="how"><b>A</b>cknowledge · <b>I</b>ntroduce (name, role) · <b>D</b>uration ("about 10 minutes") · <b>E</b>xplanation ("I'll check your heart and lungs") · <b>T</b>hank you.</span></div></li>
+      <li><div>Assess general appearance, grooming, mood, speech, ability to respond<span class="how">Say it: "Patient is well groomed, calm, speaking in full clear sentences, responds appropriately."</span></div></li>
+      <li><div>Ensure HIPAA / privacy<span class="how">Close the door or curtain; ask visitors to step out or ask permission to talk in front of them.</span></div></li>
+      <li><div>Verify armband: name + date of birth; note LOC<span class="how">Ask the patient to <b>state</b> their name and DOB, then compare to the armband and chart. Never read it to them.</span></div></li>
+      <li><div>Assess allergies and precautions<span class="how">Ask about drug, food, latex allergies and the reaction; check allergy band and isolation signage. All four charts say "none". Confirm anyway.</span></div></li>
+      <li><div>Finish within 10 minutes</div></li>
+      <li><div>Leave the room safe<span class="how">Call light in reach, tray table next to bed, bed in lowest position, 2 side rails up.</span></div></li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>Focused history <span class="pts">1 pt</span></h2>
+    <p>Assess pain using COLDSPA or OPQRST, then ask about associated symptoms. All four patients have a pain score above 0, so this applies every time.</p>
+    <div class="two" style="margin-top:.5rem">
+      <div><div class="lbl">OPQRST</div><ul>
+        <li><strong>O</strong>nset: when did it start? sudden or gradual?</li>
+        <li><strong>P</strong>rovocation / palliation: what makes it worse or better?</li>
+        <li><strong>Q</strong>uality: sharp, dull, aching, burning, pressure?</li>
+        <li><strong>R</strong>egion / radiation: where, and does it spread?</li>
+        <li><strong>S</strong>everity: 0–10 now, at worst, acceptable goal</li>
+        <li><strong>T</strong>iming / treatment: constant or comes and goes; what have you tried?</li>
+      </ul></div>
+      <div><div class="lbl">COLDSPA</div><ul>
+        <li><strong>C</strong>haracter</li><li><strong>O</strong>nset</li><li><strong>L</strong>ocation</li><li><strong>D</strong>uration</li><li><strong>S</strong>everity</li><li><strong>P</strong>attern (what helps, what worsens)</li><li><strong>A</strong>ssociated factors</li>
+      </ul></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>General focused physical assessment <span class="pts">5 pts</span></h2>
+    <ul class="check" data-k="core-general">
+      <li><div>Orientation to person, place, time, situation, and say the finding<span class="how">"Alert and oriented ×4."</span></div></li>
+      <li><div>Inspect general appearance, LOC, skin color<span class="how">Note pallor, cyanosis (lips, nail beds), flushing, diaphoresis.</span></div></li>
+      <li><div>Feel temperature and moisture of upper <b>and</b> lower extremities, then say it<span class="how">Back of your hand, compare sides. "Skin warm, dry, intact bilaterally upper and lower."</span></div></li>
+      <li><div>Use equipment correctly<span class="how">Clean stethoscope; diaphragm for high-pitched sounds, bell for low (S3/S4). Bare skin, never through the gown. Watch with a second hand.</span></div></li>
+      <li><div>Collect accurate objective data<span class="how">Your numbers should match the patient in front of you, not just the chart.</span></div></li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>Quick reference</h2>
+    <div class="tblwrap"><table class="ref">
+      <thead><tr><th>Measure</th><th>Adult normal</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Heart rate</td><td class="mono">60–100 /min</td><td>Apical for a full 60 s on this exam</td></tr>
+        <tr><td>Respirations</td><td class="mono">12–20 /min</td><td>&gt;20 tachypnea</td></tr>
+        <tr><td>Blood pressure</td><td class="mono">&lt;120 / &lt;80</td><td>120–129/&lt;80 elevated · 130–139 or 80–89 stage 1 HTN</td></tr>
+        <tr><td>SpO₂</td><td class="mono">95–100%</td><td>&lt;92% usually reportable; check your facility's parameter</td></tr>
+        <tr><td>Temperature</td><td class="mono">97.8–99.1 °F</td><td>Oral</td></tr>
+        <tr><td>Capillary refill</td><td class="mono">&lt; 2–3 s</td><td>Press nail bed 2–3 s, release, count</td></tr>
+        <tr><td>Pulse amplitude</td><td class="mono">0 to 4+</td><td>0 absent · 1+ weak · <strong>2+ normal</strong> · 3+ full · 4+ bounding</td></tr>
+        <tr><td>Pitting edema</td><td class="mono">1+ to 4+</td><td>1+ ≈2 mm, quick rebound · 4+ ≈8 mm, lasts &gt;2 min</td></tr>
+        <tr><td>Muscle strength</td><td class="mono">0 to 5</td><td>5 full against resistance · 3 against gravity only · 0 no contraction</td></tr>
+        <tr><td>Pupils</td><td class="mono">2–6 mm</td><td>PERRLA: equal, round, reactive to light, accommodation</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- ================= THOMPSON (CV) ================= -->
+<section class="panel" id="p-thompson" hidden>
+  <div class="band"><div class="clasp"><i></i></div><div class="info">
+    <span class="nm">Patricia Thompson</span>
+    <dl><div><dt>DOB</dt><dd>11/20/1954 · 72 y</dd></div><div><dt>Sex (chart)</dt><dd>Male</dd></div><div><dt>MRN</dt><dd>32372878</dd></div><div><dt>Ht / Wt</dt><dd>160 cm · 142 lb · BMI 25</dd></div><div><dt>Attending</dt><dd>Hector Garcia, MD</dd></div><div><dt>Code</dt><dd>FULL</dd></div></dl>
+  </div></div>
+
+  <div class="focus">
+    <div class="card">
+      <h2>Vitals 0800</h2>
+      <div class="tblwrap"><table class="vitals"><thead><tr><th>Vital</th><th>Value</th><th>Normal</th><th></th></tr></thead><tbody>
+        <tr><td>HR</td><td class="v">88</td><td class="r">60–100</td><td><span class="tag ok">WNL</span></td></tr>
+        <tr><td>BP</td><td class="v">138/86</td><td class="r">&lt;120/80</td><td><span class="tag bd">Stage 1</span></td></tr>
+        <tr><td>RR</td><td class="v">22</td><td class="r">12–20</td><td><span class="tag hi">High</span></td></tr>
+        <tr><td>Temp</td><td class="v">98.4 °F</td><td class="r">97.8–99.1</td><td><span class="tag ok">WNL</span></td></tr>
+        <tr><td>SpO₂</td><td class="v">94%</td><td class="r">95–100</td><td><span class="tag bd">Low</span></td></tr>
+        <tr><td>Pain</td><td class="v">2</td><td class="r">0</td><td><span class="tag bd">Mild</span></td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="card">
+      <h2>What this picture suggests</h2>
+      <p><strong>Focus: Cardiovascular.</strong> An older adult on a loop diuretic with fast breathing, borderline oxygen, and elevated BP fits <strong>fluid volume excess, such as heart failure</strong>. Your exam is looking for proof of fluid backing up: JVD, edema, crackles, an S3.</p>
+      <div class="callout" style="margin-top:.6rem"><strong>Chart traps to catch</strong>
+        <ul>
+          <li>The name is Patricia but the chart says <b>Male</b>. Verify identity with two identifiers and point out the mismatch.</li>
+          <li>Furosemide 40 mg <b>every 4 hours</b> PO is 240 mg/day. Oral furosemide is usually daily or BID. <b>Clarify with the provider before giving.</b></li>
+        </ul></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Recognize cues: cardiovascular <span class="pts">5 pts</span></h2>
+    <p class="muted">Do the core routine first (14 pts), then these.</p>
+    <ul class="check" data-k="cv">
+      <li><div>Inspect for JVD and edema in BUE and BLE<span class="how">Head of bed <b>30–45°</b>, head turned slightly left, look at the right neck. Distension above the clavicle is abnormal. Press 5 s over the dorsum of the foot, medial malleolus, and shin; grade the pitting 1+ to 4+. Check hands and sacrum too.</span></div></li>
+      <li><div>Capillary refill, and say the result<span class="how">Fingers and toes. "Cap refill under 2 seconds bilaterally."</span></div></li>
+      <li><div>Auscultate APETM; apical pulse for a full minute<span class="how"><b>A</b>ortic 2nd ICS right sternal border · <b>P</b>ulmonic 2nd ICS left SB · <b>E</b>rb's 3rd ICS left SB · <b>T</b>ricuspid 4th ICS lower left SB · <b>M</b>itral 5th ICS midclavicular (apical). Diaphragm, then bell at the apex for an <b>S3</b> ("Ken-tuck-y"), the classic heart-failure sound.</span></div></li>
+      <li><div>Say the rate, rhythm, and symmetry of pulses<span class="how">Radials together: "Radial pulses 2+ and equal bilaterally, regular rhythm, apical 88."</span></div></li>
+      <li><div>Posterior tibial and dorsalis pedis pulses<span class="how">PT sits behind the medial malleolus; DP on the top of the foot, lateral to the big-toe tendon. Compare both sides at once.</span></div></li>
+    </ul>
+    <div class="callout teal" style="margin-top:.7rem"><strong>Bonus that supports your hypothesis</strong>Listen to the posterior lung bases for crackles. RR 22 with SpO₂ 94% needs a lung explanation even on a cardiac scenario.</div>
+  </div>
+
+  <div class="card">
+    <h2>Analyze cues <span class="pts">20 pts</span></h2>
+    <div class="two">
+      <div><div class="lbl">Normal (say these)</div><ul><li>HR 88, temp 98.4 within range</li><li>A&amp;O ×4, pain only 2/10</li><li>Whatever is normal on your exam, e.g. regular rhythm, 2+ pulses, cap refill &lt;2 s</li></ul></div>
+      <div><div class="lbl">Abnormal (say these)</div><ul><li>RR 22: tachypnea</li><li>SpO₂ 94%: below normal</li><li>BP 138/86: stage 1 hypertension</li><li>Any JVD, pitting edema, S3, crackles you find</li></ul></div>
+      <div><div class="lbl">Why it matters</div><p>When the heart can't pump forward, fluid backs up. Left-side failure pushes fluid into the lungs, which causes fast breathing, low SpO₂, and crackles. Right-side failure backs it into the body, which causes JVD and edema. High BP adds afterload and makes it worse.</p></div>
+      <div><div class="lbl">What else you need</div><ul><li>Daily weights and trend (gain &gt;2–3 lb/day or 5 lb/week)</li><li>Intake &amp; output</li><li><b>Potassium</b> (normal 3.5–5.0 mEq/L), sodium (normal 135–145 mEq/L), BUN (normal 10–20 mg/dL) and creatinine (normal 0.6–1.2 mg/dL) before a loop diuretic</li><li>BNP (normal less than 100 pg/mL), chest X-ray, history of HF</li><li>Orthopnea: how many pillows? Dyspnea on exertion?</li></ul></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Prioritize hypotheses <span class="pts">20 pts</span></h2>
+    <p><strong>Priority problem:</strong> Fluid volume excess causing impaired gas exchange (RR 22, SpO₂ 94%). Breathing comes first (ABCs). Pain at 2/10 is not the priority.</p>
+    <h3>Say it in SBAR</h3>
+    <dl class="sbar">
+      <dt>S</dt><dd>"I'm calling about Patricia Thompson, 72, room __. Respirations are 22 and SpO₂ is 94%."</dd>
+      <dt>B</dt><dd>"Admitted on oral furosemide 40 mg every 4 hours; no known allergies; full code."</dd>
+      <dt>A</dt><dd>"I found [JVD / 2+ pitting edema bilaterally / crackles at the bases]. BP 138/86. I'm concerned about fluid overload."</dd>
+      <dt>R</dt><dd>"Can you confirm the furosemide frequency? I'd also like orders for daily weights, strict I&amp;O, a BMP for potassium, and O₂ to keep SpO₂ ≥ 94%."</dd>
+    </dl>
+  </div>
+
+  <div class="two">
+    <div class="card">
+      <h2>Take action <span class="pts">10 pts</span></h2>
+      <ul>
+        <li>Raise the head of bed to semi- or high-Fowler's to ease breathing</li>
+        <li>Apply O₂ per protocol or order</li>
+        <li>Notify the provider (SBAR above) and clarify the furosemide order</li>
+        <li>Check potassium and BP before giving the diuretic</li>
+        <li>Start strict I&amp;O, daily weight (same time, same scale), fluid and sodium limits if ordered</li>
+        <li>Elevate edematous legs; protect fragile skin</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>Evaluate outcomes <span class="pts">20 pts</span></h2>
+      <div class="lbl">Reassess</div><p>RR, SpO₂, lung sounds, BP, edema grade, urine output, weight, potassium.</p>
+      <div class="lbl">Expected outcome</div><p>RR 12–20, SpO₂ ≥ 95%, clear lungs, less edema, good urine output within 1–2 h of the diuretic, weight trending down.</p>
+      <div class="lbl">Escalate if</div><p>SpO₂ keeps dropping, RR climbs, pink frothy sputum, new confusion, SBP &lt; 90, or K⁺ &lt; 3.5. Call the provider or rapid response.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>NURA 320 med pass: furosemide (Lasix)</h2>
+    <div class="two">
+      <div><div class="lbl">Class &amp; action</div><p>Loop diuretic. Blocks sodium and chloride reabsorption in the loop of Henle, so the kidneys excrete more water.</p>
+        <div class="lbl">Check before giving</div><ul><li>BP: hold and call if hypotensive (commonly SBP &lt; 90)</li><li>Potassium (normal 3.5–5.0 mEq/L); furosemide wastes K⁺</li><li>Weight, I&amp;O, lung sounds, edema</li><li>Rights of med admin; question the q4h frequency</li></ul></div>
+      <div><div class="lbl">Teach the patient</div><ul><li>Expect to urinate more; give it in the morning so it doesn't disrupt sleep</li><li>Stand up slowly; you may feel dizzy</li><li>Eat potassium-rich foods (bananas, potatoes, oranges) unless told not to</li><li>Weigh yourself every morning and report a gain of 2–3 lb in a day or 5 lb in a week</li><li>Report muscle cramps, weakness, irregular heartbeat, or ringing in the ears</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= DANIEL (RESP) ================= -->
+<section class="panel" id="p-daniel" hidden>
+  <div class="band"><div class="clasp"><i></i></div><div class="info">
+    <span class="nm">Daniel Martinez</span>
+    <dl><div><dt>DOB</dt><dd>11/20/2005 · 21 y</dd></div><div><dt>Sex</dt><dd>Male</dd></div><div><dt>MRN</dt><dd>32342947</dd></div><div><dt>Ht / Wt</dt><dd>178 · 165 lb · BMI 23</dd></div><div><dt>Attending</dt><dd>None</dd></div><div><dt>Code</dt><dd>Full</dd></div></dl>
+  </div></div>
+
+  <div class="focus">
+    <div class="card">
+      <h2>Vitals 0800</h2>
+      <div class="tblwrap"><table class="vitals"><thead><tr><th>Vital</th><th>Value</th><th>Normal</th><th></th></tr></thead><tbody>
+        <tr><td>HR</td><td class="v">112</td><td class="r">60–100</td><td><span class="tag hi">High</span></td></tr>
+        <tr><td>BP</td><td class="v">128/82</td><td class="r">&lt;120/80</td><td><span class="tag bd">Stage 1</span></td></tr>
+        <tr><td>RR</td><td class="v">24</td><td class="r">12–20</td><td><span class="tag hi">High</span></td></tr>
+        <tr><td>Temp</td><td class="v">98.6 °F</td><td class="r">97.8–99.1</td><td><span class="tag ok">WNL</span></td></tr>
+        <tr><td>SpO₂</td><td class="v">93%</td><td class="r">95–100</td><td><span class="tag hi">Low</span></td></tr>
+        <tr><td>Pain</td><td class="v">3</td><td class="r">0</td><td><span class="tag bd">Mild</span></td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="card">
+      <h2>What this picture suggests</h2>
+      <p><strong>Focus: Respiratory.</strong> A young adult with tachypnea, tachycardia, and low SpO₂ on a rescue inhaler fits <strong>bronchospasm, such as an asthma exacerbation</strong>. He is the sickest of the four on paper.</p>
+      <div class="callout" style="margin-top:.6rem"><strong>Chart traps to catch</strong>
+        <ul>
+          <li>Height is listed as "178" with no unit. Say you would clarify it (178 cm fits the BMI).</li>
+          <li>Attending is "None". Know who you'd call: the covering provider or rapid response.</li>
+          <li>HR 112 <i>before</i> albuterol. Albuterol raises HR further, so recheck it afterwards. Hypoxia is driving the tachycardia, so don't withhold the inhaler for it.</li>
+        </ul></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Recognize cues: respiratory <span class="pts">5 pts</span></h2>
+    <p class="muted">Do the core routine first (14 pts), then these.</p>
+    <ul class="check" data-k="resp">
+      <li><div>Inspect respiratory rate and effort; note any difficulty<span class="how">Count a full 30–60 s without telling him. Look for <b>accessory muscle use</b>, nasal flaring, retractions, pursed lips, tripod position, and whether he can speak full sentences.</span></div></li>
+      <li><div>Inspect AP diameter, chest symmetry, positioning<span class="how">Normal AP:lateral ratio is about <b>1:2</b>; 1:1 is barrel chest. Watch both sides rise equally. Note whether he is sitting up or leaning forward.</span></div></li>
+      <li><div>Auscultate both lung fields anteriorly, posteriorly, laterally<span class="how">Diaphragm on bare skin, one full breath per spot, side to side in a ladder pattern. Start posterior. Name what you hear: clear, <b>wheezes</b> (expiratory whistling = narrowed airways), diminished, crackles.</span></div></li>
+      <li><div>Palpate trachea, chest expansion, tenderness, crepitus, wall abnormalities<span class="how">Trachea midline in the sternal notch. Thumbs at T9–T10 posteriorly; they should move apart about 5 cm equally. Crepitus feels like crackling under the skin (air leak).</span></div></li>
+    </ul>
+    <div class="callout red" style="margin-top:.7rem"><strong>Red flag</strong>A "quiet" chest in a struggling asthmatic means almost no air is moving. That is an emergency, not an improvement.</div>
+  </div>
+
+  <div class="card">
+    <h2>Analyze cues <span class="pts">20 pts</span></h2>
+    <div class="two">
+      <div><div class="lbl">Normal (say these)</div><ul><li>Temp 98.6: no sign of infection</li><li>BP essentially stable</li><li>A&amp;O ×4, trachea midline, symmetric expansion (if found)</li></ul></div>
+      <div><div class="lbl">Abnormal (say these)</div><ul><li>RR 24: tachypnea</li><li>SpO₂ 93%: hypoxemia</li><li>HR 112: tachycardia</li><li>Wheezes, accessory muscle use, short phrases (if found)</li></ul></div>
+      <div><div class="lbl">Why it matters</div><p>Bronchospasm narrows the airways, so less oxygen reaches the blood. The body compensates by breathing faster and raising the heart rate. If he tires out, RR can drop and CO₂ rises. That is respiratory failure.</p></div>
+      <div><div class="lbl">What else you need</div><ul><li>Asthma history, triggers, last rescue inhaler use, prior intubations</li><li>Peak flow compared with personal best</li><li>ABG if worsening: pH (normal 7.35–7.45), PaCO₂ (normal 35–45 mm Hg), PaO₂ (normal 75–100 mm Hg); chest X-ray</li><li>Sputum color, fever, recent illness</li><li>When his last albuterol dose was</li></ul></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Prioritize hypotheses <span class="pts">20 pts</span></h2>
+    <p><strong>Priority problem:</strong> Ineffective airway clearance and impaired gas exchange from bronchospasm (SpO₂ 93%, RR 24, HR 112). This is an Airway/Breathing problem, so it outranks everything.</p>
+    <h3>Say it in SBAR</h3>
+    <dl class="sbar">
+      <dt>S</dt><dd>"I'm calling about Daniel Martinez, 21, room __. SpO₂ is 93% with respirations of 24 and heart rate 112."</dd>
+      <dt>B</dt><dd>"He has an order for albuterol 2 puffs every 4 hours; no known allergies."</dd>
+      <dt>A</dt><dd>"I hear [expiratory wheezes bilaterally] and he is [using accessory muscles / speaking in short phrases]. I think he is having bronchospasm."</dd>
+      <dt>R</dt><dd>"I'm giving his albuterol now and applying O₂. Please come evaluate him. Would you like a peak flow, ABG, or nebulizer order if he doesn't improve?"</dd>
+    </dl>
+  </div>
+
+  <div class="two">
+    <div class="card">
+      <h2>Take action <span class="pts">10 pts</span></h2>
+      <ul>
+        <li>High-Fowler's or tripod position</li>
+        <li>Give scheduled albuterol (rescue bronchodilator) with a spacer if available</li>
+        <li>Apply O₂ per protocol to keep SpO₂ ≥ 92–94%</li>
+        <li>Stay calm and coach slow, pursed-lip breathing</li>
+        <li>Notify the provider; call rapid response if he worsens</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>Evaluate outcomes <span class="pts">20 pts</span></h2>
+      <div class="lbl">Reassess</div><p>SpO₂, RR, effort, lung sounds, HR, ability to speak. Albuterol acts in about 5–15 min, so recheck then.</p>
+      <div class="lbl">Expected outcome</div><p>SpO₂ ≥ 95%, RR 12–20, fewer or no wheezes, speaks full sentences, HR trending down.</p>
+      <div class="lbl">Escalate if</div><p>SpO₂ &lt; 90%, no improvement after the dose, silent chest, confusion or drowsiness, cyanosis, can't speak. Call rapid response.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>NURA 320 med pass: albuterol MDI</h2>
+    <div class="two">
+      <div><div class="lbl">Class &amp; action</div><p>Short-acting beta-2 agonist (SABA). Relaxes bronchial smooth muscle and opens the airways within minutes. It is the rescue inhaler.</p>
+        <div class="lbl">Check before giving</div><ul><li>HR, RR, SpO₂, lung sounds (your baseline for evaluating it)</li><li>Last dose time; q4h means not before 1200 if it was given at 0800</li><li>Rights of med admin; route is inhaled</li></ul></div>
+      <div><div class="lbl">Teach the patient (MDI technique)</div><ul><li>Shake the inhaler; attach the spacer</li><li>Breathe all the way out, seal lips around the mouthpiece</li><li>Press once as you start a slow, deep breath in</li><li>Hold for 10 seconds, then breathe out slowly</li><li>Wait 1 minute before the second puff</li><li>Side effects: shakiness, racing heart, nervousness</li><li>If you need it more often than prescribed, tell your provider; asthma may be getting worse</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ELENA (NEURO) ================= -->
+<section class="panel" id="p-elena" hidden>
+  <div class="band"><div class="clasp"><i></i></div><div class="info">
+    <span class="nm">Elena Martinez</span>
+    <dl><div><dt>DOB</dt><dd>11/20/1963 · 63 y</dd></div><div><dt>Sex</dt><dd>Female</dd></div><div><dt>MRN</dt><dd>32372684</dd></div><div><dt>Ht / Wt</dt><dd>163 cm · 152 · BMI 26</dd></div><div><dt>Attending</dt><dd>Hector Garcia, MD</dd></div><div><dt>Code</dt><dd>FULL</dd></div></dl>
+  </div></div>
+
+  <div class="focus">
+    <div class="card">
+      <h2>Vitals 0800</h2>
+      <div class="tblwrap"><table class="vitals"><thead><tr><th>Vital</th><th>Value</th><th>Normal</th><th></th></tr></thead><tbody>
+        <tr><td>HR</td><td class="v">78</td><td class="r">60–100</td><td><span class="tag ok">WNL</span></td></tr>
+        <tr><td>BP</td><td class="v">132/82</td><td class="r">&lt;120/80</td><td><span class="tag bd">Stage 1</span></td></tr>
+        <tr><td>RR</td><td class="v">16</td><td class="r">12–20</td><td><span class="tag ok">WNL</span></td></tr>
+        <tr><td>Temp</td><td class="v">98.6 °F</td><td class="r">97.8–99.1</td><td><span class="tag ok">WNL</span></td></tr>
+        <tr><td>SpO₂</td><td class="v">97%</td><td class="r">95–100</td><td><span class="tag ok">WNL</span></td></tr>
+        <tr><td>Pain</td><td class="v">5</td><td class="r">0</td><td><span class="tag hi">Moderate</span></td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="card">
+      <h2>What this picture suggests</h2>
+      <p><strong>Focus: Neurological</strong> (by elimination: the other three cover CV, respiratory, and MSK). Stable vitals, moderate pain, and acetaminophen point to a <strong>headache</strong> work-up. Your exam has to rule out anything dangerous, like a stroke or rising intracranial pressure, before calling it simple pain.</p>
+      <div class="callout" style="margin-top:.6rem"><strong>Chart traps to catch</strong>
+        <ul>
+          <li>Weight "152" has no unit. Say you would clarify lb vs kg; it changes dosing math.</li>
+          <li>Acetaminophen 650 mg q4h is up to 3.9 g/day, right at the 4 g ceiling. Ask about other acetaminophen products (cold medicine, Norco/Percocet).</li>
+          <li>If it turns out to be MSK pain, use the Bennett tab's MSK checklist.</li>
+        </ul></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Recognize cues: neurological <span class="pts">5 pts</span></h2>
+    <p class="muted">Do the core routine first (14 pts), then these.</p>
+    <ul class="check" data-k="neuro">
+      <li><div>LOC, orientation, and speech<span class="how">Person, place, time, situation. Listen for slurring, word-finding trouble, or confusion. "Alert, oriented ×4, speech clear and appropriate."</span></div></li>
+      <li><div>Pupils: PERRLA<span class="how">Dim light; note size (2–6 mm) and shape. Swing a penlight in from the side; check direct and consensual response. Accommodation: pupils constrict and converge as a finger moves toward the nose.</span></div></li>
+      <li><div>Hand grips and foot pushes; upper and lower strength<span class="how">Both sides at once, compare. Grade 0–5. "Hand grips and pedal pushes strong and equal, 5/5 bilaterally." Asymmetry is the key finding.</span></div></li>
+      <li><div>Cranial nerves <span data-no-gloss>III, IV, VI</span>: EOMs<span class="how">Hold her chin still, trace an "H" (six cardinal gazes) about 12 in. from her face. Watch for smooth tracking, nystagmus, and lid lag. <span data-no-gloss>III</span> oculomotor, <span data-no-gloss>IV</span> trochlear, <span data-no-gloss>VI</span> abducens.</span></div></li>
+      <li><div>Light-touch sensation bilaterally<span class="how">Eyes closed. Cotton ball or fingertip on arms, hands, legs, feet, same spots both sides. "Do you feel this? Is it the same on both sides?"</span></div></li>
+    </ul>
+    <div class="callout red" style="margin-top:.7rem"><strong>Stroke red flags: BE FAST</strong>Balance loss, Eyes (vision change), Face droop, Arm drift or weakness, Speech change, Time: note last known well. Any of these means call a stroke alert and keep her NPO (nothing by mouth, including the acetaminophen) until a swallow screen.</div>
+  </div>
+
+  <div class="card">
+    <h2>Analyze cues <span class="pts">20 pts</span></h2>
+    <div class="two">
+      <div><div class="lbl">Normal (say these)</div><ul><li>HR, RR, temp, SpO₂ all within range</li><li>A&amp;O ×4, PERRLA, EOMs intact, equal strength and sensation (if found)</li></ul></div>
+      <div><div class="lbl">Abnormal (say these)</div><ul><li>Pain 5/10: moderate</li><li>BP 132/82: stage 1 hypertension</li><li>Any unequal pupils, weakness, numbness, slurred speech</li></ul></div>
+      <div><div class="lbl">Why it matters</div><p>With a normal neuro exam, this is acute pain that affects comfort and rest. Raised BP can come from pain or contribute to headache. Any one-sided deficit or pupil change suggests stroke or rising intracranial pressure, which is time-critical.</p></div>
+      <div><div class="lbl">What else you need</div><ul><li>Headache history: worst ever? sudden "thunderclap"?</li><li>Vision changes, nausea or vomiting, neck stiffness, fever</li><li>Recent fall or head injury; anticoagulant use</li><li>Last acetaminophen dose and total in 24 h; liver disease, alcohol use</li><li>Trend BP; blood glucose (normal 70–99 mg/dL; low sugar can mimic stroke)</li></ul></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Prioritize hypotheses <span class="pts">20 pts</span></h2>
+    <p><strong>Priority problem:</strong> Acute pain (headache 5/10). Escalate to <strong>risk for ineffective cerebral perfusion</strong> if you find any focal deficit. Say both: "If my neuro exam is normal, my priority is pain. If I found a deficit, it becomes possible stroke and I'd call immediately."</p>
+    <h3>Say it in SBAR</h3>
+    <dl class="sbar">
+      <dt>S</dt><dd>"I'm calling about Elena Martinez, 63, room __. She reports a headache at 5 out of 10."</dd>
+      <dt>B</dt><dd>"She has acetaminophen 650 mg every 4 hours ordered; no known allergies."</dd>
+      <dt>A</dt><dd>"Neuro exam is [intact: A&amp;O ×4, PERRLA, equal strength and sensation]. BP 132/82. Pain appears uncomplicated."</dd>
+      <dt>R</dt><dd>"I'm giving her scheduled acetaminophen and will recheck pain in an hour. If she doesn't improve, could we discuss other options?"</dd>
+    </dl>
+  </div>
+
+  <div class="two">
+    <div class="card">
+      <h2>Take action <span class="pts">10 pts</span></h2>
+      <ul>
+        <li>Give acetaminophen as ordered after confirming the 24-h total</li>
+        <li>Non-drug comfort: dim lights, quiet room, cool cloth, repositioning</li>
+        <li>Raise head of bed slightly; keep the call light in reach</li>
+        <li>If any deficit: stroke alert or rapid response, NPO, note time last known well, notify provider</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>Evaluate outcomes <span class="pts">20 pts</span></h2>
+      <div class="lbl">Reassess</div><p>Pain score 30–60 min after the oral dose; repeat neuro checks; BP.</p>
+      <div class="lbl">Expected outcome</div><p>Pain at or below her acceptable goal (e.g. ≤ 3/10), neuro exam unchanged and intact, BP trending down as pain eases.</p>
+      <div class="lbl">Escalate if</div><p>Pain unrelieved or worsening, new neuro deficit, confusion, vomiting, stiff neck, or sudden severe headache. Notify the provider right away.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>NURA 320 med pass: acetaminophen (Tylenol)</h2>
+    <div class="two">
+      <div><div class="lbl">Class &amp; action</div><p>Non-opioid analgesic and antipyretic. Reduces pain and fever; no anti-inflammatory effect and no bleeding risk.</p>
+        <div class="lbl">Check before giving</div><ul><li>Pain score and when the last dose was given</li><li>Total acetaminophen in 24 h from all sources: max 4 g (many facilities use 3 g in older adults or liver risk)</li><li>Liver disease, heavy alcohol use</li><li>Can she swallow safely? Neuro intact?</li></ul></div>
+      <div><div class="lbl">Teach the patient</div><ul><li>Many cold and pain products also contain acetaminophen; read labels</li><li>Avoid alcohol while taking it</li><li>Report yellow skin or eyes, dark urine, or right upper belly pain</li><li>Tell the nurse if pain isn't better in about an hour</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= BENNETT (MSK) ================= -->
+<section class="panel" id="p-bennett" hidden>
+  <div class="band"><div class="clasp"><i></i></div><div class="info">
+    <span class="nm">Michael Bennett</span>
+    <dl><div><dt>DOB</dt><dd>11/20/1955 · 71 y</dd></div><div><dt>Sex</dt><dd>Male</dd></div><div><dt>MRN</dt><dd>32360216</dd></div><div><dt>Ht / Wt</dt><dd>178 cm · 185 lb · BMI 26</dd></div><div><dt>Attending</dt><dd>None</dd></div><div><dt>Code</dt><dd>Full Code</dd></div></dl>
+  </div></div>
+
+  <div class="focus">
+    <div class="card">
+      <h2>Vitals 0800</h2>
+      <div class="tblwrap"><table class="vitals"><thead><tr><th>Vital</th><th>Value</th><th>Normal</th><th></th></tr></thead><tbody>
+        <tr><td>HR</td><td class="v">78</td><td class="r">60–100</td><td><span class="tag ok">WNL</span></td></tr>
+        <tr><td>BP</td><td class="v">132/84</td><td class="r">&lt;120/80</td><td><span class="tag bd">Stage 1</span></td></tr>
+        <tr><td>RR</td><td class="v">16</td><td class="r">12–20</td><td><span class="tag ok">WNL</span></td></tr>
+        <tr><td>Temp</td><td class="v">98.4 °F</td><td class="r">97.8–99.1</td><td><span class="tag ok">WNL</span></td></tr>
+        <tr><td>SpO₂</td><td class="v">97%</td><td class="r">95–100</td><td><span class="tag ok">WNL</span></td></tr>
+        <tr><td>Pain</td><td class="v">6</td><td class="r">0</td><td><span class="tag hi">Moderate</span></td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="card">
+      <h2>What this picture suggests</h2>
+      <p><strong>Focus: Musculoskeletal.</strong> An older adult with the highest pain score of the four, stable vitals, and an NSAID ordered fits <strong>joint pain, such as osteoarthritis or a joint injury</strong>. Pain limits mobility, and limited mobility in a 71-year-old means fall risk.</p>
+      <div class="callout" style="margin-top:.6rem"><strong>Chart traps to catch</strong>
+        <ul>
+          <li>Attending is "None". Know who you'd notify.</li>
+          <li>Ibuprofen in an adult over 65 is on the Beers list for GI bleeding and kidney injury, and NSAIDs can raise BP (his is 132/84). Ask about stomach ulcers, kidney disease, and blood thinners.</li>
+          <li>400 mg q4h = 2,400 mg/day: within the prescription maximum (3,200 mg) but above the OTC limit.</li>
+        </ul></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Recognize cues: musculoskeletal <span class="pts">5 pts</span></h2>
+    <p class="muted">Do the core routine first (14 pts), then these.</p>
+    <ul class="check" data-k="msk">
+      <li><div>Inspect the affected joint for swelling or redness<span class="how">Expose it and <b>compare to the other side</b>. Look for swelling, redness, deformity, bruising. Feel for warmth with the back of your hand. A hot, red, swollen joint suggests infection or gout.</span></div></li>
+      <li><div>Assess range of motion<span class="how">Active first ("Can you bend your knee for me?"), then gentle passive. Stop at pain and never force. Note crepitus (grating) and how far he gets.</span></div></li>
+      <li><div>Pain assessment: location, quality, intensity, timing<span class="how">OPQRST specific to the joint: worse with movement or at rest? Morning stiffness lasting &lt;30 min suggests osteoarthritis.</span></div></li>
+      <li><div>Functional mobility: gait or transfer ability, if appropriate<span class="how">Gait belt on, bed low, non-skid socks. Dangle first. Watch balance, stride, and whether he needs a walker or cane. If he's unsteady, say you would not ambulate him alone.</span></div></li>
+      <li><div>CMS in BUE and BLE<span class="how"><b>C</b>irculation: color, temp, cap refill, pulses · <b>M</b>otion: wiggle fingers and toes · <b>S</b>ensation: "Any numbness or tingling?" Compare sides.</span></div></li>
+    </ul>
+    <div class="callout red" style="margin-top:.7rem"><strong>Red flag: the 6 P's</strong>Pain out of proportion, pallor, pulselessness, paresthesia, paralysis, poikilothermia (cold). These mean neurovascular compromise or compartment syndrome. Notify the provider immediately.</div>
+  </div>
+
+  <div class="card">
+    <h2>Analyze cues <span class="pts">20 pts</span></h2>
+    <div class="two">
+      <div><div class="lbl">Normal (say these)</div><ul><li>HR, RR, temp, SpO₂ within range: no sign of infection or distress</li><li>CMS intact (warm, pink, cap refill &lt;2 s, moves and feels all extremities), if found</li></ul></div>
+      <div><div class="lbl">Abnormal (say these)</div><ul><li>Pain 6/10: moderate, highest of the four patients</li><li>BP 132/84: stage 1 hypertension (pain can raise it)</li><li>Any swelling, redness, warmth, limited ROM, crepitus, unsteady gait</li></ul></div>
+      <div><div class="lbl">Why it matters</div><p>Pain limits movement. Limited movement plus age 71 raises the risk of falls, stiffness, pressure injury, and clots. A warm, red joint could mean infection. Any CMS change means blood flow or nerves are compromised.</p></div>
+      <div><div class="lbl">What else you need</div><ul><li>Cause: injury, arthritis, recent surgery, gout history</li><li>X-ray results; CBC with WBC (normal 5,000–10,000/mm³), ESR (normal female 0–20, male 0–15 mm/hr), and CRP (normal less than 1.0 mg/dL) if the joint is hot</li><li>Kidney function before an NSAID: BUN (normal 10–20 mg/dL), creatinine (normal 0.6–1.2 mg/dL)</li><li>History of GI bleeding or ulcers; anticoagulants or aspirin</li><li>Fall history; home mobility aids</li></ul></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Prioritize hypotheses <span class="pts">20 pts</span></h2>
+    <p><strong>Priority problem:</strong> Acute pain (6/10) impairing physical mobility, with high fall risk. If CMS is abnormal, the priority becomes neurovascular compromise.</p>
+    <h3>Say it in SBAR</h3>
+    <dl class="sbar">
+      <dt>S</dt><dd>"I'm calling about Michael Bennett, 71, room __. He reports [right knee] pain at 6 out of 10."</dd>
+      <dt>B</dt><dd>"He has ibuprofen 400 mg every 4 hours ordered; no known allergies."</dd>
+      <dt>A</dt><dd>"The joint shows [mild swelling, limited flexion]; CMS is intact bilaterally. Gait is [unsteady]. BP 132/84. I'm concerned about pain limiting mobility and fall risk."</dd>
+      <dt>R</dt><dd>"I'll give the ibuprofen with food and reassess in an hour. Could we get a PT consult, and do you want kidney function checked given his age?"</dd>
+    </dl>
+  </div>
+
+  <div class="two">
+    <div class="card">
+      <h2>Take action <span class="pts">10 pts</span></h2>
+      <ul>
+        <li>Give ibuprofen with food after checking GI and kidney history</li>
+        <li>Elevate and support the joint; ice for swelling if appropriate</li>
+        <li>Fall precautions: bed low, call light in reach, non-skid socks, gait belt and assist for walking</li>
+        <li>Reposition for comfort; encourage gentle ROM as tolerated</li>
+        <li>Notify the provider for CMS changes or a hot, red joint</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>Evaluate outcomes <span class="pts">20 pts</span></h2>
+      <div class="lbl">Reassess</div><p>Pain 30–60 min after the dose, ROM, gait and transfers, CMS, BP, GI symptoms.</p>
+      <div class="lbl">Expected outcome</div><p>Pain at or below his goal (e.g. ≤ 3/10), moves the joint and transfers safely, CMS stays intact, no falls.</p>
+      <div class="lbl">Escalate if</div><p>Pain unrelieved, new numbness or coolness, increasing swelling, fever, black or tarry stools, or reduced urine output.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>NURA 320 med pass: ibuprofen (Motrin, Advil)</h2>
+    <div class="two">
+      <div><div class="lbl">Class &amp; action</div><p>NSAID. Blocks COX enzymes, so it lowers prostaglandins: less pain, inflammation, and fever.</p>
+        <div class="lbl">Check before giving</div><ul><li>Pain score and last dose time</li><li>History of GI bleeding or ulcers, kidney disease, heart failure</li><li>Anticoagulants, aspirin, steroids, other NSAIDs</li><li>BP; kidney labs if available</li></ul></div>
+      <div><div class="lbl">Teach the patient</div><ul><li>Take with food or milk and a full glass of water</li><li>Don't combine with other NSAIDs (naproxen, aspirin) or alcohol</li><li>Report black or tarry stools, vomiting that looks like coffee grounds, stomach pain</li><li>Report swelling, less urine, or sudden weight gain</li><li>Get up slowly and call for help before walking</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<div class="toolbar"><button class="reset" id="reset" type="button">Clear all checkmarks</button><small>Clinical parameters follow common textbook values. Use your course materials and facility policy where they differ.</small></div>
+
+</div></main>
+
+<script>
+(function(){
+  var ids=["core","thompson","daniel","elena","bennett"];
+  function show(){
+    var h=(location.hash||"").replace("#","");
+    if(ids.indexOf(h)<0) h="core";
+    ids.forEach(function(id){document.getElementById("p-"+id).hidden=(id!==h);});
+    document.querySelectorAll("nav.tabs a").forEach(function(a){
+      if(a.getAttribute("href")==="#"+h) a.setAttribute("aria-current","page"); else a.removeAttribute("aria-current");
+    });
+  }
+  window.addEventListener("hashchange",function(){show();window.scrollTo(0,0);});
+  show();
+
+  var KEY="nura330-practical-checks";
+  var state={};
+  try{state=JSON.parse(localStorage.getItem(KEY)||"{}")||{};}catch(e){state={};}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
+  document.querySelectorAll("ul.check").forEach(function(ul){
+    var k=ul.getAttribute("data-k");
+    ul.querySelectorAll("li").forEach(function(li,i){
+      var id=k+"-"+i;
+      var cb=document.createElement("input");
+      cb.type="checkbox"; cb.id=id; cb.setAttribute("aria-label","Practiced");
+      cb.checked=!!state[id]; li.classList.toggle("done",cb.checked);
+      cb.addEventListener("change",function(){state[id]=cb.checked;li.classList.toggle("done",cb.checked);save();});
+      li.insertBefore(cb,li.firstChild);
+    });
+  });
+  document.getElementById("reset").addEventListener("click",function(){
+    state={}; save();
+    document.querySelectorAll("ul.check input").forEach(function(cb){cb.checked=false;cb.parentNode.classList.remove("done");});
+  });
+})();
+</script>
+<script src="../../js/glossary.js?v=202611201900"></script>
+<script src="../../js/labs.js?v=202611201900"></script>
+</body>
+</html>

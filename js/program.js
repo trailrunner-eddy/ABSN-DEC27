@@ -85,6 +85,14 @@ window.PROGRAM = {
               blurb: "Cumulative: every module from intro through GI, neuro, and musculoskeletal, plus a full-length 50-question mock final weighted like the blueprint and a color-coded study guide that marks what's on the review PowerPoint vs. the written guide.",
               topics: ["All of Exams 1–2", "GI & Abdomen", "Neuro", "MSK", "Color-coded study guide"],
               stats: "10 section overviews · 88 topics · 36 diagrams · 339 questions (173 new) · 417 flashcards"
+            },
+            {
+              name: "Final Practical", status: "ready",
+              path: "nura330/practical/index.html",
+              localPath: "../Sem 1/Health Assessment/Final/Practical Exam Study Guide/index.html",
+              blurb: "The 10-minute practical, step by step: the core safety and assessment routine for every patient, then a rubric walk-through (Recognize, Analyze, Prioritize, Act, Evaluate) with SBAR scripts and the NURA 320 med pass for each of the four possible patients.",
+              topics: ["Core routine", "Cardiovascular", "Respiratory", "Neuro", "Musculoskeletal"],
+              stats: "4 patient scenarios · 100-point rubric map · 10-minute pacing plan · practice checklists"
             }
           ]
         },
