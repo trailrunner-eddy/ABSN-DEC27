@@ -1149,7 +1149,33 @@
     ["hyperactive bowel sounds", "Frequent, loud, sometimes high-pitched bowel sounds; increased intestinal activity (as with diarrhea)."],
     ["normoactive", "Expected bowel sound activity: intermittent gurgles and clicks."],
     ["uvula", "The small piece of tissue hanging at the back of the soft palate; it should rise in the midline when the client says “Ah.”"],
-    ["costovertebral angle", "Where the 12th rib meets the spine, over each kidney; tenderness there can mean kidney infection."]
+    ["costovertebral angle", "Where the 12th rib meets the spine, over each kidney; tenderness there can mean kidney infection."],
+    /* ---------- Health Assessment Final: musculoskeletal ---------- */
+    ["crepitus", "A crackling or grinding sound or feeling in a joint (or crackling under the skin from trapped air)."],
+    ["contracture", "Permanent tightening of a muscle or tendon that locks a joint and limits movement."],
+    ["kyphosis", "An exaggerated outward curve of the upper (thoracic) spine; a hunched back, common in older adults."],
+    ["lordosis", "An exaggerated inward curve of the lower (lumbar) spine; swayback."],
+    ["scoliosis", "A sideways (lateral) curve of the spine, screened with the forward-bend test."],
+    ["sarcopenia", "Age-related loss of muscle mass and strength."],
+    ["hallux valgus", "The big toe angled outward toward the other toes; a bunion."],
+    ["ulnar deviation", "Fingers drifting toward the little-finger (ulnar) side of the hand; a sign of arthritis."],
+    ["ORIF", "Open reduction, internal fixation: surgery to line up a broken bone and hold it with plates, screws, or rods."],
+    ["abduction", "Moving a limb away from the midline of the body."],
+    ["adduction", "Moving a limb toward the midline of the body."],
+    ["supination", "Turning the palm up."],
+    ["pronation", "Turning the palm down."],
+    ["compartment syndrome", "Rising pressure inside a closed muscle compartment (after a fracture or under a tight cast) that cuts off blood flow and nerves; pain out of proportion and numbness are early signs. An emergency."],
+    ["ganglion cyst", "A round, firm, usually painless fluid-filled lump, often on the back of the wrist."],
+    ["epiphyseal plate|growth plate", "The growth plate near the end of a child's long bone; weaker than the surrounding bone, so it is easily injured."],
+    ["hematopoiesis", "Making blood cells, which happens in the bone marrow."],
+    ["ROM|range of motion", "Range of motion: how far a joint can move. Active ROM: the client moves it; passive ROM: the examiner moves it."],
+    ["proprioception", "The sense of where your body parts are in space without looking."],
+    ["periosteum", "The membrane covering bone; it carries blood vessels and nerves that nourish the bone."],
+    ["olecranon", "The bony tip of the elbow (part of the ulna)."],
+    ["malleolus", "The bony bump on either side of the ankle: medial (tibia) and lateral (fibula)."],
+    ["acetabulum", "The cup-shaped socket in the pelvis that holds the head of the femur (the hip joint)."],
+    ["genu varum", "Bowlegs: the knees bow outward."],
+    ["genu valgum", "Knock-knees: the knees angle inward."]
   ];
 
   /* ---------- Build the lookup ---------- */

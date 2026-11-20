@@ -32,18 +32,18 @@ window.SECTIONS = {
     ]
   },
   msk: {
-    diagram: "",
-    lead: "Mod 11 · Musculoskeletal Assessment (4–5 final questions). Slides not posted yet.",
+    diagram: "mskjoints",
+    lead: "Mod 11 · Musculoskeletal Assessment (4–5 final questions).",
     summary: [
-      "🚧 This section is a placeholder. The Module 11 lecture slides haven't been posted, so there are no topics, flashcards, or questions for it yet. It will be filled in from the slides as soon as they are uploaded.",
-      "To get a head start, preview ATI Health Assess 3.0 “Musculoskeletal and neurological” and ATI RN Fundamentals Chapter 31. The muscle strength scale, gait, and Romberg from Mod 10 carry over."
+      "Musculoskeletal assessment asks one question over and over: does this side match the other side? Know the parts (ligaments join bone to bone, tendons join muscle to bone; hinge joints flex and extend, ball-and-socket joints move every way), then ask about pain, stiffness, swelling, weakness, mechanism of injury, timing, and function. Examine each region head to toe by inspecting, palpating, testing range of motion (active, then passive), and grading strength 0–5.",
+      "The lecture case is an 85-year-old with osteoporosis and a hip fracture after a fall, so the priority skill is the neurovascular check: color, warmth, movement, sensation, pulses, and cap refill below the injury, compared with the other side. A lost distal pulse, new numbness, or severe pain with neurovascular changes is reported now. Round it out with the lifespan (infant hips, children's growth plates and scoliosis, older adults' bone and muscle loss and falls), SDOH, health promotion, and the terminology."
     ],
     structure: [
-      "Study guide: musculoskeletal anatomy and physiology.",
-      "Study guide: expected vs. unexpected findings.",
-      "Study guide: subjective and objective musculoskeletal assessment.",
-      "Study guide: lifespan and SDOH considerations.",
-      "Study guide: musculoskeletal medical terminology."
+      "Bones (206), joints, ligaments (bone to bone), tendons (muscle to bone), muscles (skeletal, smooth, cardiac).",
+      "Joints: fibrous (immovable), cartilaginous (slightly movable), synovial (hinge, ball and socket, condyloid).",
+      "Exam: inspect → palpate → ROM → strength; compare sides.",
+      "Strength: 5 full resistance · 4 some · 3 against gravity · 2 gravity eliminated · 1 flicker · 0 none.",
+      "Neurovascular check: color, warmth, movement, sensation, pulses, cap refill."
     ]
   }
 };

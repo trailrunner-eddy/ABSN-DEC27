@@ -97,6 +97,19 @@
       { x: 120, y: 330, label: "Patellar · L2–L4", text: "Strike the tendon just below the kneecap with the leg hanging relaxed.", topics: ["dtr"] },
       { x: 190, y: 410, label: "Achilles · S1–S2", text: "Dorsiflex the foot slightly and strike the tendon above the heel.", topics: ["dtr"] },
       { x: 150, y: 160, label: "Grading 0–4+", text: "0 absent, 1+ diminished, 2+ normal, 3+ brisk (may be normal), 4+ hyperactive with clonus. Expected: 2+ and symmetric.", topics: ["dtr", "neurofind"] }
+    ] },
+  /* ---------- MSK ---------- */
+  { id: "mskjoints", kind: "structure", topic: "mskap", sys: "msk", title: "Joints head to toe", view: "0 0 300 440",
+    svg: BODY,
+    spots: [
+      { x: 150, y: 82, label: "Neck · cervical spine", text: "Skull on 7 cervical vertebrae: nodding and rotation. Expected: head erect, aligned with the trunk. Test flexion, extension, hyperextension, lateral flexion, rotation.", topics: ["mskap", "mskregions"] },
+      { x: 94, y: 104, label: "Shoulder · ball and socket", text: "Greatest range of motion, least stability. A flattened contour after a fall suggests dislocation; pain on abduction suggests subacromial bursa trouble.", topics: ["mskap", "mskregions"] },
+      { x: 80, y: 160, label: "Elbow · hinge", text: "Humerus, radius, ulna. Expected: hollows beside the olecranon. Effusion (gout), nodules (RA), or a displaced olecranon (dislocation) are unexpected.", topics: ["mskap", "mskregions"] },
+      { x: 238, y: 236, label: "Wrist and hand · condyloid + 27 bones", text: "Fine movement and grip. Unexpected: swelling or nodules (arthritis), ulnar deviation, ganglion cyst. Test opposition and grip.", topics: ["mskap", "mskregions"] },
+      { x: 150, y: 175, label: "Spine", text: "Cervical and lumbar curves concave, thoracic convex. Unexpected: kyphosis, lordosis, scoliosis (forward-bend test).", topics: ["mskap", "mskregions"] },
+      { x: 116, y: 250, label: "Hip · ball and socket", text: "Femoral head in the acetabulum: wide motion with weight-bearing stability. Iliac crests and gluteal folds should be level. Lecture case: hip fracture after a fall.", topics: ["mskap", "mskcase"] },
+      { x: 122, y: 330, label: "Knee · hinge", text: "Femur, tibia, patella; cruciate and collateral ligaments and menisci. Expected hollows beside the patella; a boggy knee or crepitus with pain is unexpected.", topics: ["mskap", "mskregions"] },
+      { x: 194, y: 408, label: "Ankle and foot · hinge", text: "Tibia, fibula, talus plus 26 foot bones. Test dorsiflexion, plantar flexion, inversion, eversion. Unexpected: hallux valgus, hammertoes, calluses.", topics: ["mskap", "mskregions", "mskexam"] }
     ] }
   ];
   window.DIAGRAMS = (window.DIAGRAMS || []).concat(D);

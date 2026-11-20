@@ -16,7 +16,6 @@
     var c = Object.assign({}, s);
     if (bp[c.id]) c.weight = bp[c.id];
     if (c.id === "repro") { c.name = "Reproductive, GU & Rectal"; c.short = "Repro & GU"; }
-    if (c.id === "msk") c.soon = true;
     return c;
   });
 
