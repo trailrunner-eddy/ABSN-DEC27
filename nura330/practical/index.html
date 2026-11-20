@@ -134,6 +134,8 @@ button.reset:hover{color:var(--ink);border-color:var(--muted)}
 .ph-h h3{margin:0}
 .ph-h .mono{font-size:.8rem;color:var(--accent);font-weight:600}
 .ph-h .tag{background:var(--accent-soft);color:var(--accent)}
+ol.rights{margin:.3rem 0 .6rem;padding-left:1.4rem}
+ol.rights li{margin:.25rem 0}
 ol.lines{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:.3rem}
 ol.lines li{display:grid;grid-template-columns:5.6rem 1fr;gap:.6rem;padding:.4rem .6rem;border-radius:4px;margin:0;border-left:3px solid transparent}
 ol.lines .who{font-family:var(--f-mono);font-size:.68rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;padding-top:.22rem;color:var(--muted)}
@@ -178,6 +180,18 @@ ol.lines li.hid::after{content:"Tap to check your line";grid-column:2;font-famil
 
 <!-- ================= CORE ================= -->
 <section class="panel" id="p-core">
+  <div class="card">
+    <h2>NURA 320 med pass: the five rights <span class="pts">Priority</span></h2>
+    <p>All four patients are stable and can take their ordered medication. The med pass tests how you give it, not whether you catch a contraindication. Say each right out loud as you check it against the MAR (medication administration record).</p>
+    <ol class="rights">
+      <li><b>Right patient:</b> two identifiers (name and date of birth), with the patient stating them, checked against the armband and the MAR.</li>
+      <li><b>Right drug:</b> the label matches the MAR (generic and brand name).</li>
+      <li><b>Right dose:</b> the amount matches the order.</li>
+      <li><b>Right route:</b> PO (by mouth), inhaled, and so on, as ordered.</li>
+      <li><b>Right time:</b> it is due now; check when the last dose was given.</li>
+    </ol>
+    <p class="muted">Then tell the patient what the drug is for, give it, stay until it's taken, and say what you'll recheck afterward.</p>
+  </div>
   <div class="card">
     <h2>How the 100 points break down</h2>
     <div class="tblwrap"><table class="ref">
@@ -295,7 +309,6 @@ ol.lines li.hid::after{content:"Tap to check your line";grid-column:2;font-famil
       <div class="callout" style="margin-top:.6rem"><strong>Chart traps to catch</strong>
         <ul>
           <li>The name is Patricia but the chart says <b>Male</b>. Verify identity with two identifiers and point out the mismatch.</li>
-          <li>Furosemide 40 mg <b>every 4 hours</b> PO is 240 mg/day. Oral furosemide is usually daily or BID. <b>Clarify with the provider before giving.</b></li>
         </ul></div>
     </div>
   </div>
@@ -319,7 +332,7 @@ ol.lines li.hid::after{content:"Tap to check your line";grid-column:2;font-famil
       <div><div class="lbl">Normal (say these)</div><ul><li>HR 88, temp 98.4 within range</li><li>A&amp;O ×4, pain only 2/10</li><li>Whatever is normal on your exam, e.g. regular rhythm, 2+ pulses, cap refill &lt;2 s</li></ul></div>
       <div><div class="lbl">Abnormal (say these)</div><ul><li>RR 22: tachypnea</li><li>SpO₂ 94%: below normal</li><li>BP 138/86: stage 1 hypertension</li><li>Any JVD, pitting edema, S3, crackles you find</li></ul></div>
       <div><div class="lbl">Why it matters</div><p>When the heart can't pump forward, fluid backs up. Left-side failure pushes fluid into the lungs, which causes fast breathing, low SpO₂, and crackles. Right-side failure backs it into the body, which causes JVD and edema. High BP adds afterload and makes it worse.</p></div>
-      <div><div class="lbl">What else you need</div><ul><li>Daily weights and trend (gain &gt;2–3 lb/day or 5 lb/week)</li><li>Intake &amp; output</li><li><b>Potassium</b> (normal 3.5–5.0 mEq/L), sodium (normal 135–145 mEq/L), BUN (normal 10–20 mg/dL) and creatinine (normal 0.6–1.2 mg/dL) before a loop diuretic</li><li>BNP (normal less than 100 pg/mL), chest X-ray, history of HF</li><li>Orthopnea: how many pillows? Dyspnea on exertion?</li></ul></div>
+      <div><div class="lbl">What else you need</div><ul><li>Daily weights and trend (gain &gt;2–3 lb/day or 5 lb/week)</li><li>Intake &amp; output</li><li><b>Potassium</b> (normal 3.5–5.0 mEq/L), sodium (normal 135–145 mEq/L), BUN (normal 10–20 mg/dL) and creatinine (normal 0.6–1.2 mg/dL)</li><li>BNP (normal less than 100 pg/mL), chest X-ray, history of HF</li><li>Orthopnea: how many pillows? Dyspnea on exertion?</li></ul></div>
     </div>
   </div>
 
@@ -331,7 +344,7 @@ ol.lines li.hid::after{content:"Tap to check your line";grid-column:2;font-famil
       <dt>S</dt><dd>"I'm calling about Patricia Thompson, 72, room __. Respirations are 22 and SpO₂ is 94%."</dd>
       <dt>B</dt><dd>"Admitted on oral furosemide 40 mg every 4 hours; no known allergies; full code."</dd>
       <dt>A</dt><dd>"I found [JVD / 2+ pitting edema bilaterally / crackles at the bases]. BP 138/86. I'm concerned about fluid overload."</dd>
-      <dt>R</dt><dd>"Can you confirm the furosemide frequency? I'd also like orders for daily weights, strict I&amp;O, a BMP for potassium, and O₂ to keep SpO₂ ≥ 94%."</dd>
+      <dt>R</dt><dd>"I'd like orders for daily weights, strict I&amp;O, a BMP for potassium, and O₂ to keep SpO₂ ≥ 94%."</dd>
     </dl>
   </div>
 
@@ -341,7 +354,7 @@ ol.lines li.hid::after{content:"Tap to check your line";grid-column:2;font-famil
       <ul>
         <li>Raise the head of bed to semi- or high-Fowler's to ease breathing</li>
         <li>Apply O₂ per protocol or order</li>
-        <li>Notify the provider (SBAR above) and clarify the furosemide order</li>
+        <li>Notify the provider (SBAR above)</li>
         <li>Check potassium and BP before giving the diuretic</li>
         <li>Start strict I&amp;O, daily weight (same time, same scale), fluid and sodium limits if ordered</li>
         <li>Elevate edematous legs; protect fragile skin</li>
@@ -359,7 +372,7 @@ ol.lines li.hid::after{content:"Tap to check your line";grid-column:2;font-famil
     <h2>NURA 320 med pass: furosemide (Lasix)</h2>
     <div class="two">
       <div><div class="lbl">Class &amp; action</div><p>Loop diuretic. Blocks sodium and chloride reabsorption in the loop of Henle, so the kidneys excrete more water.</p>
-        <div class="lbl">Check before giving</div><ul><li>BP: hold and call if hypotensive (commonly SBP &lt; 90)</li><li>Potassium (normal 3.5–5.0 mEq/L); furosemide wastes K⁺</li><li>Weight, I&amp;O, lung sounds, edema</li><li>Rights of med admin; question the q4h frequency</li></ul></div>
+        <div class="lbl">Five rights: say each out loud</div><ol class="rights"><li><b>Right patient:</b> two identifiers (name + DOB) checked against the armband and MAR</li><li><b>Right drug:</b> furosemide (Lasix), matching the MAR label</li><li><b>Right dose:</b> 40 mg</li><li><b>Right route:</b> PO (by mouth)</li><li><b>Right time:</b> every 4 hours, due now</li></ol><div class="lbl">Baseline to recheck after</div><p>BP, lung sounds, edema, urine output, weight.</p></div>
       <div><div class="lbl">Teach the patient</div><ul><li>Expect to urinate more; give it in the morning so it doesn't disrupt sleep</li><li>Stand up slowly; you may feel dizzy</li><li>Eat potassium-rich foods (bananas, potatoes, oranges) unless told not to</li><li>Weigh yourself every morning and report a gain of 2–3 lb in a day or 5 lb in a week</li><li>Report muscle cramps, weakness, irregular heartbeat, or ringing in the ears</li></ul></div>
     </div>
   </div>
@@ -393,7 +406,6 @@ ol.lines li.hid::after{content:"Tap to check your line";grid-column:2;font-famil
         <ul>
           <li>Height is listed as "178" with no unit. Say you would clarify it (178 cm fits the BMI).</li>
           <li>Attending is "None". Know who you'd call: the covering provider or rapid response.</li>
-          <li>HR 112 <i>before</i> albuterol. Albuterol raises HR further, so recheck it afterwards. Hypoxia is driving the tachycardia, so don't withhold the inhaler for it.</li>
         </ul></div>
     </div>
   </div>
@@ -455,7 +467,7 @@ ol.lines li.hid::after{content:"Tap to check your line";grid-column:2;font-famil
     <h2>NURA 320 med pass: albuterol MDI</h2>
     <div class="two">
       <div><div class="lbl">Class &amp; action</div><p>Short-acting beta-2 agonist (SABA). Relaxes bronchial smooth muscle and opens the airways within minutes. It is the rescue inhaler.</p>
-        <div class="lbl">Check before giving</div><ul><li>HR, RR, SpO₂, lung sounds (your baseline for evaluating it)</li><li>Last dose time; q4h means not before 1200 if it was given at 0800</li><li>Rights of med admin; route is inhaled</li></ul></div>
+        <div class="lbl">Five rights: say each out loud</div><ol class="rights"><li><b>Right patient:</b> two identifiers (name + DOB) checked against the armband and MAR</li><li><b>Right drug:</b> albuterol MDI (metered-dose inhaler), matching the MAR label</li><li><b>Right dose:</b> 2 puffs</li><li><b>Right route:</b> inhaled, with a spacer</li><li><b>Right time:</b> every 4 hours; check when the last dose was given</li></ol><div class="lbl">Baseline to recheck after</div><p>HR, RR, SpO₂, lung sounds, ability to speak.</p></div>
       <div><div class="lbl">Teach the patient (MDI technique)</div><ul><li>Shake the inhaler; attach the spacer</li><li>Breathe all the way out, seal lips around the mouthpiece</li><li>Press once as you start a slow, deep breath in</li><li>Hold for 10 seconds, then breathe out slowly</li><li>Wait 1 minute before the second puff</li><li>Side effects: shakiness, racing heart, nervousness</li><li>If you need it more often than prescribed, tell your provider; asthma may be getting worse</li></ul></div>
     </div>
   </div>
@@ -488,7 +500,6 @@ ol.lines li.hid::after{content:"Tap to check your line";grid-column:2;font-famil
       <div class="callout" style="margin-top:.6rem"><strong>Chart traps to catch</strong>
         <ul>
           <li>Weight "152" has no unit. Say you would clarify lb vs kg; it changes dosing math.</li>
-          <li>Acetaminophen 650 mg q4h is up to 3.9 g/day, right at the 4 g ceiling. Ask about other acetaminophen products (cold medicine, Norco/Percocet).</li>
           <li>If it turns out to be MSK pain, use the Bennett tab's MSK checklist.</li>
         </ul></div>
     </div>
@@ -513,7 +524,7 @@ ol.lines li.hid::after{content:"Tap to check your line";grid-column:2;font-famil
       <div><div class="lbl">Normal (say these)</div><ul><li>HR, RR, temp, SpO₂ all within range</li><li>A&amp;O ×4, PERRLA, EOMs intact, equal strength and sensation (if found)</li></ul></div>
       <div><div class="lbl">Abnormal (say these)</div><ul><li>Pain 5/10: moderate</li><li>BP 132/82: stage 1 hypertension</li><li>Any unequal pupils, weakness, numbness, slurred speech</li></ul></div>
       <div><div class="lbl">Why it matters</div><p>With a normal neuro exam, this is acute pain that affects comfort and rest. Raised BP can come from pain or contribute to headache. Any one-sided deficit or pupil change suggests stroke or rising intracranial pressure, which is time-critical.</p></div>
-      <div><div class="lbl">What else you need</div><ul><li>Headache history: worst ever? sudden "thunderclap"?</li><li>Vision changes, nausea or vomiting, neck stiffness, fever</li><li>Recent fall or head injury; anticoagulant use</li><li>Last acetaminophen dose and total in 24 h; liver disease, alcohol use</li><li>Trend BP; blood glucose (normal 70–99 mg/dL; low sugar can mimic stroke)</li></ul></div>
+      <div><div class="lbl">What else you need</div><ul><li>Headache history: worst ever? sudden "thunderclap"?</li><li>Vision changes, nausea or vomiting, neck stiffness, fever</li><li>Recent fall or head injury; anticoagulant use</li><li>When her last acetaminophen dose was</li><li>Trend BP; blood glucose (normal 70–99 mg/dL; low sugar can mimic stroke)</li></ul></div>
     </div>
   </div>
 
@@ -533,7 +544,7 @@ ol.lines li.hid::after{content:"Tap to check your line";grid-column:2;font-famil
     <div class="card">
       <h2>Take action <span class="pts">10 pts</span></h2>
       <ul>
-        <li>Give acetaminophen as ordered after confirming the 24-h total</li>
+        <li>Give acetaminophen as ordered</li>
         <li>Non-drug comfort: dim lights, quiet room, cool cloth, repositioning</li>
         <li>Raise head of bed slightly; keep the call light in reach</li>
         <li>If any deficit: stroke alert or rapid response, NPO, note time last known well, notify provider</li>
@@ -551,7 +562,7 @@ ol.lines li.hid::after{content:"Tap to check your line";grid-column:2;font-famil
     <h2>NURA 320 med pass: acetaminophen (Tylenol)</h2>
     <div class="two">
       <div><div class="lbl">Class &amp; action</div><p>Non-opioid analgesic and antipyretic. Reduces pain and fever; no anti-inflammatory effect and no bleeding risk.</p>
-        <div class="lbl">Check before giving</div><ul><li>Pain score and when the last dose was given</li><li>Total acetaminophen in 24 h from all sources: max 4 g (many facilities use 3 g in older adults or liver risk)</li><li>Liver disease, heavy alcohol use</li><li>Can she swallow safely? Neuro intact?</li></ul></div>
+        <div class="lbl">Five rights: say each out loud</div><ol class="rights"><li><b>Right patient:</b> two identifiers (name + DOB) checked against the armband and MAR</li><li><b>Right drug:</b> acetaminophen (Tylenol), matching the MAR label</li><li><b>Right dose:</b> 650 mg</li><li><b>Right route:</b> PO (by mouth)</li><li><b>Right time:</b> every 4 hours; check when the last dose was given</li></ol><div class="lbl">Baseline to recheck after</div><p>Pain score (recheck in 30–60 min).</p></div>
       <div><div class="lbl">Teach the patient</div><ul><li>Many cold and pain products also contain acetaminophen; read labels</li><li>Avoid alcohol while taking it</li><li>Report yellow skin or eyes, dark urine, or right upper belly pain</li><li>Tell the nurse if pain isn't better in about an hour</li></ul></div>
     </div>
   </div>
@@ -584,8 +595,6 @@ ol.lines li.hid::after{content:"Tap to check your line";grid-column:2;font-famil
       <div class="callout" style="margin-top:.6rem"><strong>Chart traps to catch</strong>
         <ul>
           <li>Attending is "None". Know who you'd notify.</li>
-          <li>Ibuprofen in an adult over 65 is on the Beers list for GI bleeding and kidney injury, and NSAIDs can raise BP (his is 132/84). Ask about stomach ulcers, kidney disease, and blood thinners.</li>
-          <li>400 mg q4h = 2,400 mg/day: within the prescription maximum (3,200 mg) but above the OTC limit.</li>
         </ul></div>
     </div>
   </div>
@@ -609,7 +618,7 @@ ol.lines li.hid::after{content:"Tap to check your line";grid-column:2;font-famil
       <div><div class="lbl">Normal (say these)</div><ul><li>HR, RR, temp, SpO₂ within range: no sign of infection or distress</li><li>CMS intact (warm, pink, cap refill &lt;2 s, moves and feels all extremities), if found</li></ul></div>
       <div><div class="lbl">Abnormal (say these)</div><ul><li>Pain 6/10: moderate, highest of the four patients</li><li>BP 132/84: stage 1 hypertension (pain can raise it)</li><li>Any swelling, redness, warmth, limited ROM, crepitus, unsteady gait</li></ul></div>
       <div><div class="lbl">Why it matters</div><p>Pain limits movement. Limited movement plus age 71 raises the risk of falls, stiffness, pressure injury, and clots. A warm, red joint could mean infection. Any CMS change means blood flow or nerves are compromised.</p></div>
-      <div><div class="lbl">What else you need</div><ul><li>Cause: injury, arthritis, recent surgery, gout history</li><li>X-ray results; CBC with WBC (normal 5,000–10,000/mm³), ESR (normal female 0–20, male 0–15 mm/hr), and CRP (normal less than 1.0 mg/dL) if the joint is hot</li><li>Kidney function before an NSAID: BUN (normal 10–20 mg/dL), creatinine (normal 0.6–1.2 mg/dL)</li><li>History of GI bleeding or ulcers; anticoagulants or aspirin</li><li>Fall history; home mobility aids</li></ul></div>
+      <div><div class="lbl">What else you need</div><ul><li>Cause: injury, arthritis, recent surgery, gout history</li><li>X-ray results; CBC with WBC (normal 5,000–10,000/mm³), ESR (normal female 0–20, male 0–15 mm/hr), and CRP (normal less than 1.0 mg/dL) if the joint is hot</li><li>History of GI bleeding or ulcers; anticoagulants or aspirin</li><li>Fall history; home mobility aids</li></ul></div>
     </div>
   </div>
 
@@ -621,7 +630,7 @@ ol.lines li.hid::after{content:"Tap to check your line";grid-column:2;font-famil
       <dt>S</dt><dd>"I'm calling about Michael Bennett, 71, room __. He reports [right knee] pain at 6 out of 10."</dd>
       <dt>B</dt><dd>"He has ibuprofen 400 mg every 4 hours ordered; no known allergies."</dd>
       <dt>A</dt><dd>"The joint shows [mild swelling, limited flexion]; CMS is intact bilaterally. Gait is [unsteady]. BP 132/84. I'm concerned about pain limiting mobility and fall risk."</dd>
-      <dt>R</dt><dd>"I'll give the ibuprofen with food and reassess in an hour. Could we get a PT consult, and do you want kidney function checked given his age?"</dd>
+      <dt>R</dt><dd>"I'll give the ibuprofen with food and reassess in an hour. Could we get a PT consult to help with his mobility?"</dd>
     </dl>
   </div>
 
@@ -629,7 +638,7 @@ ol.lines li.hid::after{content:"Tap to check your line";grid-column:2;font-famil
     <div class="card">
       <h2>Take action <span class="pts">10 pts</span></h2>
       <ul>
-        <li>Give ibuprofen with food after checking GI and kidney history</li>
+        <li>Give ibuprofen with food as ordered</li>
         <li>Elevate and support the joint; ice for swelling if appropriate</li>
         <li>Fall precautions: bed low, call light in reach, non-skid socks, gait belt and assist for walking</li>
         <li>Reposition for comfort; encourage gentle ROM as tolerated</li>
@@ -648,7 +657,7 @@ ol.lines li.hid::after{content:"Tap to check your line";grid-column:2;font-famil
     <h2>NURA 320 med pass: ibuprofen (Motrin, Advil)</h2>
     <div class="two">
       <div><div class="lbl">Class &amp; action</div><p>NSAID. Blocks COX enzymes, so it lowers prostaglandins: less pain, inflammation, and fever.</p>
-        <div class="lbl">Check before giving</div><ul><li>Pain score and last dose time</li><li>History of GI bleeding or ulcers, kidney disease, heart failure</li><li>Anticoagulants, aspirin, steroids, other NSAIDs</li><li>BP; kidney labs if available</li></ul></div>
+        <div class="lbl">Five rights: say each out loud</div><ol class="rights"><li><b>Right patient:</b> two identifiers (name + DOB) checked against the armband and MAR</li><li><b>Right drug:</b> ibuprofen (Motrin, Advil), matching the MAR label</li><li><b>Right dose:</b> 400 mg</li><li><b>Right route:</b> PO (by mouth), with food</li><li><b>Right time:</b> every 4 hours; check when the last dose was given</li></ol><div class="lbl">Baseline to recheck after</div><p>Pain score (recheck in 30–60 min), mobility.</p></div>
       <div><div class="lbl">Teach the patient</div><ul><li>Take with food or milk and a full glass of water</li><li>Don't combine with other NSAIDs (naproxen, aspirin) or alcohol</li><li>Report black or tarry stools, vomiting that looks like coffee grounds, stomach pain</li><li>Report swelling, less urine, or sudden weight gain</li><li>Get up slowly and call for help before walking</li></ul></div>
     </div>
   </div>
@@ -695,8 +704,8 @@ ol.lines li.hid::after{content:"Tap to check your line";grid-column:2;font-famil
   });
 })();
 </script>
-<script src="js/scripts.js?v=202611201900"></script>
-<script src="js/roleplay.js?v=202611201900"></script>
+<script src="js/scripts.js?v=202611201910"></script>
+<script src="js/roleplay.js?v=202611201910"></script>
 <script src="../../js/glossary.js?v=202611201900"></script>
 <script src="../../js/labs.js?v=202611201900"></script>
 </body>
