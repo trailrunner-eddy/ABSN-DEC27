@@ -62,9 +62,9 @@ window.ROLEPLAY = {
       ]},
       { title: "Prioritize hypotheses", pts: "20 pts", lines: [
         ["say", "My priority is fluid volume excess causing impaired gas exchange. Breathing comes first under the ABCs (airway, breathing, circulation), so it outranks her pain of 2.", "States priority problem"],
-        ["n", "Dr. Garcia, this is ___, the nursing student caring for Patricia Thompson in room ___. Her respiratory rate is 22 and her oxygen saturation is 94%. She's 72, on oral furosemide 40 mg every 4 hours, no allergies, full code. I found JVD, 2+ bilateral edema, and crackles at both bases; BP 138/86. I'm concerned about fluid overload. Can you clarify the furosemide frequency, and may I get daily weights, strict I&O (intake and output), and a BMP (basic metabolic panel)?", "Communicates clearly: SBAR (Situation, Background, Assessment, Recommendation)"],
-        ["dr", "Good catch. Make it 40 mg PO (by mouth) once daily. Daily weights, strict I&O, and a BMP are fine."],
-        ["n", "Reading back: furosemide 40 mg by mouth once daily, daily weights, strict I&O, and a BMP. Thank you."]
+        ["n", "Dr. Garcia, this is ___, the nursing student caring for Patricia Thompson in room ___. Her respiratory rate is 22 and her oxygen saturation is 94%. She's 72, with furosemide 40 mg by mouth every 4 hours ordered, no allergies, full code. I found JVD, 2+ bilateral edema, and crackles at both bases; BP 138/86. I'm concerned about fluid overload. May I get daily weights, strict I&O (intake and output), and a BMP (basic metabolic panel)?", "Communicates clearly: SBAR (Situation, Background, Assessment, Recommendation)"],
+        ["dr", "Yes, go ahead with daily weights, strict I&O, and a BMP. Give her scheduled furosemide now."],
+        ["n", "Reading back: daily weights, strict I&O, a BMP, and give the scheduled furosemide now. Thank you."],
       ]},
       { title: "Take action", pts: "10 pts", lines: [
         ["say", "I'm raising her to high-Fowler's, applying O₂ (oxygen) at 2 L by nasal cannula per protocol, and elevating her legs. I'll check her potassium and BP before giving the diuretic.", "Recommends an intervention / notifies provider"]
@@ -78,9 +78,17 @@ window.ROLEPLAY = {
       { title: "Before you leave", pts: "Safety", lines: [
         ["say", "Bed in the lowest position, 2 side rails up, call light and tray table in reach. Performing hand hygiene on exit.", "Leaves room safe"]
       ]},
-      { title: "NURA 320 med pass: furosemide", pts: "If asked", lines: [
-        ["say", "Her BP is 138/86 and potassium this morning was 4.1 mEq/L (normal 3.5–5.0), so it's safe to give."],
-        ["n", "This is furosemide, a water pill. You'll urinate more, so get up slowly and call me first. Eat potassium-rich foods like bananas, and weigh yourself every morning. Call if you gain 2 to 3 pounds in a day or 5 in a week."]
+      { title: "NURA 320 med pass: furosemide", pts: "Five rights · priority", lines: [
+        ["n", "Before I give your medicine, can you tell me your name and date of birth again?"],
+        ["p", "Patricia Thompson. November 20th, 1954."],
+        ["say", "Name and date of birth match the armband and the MAR (medication administration record).", "Right patient"],
+        ["say", "Furosemide (Lasix), and the label matches the MAR.", "Right drug"],
+        ["say", "40 mg, matching the order.", "Right dose"],
+        ["say", "PO (by mouth), as ordered.", "Right route"],
+        ["say", "Every 4 hours, and it's due now.", "Right time"],
+        ["n", "This is furosemide, a water pill, to help your body get rid of the extra fluid. You'll urinate more, so call me before you get up. Weigh yourself every morning."],
+        ["do", "Hand her the tablet with water and stay until she has swallowed it."],
+        ["say", "I'll recheck her BP, lung sounds, edema, and urine output after the dose."]
       ]}
     ]
   },
@@ -151,9 +159,17 @@ window.ROLEPLAY = {
       { title: "Before you leave", pts: "Safety", lines: [
         ["say", "Bed in the lowest position with him sitting upright, 2 side rails up, call light and tray table in reach. Performing hand hygiene on exit.", "Leaves room safe"]
       ]},
-      { title: "NURA 320 med pass: albuterol MDI (metered-dose inhaler)", pts: "If asked", lines: [
-        ["say", "Last dose at 0400, so it's due. His HR of 112 is from low oxygen, so I won't hold it, and I'll recheck it afterward."],
-        ["n", "Shake it, breathe all the way out, seal your lips on the spacer, press once as you breathe in slowly, and hold for 10 seconds. Wait 1 minute before the second puff. It may make you shaky. Tell your provider if you need it more often than prescribed."]
+      { title: "NURA 320 med pass: albuterol MDI (metered-dose inhaler)", pts: "Five rights · priority", lines: [
+        ["n", "Before I give your medicine, can you tell me your name and date of birth again?"],
+        ["p", "Daniel Martinez. November 20th, 2005."],
+        ["say", "Name and date of birth match the armband and the MAR (medication administration record).", "Right patient"],
+        ["say", "Albuterol, and the label matches the MAR.", "Right drug"],
+        ["say", "2 puffs, matching the order.", "Right dose"],
+        ["say", "Inhaled, with a spacer, as ordered.", "Right route"],
+        ["say", "Every 4 hours. The last dose was at 0400, so it's due now.", "Right time"],
+        ["n", "This is your albuterol inhaler to open your airways. Shake it, breathe all the way out, seal your lips on the spacer, press once as you breathe in slowly, and hold for 10 seconds. Wait 1 minute before the second puff. It may make you a little shaky."],
+        ["do", "Watch him take both puffs and coach his technique."],
+        ["say", "I'll recheck his SpO₂, RR, lung sounds, and HR in 5 to 15 minutes."]
       ]}
     ]
   },
@@ -179,8 +195,8 @@ window.ROLEPLAY = {
       { title: "Focused history", pts: "Recognize cues · 1 pt", lines: [
         ["n", "Your pain is charted as a 5. Where is it, when did it start, did it come on suddenly, what makes it better or worse, and what does it feel like?", "Pain with OPQRST (onset, provocation, quality, region, severity, timing)"],
         ["p", "A headache across my forehead since I woke up. It built up slowly, and it's dull and pressing. Light makes it worse; the dark helps. It's a 5, and not the worst I've had."],
-        ["n", "Any vision changes, nausea, stiff neck, fever, weakness, numbness, falls, or blood thinners? Any acetaminophen today?", "Associated symptoms"],
-        ["p", "A little queasy. None of the rest, and no Tylenol yet."]
+        ["n", "Any vision changes, nausea, stiff neck, fever, weakness, numbness, or falls?", "Associated symptoms"],
+        ["p", "A little queasy. None of the rest."],
       ]},
       { title: "General focused assessment", pts: "Recognize cues · 5 pts", lines: [
         ["n", "Where are you, what's today's date, and why are you here?"],
@@ -206,16 +222,16 @@ window.ROLEPLAY = {
         ["say", "Normal: HR (heart rate) 78, RR (respiratory rate) 16, temperature 98.6, SpO₂ (oxygen saturation) 97%. Alert and oriented ×4, PERRLA, EOMs intact, equal strength and sensation.", "Identifies normal findings"],
         ["say", "Abnormal: pain 5 out of 10, BP (blood pressure) 132/82 stage 1 hypertension, light sensitivity and mild nausea.", "Identifies abnormal findings"],
         ["say", "With a normal neuro exam, this is acute pain affecting her comfort, and the pain may be raising her BP. A one-sided deficit or pupil change would suggest stroke or rising intracranial pressure.", "Explains why abnormals matter"],
-        ["say", "I'd also want a fingerstick glucose, her BP trend, her total acetaminophen in 24 hours, and her liver and alcohol history.", "Identifies additional data needed"]
+        ["say", "I'd also want a fingerstick glucose, her BP trend, and her headache history, including any recent head injury.", "Identifies additional data needed"],
       ]},
       { title: "Prioritize hypotheses", pts: "20 pts", lines: [
         ["say", "My priority is acute pain. If I'd found any focal deficit, it would become possible stroke, and I'd call a stroke alert and keep her NPO (nothing by mouth).", "States priority problem"],
-        ["n", "Dr. Garcia, this is ___, the nursing student caring for Elena Martinez in room ___. She has a headache rated 5 out of 10. She's 63, with acetaminophen 650 mg every 4 hours ordered and none given today; no allergies. Her neuro exam is intact and her BP is 132/82. I'd like to give the acetaminophen and recheck in an hour. Since every 4 hours is 3.9 grams a day, would you like to change the frequency?", "Communicates clearly: SBAR (Situation, Background, Assessment, Recommendation)"],
-        ["dr", "Give 650 mg now and change it to every 6 hours as needed. Call me with any neuro change."],
-        ["n", "Reading back: acetaminophen 650 mg now, then every 6 hours as needed, and call with any neuro change. Thank you."]
+        ["n", "Dr. Garcia, this is ___, the nursing student caring for Elena Martinez in room ___. She has a headache rated 5 out of 10. She's 63, with acetaminophen 650 mg every 4 hours ordered, and no allergies. Her neuro exam is intact and her BP is 132/82. I'm giving her scheduled acetaminophen and will recheck her pain in an hour. Please call back if you'd like anything else.", "Communicates clearly: SBAR (Situation, Background, Assessment, Recommendation)"],
+        ["dr", "Sounds good. Call me if her neuro exam changes or the pain gets worse."],
+        ["n", "Okay: call with any neuro change or worsening pain. Thank you."],
       ]},
       { title: "Take action", pts: "10 pts", lines: [
-        ["say", "I'm giving the acetaminophen after confirming her 24-hour total, dimming the lights, offering a cool cloth, and keeping the call light in reach.", "Recommends an intervention / notifies provider"]
+        ["say", "I'm giving the acetaminophen, dimming the lights, offering a cool cloth, and keeping the call light in reach.", "Recommends an intervention / notifies provider"]
       ]},
       { title: "Evaluate outcomes", pts: "20 pts", lines: [
         ["say", "I'll reassess her pain 30 to 60 minutes after the dose, repeat neuro checks, and recheck her BP.", "What to reassess"],
@@ -226,9 +242,17 @@ window.ROLEPLAY = {
       { title: "Before you leave", pts: "Safety", lines: [
         ["say", "Bed in the lowest position, 2 side rails up, call light and tray table in reach. Performing hand hygiene on exit.", "Leaves room safe"]
       ]},
-      { title: "NURA 320 med pass: acetaminophen", pts: "If asked", lines: [
-        ["say", "No acetaminophen in 24 hours, no liver disease, and she swallows safely, so it's safe to give."],
-        ["n", "This is Tylenol for your headache. Many cold medicines contain it too, so read labels, and avoid alcohol. Tell us about yellow skin or eyes or dark urine, and call me if it isn't better in an hour."]
+      { title: "NURA 320 med pass: acetaminophen", pts: "Five rights · priority", lines: [
+        ["n", "Before I give your medicine, can you tell me your name and date of birth again?"],
+        ["p", "Elena Martinez. November 20th, 1963."],
+        ["say", "Name and date of birth match the armband and the MAR (medication administration record).", "Right patient"],
+        ["say", "Acetaminophen (Tylenol), and the label matches the MAR.", "Right drug"],
+        ["say", "650 mg, matching the order.", "Right dose"],
+        ["say", "PO (by mouth), as ordered.", "Right route"],
+        ["say", "Every 4 hours. Her last dose was over 4 hours ago, so it's due.", "Right time"],
+        ["n", "This is Tylenol for your headache. Take it with a sip of water. Call me if it isn't better in about an hour."],
+        ["do", "Hand her the tablet with water and stay until she has swallowed it."],
+        ["say", "I'll recheck her pain score in 30 to 60 minutes."]
       ]}
     ]
   },
@@ -254,8 +278,8 @@ window.ROLEPLAY = {
       { title: "Focused history", pts: "Recognize cues · 1 pt", lines: [
         ["n", "Your pain is charted as a 6. Where is it, when did it start, what makes it better or worse, what does it feel like, and does it spread?", "Pain with OPQRST (onset, provocation, quality, region, severity, timing)"],
         ["p", "My right knee. It's bothered me for years but got worse yesterday after yard work. Walking and stairs make it worse; propping it up helps. It's a deep ache that sometimes grinds, and it stays in the knee. Stiff for about 20 minutes in the morning."],
-        ["n", "Any numbness, tingling, fever, or falls? Any ulcers, kidney problems, or blood thinners?", "Associated symptoms"],
-        ["p", "No numbness or fever. I almost fell last night. I take a baby aspirin every day."]
+        ["n", "Any numbness, tingling, fever, or falls?", "Associated symptoms"],
+        ["p", "No numbness or fever. I almost fell getting up last night."],
       ]},
       { title: "General focused assessment", pts: "Recognize cues · 5 pts", lines: [
         ["n", "Where are you, what's today's date, and why are you here?"],
@@ -281,14 +305,14 @@ window.ROLEPLAY = {
       { title: "Analyze cues", pts: "20 pts", lines: [
         ["say", "Normal: HR (heart rate) 78, RR (respiratory rate) 16, temperature 98.4, and SpO₂ (oxygen saturation) 97%, so no sign of infection. CMS intact.", "Identifies normal findings"],
         ["say", "Abnormal: pain 6 out of 10, BP (blood pressure) 132/84 stage 1 hypertension, right knee swelling, limited flexion, crepitus, unsteady gait, and a near-fall.", "Identifies abnormal findings"],
-        ["say", "Pain limits his movement, and at 71 that raises his risk of falls, stiffness, pressure injury, and clots. Ibuprofen is on the Beers list for adults over 65, and he also takes aspirin, which adds to the bleeding risk.", "Explains why abnormals matter"],
-        ["say", "I'd also want his X-ray results, kidney function before an NSAID (nonsteroidal anti-inflammatory drug), and his fall history and home mobility aids.", "Identifies additional data needed"]
+        ["say", "Pain limits his movement, and at 71 that raises his risk of falls, stiffness, pressure injury, and blood clots.", "Explains why abnormals matter"],
+        ["say", "I'd also want his knee X-ray results, what caused the flare, and his fall history and home mobility aids.", "Identifies additional data needed"],
       ]},
       { title: "Prioritize hypotheses", pts: "20 pts", lines: [
         ["say", "My priority is acute pain impairing physical mobility, with a high fall risk. If his CMS were abnormal, it would become neurovascular compromise.", "States priority problem"],
-        ["n", "This is ___, the nursing student caring for Michael Bennett in room ___. He has right knee pain rated 6 out of 10. He's 71, with ibuprofen 400 mg every 4 hours ordered, he takes aspirin 81 mg daily, and he has no allergies. His knee is swollen with limited flexion; CMS is intact. He's unsteady and nearly fell last night. BP 132/84. Given his age and aspirin, would you consider scheduled acetaminophen? Could we get a PT (physical therapy) consult and a BMP (basic metabolic panel) for kidney function?", "Communicates clearly: SBAR (Situation, Background, Assessment, Recommendation)"],
-        ["dr", "Give the ibuprofen with breakfast now. I'll order a BMP and PT, and I'll review switching to acetaminophen."],
-        ["n", "Reading back: ibuprofen with breakfast now, a BMP and a PT consult, and you'll review acetaminophen. Thank you."]
+        ["n", "This is ___, the nursing student caring for Michael Bennett in room ___. He has right knee pain rated 6 out of 10. He's 71, with ibuprofen 400 mg every 4 hours ordered, and no allergies. His knee is swollen with limited flexion; CMS is intact. He's unsteady and nearly fell last night. BP 132/84. I'm giving his scheduled ibuprofen with food. Could we get a PT (physical therapy) consult for his mobility?", "Communicates clearly: SBAR (Situation, Background, Assessment, Recommendation)"],
+        ["dr", "Yes, I'll order the PT consult. Keep him on fall precautions."],
+        ["n", "Reading back: PT consult and fall precautions. Thank you."],
       ]},
       { title: "Take action", pts: "10 pts", lines: [
         ["say", "I'm giving the ibuprofen with food, elevating his knee with ice, and starting fall precautions: bed low, call light in reach, non-skid socks, and a gait belt with assist for walking.", "Recommends an intervention / notifies provider"]
@@ -302,9 +326,17 @@ window.ROLEPLAY = {
       { title: "Before you leave", pts: "Safety", lines: [
         ["say", "Bed in the lowest position, 2 side rails up, call light and tray table in reach. Performing hand hygiene on exit.", "Leaves room safe"]
       ]},
-      { title: "NURA 320 med pass: ibuprofen", pts: "If asked", lines: [
-        ["say", "No ulcers or kidney disease, the provider knows about his aspirin, and his breakfast is here, so it's safe to give."],
-        ["n", "This is ibuprofen for your knee. Take it with food and water. Don't take other NSAIDs or alcohol with it. Tell us about black stools, stomach pain, or less urine, and call me before you get up."]
+      { title: "NURA 320 med pass: ibuprofen", pts: "Five rights · priority", lines: [
+        ["n", "Before I give your medicine, can you tell me your name and date of birth again?"],
+        ["p", "Michael Bennett. November 20th, 1955."],
+        ["say", "Name and date of birth match the armband and the MAR (medication administration record).", "Right patient"],
+        ["say", "Ibuprofen (Motrin), and the label matches the MAR.", "Right drug"],
+        ["say", "400 mg, matching the order.", "Right dose"],
+        ["say", "PO (by mouth), with food, as ordered.", "Right route"],
+        ["say", "Every 4 hours. His last dose was over 4 hours ago, so it's due.", "Right time"],
+        ["n", "This is ibuprofen for your knee pain and swelling. Take it with your breakfast and a full glass of water. Call me before you get up."],
+        ["do", "Hand him the tablet with water and food and stay until he has swallowed it."],
+        ["say", "I'll recheck his pain in 30 to 60 minutes."]
       ]}
     ]
   }

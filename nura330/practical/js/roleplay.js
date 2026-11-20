@@ -50,7 +50,10 @@
     });
     card.appendChild(lg);
 
-    s.phases.forEach(function (ph) {
+    // "Before you leave" always comes last, after the med pass.
+    var phases = s.phases.filter(function (ph) { return ph.title !== "Before you leave"; })
+      .concat(s.phases.filter(function (ph) { return ph.title === "Before you leave"; }));
+    phases.forEach(function (ph) {
       var box = el("div", "ph"), hd = el("div", "ph-h");
       hd.appendChild(el("h3", null, ph.title));
       hd.appendChild(el("span", "tag", ph.pts));
