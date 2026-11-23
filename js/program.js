@@ -135,7 +135,10 @@ window.PROGRAM = {
             { mod: "Final · Diseases of the Hematologic System", title: "Sickle Cell Anemia", file: "Final/Lecture Guide/Sickle Cell Anemia Lecture Guide.pdf", web: "final-sickle-cell-anemia.pdf", topics: [["Sickle cell disease", "scd"], ["Pain crisis", "voe"], ["Acute chest", "acs"]] },
             { mod: "Final · Diseases of the Hematologic System", title: "Diseases of Platelets", file: "Final/Lecture Guide/Diseases of Platelets Lecture Guide.pdf", web: "final-diseases-of-platelets.pdf", topics: [["Thrombocytopenia", "tcp"], ["Essential thrombocythemia", "et"], ["Acquired platelet disorders", "apfd"]] },
             { mod: "Final · Diseases of the Hematologic System", title: "Diseases of White Blood Cells", file: "Final/Lecture Guide/Diseases of White Blood Cells Lecture Guide.pdf", web: "final-diseases-of-white-blood-cells.pdf", topics: [["Leukemias", "leuk"], ["Lymphomas", "hodgkin"], ["MDS", "mds"]] },
-            { mod: "Final · Diseases of the Hematologic System", title: "Introduction to Neoplasia & Cancer", file: "Final/Lecture Guide/Introduction to Neoplasia and Cancer Lecture Guide.pdf", web: "final-introduction-to-neoplasia-and-cancer.pdf", topics: [["Benign vs. malignant", "neo"], ["Spread", "spread"], ["Grade & stage", "grade"]] }
+            { mod: "Final · Diseases of the Hematologic System", title: "Introduction to Neoplasia & Cancer", file: "Final/Lecture Guide/Introduction to Neoplasia and Cancer Lecture Guide.pdf", web: "final-introduction-to-neoplasia-and-cancer.pdf", topics: [["Benign vs. malignant", "neo"], ["Spread", "spread"], ["Grade & stage", "grade"]] },
+            { mod: "Final · Diseases of the Nervous System", title: "Structure and Function of the Nervous System", file: "Final/Lecture Guide/Structure and Function of the Nervous System Lecture Guide.pdf", web: "final-structure-and-function-of-the-nervous-system.pdf", topics: [["Neurons & brain regions", "nsfn"], ["CPP & Monro-Kellie", "cperf"], ["Increased ICP", "icp"]] },
+            { mod: "Final · Diseases of the Nervous System", title: "Diseases of the Central Nervous System", file: "Final/Lecture Guide/Diseases of the Central Nervous System Lecture Guide.pdf", web: "final-diseases-of-the-central-nervous-system.pdf", topics: [["Stroke", "ischemic"], ["Meningitis", "meningitis"], ["Spinal cord injury", "sci"]] },
+            { mod: "Final · Diseases of the Nervous System", title: "Diseases of the Autonomic Nervous System", file: "Final/Lecture Guide/Diseases of the Autonomic Nervous System Lecture Guide.pdf", web: "final-diseases-of-the-autonomic-nervous-system.pdf", topics: [["Orthostatic hypotension", "ansfn"], ["Diabetic autonomic neuropathy", "dan"]] }
           ],
           exams: [
             { name: "Exam 1", status: "planned" },
@@ -151,10 +154,10 @@ window.PROGRAM = {
             {
               name: "Final Exam", status: "ready",
               path: "nura340/final/index.html",
-              bank: ["js/data.js", "js/data-endo.js", "js/data-heme.js", "js/practice.js", "js/practice-endo.js", "js/practice-heme.js", "js/practice-deep.js"],
-              blurb: "GI, endocrine, and hematology & neoplasia from the eleven Final lecture guides, plus the instructor's Final study guide with every question answered in depth. Questions use the guide's formats (MC, SATA, select N, drop-down rationale, cloze) and include an exam-depth set.",
-              topics: ["Exam Guide", "GI", "Endocrine", "Anemias & Sickle Cell", "Platelets", "Leukemia & Lymphoma", "Neoplasia"],
-              stats: "Instructor exam guide answered · 12 section overviews · 72 topics · 316 questions (41 exam-depth) · 263 flashcards"
+              bank: ["js/data.js", "js/data-endo.js", "js/data-heme.js", "js/practice.js", "js/practice-endo.js", "js/practice-heme.js", "js/practice-deep.js", "js/data-neuro.js", "js/practice-neuro.js"],
+              blurb: "GI, endocrine, hematology & neoplasia, and neuro from the fourteen Final lecture guides, plus the instructor's Final study guide with every question answered in depth. Questions use the guide's formats (MC, SATA, select N, drop-down rationale, cloze) and include an exam-depth set.",
+              topics: ["Exam Guide", "GI", "Endocrine", "Anemias & Sickle Cell", "Platelets", "Leukemia & Lymphoma", "Neoplasia", "Neuro: Stroke, ICP & Trauma", "Parkinson's, MS, ALS", "Meningitis & Encephalitis", "Autonomic"],
+              stats: "Instructor exam guide answered · 18 section overviews · 90 topics · 394 questions (49 exam-depth) · 358 flashcards"
             }
           ]
         },
