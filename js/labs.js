@@ -36,6 +36,7 @@
     // Kidney
     { lab: "BUN",         names: ["BUN", "blood urea nitrogen"],         unit: "mg/dL", normal: "10–20" },
     { lab: "Creatinine",  names: ["creatinine"],                      unit: "mg/dL", normal: "0.6–1.2" },
+    { lab: "Creatinine clearance", names: ["creatinine clearance", "CrCl"], unit: "mL/min", normal: "90–140" },
     { lab: "eGFR",        names: ["eGFR", "GFR"],                           unit: "mL/min/1.73 m²", normal: "90 or higher" },
     // Blood counts
     { lab: "Hemoglobin",  names: ["hemoglobin", "Hgb"],                  unit: "g/dL",  normal: "female 12–16, male 14–18" },
@@ -88,7 +89,12 @@
     { lab: "BNP",         names: ["BNP"],                             unit: "pg/mL", normal: "less than 100" },
     { lab: "Troponin I",  names: ["troponin"],                 unit: "ng/mL", normal: "less than 0.03" },
     { lab: "Digoxin level", names: ["digoxin level"],            unit: "ng/mL", normal: "0.5–2.0" },
-    { lab: "Lithium level", names: ["lithium level"],            unit: "mEq/L", normal: "0.6–1.2" }
+    { lab: "Lithium level", names: ["lithium level"],            unit: "mEq/L", normal: "0.6–1.2" },
+    { lab: "Phenytoin level", names: ["phenytoin level"],        unit: "mcg/mL", normal: "10–20" },
+    { lab: "Carbamazepine level", names: ["carbamazepine level"], unit: "mcg/mL", normal: "4–12" },
+    { lab: "Valproic acid level", names: ["valproic acid level", "valproate level"], unit: "mcg/mL", normal: "50–100" },
+    { lab: "Vancomycin trough", names: ["vancomycin trough", "trough"], unit: "mcg/mL", normal: "10–20" },
+    { lab: "Free T4",     names: ["free T4", "FT4"],                    unit: "ng/dL", normal: "0.8–2.8" }
   ];
   root.LAB_RANGES = LAB_RANGES;
   if (typeof module !== "undefined" && module.exports) { module.exports = LAB_RANGES; return; }
