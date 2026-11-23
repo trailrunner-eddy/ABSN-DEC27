@@ -1,0 +1,775 @@
+/* Pharm Final study lab: drug tables, compare grid, flashcards, practice questions, name game.
+   Reads window.SYSTEMS, CATEGORIES, DRUGS, SUFFIXES (drugs.js), GUIDE (guide.js) and QUESTIONS (practice.js). */
+(function () {
+  "use strict";
+
+  /* ---------- Storage (per-browser; works offline from file://) ---------- */
+  var KEY = "pharm-final-v1";
+  var S = { xp: 0, drugs: {}, flash: {}, q: {}, best: {}, guide: {}, guideAlso: true, plain: false, cover: false, theme: "auto" };
+  try { var saved = JSON.parse(localStorage.getItem(KEY) || "null"); if (saved) S = Object.assign(S, saved); } catch (e) {}
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+
+  var app = document.getElementById("app");
+  var UNITS = window.SYSTEMS, CATS = window.CATEGORIES, DRUGS = window.DRUGS, SUFFIXES = window.SUFFIXES, QUESTIONS = window.QUESTIONS || [];
+  var G = window.GUIDE || { sections: [] }, GSECS = G.sections;
+  var UNIT = {}, CAT = {}, DRUG = {}, GSEC = {}, ON_GUIDE = {};
+  UNITS.forEach(function (u) { UNIT[u.id] = u; });
+  CATS.forEach(function (c) { CAT[c.id] = c; });
+  DRUGS.forEach(function (d) { DRUG[d.id] = d; });
+  GSECS.forEach(function (g) { GSEC[g.id] = g; g.drugs.forEach(function (x) { ON_GUIDE[x.drug] = g; }); });
+  var CARDS = window.CARDS || {};
+  var FIELDS = [["moa", "MOA"], ["use", "Use"], ["contra", "Contraindications"], ["se", "Side effects"], ["ae", "Adverse effects"], ["rn", "RN assessment"], ["teach", "Client teaching"]];
+
+  /* ---------- Helpers ---------- */
+  function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function pick(a) { return a[Math.floor(Math.random() * a.length)]; }
+  function $(sel, root) { return (root || app).querySelector(sel); }
+  function $$(sel, root) { return Array.prototype.slice.call((root || app).querySelectorAll(sel)); }
+  function unitOf(d) { return CAT[d.cats[0]].sys; }
+  function drugsIn(catId) { return DRUGS.filter(function (d) { return d.cats.indexOf(catId) > -1; }); }
+  function catsIn(unitId) { return CATS.filter(function (c) { return c.sys === unitId; }); }
+  function tag(u) { return '<span class="tag sys-' + u + '">' + esc(UNIT[u].icon + " " + UNIT[u].short) + "</span>"; }
+  function title(d) { return esc(d.name) + (d.brand ? ' <span class="brand-name">(' + esc(d.brand) + ")</span>" : ""); }
+  // ==text== in cards.js = on the instructor's study guide
+  function hl(s) { return esc(s).replace(/==([\s\S]+?)==/g, '<mark class="sg">$1</mark>'); }
+  /* Tap-to-hide only works in cover mode. Outside cover mode a tap (e.g. on a
+     glossary word) just shows the definition and never hides the cell. In cover
+     mode, tapping a blurred cell reveals it (without popping a definition that
+     would give the answer away); tapping a glossary word in a revealed cell just
+     shows the definition, and tapping elsewhere in it covers it again. */
+  function bindCover() {
+    $$(".fv").forEach(function (f) {
+      f.onclick = f.onkeydown = function (e) {
+        if (!S.cover) return;
+        if (e.type === "keydown" && e.key !== "Enter" && e.key !== " ") return;
+        if (e.type === "keydown") e.preventDefault();
+        if (f.classList.contains("covered")) { f.classList.remove("covered"); e.stopPropagation(); return; }
+        if (e.type === "click" && e.target.closest && e.target.closest(".gl-term")) return;
+        f.classList.add("covered");
+      };
+    });
+  }
+  function fvh(html) { return '<span class="fv' + (S.cover ? " covered" : "") + '" tabindex="0">' + html + "</span>"; }
+  var SG_LEGEND = '<p class="sg-legend small"><mark class="sg">Highlighted</mark> = on the instructor\'s study guide, so expect it on the exam.</p>';
+  // The four fields every drug shows, then any other study-guide takeaways for that drug
+  function cardRows(d) {
+    var c = CARDS[d.id];
+    if (!c) return FIELDS.map(function (f) { return "<dt>" + f[1] + "</dt><dd>" + fvh(esc(d[f[0]])) + "</dd>"; }).join("");
+    return "<dt>MOA</dt><dd>" + fvh(hl(c.moa)) + (c.moaS ? '<div class="moa-simple"><span class="moa-simple-k">Simply put</span>' + fvh(esc(c.moaS)) + "</div>" : "") + "</dd>" +
+      "<dt>Therapeutic use</dt><dd>" + fvh(hl(c.use)) + "</dd>" +
+      '<dt>Side &amp; adverse effects</dt><dd><div class="sae"><span class="sae-k">Side</span>' + fvh(hl(c.se)) + '</div><div class="sae"><span class="sae-k adv">Adverse</span>' + fvh(hl(c.ae)) + "</div></dd>" +
+      "<dt>Contraindications</dt><dd>" + fvh(hl(c.contra)) + "</dd>" +
+      "<dt>Nursing priorities</dt><dd>" + fvh(hl(c.np)) + "</dd>" +
+      "<dt>Client teaching</dt><dd>" + fvh(c.teach ? hl(c.teach) : esc(d.teach)) + "</dd>" +
+      (c.sg || []).map(function (r) { return '<dt class="sg-dt">📋 ' + esc(r[0]) + '</dt><dd class="sg-dd">' + fvh(hl(r[1])) + "</dd>"; }).join("");
+  }
+  function plainTitle(d) { return d.name + (d.brand ? " (" + d.brand + ")" : ""); }
+  function addXP(n, msg) { S.xp += n; save(); document.getElementById("xp").textContent = S.xp; if (msg) toast(msg + "  +" + n + " XP"); }
+  var toastTimer;
+  function toast(msg) { var t = document.getElementById("toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toastTimer); toastTimer = setTimeout(function () { t.classList.remove("show"); }, 1600); }
+  function unitBar(active, hrefBase) {
+    return '<div class="filter-bar"><a class="chip ' + (!active ? "on" : "") + '" href="' + hrefBase + '">All</a>' +
+      UNITS.map(function (u) { return '<a class="chip ' + (active === u.id ? "on" : "") + '" href="' + hrefBase + "/" + u.id + '"><span class="sys-dot sys-' + u.id + '"></span>' + esc(u.short) + "</a>"; }).join("") + "</div>";
+  }
+  function switchHTML(id, on, label) {
+    return '<div class="plain-switch"><button type="button" class="switch' + (on ? " on" : "") + '" id="' + id + '" role="switch" aria-checked="' + (on ? "true" : "false") + '"><span class="knob"></span></button><label for="' + id + '">' + label + "</label></div>";
+  }
+
+  function mastery(unitId) {
+    var parts = [];
+    var ds = DRUGS.filter(function (d) { return !unitId || unitOf(d) === unitId; });
+    parts.push(ds.filter(function (d) { return S.drugs[d.id]; }).length / ds.length);
+    var fc = FLASH.filter(function (c) { return !unitId || c.u === unitId; });
+    parts.push(fc.filter(function (c) { return S.flash[c.k]; }).length / fc.length);
+    var qs = QUESTIONS.map(function (q, i) { return [q, i]; }).filter(function (x) { return !unitId || x[0].sys === unitId; });
+    if (qs.length) parts.push(qs.filter(function (x) { return S.q[x[1]] === 1; }).length / qs.length);
+    var gs = GSECS.filter(function (g) { return !unitId || g.sys === unitId; });
+    if (gs.length) parts.push(gs.filter(function (g) { return S.guide[g.id]; }).length / gs.length);
+    return Math.round(100 * parts.reduce(function (a, b) { return a + b; }, 0) / parts.length);
+  }
+
+  /* ---------- Router ---------- */
+  var cleanup = null;
+  function route() {
+    if (cleanup) { cleanup(); cleanup = null; }
+    var h = (location.hash || "#home").slice(1).split("/");
+    var r = h[0] || "home";
+    $$("#nav a", document).forEach(function (a) { a.classList.toggle("active", a.getAttribute("data-r") === r || (r === "drug" && a.getAttribute("data-r") === "drugs")); });
+    var views = { home: home, guide: guideView, drugs: drugsView, drug: drugView, compare: compare, flash: flash, quiz: quiz, names: names, memory: memory };
+    (views[r] || home)(h[1], h[2]);
+    window.scrollTo(0, 0);
+    var active = $(".nav a.active", document); if (active && active.scrollIntoView) { try { active.scrollIntoView({ block: "nearest", inline: "center" }); } catch (e) {} }
+  }
+  window.addEventListener("hashchange", route);
+
+  /* ================= HOME ================= */
+  function home() {
+    var overall = mastery(null);
+    var rows = UNITS.map(function (u) {
+      var m = mastery(u.id), cs = catsIn(u.id);
+      var n = DRUGS.filter(function (d) { return unitOf(d) === u.id; }).length;
+      return '<a class="blueprint-row sys-' + u.id + '" href="#drugs/' + cs[0].id + '">' +
+        '<span style="font-size:20px">' + u.icon + '</span><span><span class="name">' + esc(u.name) + '</span><br><span class="tiny">' + n + " drugs · " + esc(cs.map(function (c) { return c.name; }).join(", ")) + "</span></span>" +
+        '<span class="small" style="font-weight:700">' + m + '%</span><div class="progress bar"><span style="width:' + m + '%"></span></div></a>';
+    }).join("");
+    var tiles = [
+      ["#guide", "📋", "Study Guide", "Your instructor's Final takeaways for " + GSECS.reduce(function (n, g) { return n + g.drugs.length; }, 0) + " drugs in " + GSECS.length + " sections, in exam order, with \"Also know\" context, the exam breakdown, high-yield comparisons, and cover mode."],
+      ["#drugs", "💊", "Drug Tables", DRUGS.length + " drugs in " + CATS.length + " categories. MOA with a \"simply put\", use, drug-specific side and adverse effects, contraindications, nursing priorities, and teaching, with the study guide highlighted."],
+      ["#compare", "📊", "Compare", "Line up one column (say, adverse effects) across every drug in a unit to spot look-alikes."],
+      ["#flash", "🃏", "Flashcards", FLASH.length + " flip cards: every takeaway on the study guide, insulin timing, name endings, class and use, brand to generic, and the one thing to remember for each drug."],
+      ["#quiz", "📝", "Practice Questions", QUESTIONS.length + " NCLEX-style items weighted like the exam breakdown: multiple choice, SATA, a few Next Gen formats, and dosage calc, each rated easy to hard with a rationale."],
+      ["#names", "⚡", "Name Game", "Rapid fire: brand to generic, drug to category, drug to class, and suffix to class."],
+      ["#memory", "🧠", "Memory Aids", "The mnemonic for every category and the name endings that give away the class."]
+    ].map(function (t) { return '<a class="card tile" href="' + t[0] + '"><div class="emoji">' + t[1] + "</div><h3>" + t[2] + '</h3><p class="muted small">' + t[3] + "</p></a>"; }).join("");
+
+    app.innerHTML =
+      '<section class="hero">' +
+        '<div class="hero-main"><div class="hero-art">💊</div>' +
+          '<div class="tiny" style="color:rgba(255,255,255,.8);font-weight:700;letter-spacing:.06em;text-transform:uppercase">NURA 350 · Pharmacology</div>' +
+          "<h1>Final Exam Study Lab</h1>" +
+          "<p>The final is cumulative. Start with your instructor's takeaways for Modules 10–12 (endocrine, heme/cancer, neuro), then the 18 drugs named from earlier modules. For each one, learn <b>what it is → what it does → what to watch → what to teach</b>.</p>" +
+          '<div class="row"><a class="btn" href="#guide">Open the study guide</a><a class="btn ghost" href="#drugs">Drug tables</a><a class="btn ghost" href="#quiz">Quick quiz</a></div>' +
+        "</div>" +
+        '<div class="card"><h3>Your progress</h3><div class="ring-wrap"><div class="ring" style="--p:' + overall + '" data-label="' + overall + '%"></div>' +
+          '<div class="small muted">Mastery blends study guide sections you reviewed, drugs you marked studied, flashcards you know, and questions you answered correctly.<br><br><b>' + S.xp + " XP</b> earned · " + Object.keys(S.drugs).length + "/" + DRUGS.length + " drugs studied · Name Game best streak <b>" + (S.best.names || 0) + "</b></div></div>" +
+          '<div class="row" style="margin-top:14px"><button class="btn small" id="reset">Reset progress</button></div></div>' +
+      "</section>" +
+      '<section class="grid grid-2">' +
+        '<div class="card"><h2>Drugs by lecture</h2><p class="small muted">Tap a unit to open its first category.</p>' + rows + "</div>" +
+        '<div class="card"><h2>Which drug goes where</h2><p class="small muted">Personal memory aids from the drug tables: the first letter of each word matches a drug in that category.</p>' +
+          '<div class="mn-list">' + CATS.map(function (c) { return '<a class="mn-row sys-' + c.sys + '" href="#drugs/' + c.id + '"><span class="mn-cat">' + esc(c.name) + '</span><span class="mn-say">' + esc(c.mnemonic) + "</span></a>"; }).join("") + "</div></div>" +
+      "</section>" +
+      '<h2 style="margin-top:28px">Study modes</h2><section class="grid grid-3">' + tiles + "</section>" +
+      '<div class="card" style="margin-top:28px"><h2>How to read a drug card</h2><ol class="facts">' +
+        "<li><b>Class and MOA first.</b> If you know the class, you can usually predict the side effects.</li>" +
+        "<li><b>Side vs. adverse effects.</b> Side effects are expected and annoying; adverse effects are dangerous and get reported. Exam questions about \"priority\" usually point at an adverse effect.</li>" +
+        "<li><b>Nursing priorities = what you check before and during.</b> Glucose before insulin and glipizide; respiratory status with benzodiazepines; counts with every chemo drug; liver labs with dantrolene and valproic acid.</li>" +
+        "<li><b>Client teaching = what the client does at home.</b> Turn on cover mode and try to say it before you reveal it.</li></ol></div>";
+    $("#reset").onclick = function () { if (confirm("Clear all saved progress and XP?")) { var th = S.theme; S = { xp: 0, drugs: {}, flash: {}, q: {}, best: {}, guide: {}, guideAlso: true, plain: false, cover: false, theme: th }; save(); document.getElementById("xp").textContent = 0; home(); } };
+  }
+
+  /* ================= DRUG TABLES ================= */
+  function drugCard(d, catId, open) {
+    var u = CAT[catId].sys;
+    var other = d.cats.filter(function (c) { return c !== catId; });
+    return '<details class="card drug-card sys-' + u + '" id="d-' + d.id + '"' + (open ? " open" : "") + ">" +
+      '<summary><div class="drug-head"><h3>' + title(d) + (S.drugs[d.id] ? ' <span class="chip good-chip">✓</span>' : "") + '</h3><div class="drug-cls">' + esc(d.cls) + (d.note ? " · " + esc(d.note) : "") + "</div></div></summary>" +
+      (ON_GUIDE[d.id] ? '<p class="small"><a class="chip guide-chip" href="#guide/' + ON_GUIDE[d.id].id + '">📋 ' + (G.added.indexOf(d.id) > -1 ? "Added to the study guide: " : ON_GUIDE[d.id].drugs.filter(function (x) { return x.drug === d.id; })[0].noGuide ? "Named on the study guide: " : "On the study guide: ") + esc(ON_GUIDE[d.id].name) + "</a></p>" : '<p class="small muted">Not on the instructor\'s study guide, but still in your drug tables.</p>') +
+      (other.length ? '<p class="small muted">Also in: ' + other.map(function (c) { return '<a href="#drugs/' + c + '">' + esc(CAT[c].name) + "</a>"; }).join(", ") + "</p>" : "") +
+      '<div class="plain-card card plain-box"' + (S.plain ? "" : " hidden") + '><h4>🗣 In plain words</h4><p>' + esc(d.plain) + "</p></div>" +
+      '<div class="key-line"><b>Must know:</b> ' + esc(d.key) + "</div>" +
+      '<dl class="drug-fields">' + cardRows(d) + "</dl>" +
+      '<details class="ati-more"><summary>Full ATI table: every listed effect, RN assessment</summary><dl class="drug-fields">' + FIELDS.filter(function (f) { return f[0] !== "teach"; }).map(function (f) {
+        return "<dt>" + f[1] + "</dt><dd>" + fvh(esc(d[f[0]])) + "</dd>";
+      }).join("") + "</dl></details>" +
+      (d.beyond ? '<div class="callout beyond"><strong>Beyond the table</strong>' + esc(d.beyond) + "</div>" : "") +
+      '<div class="row" style="margin-top:12px"><button class="btn small ' + (S.drugs[d.id] ? "good" : "primary") + '" data-mark="' + d.id + '">' + (S.drugs[d.id] ? "✓ Studied" : "Mark as studied") + "</button></div>" +
+      "</details>";
+  }
+
+  function drugsShell(key, body) {
+    var side = "";
+    UNITS.forEach(function (u) {
+      side += '<h4><span class="sys-dot sys-' + u.id + '"></span>' + esc(u.name) + "</h4>";
+      catsIn(u.id).forEach(function (c) {
+        var ds = drugsIn(c.id), done = ds.filter(function (d) { return S.drugs[d.id]; }).length;
+        side += '<a class="sys-' + u.id + (key === c.id ? " active" : "") + '" href="#drugs/' + c.id + '">' + esc(c.name) + ' <span class="tiny">' + done + "/" + ds.length + "</span>" + (done === ds.length ? '<span class="check">✓</span>' : "") + "</a>";
+      });
+    });
+    var jump = UNITS.map(function (u) {
+      return '<optgroup label="' + esc(u.name) + '">' + catsIn(u.id).map(function (c) { return '<option value="drugs/' + c.id + '"' + (key === c.id ? " selected" : "") + ">" + esc(c.name) + "</option>"; }).join("") + "</optgroup>";
+    }).join("");
+    app.innerHTML = '<div class="topics-layout"><aside class="card sidebar" id="side"><div class="row" style="margin-bottom:6px"><b>Categories</b><span class="spacer"></span><span class="tiny">' + Object.keys(S.drugs).length + "/" + DRUGS.length + ' studied</span></div><div class="side-body">' + side + "</div></aside>" +
+      '<div class="stack"><div class="search-wrap"><input type="search" id="q" placeholder="Search all ' + DRUGS.length + ' drugs: name, brand, class, effect…" aria-label="Search drugs" autocomplete="off"><div id="hits" class="hits" hidden></div></div>' +
+      '<select class="topic-jump" id="jump" aria-label="Jump to category">' + jump + "</select>" + body + "</div></div>";
+    $("#jump").onchange = function () { location.hash = "#" + this.value; };
+    bindSearch();
+  }
+
+  function bindSearch() {
+    var q = $("#q"), hits = $("#hits");
+    q.oninput = function () {
+      var t = q.value.trim().toLowerCase();
+      if (t.length < 2) { hits.hidden = true; return; }
+      var res = DRUGS.map(function (d) {
+        var head = (d.name + " " + d.brand + " " + d.note + " " + d.cls).toLowerCase();
+        var inHead = head.indexOf(t) > -1;
+        var where = inHead ? null : FIELDS.filter(function (f) { return d[f[0]].toLowerCase().indexOf(t) > -1; }).map(function (f) { return f[1]; });
+        return { d: d, score: inHead ? 2 : where.length ? 1 : 0, where: where };
+      }).filter(function (r) { return r.score; }).sort(function (a, b) { return b.score - a.score; });
+      hits.hidden = false;
+      hits.innerHTML = res.length ? res.slice(0, 12).map(function (r) {
+        return '<a href="#drug/' + r.d.id + '"><b>' + esc(plainTitle(r.d)) + '</b><span class="tiny">' + esc(r.where ? "found in " + r.where.join(", ") : r.d.cls) + "</span></a>";
+      }).join("") + (res.length > 12 ? '<div class="tiny" style="padding:8px 12px">' + (res.length - 12) + " more; keep typing to narrow it down</div>" : "") : '<div class="tiny" style="padding:8px 12px">No drug matches "' + esc(q.value) + '"</div>';
+    };
+  }
+
+  // open: one drug id or a list of ids whose cards start expanded; the last one is scrolled to
+  function drugsView(catId, open) {
+    var ids = [].concat(open || []), openId = ids[ids.length - 1];
+    var c = CAT[catId] || CATS[0];
+    var ds = drugsIn(c.id);
+    var i = CATS.indexOf(c), prev = CATS[i - 1], next = CATS[i + 1];
+    var body =
+      '<div class="card topic-head sys-' + c.sys + '">' +
+        '<div class="row">' + tag(c.sys) + '<span class="spacer"></span><span class="tiny">' + esc(UNIT[c.sys].weight) + "</span></div>" +
+        '<div class="row switches">' + switchHTML("plainT", S.plain, "Plain language") + switchHTML("coverT", S.cover, "Cover mode") + "</div>" +
+        '<h1 style="margin-top:10px">' + esc(c.name) + ' <span class="muted" style="font-weight:500">(' + ds.length + ")</span></h1>" +
+        '<div class="mnemonic"><span class="tiny">Mnemonic</span><div class="mn-big">' + esc(c.mnemonic) + '</div><div class="small muted">' + esc(c.decode) + "</div></div>" +
+      "</div>" +
+      '<div class="card plain-card plain-box"' + (S.plain ? "" : " hidden") + '><h2>🗣 In plain words</h2><p class="plain-like" style="margin:0"><b>Think of it like this:</b> ' + esc(c.like) + "</p></div>" +
+      '<div class="card"><h2>At a glance</h2><div class="table-wrap"><table class="glance"><thead><tr><th>Drug</th><th>Class</th><th>Must know</th></tr></thead><tbody>' +
+        ds.map(function (d) { return '<tr><td><a href="#drug/' + d.id + '"><b>' + esc(d.name) + "</b></a>" + (d.brand ? '<br><span class="tiny">' + esc(d.brand) + "</span>" : "") + "</td><td>" + esc(d.cls) + "</td><td>" + esc(d.key) + "</td></tr>"; }).join("") +
+      "</tbody></table></div></div>" +
+      '<p class="small muted" style="margin:0">' + (S.cover ? "Cover mode is on: say each answer out loud, then tap the blurred text to check." : "Tap a drug to open its card. Turn on cover mode to quiz yourself.") + "</p>" + SG_LEGEND +
+      ds.map(function (d) { return drugCard(d, c.id, ids.indexOf(d.id) > -1 || ds.length === 1); }).join("") +
+      '<div class="row nav-links">' + (prev ? '<a class="btn" href="#drugs/' + prev.id + '">← ' + esc(prev.name) + "</a>" : "") + '<span class="spacer"></span>' +
+        '<a class="btn" href="#quiz/' + c.sys + '">Quiz this unit</a>' + (next ? '<a class="btn primary" href="#drugs/' + next.id + '">' + esc(next.name) + " →</a>" : "") + "</div>";
+    drugsShell(c.id, body);
+
+    $("#plainT").onclick = function () { S.plain = !S.plain; save(); drugsView(c.id, openIds()); };
+    $("#coverT").onclick = function () { S.cover = !S.cover; save(); drugsView(c.id, openIds()); };
+    bindCover();
+    $$("[data-mark]").forEach(function (b) {
+      b.onclick = function () {
+        var id = b.getAttribute("data-mark"), y = window.scrollY;
+        if (S.drugs[id]) { delete S.drugs[id]; save(); } else { S.drugs[id] = 1; save(); addXP(10, "Drug studied"); if (ds.every(function (d) { return S.drugs[d.id]; })) confetti(); }
+        drugsView(c.id, openIds().concat([id])); window.scrollTo(0, y);
+      };
+    });
+    if (openId && DRUG[openId]) { var el = document.getElementById("d-" + openId); if (el) setTimeout(function () { el.scrollIntoView({ block: "start" }); }, 0); }
+  }
+  function openIds() { return $$("details.drug-card[open]").map(function (x) { return x.id.slice(2); }); }
+
+  // #drug/<id> opens the drug inside its first category
+  function drugView(id) {
+    var d = DRUG[id]; if (!d) return drugsView();
+    drugsView(d.cats[0], id);
+  }
+
+  /* ================= STUDY GUIDE ================= */
+  var SRC = { ATI: "ATI tables", LECTURE: "Lecture", ADDED: "Study aid", CORRECTED: "Corrected", EXTRA: "Added: not on instructor guide" };
+  function srcTag(s) { return '<span class="src src-' + (s === "EXTRA" ? "added" : s.toLowerCase()) + '">' + SRC[s] + "</span>"; }
+  var FOUR = ["Action", "Therapeutic use", "Side effects", "Adverse effects", "Contraindications", "Nursing priorities", "Client teaching"];
+  function gv(text) { return '<span class="fv' + (S.cover ? " covered" : "") + '" tabindex="0">' + esc(text) + "</span>"; }
+  function guideNav(key) {
+    return '<div class="filter-bar guide-bar"><a class="chip ' + (!key ? "on" : "") + '" href="#guide">Overview</a>' +
+      GSECS.map(function (g, i) { return '<a class="chip ' + (key === g.id ? "on" : "") + '" href="#guide/' + g.id + '"><span class="sys-dot sys-' + g.sys + '"></span>' + (i + 1) + ". " + esc(g.name) + (S.guide[g.id] ? " ✓" : "") + "</a>"; }).join("") +
+      '<a class="chip ' + (key === "hy" ? "on" : "") + '" href="#guide/hy">⭐ High-yield</a><a class="chip ' + (key === "stems" ? "on" : "") + '" href="#guide/stems">🔤 Name decoder</a><a class="chip ' + (key === "notes" ? "on" : "") + '" href="#guide/notes">Notes</a></div>';
+  }
+  function guideDrug(g) {
+    var d = DRUG[g.drug];
+    return '<div class="card guide-drug sys-' + d.cats.map(function (c) { return CAT[c].sys; })[0] + '">' +
+      '<div class="row guide-drug-head"><h3>' + esc(g.title) + (g.brand ? ' <span class="brand-name">(' + esc(g.brand) + ")</span>" : "") + '</h3><span class="spacer"></span><a class="small" href="#drug/' + d.id + '">Full drug table →</a></div>' +
+      '<div class="drug-cls">' + esc(g.cls) + (g.clsFix ? " " + srcTag("CORRECTED") : "") + (g.added ? " " + srcTag("EXTRA") : "") + "</div>" + stemPill(d.id) +
+      (g.added ? '<p class="tiny" style="margin:4px 0 0">Every drug with a lecture table is in play. These rows come from your ATI drug table and the lecture, not the instructor\'s takeaways.</p>' : "") +
+      (g.noGuide ? '<p class="tiny" style="margin:4px 0 0">' + srcTag("ATI") + ' Named on the Final guide. No Exam 1 study guide was provided, so these rows come from your Exam 1 ATI drug table.</p>' : "") +
+      (g.clsFix ? '<p class="tiny" style="margin:4px 0 0">' + esc(g.clsFix) + "</p>" : "") +
+      '<dl class="drug-fields guide-fields">' + (CARDS[d.id] ? cardRows(d) + (g.added ? g.rows.filter(function (r) { return FOUR.indexOf(r[0]) < 0; }).map(function (r) { return "<dt>" + esc(r[0]) + "</dt><dd>" + gv(r[1]) + "</dd>"; }).join("") : "") : g.rows.map(function (r) {
+        return "<dt>" + esc(r[0]) + "</dt><dd>" + gv(r[1]) + (r[2] ? '<div class="fix">' + srcTag("CORRECTED") + " " + esc(r[2]) + "</div>" : "") + "</dd>";
+      }).join("")) +
+      (g.also.length && S.guideAlso ? '<dt class="also">Also know</dt><dd class="also">' + g.also.map(function (a) { return '<div class="also-row">' + srcTag(a[0]) + " " + esc(a[1]) + "</div>"; }).join("") + "</dd>" : "") +
+      "</dl></div>";
+  }
+  function guideView(key) {
+    var done = GSECS.filter(function (g) { return S.guide[g.id]; }).length;
+    var head = '<div class="row" style="margin-bottom:6px"><h1 style="margin:0">Study Guide</h1><span class="spacer"></span><span class="small muted">' + done + " of " + GSECS.length + " sections reviewed</span></div>" + guideNav(key);
+    var sec = GSEC[key];
+    if (sec) {
+      var i = GSECS.indexOf(sec), prev = GSECS[i - 1], next = GSECS[i + 1];
+      app.innerHTML = head +
+        '<div class="card topic-head sys-' + sec.sys + '"><div class="row">' + tag(sec.sys) + '<span class="spacer"></span><span class="tiny">Section ' + (i + 1) + " of " + GSECS.length + "</span></div>" +
+          '<div class="row switches">' + switchHTML("alsoT", S.guideAlso, "Show “Also know” rows") + switchHTML("coverT", S.cover, "Cover mode") + "</div>" +
+          '<h1 style="margin-top:10px">' + sec.icon + " " + esc(sec.name) + ' <span class="muted" style="font-weight:500">(' + sec.drugs.length + ")</span></h1>" +
+          '<p class="small muted" style="margin:0">' + (S.cover ? "Cover mode is on: say each takeaway out loud, then tap the blurred text to check." : "Every drug shows MOA, therapeutic use, drug-specific side and adverse effects, contraindications, nursing priorities, and client teaching. “Also know” adds context from ATI and the lectures.") + "</p>" + SG_LEGEND + "</div>" +
+        sec.drugs.map(guideDrug).join("") +
+        '<div class="card guide-done"><div class="row"><button class="btn ' + (S.guide[sec.id] ? "good" : "primary") + '" id="mark">' + (S.guide[sec.id] ? "✓ Section reviewed" : "Mark section reviewed") + '</button><span class="spacer"></span><a class="btn" href="#quiz/' + sec.sys + '">Quiz ' + esc(UNIT[sec.sys].short) + "</a></div></div>" +
+        '<div class="row nav-links">' + (prev ? '<a class="btn" href="#guide/' + prev.id + '">← ' + esc(prev.name) + "</a>" : '<a class="btn" href="#guide">← Overview</a>') + '<span class="spacer"></span>' +
+          (next ? '<a class="btn primary" href="#guide/' + next.id + '">' + esc(next.name) + " →</a>" : '<a class="btn primary" href="#guide/hy">High-yield comparisons →</a>') + "</div>";
+      $("#alsoT").onclick = function () { S.guideAlso = !S.guideAlso; save(); guideView(key); };
+      $("#coverT").onclick = function () { S.cover = !S.cover; save(); guideView(key); };
+      bindCover();
+      $("#mark").onclick = function () {
+        var y = window.scrollY;
+        if (S.guide[sec.id]) { delete S.guide[sec.id]; save(); } else { S.guide[sec.id] = 1; save(); addXP(15, "Section reviewed"); if (GSECS.every(function (g) { return S.guide[g.id]; })) confetti(); }
+        guideView(key); window.scrollTo(0, y);
+      };
+      return;
+    }
+    if (key === "hy") {
+      var H = G.hy;
+      app.innerHTML = head +
+        '<p class="muted">Patterns that cut across units, a common source of select-all-that-apply questions. Built from the study guide, the ATI tables, and the lectures ' + srcTag("ADDED") + "</p>" +
+        '<div class="grid grid-2">' +
+          '<div class="card"><h2>🧪 Labs to know</h2><div class="table-wrap"><table><thead><tr><th>Lab</th><th>Drugs</th></tr></thead><tbody>' + H.labs.map(function (r) { return "<tr><td><b>" + esc(r[0]) + "</b></td><td>" + esc(r[1]) + "</td></tr>"; }).join("") + "</tbody></table></div></div>" +
+          '<div class="stack"><div class="card"><h2>' + esc(H.updown.title) + '</h2><div class="k-grid"><div class="k-col k-up"><h4>' + esc(H.updown.upLabel) + '</h4><ul>' + H.updown.up.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + '</ul></div><div class="k-col k-down"><h4>' + esc(H.updown.downLabel) + '</h4><ul>' + H.updown.down.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + '</ul></div></div><div class="callout warn"><strong>Danger</strong>' + esc(H.updown.danger) + "</div></div>" +
+          '<div class="card"><h2>✋ Check before giving</h2><div class="table-wrap"><table><tbody>' + H.hold.map(function (r) { return "<tr><td><b>" + esc(r[0]) + "</b></td><td>" + esc(r[1]) + "</td></tr>"; }).join("") + "</tbody></table></div></div></div>" +
+        "</div>" +
+        '<div class="grid grid-2" style="margin-top:20px">' +
+          '<div class="card"><h2>⚠️ Dangerous combinations</h2><ul class="facts">' + H.combos.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + "</ul></div>" +
+          '<div class="stack">' + H.boxes.map(function (b) { return '<div class="card"><h2>' + esc(b[0]) + '</h2><p style="margin:0">' + esc(b[1]) + "</p></div>"; }).join("") + "</div>" +
+        "</div>" +
+        '<div class="row nav-links" style="margin-top:20px"><a class="btn" href="#guide/' + GSECS[GSECS.length - 1].id + '">← ' + esc(GSECS[GSECS.length - 1].name) + '</a><span class="spacer"></span><a class="btn primary" href="#guide/stems">Name decoder →</a></div>';
+      return;
+    }
+    if (key === "stems") { decoderView(head); return; }
+    if (key === "notes") {
+      app.innerHTML = head +
+        '<div class="card"><h2>Notes on the instructor guide</h2><ol class="facts">' + G.notes.map(function (n) { return "<li>" + (n[2] ? srcTag(n[2]) + " " : "") + "<b>" + esc(n[0]) + ".</b> " + esc(n[1]) + "</li>"; }).join("") + "</ol></div>" +
+        '<div class="card" style="margin-top:20px"><h2>Added so every drug in play is covered</h2><p class="small muted">The instructor guide skipped these, but each one has its own lecture drug table, so it\'s in play. Each has a guide entry built from your ATI drug tables and the lectures, plus its own practice questions.</p><div class="row" style="flex-wrap:wrap;gap:8px">' +
+          G.added.map(function (id) { var d = DRUG[id]; return '<a class="chip" href="#guide/' + ON_GUIDE[id].id + '"><span class="sys-dot sys-' + unitOf(d) + '"></span>' + esc(d.name) + " · " + esc(ON_GUIDE[id].name) + "</a>"; }).join("") + '</div><div class="row" style="margin-top:12px"><a class="btn primary" href="#quiz/added">Practice the added drugs</a></div></div>';
+      return;
+    }
+    var nDrugs = GSECS.reduce(function (n, g) { return n + g.drugs.length; }, 0);
+    var nQ = QUESTIONS.filter(function (q) { return q.guide; }).length;
+    var bdTotal = G.breakdown.reduce(function (n, b) { return n + b[1]; }, 0);
+    app.innerHTML = head +
+      '<div class="grid grid-2"><div class="card"><h2>What\'s on the exam</h2><p class="small muted">Instructor guide order · ' + GSECS.length + " sections · " + nDrugs + ' drugs</p>' +
+        GSECS.map(function (g, i) { return '<a class="blueprint-row sys-' + g.sys + '" href="#guide/' + g.id + '"><span style="font-size:20px">' + g.icon + '</span><span><span class="name">' + (i + 1) + ". " + esc(g.name) + '</span><br><span class="tiny">' + esc(g.drugs.map(function (x) { return x.title; }).join(", ")) + '</span></span><span class="small" style="font-weight:700">' + (S.guide[g.id] ? "✓" : "") + "</span></a>"; }).join("") +
+        '<h3 style="margin-top:18px">Exam breakdown · ' + bdTotal + ' questions</h3><div class="table-wrap"><table class="glance"><tbody>' + G.breakdown.map(function (b) { return "<tr><td>" + esc(b[0]) + '</td><td style="text-align:right"><b>' + b[1] + "</b></td></tr>"; }).join("") + "</tbody></table></div></div>" +
+      '<div class="stack"><div class="card"><h2>From the instructor</h2><p style="margin:0">' + esc(G.tips) + "</p></div>" +
+        '<div class="card"><h2>How to read this guide</h2><ul class="facts small"><li><b>Plain rows</b> are the instructor\'s takeaways, and the same words are <mark class="sg">highlighted</mark> on every drug card. Study these first.</li>' +
+          "<li><b>Also know</b> rows add context, tagged by source: " + srcTag("ATI") + " your ATI medication tables, " + srcTag("LECTURE") + " the recorded lectures and slides, " + srcTag("ADDED") + " memory tips and comparisons.</li>" +
+          "<li>" + srcTag("EXTRA") + " marks the " + G.added.length + " lecture drugs the instructor guide skipped; every drug with a lecture table is in play, so they're built from your ATI tables and lectures.</li>" +
+          "<li><b>Prior modules:</b> the guide names 18 drugs from Modules 1–8. Modules 5–8 reuse the Exam 2 study guide; Modules 1–3 come from the Exam 1 ATI tables (no Exam 1 guide was provided).</li>" +
+          "<li>" + srcTag("CORRECTED") + " marks a transcript or guide detail that conflicts with the drug table; see the <a href=\"#guide/notes\">notes</a>.</li>" +
+          "<li><b>Cover mode</b> blurs every takeaway so you can quiz yourself.</li></ul></div>" +
+        '<a class="card stem-teaser" href="#guide/stems"><h2>🔤 Suffix-to-class chart</h2><p class="small" style="margin:0">The ending of a drug name often gives away its class: <b>-gliflozin</b> is an SGLT2 inhibitor, <b>-azepam</b> a benzodiazepine, <b>-grastim</b> a white-cell growth factor. See which of the ' + DRUGS.length + ' Final drugs follow a stem and which ones you just have to memorize.</p><span class="btn primary" style="margin-top:12px">Open the decoder →</span></a>' +
+        '<div class="card"><h2>Then practice</h2><p class="small muted">' + nQ + ' questions test a study guide takeaway directly. The dosage calc set covers the 8 math questions.</p><div class="row"><a class="btn primary" href="#quiz/guide">Study guide questions</a><a class="btn" href="#quiz/calc">🧮 Dosage calc</a><a class="btn" href="#guide/hy">⭐ High-yield</a></div></div></div></div>';
+  }
+
+  /* ================= COMPARE ================= */
+  function compare(unitId, field) {
+    var opts = [["cls", "Class"]].concat(FIELDS).concat([["key", "Must know"]]);
+    var f = opts.filter(function (o) { return o[0] === field; })[0] || ["use", "Use"];
+    var cats = unitId && UNIT[unitId] ? catsIn(unitId) : CATS;
+    app.innerHTML = '<h1>Compare</h1><p class="muted">Pick one column and read it down the list. Look-alikes jump out (for example, every drug whose adverse effects include hyperkalemia).</p>' +
+      unitBar(unitId && UNIT[unitId] ? unitId : null, "#compare") +
+      '<div class="filter-bar">' + opts.map(function (o) { return '<a class="chip ' + (o[0] === f[0] ? "on" : "") + '" href="#compare/' + (unitId && UNIT[unitId] ? unitId : "all") + "/" + o[0] + '">' + o[1] + "</a>"; }).join("") + "</div>" +
+      '<input type="search" id="hl" class="hl-input" placeholder="Highlight a word, e.g. potassium, bleeding, pregnancy" aria-label="Highlight a word">' +
+      '<div class="card"><div class="table-wrap"><table class="compare"><thead><tr><th>Drug</th><th>' + f[1] + "</th></tr></thead><tbody>" +
+      cats.map(function (c) {
+        return '<tr class="cat-row sys-' + c.sys + '"><td colspan="2"><span class="sys-dot sys-' + c.sys + '"></span> ' + esc(c.name) + "</td></tr>" +
+          drugsIn(c.id).map(function (d) { return '<tr><td><a href="#drug/' + d.id + '"><b>' + esc(d.name) + '</b></a></td><td class="cv">' + esc(d[f[0]]) + "</td></tr>"; }).join("");
+      }).join("") + "</tbody></table></div></div>";
+    var cells = $$(".cv"), raw = cells.map(function (c) { return c.innerHTML; });
+    $("#hl").oninput = function () {
+      var t = this.value.trim();
+      var re = t.length > 1 ? new RegExp("(" + esc(t).replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")", "gi") : null;
+      var n = 0;
+      cells.forEach(function (c, i) { var h = re ? raw[i].replace(re, function (m) { n++; return "<mark>" + m + "</mark>"; }) : raw[i]; c.innerHTML = h; c.parentNode.classList.toggle("dim", !!re && h === raw[i]); });
+    };
+  }
+
+  /* ================= FLASHCARDS ================= */
+  var FLASH = [];
+  DRUGS.forEach(function (d) {
+    var u = unitOf(d);
+    FLASH.push({ k: d.id + ":cls", u: u, q: plainTitle(d) + ": class and main use?", a: d.cls + ".\n\nUse: " + d.use });
+    FLASH.push({ k: d.id + ":key", u: u, q: plainTitle(d) + ": the one thing to remember?", a: d.key });
+    if (d.brand) FLASH.push({ k: d.id + ":brand", u: u, q: "Brand name " + d.brand.split(/,|\[/)[0].trim() + " is which generic drug?", a: d.name + " (" + d.cls + ")" });
+  });
+  CATS.forEach(function (c) { FLASH.push({ k: "mn:" + c.id, u: c.sys, q: "Mnemonic for " + c.name + "?", a: c.mnemonic + "\n\n" + c.decode }); });
+  // One card per takeaway on the study guide (instructor's Exam 2 takeaways, plus the drugs we added to it)
+  GSECS.forEach(function (g) {
+    g.drugs.forEach(function (x) {
+      var d = DRUG[x.drug], u = d ? unitOf(d) : g.sys;
+      x.rows.forEach(function (r) {
+        FLASH.push({ k: "g:" + x.drug + ":" + r[0], u: u, guide: true,
+          q: "What " + (/s$/.test(r[0]) ? "are" : "is") + " the " + r[0].toLowerCase() + " for " + x.title + (x.brand ? " (" + x.brand + ")" : "") + (x.added ? " (added to the study guide)?" : x.noGuide ? " (from the Exam 1 drug table)?" : g.id === "prior2" ? " on the Exam 2 study guide?" : " on the study guide?"),
+          a: r[1] + (r[2] ? "\n\nNote: " + r[2] : "") });
+      });
+    });
+  });
+  // Name decoder: stem → class and this exam's drugs
+  (window.STEMS || []).forEach(function (s) {
+    var ds = s.drugs.map(function (id) { return DRUG[id]; }).filter(Boolean);
+    if (!ds.length) return;
+    FLASH.push({ k: "stem:" + s.stem, u: unitOf(ds[0]), q: "Name ending " + s.stem + " means which class?", a: s.cls + ".\n\nOn this exam: " + ds.map(function (d) { return d.name; }).join(", ") + "." + (s.tip ? "\n\n" + s.tip : "") });
+  });
+
+  function flash(unitId) {
+    unitId = UNIT[unitId] ? unitId : null;
+    var only = sget("pharmFlashOnly") === "1", gonly = sget("pharmFlashGuide") === "1";
+    function inSet(c) { return (!unitId || c.u === unitId) && (!gonly || c.guide); }
+    var deck = shuffle(FLASH.filter(function (c) { return inSet(c) && (!only || !S.flash[c.k]); }));
+    var total = FLASH.filter(inSet).length;
+    var pos = 0, flipped = false;
+    function draw() {
+      var known = FLASH.filter(function (c) { return inSet(c) && S.flash[c.k]; }).length;
+      var head = '<div class="row" style="margin-bottom:6px"><h1 style="margin:0">Flashcards</h1><span class="spacer"></span><span class="small muted">' + known + " of " + total + " known</span></div>" +
+        unitBar(unitId, "#flash") +
+        '<label class="row small" style="margin-bottom:14px;gap:6px"><input type="checkbox" id="only" ' + (only ? "checked" : "") + "> Only show cards I haven't marked known</label>" +
+        '<label class="row small" style="margin:-8px 0 14px;gap:6px"><input type="checkbox" id="gonly" ' + (gonly ? "checked" : "") + "> Only show what's on the study guide 📋</label>";
+      if (!deck.length) { app.innerHTML = head + '<div class="card empty"><div style="font-size:48px">🎉</div><h2>Every card here is marked known.</h2><p>Uncheck the filter to review them all again.</p></div>'; bindHead(); return; }
+      if (pos >= deck.length) {
+        app.innerHTML = head + '<div class="card empty"><div style="font-size:48px">✅</div><h2>Deck finished</h2><p>' + known + " of " + total + ' known in this set.</p><button class="btn primary" id="again">Shuffle and go again</button></div>';
+        bindHead(); $("#again").onclick = function () { flash(unitId); }; if (known === total) confetti(); return;
+      }
+      var c = deck[pos];
+      app.innerHTML = head +
+        '<div class="flash-stage sys-' + c.u + '">' +
+          '<div class="progress" style="margin-bottom:14px"><span style="width:' + (100 * pos / deck.length) + '%"></span></div>' +
+          '<div class="flash' + (flipped ? " flipped" : "") + '" id="card" role="button" tabindex="0" aria-label="Flip card">' +
+            '<div class="flash-face front"><span class="tagpos">' + tag(c.u) + (c.guide ? ' <span class="chip guide-chip tiny">📋 Study guide</span>' : "") + '</span><div class="q">' + esc(c.q) + '</div><div class="hint">Tap or press space to flip</div></div>' +
+            '<div class="flash-face back"><span class="tagpos">' + tag(c.u) + '</span><div class="a pre">' + esc(c.a) + '</div><div class="hint">' + (S.flash[c.k] ? "Marked known" : "Did you know it?") + "</div></div>" +
+          "</div>" +
+          '<div class="flash-controls">' +
+            '<button class="btn" id="prev" ' + (pos === 0 ? "disabled" : "") + ">← Back</button>" +
+            '<button class="btn bad" id="no">Still learning (1)</button>' +
+            '<button class="btn good" id="yes">Got it (2)</button>' +
+            '<button class="btn" id="skip">Skip →</button>' +
+          '</div><p class="tiny" style="text-align:center;margin-top:10px">Card ' + (pos + 1) + " of " + deck.length + " · keys: space flip, 1 learning, 2 got it, ← →</p></div>";
+      bindHead();
+      $("#card").onclick = flip;
+      $("#prev").onclick = function () { pos = Math.max(0, pos - 1); flipped = false; draw(); };
+      $("#skip").onclick = function () { pos++; flipped = false; draw(); };
+      $("#yes").onclick = function () { if (!S.flash[c.k]) { S.flash[c.k] = 1; save(); addXP(2); } pos++; flipped = false; draw(); };
+      $("#no").onclick = function () { if (S.flash[c.k]) { delete S.flash[c.k]; save(); } deck.push(c); pos++; flipped = false; draw(); };
+    }
+    function flip() { flipped = !flipped; var el = $("#card"); if (el) el.classList.toggle("flipped", flipped); }
+    function bindHead() {
+      var o = $("#only"); if (o) o.onchange = function () { sset("pharmFlashOnly", o.checked ? "1" : "0"); flash(unitId); };
+      var g = $("#gonly"); if (g) g.onchange = function () { sset("pharmFlashGuide", g.checked ? "1" : "0"); flash(unitId); };
+    }
+    function onKey(e) {
+      if (e.target.tagName === "INPUT") return;
+      if (e.key === " ") { e.preventDefault(); flip(); }
+      else if (e.key === "1" && $("#no")) $("#no").click();
+      else if (e.key === "2" && $("#yes")) $("#yes").click();
+      else if (e.key === "ArrowRight" && $("#skip")) $("#skip").click();
+      else if (e.key === "ArrowLeft" && $("#prev") && !$("#prev").disabled) $("#prev").click();
+    }
+    document.addEventListener("keydown", onKey);
+    cleanup = function () { document.removeEventListener("keydown", onKey); };
+    draw();
+  }
+  function sget(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } }
+  function sset(k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} }
+
+  /* ================= PRACTICE QUESTIONS ================= */
+  var TYPE_LABEL = { mc: "Multiple choice", sata: "Select all that apply", selectn: "Select N", matrix: "Matrix grid", cloze: "Drop-down cloze", fill: "Fill in the blank" };
+  var DIFF = { easy: ["Easy", "recall a fact or definition"], medium: ["Medium", "apply a concept to a client"], hard: ["Hard", "multi-step or technical reasoning"] };
+  function diffChip(d) { return DIFF[d] ? '<span class="chip diff diff-' + d + '" title="' + DIFF[d][1] + '">' + DIFF[d][0] + "</span>" : ""; }
+  function qChips(q) { return tag(q.sys) + '<span class="chip">' + TYPE_LABEL[q.type] + (q.type === "selectn" ? " · pick " + q.n : "") + "</span>" + diffChip(q.diff) + (q.guide ? '<span class="chip guide-chip">📋 Study guide</span>' : "") + (q.added ? '<span class="chip guide-chip">➕ Added drug</span>' : "") + (q.calc ? '<span class="chip">🧮 Dosage calc</span>' : ""); }
+  var quizDiff = "all";
+  // unitId is a unit id, "guide" (tests a study guide takeaway), "added" (drugs added to the guide), "calc" (dosage calculation), "new" (Modules 10–12), "prior" (Modules 1–8), or empty for all
+  var SETS = { guide: function (q) { return q.guide; }, added: function (q) { return q.added; }, calc: function (q) { return q.calc; },
+    "new": function (q) { return !q.calc && ["endo", "heme", "neuro"].indexOf(q.sys) > -1; }, prior: function (q) { return !q.calc && (q.sys === "prior1" || q.sys === "prior2"); } };
+  function quiz(unitId) {
+    unitId = UNIT[unitId] || SETS[unitId] ? unitId : null;
+    var pool = QUESTIONS.map(function (q, i) { return i; }).filter(function (i) { return !unitId || (SETS[unitId] ? SETS[unitId](QUESTIONS[i]) : QUESTIONS[i].sys === unitId && !QUESTIONS[i].calc); });
+    function inDiff(i) { return quizDiff === "all" || QUESTIONS[i].diff === quizDiff; }
+    function countOf(f) { return pool.filter(f).length; }
+    var answered = pool.filter(function (i) { return S.q[i] !== undefined; }).length;
+    var correct = pool.filter(function (i) { return S.q[i] === 1; }).length;
+    var missed = pool.filter(function (i) { return S.q[i] === 0; });
+    var count = 10;
+    var bar = '<div class="filter-bar"><a class="chip ' + (!unitId ? "on" : "") + '" href="#quiz">All</a>' +
+      UNITS.map(function (u) { return '<a class="chip ' + (unitId === u.id ? "on" : "") + '" href="#quiz/' + u.id + '"><span class="sys-dot sys-' + u.id + '"></span>' + esc(u.short) + "</a>"; }).join("") +
+      '<a class="chip ' + (unitId === "guide" ? "on" : "") + '" href="#quiz/guide">📋 Study guide items</a>' +
+      '<a class="chip ' + (unitId === "new" ? "on" : "") + '" href="#quiz/new">🆕 Modules 10–12</a>' +
+      '<a class="chip ' + (unitId === "prior" ? "on" : "") + '" href="#quiz/prior">↩️ Modules 1–8</a>' +
+      '<a class="chip ' + (unitId === "added" ? "on" : "") + '" href="#quiz/added">➕ Added drugs</a>' +
+      '<a class="chip ' + (unitId === "calc" ? "on" : "") + '" href="#quiz/calc">🧮 Dosage calc</a></div>';
+    app.innerHTML = '<h1>Practice Questions</h1><p class="muted">The Final guide doesn\'t name question formats, so these are NCLEX-style: mostly multiple choice and select all that apply, with a few Next Gen items and fill-in-the-blank dosage calculations. Every question is rated by difficulty and explains why the answer is right. Use ← Previous to review any answered question in a set.</p>' + bar +
+      (unitId === "calc" ? '<div class="callout" style="margin-bottom:16px"><strong>8 dosage calc questions on the final</strong>"Similar questions to previous exams." Type the number only and round as the question says. For a full workout, open the <a href="../../dosage/calc/index.html">Med Math &amp; IV Rates trainer</a>.</div>' : "") +
+      '<div class="grid grid-2"><div class="card"><h2>Start a set</h2><p class="small muted">' + pool.length + " questions here · " + answered + " tried · " + correct + " correct</p>" +
+        '<div class="row" style="margin:12px 0"><span class="small">How many?</span>' + [10, 20, "All"].map(function (n, k) { return '<button class="chip' + (k === 0 ? " on" : "") + '" data-n="' + n + '">' + n + "</button>"; }).join("") + "</div>" +
+        '<div class="row" style="margin:0 0 14px"><span class="small">Difficulty</span>' + ["all", "easy", "medium", "hard"].map(function (d) { return '<button class="chip' + (quizDiff === d ? " on" : "") + '" data-d="' + d + '">' + (d === "all" ? "All" : DIFF[d][0]) + " · " + countOf(function (i) { return d === "all" || QUESTIONS[i].diff === d; }) + "</button>"; }).join("") + "</div>" +
+        '<div class="row"><button class="btn primary" id="go">Start</button>' + (missed.length ? '<button class="btn" id="redo">Redo the ' + missed.length + " I missed</button>" : "") + "</div></div>" +
+      '<div class="card"><h2>Formats</h2><ul class="facts small">' + Object.keys(TYPE_LABEL).map(function (t) { var n = countOf(function (i) { return QUESTIONS[i].type === t; }); return n ? "<li><b>" + TYPE_LABEL[t] + "</b> · " + n + "</li>" : ""; }).join("") + "</ul>" +
+        '<h3 style="margin-top:14px">Difficulty</h3><ul class="facts small">' + Object.keys(DIFF).map(function (d) { return "<li>" + diffChip(d) + " " + DIFF[d][1] + " · " + countOf(function (i) { return QUESTIONS[i].diff === d; }) + "</li>"; }).join("") + "</ul>" +
+        '<p class="small muted">Answer choices are shuffled every time, so you learn the content, not the letter.</p></div></div>';
+    $$("[data-n]").forEach(function (b) { b.onclick = function () { $$("[data-n]").forEach(function (x) { x.classList.remove("on"); }); b.classList.add("on"); count = b.getAttribute("data-n") === "All" ? 999 : +b.getAttribute("data-n"); }; });
+    $$("[data-d]").forEach(function (b) { b.onclick = function () { $$("[data-d]").forEach(function (x) { x.classList.remove("on"); }); b.classList.add("on"); quizDiff = b.getAttribute("data-d"); }; });
+    $("#go").onclick = function () { var ids = pool.filter(inDiff); if (!ids.length) { toast("No questions at that difficulty here"); return; } runQuiz(shuffle(ids).slice(0, count), unitId); };
+    if ($("#redo")) $("#redo").onclick = function () { runQuiz(shuffle(missed), unitId); };
+  }
+
+  /* Select-all-that-apply partial credit: (right picks - wrong picks) / number of right answers, never below 0.
+     e.g. 3 right answers: pick 2 right = 2/3; pick 3 right + 1 wrong = 2/3. Other types are all-or-nothing. */
+  function credit(type, sel, ans) {
+    var hit = sel.filter(function (k) { return ans.indexOf(k) > -1; }).length;
+    var full = sel.length === ans.length && hit === ans.length;
+    if (type !== "sata") return allOrNothing(full);
+    var net = Math.max(0, hit - (sel.length - hit));
+    return { sata: true, net: net, of: ans.length, pts: net / ans.length, ok: net === ans.length };
+  }
+  function allOrNothing(ok) { return { sata: false, net: ok ? 1 : 0, of: 1, pts: ok ? 1 : 0, ok: ok }; }
+  function fmtPts(p) { return String(Math.round(p * 100) / 100); }
+  function verdict(c) {
+    return '<div class="rationale ' + (c.ok ? "ok" : c.pts > 0 ? "part" : "no") + '"><strong>' + (c.ok ? "Correct!" : c.pts > 0 ? "Partial credit." : "Not quite.") +
+      (c.sata ? " " + c.net + "/" + c.of + " points" : "") + "</strong>";
+  }
+  function partChip(c) { return c && c.sata && c.pts > 0 && !c.ok ? '<span class="chip">' + c.net + "/" + c.of + " points</span>" : ""; }
+
+  /* A set keeps every answer, so ← Previous reopens an answered question with its
+     marks and rationale. Only the newest unanswered question needs Submit. */
+  function runQuiz(ids, unitId) {
+    var pos = 0, results = [], orders = [];
+    function score() { return results.reduce(function (s, r) { return s + r.cr.pts; }, 0); }
+    function show(p) {
+      pos = p;
+      if (pos >= ids.length) return finish();
+      var qi = ids[pos], q = QUESTIONS[qi], done = results[pos], last = results.length;
+      var html = '<div class="q-card card sys-' + q.sys + '"><div class="progress" style="margin-bottom:14px"><span style="width:' + (100 * last / ids.length) + '%"></span></div>' +
+        '<div class="q-meta">' + qChips(q) + (done ? '<span class="chip">Reviewing</span>' : "") + '<span class="spacer"></span><span class="tiny">' + (pos + 1) + " / " + ids.length + " · score " + fmtPts(score()) + "</span></div>";
+      if (q.type === "cloze") {
+        orders[pos] = orders[pos] || q.blanks.map(function (b) { return shuffle(b.options.map(function (o, k) { return k; })); });
+        html += '<p class="small muted">Choose the option that best completes each blank.</p><div class="cloze">' + esc(q.stem).replace(/\{(\d+)\}/g, function (m, n) {
+          var b = q.blanks[+n];
+          return '<select data-b="' + n + '"><option value="">Select…</option>' + orders[pos][+n].map(function (k) { return '<option value="' + k + '">' + esc(b.options[k]) + "</option>"; }).join("") + "</select>";
+        }) + "</div>";
+      } else if (q.type === "matrix") {
+        html += '<div class="q-stem">' + esc(q.stem) + '</div><div class="table-wrap"><table class="matrix"><thead><tr><th></th>' + q.cols.map(function (c) { return "<th>" + esc(c) + "</th>"; }).join("") + "</tr></thead><tbody>" +
+          q.rows.map(function (r, ri) { return "<tr><td>" + esc(r[0]) + "</td>" + q.cols.map(function (c, ci) { return '<td data-r="' + ri + '" data-c="' + ci + '"><input type="radio" name="m' + ri + '" value="' + ci + '" aria-label="' + esc(r[0] + ": " + c) + '"></td>'; }).join("") + "</tr>"; }).join("") + "</tbody></table></div>";
+      } else if (q.type === "fill") {
+        html += '<div class="q-stem">' + esc(q.stem) + '</div><div class="fill-row"><input id="fill" class="fill-in" type="text" inputmode="decimal" autocomplete="off" aria-label="Your answer">' + (q.unit ? '<span class="fill-unit">' + esc(q.unit) + "</span>" : "") + "</div>";
+      } else {
+        var multi = q.type !== "mc";
+        orders[pos] = orders[pos] || shuffle(q.options.map(function (o, k) { return k; }));
+        html += '<div class="q-stem">' + esc(q.stem) + "</div>" + orders[pos].map(function (k) { return '<button class="opt' + (multi ? " multi" : "") + '" data-k="' + k + '"><span class="box"></span><span>' + esc(q.options[k]) + "</span></button>"; }).join("");
+      }
+      html += '<div id="rat"></div><div class="row q-nav" style="margin-top:16px"><button class="btn" id="prev"' + (pos ? "" : " disabled") + '>← Previous</button>' +
+        (last < ids.length && last - pos > 1 ? '<button class="btn small" id="resume">Jump to question ' + (last + 1) + "</button>" : "") +
+        '<span class="spacer"></span><button class="btn primary" id="submit">Submit</button></div></div>';
+      app.innerHTML = '<div class="row" style="margin-bottom:14px"><button class="btn small" id="end">← End set</button></div>' + html;
+
+      $("#end").onclick = function () { if (results.length) finish(); else quiz(unitId); };
+      $("#prev").onclick = function () { if (pos) { show(pos - 1); window.scrollTo(0, 0); } };
+      if ($("#resume")) $("#resume").onclick = function () { show(last); window.scrollTo(0, 0); };
+      if (done) { reveal(q, done.resp); explain(q, done.cr); return; }
+      if (q.type === "fill") { $("#fill").onkeydown = function (e) { if (e.key === "Enter") grade(q, qi); }; $("#fill").focus(); }
+      if (q.type === "mc" || q.type === "sata" || q.type === "selectn") {
+        $$(".opt").forEach(function (b) { b.onclick = function () {
+          if (q.type === "mc") $$(".opt").forEach(function (x) { if (x !== b) x.classList.remove("sel"); });
+          if (q.type === "selectn" && !b.classList.contains("sel") && $$(".opt.sel").length >= q.n) { toast("Pick exactly " + q.n); return; }
+          b.classList.toggle("sel");
+        }; });
+      }
+      $("#submit").onclick = function () { grade(q, qi); };
+    }
+    function read(q) {
+      if (q.type === "fill") { var raw = $("#fill").value.replace(/,/g, "").trim(), fv = parseFloat(raw); if (raw === "" || isNaN(fv)) { toast("Enter a number"); return null; } return [fv]; }
+      if (q.type === "cloze") { var v = $$(".cloze select").map(function (s) { return s.value; }); if (v.indexOf("") > -1) { toast("Fill every blank"); return null; } return v.map(Number); }
+      if (q.type === "matrix") { var p = q.rows.map(function (r, ri) { var c = app.querySelector('input[name="m' + ri + '"]:checked'); return c ? +c.value : -1; }); if (p.indexOf(-1) > -1) { toast("Answer every row"); return null; } return p; }
+      var sel = $$(".opt.sel").map(function (b) { return +b.getAttribute("data-k"); });
+      if (!sel.length) { toast("Choose an answer first"); return null; }
+      if (q.type === "selectn" && sel.length !== q.n) { toast("Pick exactly " + q.n); return null; }
+      return sel;
+    }
+    function check(q, r) {
+      if (q.type === "fill") return allOrNothing(Math.abs(r[0] - q.answer) <= (q.tol || 0) + 1e-9);
+      if (q.type === "cloze") return allOrNothing(q.blanks.every(function (b, i) { return r[i] === b.answer; }));
+      if (q.type === "matrix") return allOrNothing(q.rows.every(function (row, i) { return r[i] === row[1]; }));
+      return credit(q.type, r, q.type === "mc" ? [q.answer] : q.answer);
+    }
+    function reveal(q, r) {
+      if (q.type === "fill") {
+        var f = $("#fill"), good = check(q, r).ok; f.value = String(r[0]); f.disabled = true; f.classList.add(good ? "right" : "wrong");
+        if (!good) { var sp = document.createElement("span"); sp.className = "small fill-key"; sp.textContent = "→ " + q.answer + (q.unit ? " " + q.unit : ""); f.parentNode.appendChild(sp); }
+      } else if (q.type === "cloze") {
+        $$(".cloze select").forEach(function (s) { var n = +s.getAttribute("data-b"), b = q.blanks[n], good = r[n] === b.answer; s.value = String(r[n]); s.classList.add(good ? "right" : "wrong"); s.disabled = true;
+          if (!good) { var span = document.createElement("span"); span.className = "small"; span.style.color = "var(--good)"; span.style.fontWeight = "700"; span.textContent = " → " + b.options[b.answer]; s.after(span); } });
+      } else if (q.type === "matrix") {
+        q.rows.forEach(function (row, ri) { var pick = app.querySelector('input[name="m' + ri + '"][value="' + r[ri] + '"]'); if (pick) pick.checked = true;
+          app.querySelector('td[data-r="' + ri + '"][data-c="' + row[1] + '"]').classList.add("right"); if (r[ri] !== row[1]) app.querySelector('td[data-r="' + ri + '"][data-c="' + r[ri] + '"]').classList.add("wrong"); });
+        $$(".matrix input").forEach(function (x) { x.disabled = true; });
+      } else {
+        var ans = q.type === "mc" ? [q.answer] : q.answer;
+        $$(".opt").forEach(function (b) { var k = +b.getAttribute("data-k"); b.disabled = true; var isA = ans.indexOf(k) > -1, isS = r.indexOf(k) > -1;
+          b.classList.remove("sel"); if (isA && isS) b.classList.add("right"); else if (isS) b.classList.add("wrong"); else if (isA) b.classList.add("right", "missed");
+          b.querySelector(".box").textContent = isA ? "✓" : isS ? "✕" : ""; });
+      }
+    }
+    function explain(q, cr) {
+      $("#rat").innerHTML = verdict(cr) + esc(q.why) + "</div>";
+      var btn = $("#submit"); btn.textContent = pos + 1 >= ids.length ? "See results" : "Next question →";
+      btn.onclick = function () { show(pos + 1); window.scrollTo(0, 0); };
+    }
+    function grade(q, qi) {
+      var r = read(q); if (!r) return;
+      var cr = check(q, r), ok = cr.ok;
+      reveal(q, r);
+      S.q[qi] = ok ? 1 : (S.q[qi] === 1 ? 1 : 0);
+      if (cr.pts) addXP(Math.round(10 * cr.pts)); save();
+      results[pos] = { qi: qi, ok: ok, cr: cr, resp: r };
+      $(".q-card .progress span").style.width = (100 * results.length / ids.length) + "%";
+      $(".q-meta .tiny").textContent = (pos + 1) + " / " + ids.length + " · score " + fmtPts(score());
+      explain(q, cr);
+      $("#submit").focus();
+    }
+    function finish() {
+      var n = results.length, sc = score(), pct = Math.round(100 * sc / n), full = results.filter(function (r) { return r.ok; }).length;
+      var wrong = results.filter(function (r) { return !r.ok; });
+      app.innerHTML = '<div class="card scoreboard"><div style="font-size:44px">' + (pct >= 85 ? "🏆" : pct >= 70 ? "💪" : "📖") + '</div><div class="big-score">' + pct + '%</div><p class="muted">' + fmtPts(sc) + " of " + n + " points · " + full + " fully correct" + (n < ids.length ? " · ended early" : "") + "</p>" +
+        "<p>" + (pct >= 85 ? "Exam-ready on this set." : pct >= 70 ? "Solid. Review the rationales you missed." : "Go back to the drug tables for the units you missed, then retry.") + "</p>" +
+        '<div class="row" style="justify-content:center"><button class="btn primary" id="newset">New set</button><a class="btn" href="#drugs">Drug tables</a></div></div>' +
+        (wrong.length ? '<h2 style="margin-top:24px">Review what you missed</h2>' + wrong.map(function (r) { var q = QUESTIONS[r.qi]; return '<div class="card sys-' + q.sys + '" style="margin-bottom:12px"><div class="q-meta">' + tag(q.sys) + '<span class="chip">' + TYPE_LABEL[q.type] + "</span>" + diffChip(q.diff) + partChip(r.cr) + '</div><p><b>' + esc(q.stem.replace(/\{\d+\}/g, "___")) + '</b></p><p class="small muted">' + esc(q.why) + "</p></div>"; }).join("") : "");
+      $("#newset").onclick = function () { quiz(unitId); window.scrollTo(0, 0); };
+      if (pct >= 85) confetti();
+    }
+    show(0);
+  }
+
+  /* ================= NAME GAME ================= */
+  var MODES = {
+    brand: { label: "Brand → generic", pool: function () { return DRUGS.filter(function (d) { return d.brand; }); },
+      ask: function (d) { return { q: d.brand.split(/,|\[/)[0].trim(), sub: "is the brand name for…", a: d.name, opts: DRUGS.map(function (x) { return x.name; }) }; } },
+    cat: { label: "Drug → category", pool: function () { return DRUGS; },
+      ask: function (d) { return { q: d.name, sub: "goes in which category?", a: d.cats.map(function (c) { return CAT[c].name; }), opts: CATS.map(function (c) { return c.name; }) }; } },
+    cls: { label: "Drug → class", pool: function () { return DRUGS; },
+      ask: function (d) { return { q: d.name, sub: "belongs to which class?", a: d.cls, opts: DRUGS.map(function (x) { return x.cls; }) }; } },
+    suffix: { label: "Suffix → class", pool: function () { return SUFFIXES; },
+      ask: function (s) { return { q: s[0], sub: "names usually mean…", a: s[1], opts: SUFFIXES.map(function (x) { return x[1]; }), after: "Example: " + s[2] }; } }
+  };
+  function names(mode) {
+    if (!MODES[mode]) {
+      app.innerHTML = '<h1>Name Game</h1><p class="muted">Rapid fire. Pick a mode, then keep the streak going. Best streak: <b>' + (S.best.names || 0) + "</b></p>" +
+        '<div class="grid grid-2">' + Object.keys(MODES).map(function (k) { return '<a class="card tile" href="#names/' + k + '"><h3>' + MODES[k].label + '</h3><p class="small muted">' + MODES[k].pool().length + " items</p></a>"; }).join("") + "</div>";
+      return;
+    }
+    var M = MODES[mode], streak = 0, right = 0, total = 0;
+    function ask() {
+      var item = pick(M.pool()), x = M.ask(item);
+      var answers = [].concat(x.a);
+      var distract = shuffle(x.opts.filter(function (o, i, a) { return a.indexOf(o) === i && answers.indexOf(o) < 0; })).slice(0, 3);
+      var correct = pick(answers);
+      var opts = shuffle(distract.concat([correct]));
+      app.innerHTML = '<div class="row"><h1 style="margin:0">Name Game</h1><span class="spacer"></span><a class="chip" href="#names">Change mode</a></div>' +
+        '<p class="small muted">' + M.label + " · streak <b>" + streak + "</b> · " + right + "/" + total + " · best " + (S.best.names || 0) + "</p>" +
+        '<div class="card q-card name-card"><div class="name-q">' + esc(x.q) + '</div><p class="muted">' + esc(x.sub) + "</p>" +
+        opts.map(function (o) { return '<button class="opt" data-o="' + esc(o) + '"><span class="box"></span><span>' + esc(o) + "</span></button>"; }).join("") +
+        '<div id="rat"></div></div>';
+      $$(".opt").forEach(function (b) {
+        b.onclick = function () {
+          var o = b.getAttribute("data-o"), ok = answers.indexOf(o) > -1;
+          total++;
+          $$(".opt").forEach(function (y) { y.disabled = true; var r = answers.indexOf(y.getAttribute("data-o")) > -1; if (r) y.classList.add("right"); else if (y === b) y.classList.add("wrong"); y.querySelector(".box").textContent = r ? "✓" : y === b ? "✕" : ""; });
+          if (ok) {
+            right++; streak++; addXP(1);
+            if (streak > (S.best.names || 0)) { S.best.names = streak; save(); }
+            if (streak % 10 === 0) { confetti(); toast(streak + " in a row!"); }
+          } else streak = 0;
+          $("#rat").innerHTML = '<div class="rationale ' + (ok ? "ok" : "no") + '"><strong>' + (ok ? "Yes!" : "Not quite.") + "</strong>" + esc(x.q + " → " + answers.join(" / ") + (x.after ? ". " + x.after : "")) + "</div>" +
+            '<div class="row" style="margin-top:12px"><span class="spacer"></span><button class="btn primary" id="nx">Next →</button></div>';
+          $("#nx").onclick = ask; $("#nx").focus();
+        };
+      });
+    }
+    ask();
+  }
+
+  /* ================= NAME DECODER (stems.js) ================= */
+  var STEMS = window.STEMS || [], NO_STEM = window.NO_STEM || [], STEM_OF = {};
+  STEMS.forEach(function (s) { s.drugs.forEach(function (id) { (STEM_OF[id] = STEM_OF[id] || []).push(s); }); });
+  function stemName(name, s) {
+    var low = name.toLowerCase();
+    for (var k = 0; k < s.hit.length; k++) {
+      var i = low.indexOf(s.hit[k]);
+      if (i > -1) return esc(name.slice(0, i)) + '<span class="stem-hit">' + esc(name.slice(i, i + s.hit[k].length)) + "</span>" + esc(name.slice(i + s.hit[k].length));
+    }
+    return esc(name);
+  }
+  function stemPill(id) {
+    var list = STEM_OF[id];
+    if (!list) return '<a class="stem-pill none" href="#guide/stems">🔤 No class stem: memorize this one</a>';
+    return list.map(function (s) { return '<a class="stem-pill" href="#guide/stems">🔤 <b>' + esc(s.stem) + "</b> = " + esc(s.cls) + "</a>"; }).join(" ");
+  }
+  function drugChip(id, s) {
+    var d = DRUG[id], sec = ON_GUIDE[id];
+    return '<a class="stem-drug" href="' + (sec ? "#guide/" + sec.id : "#drug/" + id) + '">' + (s ? stemName(d.name, s) : esc(d.name)) + "</a>";
+  }
+  function stemUnit(s) { return unitOf(DRUG[s.drugs[0]]); }
+  function decode(q) {
+    q = q.trim().toLowerCase().replace(/[^a-z]/g, "");
+    if (q.length < 3) return "";
+    var exam = DRUGS.filter(function (d) { return d.name.toLowerCase().replace(/[^a-z]/g, "").indexOf(q) === 0; })[0];
+    var hits = STEMS.filter(function (s) { return s.hit.some(function (h) { return q.indexOf(h) > -1; }); });
+    if (exam && !STEM_OF[exam.id]) {
+      var ns = NO_STEM.filter(function (x) { return x.drug === exam.id; })[0];
+      return '<div class="stem-result none"><b>' + esc(exam.name) + "</b> is on your exam: " + esc(exam.cls) + ". Its name has no class stem, so memorize it." + (ns ? '<div class="small">' + esc(ns.hook) + "</div>" : "") + "</div>";
+    }
+    if (exam) hits = STEM_OF[exam.id];
+    if (!hits.length) return '<div class="stem-result miss">None of this exam\'s stems match. The drug still has a class; its name just doesn\'t use one of these endings.</div>';
+    return hits.map(function (s) {
+      return '<div class="stem-result sys-' + stemUnit(s) + '">' + (exam ? "<b>" + stemName(exam.name, s) + "</b> is on your exam. " : "") + "<b>" + esc(s.stem) + "</b> → " + esc(s.cls) +
+        '<div class="small" style="margin-top:6px">On this exam: ' + s.drugs.map(function (id) { return drugChip(id, s); }).join(" ") + "</div></div>";
+    }).join("");
+  }
+  function decoderView(head) {
+    var withStem = DRUGS.filter(function (d) { return STEM_OF[d.id]; }).length;
+    var cov = function (t) { return S.cover ? '<span class="fv covered" tabindex="0" role="button" aria-label="Tap to reveal">' + t + "</span>" : t; };
+    var byUnit = UNITS.map(function (u) {
+      var list = STEMS.filter(function (s) { return stemUnit(s) === u.id; });
+      if (!list.length) return "";
+      return '<h2 class="stem-unit">' + tag(u.id) + " " + esc(u.name) + "</h2>" +
+        '<div class="stem-grid">' + list.map(function (s) {
+          return '<div class="stem-tile sys-' + u.id + '"><div class="stem-big">' + esc(s.stem) + '</div><div class="drug-cls">' + cov(esc(s.cls)) + "</div>" +
+            '<div class="stem-drugs">' + s.drugs.map(function (id) { return drugChip(id, s); }).join("") + "</div>" +
+            '<p class="small stem-tip">' + cov(esc(s.tip)) + "</p>" +
+            (s.more ? '<p class="tiny" style="margin:0">Same stem, not on this exam: ' + esc(s.more) + "</p>" : "") + "</div>";
+        }).join("") + "</div>";
+    }).join("");
+    app.innerHTML = head +
+      '<div class="card topic-head stem-head"><div class="row switches">' + switchHTML("coverT", S.cover, "Cover mode: hide the classes") + "</div>" +
+        '<h1 style="margin-top:10px">🔤 Name decoder</h1>' +
+        '<p class="small muted" style="margin:0">Many generic names end (or start) with a stem that tells you the class. <b>' + withStem + " of your " + DRUGS.length + " exam drugs</b> follow one. The other " + (DRUGS.length - withStem) + " don't, so they're at the bottom to memorize. Tap a drug to jump to its study guide section. " + srcTag("ADDED") + "</p>" +
+        '<div class="stem-meter" role="img" aria-label="' + withStem + " of " + DRUGS.length + ' drugs follow a stem"><span style="width:' + Math.round(100 * withStem / DRUGS.length) + '%"></span></div>' +
+        '<label class="small" for="stemQ" style="display:block;margin-top:14px;font-weight:700">Decode a name (any drug, even one not on the exam)</label>' +
+        '<input id="stemQ" class="hl-input" type="search" placeholder="e.g. atenolol, amlodipine, omeprazole" autocomplete="off" autocapitalize="off" spellcheck="false">' +
+        '<div id="stemOut" aria-live="polite"></div></div>' +
+      byUnit +
+      '<h2 class="stem-unit">🧠 No stem: memorize these ' + NO_STEM.length + "</h2>" +
+      '<p class="small muted" style="margin-top:0">Their names don\'t give the class away, so learn each one with its hook.</p>' +
+      '<div class="stem-grid">' + NO_STEM.map(function (x) {
+        var d = DRUG[x.drug];
+        return '<div class="stem-tile no-stem sys-' + unitOf(d) + '"><div class="stem-drugs" style="margin-top:0">' + drugChip(d.id) + '</div><div class="drug-cls">' + cov(esc(d.cls)) + '</div><p class="small stem-tip">' + cov(esc(x.hook)) + "</p></div>";
+      }).join("") + "</div>" +
+      '<div class="callout" style="margin-top:20px"><strong>Stems are a shortcut, not a guarantee</strong>Watch the look-alikes: carbamazepine ends in -azepine but is not a benzodiazepine (-azepam), methimazole is not an antifungal -conazole, and methyldopa (-dopa) lowers blood pressure. When a question gives a brand name, translate it to the generic first.</div>' +
+      '<div class="row nav-links" style="margin-top:20px"><a class="btn" href="#guide/hy">← High-yield</a><span class="spacer"></span><a class="btn primary" href="#names/suffix">Drill stems in the Name Game →</a></div>';
+    $("#coverT").onclick = function () { S.cover = !S.cover; save(); var y = window.scrollY; decoderView(head); window.scrollTo(0, y); };
+    bindCover();
+    var inp = $("#stemQ");
+    inp.oninput = function () { $("#stemOut").innerHTML = decode(inp.value); };
+  }
+
+  /* ================= MEMORY AIDS ================= */
+  function memory() {
+    app.innerHTML = "<h1>Memory Aids</h1>" +
+      '<div class="card"><h2>Which drug goes where</h2><p class="small muted">Personal memory aids from the drug tables, not ATI content. The first letter of each word matches a drug in that category.</p><div class="table-wrap"><table><thead><tr><th>Category</th><th>Mnemonic</th><th>Drugs</th></tr></thead><tbody>' +
+        CATS.map(function (c) { return '<tr><td><a href="#drugs/' + c.id + '"><span class="sys-dot sys-' + c.sys + '"></span> ' + esc(c.name) + "</a></td><td><b>" + esc(c.mnemonic) + "</b></td><td>" + esc(c.decode) + "</td></tr>"; }).join("") +
+      "</tbody></table></div></div>" +
+      '<div class="card" style="margin-top:20px"><h2>Name endings that give away the class</h2><div class="table-wrap"><table><thead><tr><th>Ending</th><th>Class</th><th>Example</th></tr></thead><tbody>' +
+        SUFFIXES.map(function (s) { return "<tr><td><b>" + esc(s[0]) + "</b></td><td>" + esc(s[1]) + "</td><td>" + esc(s[2]) + "</td></tr>"; }).join("") +
+      '</tbody></table></div><div class="row" style="margin-top:12px"><a class="btn primary" href="#guide/stems">Open the name decoder</a><a class="btn" href="#names/suffix">Drill the suffixes</a><a class="btn" href="#names/cat">Drill the categories</a></div></div>';
+  }
+
+  /* ---------- Confetti ---------- */
+  var confettiRun = 0;
+  function confetti() {
+    var run = ++confettiRun;
+    if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    var cv = document.getElementById("confetti"), ctx = cv.getContext("2d"), W = cv.width = innerWidth, H = cv.height = innerHeight;
+    var colors = ["#c8463d", "#a43f87", "#4b5fc9", "#c27a17", "#1f8a5b"];
+    var bits = []; for (var i = 0; i < 140; i++) bits.push({ x: Math.random() * W, y: -20 - Math.random() * H * 0.4, vx: Math.random() * 4 - 2, vy: 2 + Math.random() * 4, s: 4 + Math.random() * 5, c: pick(colors), r: Math.random() * 6 });
+    var frames = 0;
+    (function tick() {
+      ctx.clearRect(0, 0, W, H);
+      bits.forEach(function (b) { b.x += b.vx; b.y += b.vy; b.vy += 0.05; b.r += 0.1; ctx.save(); ctx.translate(b.x, b.y); ctx.rotate(b.r); ctx.fillStyle = b.c; ctx.fillRect(-b.s / 2, -b.s / 2, b.s, b.s * 0.6); ctx.restore(); });
+      if (++frames < 120 && run === confettiRun) requestAnimationFrame(tick); else ctx.clearRect(0, 0, W, H);
+    })();
+  }
+
+  /* ---------- Theme ---------- */
+  function applyTheme() { if (S.theme === "auto") document.documentElement.removeAttribute("data-theme"); else document.documentElement.setAttribute("data-theme", S.theme); }
+  document.getElementById("theme").onclick = function () {
+    var dark = S.theme === "dark" || (S.theme === "auto" && window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches);
+    S.theme = dark ? "light" : "dark"; save(); applyTheme();
+  };
+  applyTheme();
+  document.getElementById("xp").textContent = S.xp;
+  route();
+})();

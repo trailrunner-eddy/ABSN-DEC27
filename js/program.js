@@ -165,7 +165,7 @@ window.PROGRAM = {
           id: "nura350", code: "NURA 350", name: "Pharmacology", icon: "💊", color: "#a43f87",
           lectureFolder: "../Sem 1/Pharm/",
           lectureWebFolder: "nura350/lecture-guides/",
-          lectureExam: "Exam 2",
+          lectureExam: "Final Exam",
           lectureGuides: [
             { mod: "Exam 2 · Cardiac, Renal & GU", title: "Cardiovascular System, Part 1", file: "Exam 2/Lecture Guide/Pharm for the Cardiovascular System Pt 1 Lecture Guide.pdf", web: "exam2-cardiovascular-system-pt-1.pdf", topics: [] },
             { mod: "Exam 2 · Cardiac, Renal & GU", title: "Cardiovascular System, Part 2", file: "Exam 2/Lecture Guide/Pharm for the Cardiovascular System Pt 2 Lecture Guide.pdf", web: "exam2-cardiovascular-system-pt-2.pdf", topics: [] },
@@ -185,6 +185,14 @@ window.PROGRAM = {
               blurb: "Your instructor's Exam 2 takeaways in exam order, plus every drug from the combined drug tables: cardiac, renal & GU, reproductive, and GI.",
               topics: ["Study Guide", "Cardiac 1", "Cardiac 2", "Renal/GU", "GI"],
               stats: "11-section study guide · 44 drugs · 201 MC & SATA questions · 289 flashcards"
+            },
+            {
+              name: "Final Exam", status: "ready",
+              path: "nura350/final/index.html",
+              bank: ["js/drugs.js", "js/practice.js", "js/practice-prior.js", "js/practice-calc.js"],
+              blurb: "Cumulative final: your instructor's Modules 10–12 takeaways highlighted on every drug card, the 18 drugs named from earlier modules, a suffix-to-class chart, and an NCLEX-style bank weighted like the exam breakdown.",
+              topics: ["Study Guide", "Endocrine", "Heme/Cancer", "Neuro", "Prior mods", "Dosage calc"],
+              stats: "5-section study guide · 47 drugs · 34-stem suffix chart · 215 questions (incl. 31 dosage calc) · 310 flashcards"
             }
           ]
         },
