@@ -537,3 +537,8 @@ a.chip { text-decoration: none; }
 .guide-sec .topic-links { margin-top: 10px; }
 .dl-list a { display: flex; gap: 10px; align-items: center; padding: 10px 12px; border: 1px solid var(--line, rgba(0,0,0,.12)); border-radius: 10px; margin-bottom: 8px; text-decoration: none; color: inherit; }
 .dl-list a:hover { border-color: var(--accent); }
+/* Neuro unit colors */
+:root { --nsf: #3a5fb0; --ndeg: #8a5a2b; --ninf: #2f7d4f; --cvd: #c0392b; --ntr: #b7701a; --ans: #5a6b7d; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --nsf: #8fb0f5; --ndeg: #e0b07f; --ninf: #86d6a6; --cvd: #ff9a8e; --ntr: #f5c070; --ans: #b3c2d3; } }
+:root[data-theme="dark"] { --nsf: #8fb0f5; --ndeg: #e0b07f; --ninf: #86d6a6; --cvd: #ff9a8e; --ntr: #f5c070; --ans: #b3c2d3; }
+.sys-nsf { --c: var(--nsf); } .sys-ndeg { --c: var(--ndeg); } .sys-ninf { --c: var(--ninf); } .sys-cvd { --c: var(--cvd); } .sys-ntr { --c: var(--ntr); } .sys-ans { --c: var(--ans); }

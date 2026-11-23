@@ -81,8 +81,8 @@
       '<section class="hero">' +
         '<div class="hero-main"><div class="hero-art">🌀</div>' +
           '<div class="tiny" style="color:rgba(255,255,255,.8);font-weight:700;letter-spacing:.06em;text-transform:uppercase">NURA 340 · Pathophysiology</div>' +
-          "<h1>Final Exam Study Lab · GI, Endocrine &amp; Hematology</h1>" +
-          "<p>GI, endocrine, and hematology &amp; neoplasia, built from the eleven Final lecture guides and the instructor's Final study guide. For every disorder, ask <b>what normal function has been disrupted</b>, then move from <b>mechanism → physiologic change → cues → complications</b>.</p>" +
+          "<h1>Final Exam Study Lab · GI, Endocrine, Hematology &amp; Neuro</h1>" +
+          "<p>GI, endocrine, hematology &amp; neoplasia, and neuro, built from the fourteen Final lecture guides and the instructor's Final study guide. For every disorder, ask <b>what normal function has been disrupted</b>, then move from <b>mechanism → physiologic change → cues → complications</b>.</p>" +
           '<div class="row"><a class="btn" href="#guide">Instructor\'s exam guide</a><a class="btn ghost" href="#topics">Topics</a><a class="btn ghost" href="#quiz">Quick quiz</a></div>' +
         "</div>" +
         '<div class="card"><h3>Your progress</h3><div class="ring-wrap"><div class="ring" style="--p:' + overall + '" data-label="' + overall + '%"></div>' +
@@ -90,7 +90,7 @@
           '<div class="row" style="margin-top:14px"><button class="btn small" id="reset">Reset progress</button></div></div>' +
       "</section>" +
       '<section class="grid grid-2">' +
-        '<div class="card"><h2>Lectures in this unit</h2><p class="small muted">Blueprint from the instructor\'s Final guide: GI 26–34%, Endocrine 18–24%, Hematology 18–24%, Neuro 26–34% (neuro lectures aren\'t posted yet). Tap a section to jump to its first topic.</p>' + rows + "</div>" +
+        '<div class="card"><h2>Lectures in this unit</h2><p class="small muted">Blueprint from the instructor\'s Final guide: GI 26–34%, Endocrine 18–24%, Hematology 18–24%, Neuro 26–34%. Tap a section to jump to its first topic.</p>' + rows + "</div>" +
         '<div class="stack"><div class="card"><h2>Heard in lecture</h2><ul class="list-clean">' + EMPHASIS.map(function (e) { return "<li>⭐ " + esc(e) + "</li>"; }).join("") + "</ul></div>" +
         '<div class="card"><h2>Question types on the exam</h2><div class="row">' + EXAM_GUIDE.formats.map(function (t) { return '<span class="chip">' + t + "</span>"; }).join("") + '</div><p class="small muted" style="margin-top:10px">From the instructor\'s Final guide: ' + EXAM_GUIDE.total + '. No matrix grids. A drop-down rationale is one sentence with 2 (dyad) or 3 (triad) blanks; a cloze fills blanks across a short passage. <a href="#guide">See the full guide</a>.</p></div></div>' +
       "</section>" +
@@ -120,7 +120,10 @@
     ["Hematology", "Sickle Cell Anemia", "final-sickle-cell-anemia.pdf"],
     ["Hematology", "Diseases of Platelets", "final-diseases-of-platelets.pdf"],
     ["Hematology", "Diseases of White Blood Cells", "final-diseases-of-white-blood-cells.pdf"],
-    ["Hematology", "Introduction to Neoplasia & Cancer", "final-introduction-to-neoplasia-and-cancer.pdf"]
+    ["Hematology", "Introduction to Neoplasia & Cancer", "final-introduction-to-neoplasia-and-cancer.pdf"],
+    ["Neuro", "Structure and Function of the Nervous System", "final-structure-and-function-of-the-nervous-system.pdf"],
+    ["Neuro", "Diseases of the Central Nervous System", "final-diseases-of-the-central-nervous-system.pdf"],
+    ["Neuro", "Diseases of the Autonomic Nervous System", "final-diseases-of-the-autonomic-nervous-system.pdf"]
   ];
   function guide(unit) {
     var G = window.EXAM_GUIDE, DIS = {};
@@ -145,7 +148,7 @@
       "<h1>Instructor's Final Exam Guide</h1><p class=\"muted\">The 340 Final Exam Study Guide, organized for studying. Each “Applying Foundational Concepts” question is answered at exam depth: the mechanism, how it shows up in the client, and what the nurse does first. Tap a question to reveal the answer, then try to say it yourself before you read.</p>" +
       '<div class="grid grid-2"><div class="card"><h2>Blueprint</h2><p class="small muted">' + esc(G.total) + '</p><div class="table-wrap"><table class="guide-table"><thead><tr><th>Unit</th><th>Topics</th><th>Questions</th><th>Points</th></tr></thead><tbody>' +
         G.blueprint.map(function (r) { return "<tr><td><b>" + esc(r[0]) + "</b></td><td class=\"small\">" + esc(r[1]) + "</td><td>" + esc(r[2]) + "</td><td>" + esc(r[3]) + "</td></tr>"; }).join("") + "</tbody></table></div>" +
-        '<div class="callout" style="margin-top:12px"><strong>Neuro isn\'t covered here yet</strong>Neuro is about a third of the exam, but its lectures haven\'t been added. Its guide questions are listed below so you can see what\'s coming.</div></div>' +
+        '</div>' +
       '<div class="stack"><div class="card"><h2>Question formats</h2><div class="row">' + G.formats.map(function (t) { return '<span class="chip">' + esc(t) + "</span>"; }).join("") + '</div><p class="small muted" style="margin-top:10px">Practice every format in <a href="#quiz">Practice Qs</a>; pick “Exam-depth only” for scenario questions like these.</p></div>' +
       '<div class="card"><h2>Critical thinking questions</h2><p class="small muted">Ask these of every disorder on the exam.</p>' + G.critical.map(function (q, i) { return revealQ((i + 1) + ". " + q[0], q[1]); }).join("") + "</div></div></div>" +
       '<h2 style="margin-top:24px">Applying foundational concepts</h2>' + bar + secs +
@@ -457,7 +460,7 @@
   var TYPE_LABEL = { mc: "Multiple choice", sata: "Select all that apply", selectn: "Select N", rationale: "Drop-down rationale", cloze: "Drop-down cloze" };
   function kind(q) { return q.type === "cloze" && q.fmt ? "rationale" : q.type; }
   function typeLabel(q) { return q.type === "cloze" && q.fmt ? "Drop-down rationale (" + q.fmt + ")" : TYPE_LABEL[q.type] || q.type; }
-  var UNITS = { gi: ["GI", ["found", "upper", "lower", "liver"]], endo: ["Endocrine", ["pancreas", "thyroid", "adrenal"]], heme: ["Hematology & Neoplasia", ["rbc", "sickle", "plt", "wbc", "neo"]] };
+  var UNITS = { gi: ["GI", ["found", "upper", "lower", "liver"]], endo: ["Endocrine", ["pancreas", "thyroid", "adrenal"]], heme: ["Hematology & Neoplasia", ["rbc", "sickle", "plt", "wbc", "neo"]], neuro: ["Neuro", ["nsf", "ndeg", "ninf", "cvd", "ntr", "ans"]] };
   var quizUnit = "all", quizDeep = false;
   var DIFF = { easy: ["Easy", "recall a fact or definition"], medium: ["Medium", "apply a concept to a client"], hard: ["Hard", "multi-step or technical reasoning"] };
   function diffChip(d) { return DIFF[d] ? '<span class="chip diff diff-' + d + '" title="' + DIFF[d][1] + '">' + DIFF[d][0] + "</span>" : ""; }
@@ -475,7 +478,7 @@
     app.innerHTML =
       '<h1>Practice Questions</h1><p class="muted">Written in the formats the instructor\'s Final guide lists: multiple choice, select all that apply, select N, drop-down rationale (dyad/triad), and drop-down cloze. The <b>exam-depth set</b> asks you to connect mechanism, cue, and priority across a full scenario, like the real exam. Every question is rated by difficulty and explains why the answer is right.</p>' +
       sysFilterBar(sys, "#quiz", false) +
-      (sys ? "" : '<div class="row" style="margin:0 0 12px"><span class="small">Unit</span>' + ["all", "gi", "endo", "heme"].map(function (u) { return '<button class="chip' + (quizUnit === u ? " on" : "") + '" data-u="' + u + '">' + (u === "all" ? "All units" : UNITS[u][0]) + "</button>"; }).join("") + "</div>") +
+      (sys ? "" : '<div class="row" style="margin:0 0 12px"><span class="small">Unit</span>' + ["all", "gi", "endo", "heme", "neuro"].map(function (u) { return '<button class="chip' + (quizUnit === u ? " on" : "") + '" data-u="' + u + '">' + (u === "all" ? "All units" : UNITS[u][0]) + "</button>"; }).join("") + "</div>") +
       '<div class="row" style="margin:0 0 16px"><span class="small">Set</span><button class="chip' + (quizDeep ? "" : " on") + '" data-deep="0">Everything</button><button class="chip' + (quizDeep ? " on" : "") + '" data-deep="1">Exam-depth only · ' + deepCount + "</button></div>" +
       '<div class="grid grid-2"><div class="card"><h2>Start a set</h2><p class="small muted">' + pool.length + " questions in this pool · " + answered + " attempted · " + correct + ' correct</p>' +
         '<div class="row" style="margin:12px 0"><span class="small">How many?</span>' + [10, 20, "All"].map(function (n, k) { return '<button class="chip' + (k === 0 ? " on" : "") + '" data-n="' + n + '">' + n + "</button>"; }).join("") + "</div>" +
