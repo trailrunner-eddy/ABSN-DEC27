@@ -40,7 +40,16 @@ window.PROGRAM = {
       courses: [
         {
           id: "nura320", code: "NURA 320", name: "Nursing Fundamentals", icon: "🩹", color: "#5b8c3a",
-          exams: []
+          exams: [
+            {
+              name: "Final Exam", status: "ready",
+              path: "nura320/final/index.html",
+              bank: ["js/data.js", "js/practice.js", "js/questions.js", "js/questions-2.js", "js/questions-cj.js"],
+              blurb: "For the ATI RN Fundamentals final: the blueprint from the 60-item practice assessment, a 60-question practice exam dealt the same way, and topics for every area it tested (delegation, falls and isolation, teaching, coping, mobility and diets, injections and dosage, postop care, trachs and wounds). Next Gen case items with chart tabs. Every question rated by difficulty.",
+              topics: ["ATI blueprint", "Management of Care", "Safety & Infection", "Basic Care", "Pharm & Dosage", "Risk Reduction", "Case items"],
+              stats: "ATI plan page · 35 topics · 109 questions (14 case items) · 131 flashcards · 60-question practice exam"
+            }
+          ]
         },
         {
           id: "nura330", code: "NURA 330", name: "Health Assessment", icon: "🩺", color: "#12898f",

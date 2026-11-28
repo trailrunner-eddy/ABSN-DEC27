@@ -23,6 +23,17 @@ Each exam guide's practice questions live in `window.QUESTIONS` (listed under `b
 
 In every practice set, ← Previous reopens questions you already answered with your picks, the correct answer, and the rationale, so you can review mid-set without finishing it. NCLEX Prep allows this in Tutor mode; Exam mode stays forward-only like the real NCLEX.
 
+## Nursing Fundamentals Final (ATI RN Fundamentals)
+
+`nura320/final/` uses the Nutrition engine. Its blueprint (`window.ATI.blueprint` in `js/ati.js`) is the item count per sub-scale from the 60-item ATI RN Fundamentals practice assessment, and the 60-question practice exam deals that many questions from each section. The ATI page maps every topic that assessment covered to topics on the site, evenly, with no personal scores. Every question is ATI-style (`ati: true`), in three files that load in order: `js/questions.js` (Management of Care, Safety, Health Promotion, Psychosocial), `js/questions-2.js` (Basic Care, Pharm, Risk Reduction, Physiological Adaptation), and `js/questions-cj.js` (Clinical Judgment case items). Add new questions at the end of the last file.
+
+Two formats are new here, and both work in NCLEX Prep:
+
+- `case`: a list of chart tabs, `[["Nurses' Notes", "text"], ["Vital Signs", "text"], ...]`, shown above the stem of any question type, like ATI's Next Gen case items. Use `\n` for line breaks in a tab.
+- `type: "highlight"`: `options` are phrases from the chart in reading order (not shuffled), `answer` is a list of indexes, and it's scored with partial credit like `sata`.
+
+The engine doesn't shuffle multiple-choice options, so spread the correct answers evenly across positions.
+
 ## Health Assessment Final (cumulative)
 
 `nura330/final/` is cumulative, so its page loads the Exam 1 guide, then the Exam 2 guide, then the Final's own files. `js/stash.js` saves each guide's globals after it loads, and `js/merge.js` joins them (Exam 1, Exam 2, Final, always in that order, so saved progress keeps its place) before `../shared/app.js` starts. The Final's own files (`js/data.js`, `js/practice.js`, ...) hold only the new content: Mod 9 GI, Mod 10 neuro, Mod 11 musculoskeletal, and the “New for the final” cumulative questions. Only those two files are its NCLEX Prep bank, so Exam 1 and 2 questions aren't counted twice. `GUIDE.blueprint` gives the final's questions per system; the quiz page uses it for a 50-question mock final. Add new items at the END of the Final's lists.
