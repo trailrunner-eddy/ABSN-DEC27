@@ -70,3 +70,15 @@ a.chip:hover { border-color: var(--c, var(--accent)); color: var(--ink); }
 .chip.diff-easy { background: var(--good-bg); color: var(--good); }
 .chip.diff-medium { background: var(--warn-bg); color: var(--warn); }
 .chip.diff-hard { background: var(--bad-bg); color: var(--bad); }
+
+/* NCLEX Prep: Next Gen chart tabs (Nurses' Notes / Vital Signs / MAR) and highlight items */
+.case { border: 1px solid var(--line); border-radius: 12px; margin: 4px 0 14px; background: var(--surface-2); overflow: hidden; }
+.case-tabs { display: flex; flex-wrap: wrap; gap: 2px; border-bottom: 1px solid var(--line); background: var(--surface); }
+.case-tab { border: 0; background: none; color: var(--ink-2); font: inherit; font-size: .85rem; font-weight: 600; padding: 9px 14px; cursor: pointer; border-bottom: 3px solid transparent; }
+.case-tab.on { color: var(--ink); border-bottom-color: var(--accent); }
+.case-body { padding: 12px 14px; font-size: .92rem; line-height: 1.55; white-space: pre-line; }
+.case-body[hidden] { display: none; }
+.hl-box { border: 1px solid var(--line); border-radius: 12px; padding: 8px; background: var(--surface); }
+.opt.hl { border-style: dashed; margin: 4px 0; }
+.opt.hl .box { display: none; }
+.opt.hl.sel { background: color-mix(in srgb, #f5c842 45%, var(--surface)); border-style: solid; }

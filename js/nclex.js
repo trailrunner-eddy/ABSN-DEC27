@@ -4,7 +4,7 @@
    window.TRIAGE (priority sets) and window.SYSTEMS (topic names). */
 (function () {
   "use strict";
-  var TYPES = { mc: "Multiple choice", sata: "Select all that apply", selectn: "Select N", cloze: "Drop-down cloze", matrix: "Matrix grid", fill: "Fill in the blank", order: "Ordered response", priority: "Prioritization" };
+  var TYPES = { mc: "Multiple choice", sata: "Select all that apply", selectn: "Select N", cloze: "Drop-down cloze", matrix: "Matrix grid", fill: "Fill in the blank", order: "Ordered response", highlight: "Highlight", priority: "Prioritization" };
   var DIFFS = { easy: "Easy", medium: "Medium", hard: "Hard", unrated: "Not rated" };
   function diffChip(d) { return d === "unrated" ? "" : '<span class="chip diff diff-' + d + '">' + DIFFS[d] + "</span>"; }
   var LENGTHS = [10, 25, 50, 75, "All"];
@@ -147,12 +147,22 @@
       if (limit && t >= limit) { stopTimer(); for (var i = results.length; i < list.length; i++) results.push({ x: list[i], ok: false, pts: 0, resp: null }); finish(true); }
     }, 500);
 
+    /* Next Gen chart: q.case = [["Nurses' Notes", "text"], ...] shown as tabs above the question. */
+    function caseHTML(q) {
+      if (!q.case || !q.case.length) return "";
+      return '<div class="case"><div class="case-tabs" role="tablist">' + q.case.map(function (c, i) { return '<button type="button" class="case-tab' + (i ? "" : " on") + '" role="tab" data-ct="' + i + '">' + esc(c[0]) + "</button>"; }).join("") + "</div>" +
+        q.case.map(function (c, i) { return '<div class="case-body" data-cb="' + i + '"' + (i ? " hidden" : "") + ">" + esc(c[1]) + "</div>"; }).join("") + "</div>";
+    }
+    function bindCase() {
+      $$(".case-tab").forEach(function (b) { b.onclick = function () { var i = b.getAttribute("data-ct"); $$(".case-tab").forEach(function (x) { x.classList.toggle("on", x === b); }); $$(".case-body").forEach(function (x) { x.hidden = x.getAttribute("data-cb") !== i; }); }; });
+    }
     function draw() {
       if (pos >= list.length) return finish(false);
       var x = list[pos], q = x.q, k = x.kind, done = mode === "tutor" ? results[pos] : null, last = results.length;
       var html = '<div class="row" style="margin-bottom:14px"><button class="btn small" id="quit">← End exam</button><span class="spacer"></span><span class="chip">⏱ <span id="nx-time">' + (limit ? fmt(limit - (Date.now() - t0) / 1000) + " left" : fmt((Date.now() - t0) / 1000)) + '</span></span></div>' +
         '<div class="q-card card" style="border-left:5px solid ' + x.color + '"><div class="progress" style="margin-bottom:14px"><span style="width:' + (100 * last / list.length) + '%"></span></div>' +
         '<div class="q-meta"><span class="chip">' + esc(x.course.code || x.course.name) + " · " + esc(x.short) + '</span><span class="chip">' + (k === "cloze" && q.fmt ? "Drop-down rationale (" + q.fmt + ")" : TYPES[k]) + (k === "selectn" ? " · pick " + q.n : "") + "</span>" + diffChip(x.diff) + (done ? '<span class="chip">Reviewing</span>' : "") + '<span class="spacer"></span><span class="tiny">' + (pos + 1) + " / " + list.length + "</span></div>";
+      html += caseHTML(q);
       if (k === "cloze") {
         html += '<p class="small muted">Choose the option that best completes each blank.</p><div class="cloze">' + esc(q.stem).replace(/\n/g, "<br>").replace(/\{(\d+)\}/g, function (m, n) {
           var b = q.blanks[+n];
@@ -167,14 +177,16 @@
         if (!perms[pos]) { var o = q.options.map(function (z, i) { return i; }), sh; do { sh = shuffle(o); } while (o.length > 1 && sh.join() === o.join()); perms[pos] = sh; }
         html += '<div class="q-stem">' + esc(q.stem) + '</div><p class="small muted">Use ↑ and ↓ to put the steps in order, first step at the top.</p><ol class="order-list" id="olist"></ol>';
       } else {
-        var multi = k === "sata" || k === "selectn";
-        var perm = perms[pos] = perms[pos] || shuffle(q.options.map(function (o, i) { return i; }));
-        html += '<div class="q-stem">' + esc(q.stem) + "</div>" + perm.map(function (i) { return '<button class="opt' + (multi ? " multi" : "") + '" data-k="' + i + '"><span class="box"></span><span>' + esc(q.options[i]) + "</span></button>"; }).join("");
+        var multi = k === "sata" || k === "selectn" || k === "highlight", hl = k === "highlight";
+        /* Highlight phrases keep their chart order; other option lists are shuffled. */
+        var perm = perms[pos] = perms[pos] || (hl ? q.options.map(function (o, i) { return i; }) : shuffle(q.options.map(function (o, i) { return i; })));
+        html += '<div class="q-stem">' + esc(q.stem) + "</div>" + (hl ? '<p class="small muted">Tap each phrase to highlight it. Tap again to clear it.</p><div class="hl-box">' : "") + perm.map(function (i) { return '<button class="opt' + (multi ? " multi" : "") + (hl ? " hl" : "") + '" data-k="' + i + '"><span class="box"></span><span>' + esc(q.options[i]) + "</span></button>"; }).join("") + (hl ? "</div>" : "");
       }
       html += '<div class="row" style="margin-top:16px">' + (mode === "exam" ? '<span class="tiny">Exam mode: you can\'t go back, just like the NCLEX.</span>' :
         '<button class="btn" id="prev"' + (pos ? "" : " disabled") + '>← Previous</button>' + (last < list.length && last - pos > 1 ? '<button class="btn small" id="resume">Jump to question ' + (last + 1) + "</button>" : "")) + '<span class="spacer"></span><button class="btn primary" id="submit">' + (mode === "exam" ? (pos + 1 >= list.length ? "Finish exam" : "Next →") : "Submit") + '</button></div><div class="callout" id="nx-note" style="display:none;margin-top:10px"></div><div id="rat"></div></div>';
       app.innerHTML = html;
       window.scrollTo(0, 0);
+      bindCase();
 
       $$(".opt").forEach(function (b) { b.onclick = function () {
         if (k === "mc" || k === "priority") $$(".opt").forEach(function (o) { o.classList.remove("sel"); });
@@ -231,7 +243,7 @@
     function credit(type, sel, ans) {
       var hit = sel.filter(function (k) { return ans.indexOf(k) > -1; }).length;
       var full = sel.length === ans.length && hit === ans.length;
-      if (type !== "sata") return allOrNothing(full);
+      if (type !== "sata" && type !== "highlight") return allOrNothing(full);
       var net = Math.max(0, hit - (sel.length - hit));
       return { sata: true, net: net, of: ans.length, pts: net / ans.length, ok: net === ans.length };
     }
